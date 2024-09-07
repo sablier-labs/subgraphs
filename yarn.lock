@@ -871,6 +871,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sablier/v2-subgraphs-flow@workspace:apps/flow":
+  version: 0.0.0-use.local
+  resolution: "@sablier/v2-subgraphs-flow@workspace:apps/flow"
+  dependencies:
+    "@graphprotocol/graph-cli": ^0.80.0
+    "@graphprotocol/graph-ts": ^0.35.1
+    "@trivago/prettier-plugin-sort-imports": 4.1.0
+    "@typescript-eslint/eslint-plugin": ^5.59.11
+    "@typescript-eslint/parser": ^5.59.11
+    babel-polyfill: ^6.26.0
+    babel-register: ^6.26.0
+    eslint: ^8.25.0
+    eslint-config-prettier: ^8.5.0
+    mustache: ^4.2.0
+    prettier: ^2.8.8
+    rimraf: ^5.0.7
+    typescript: 5.2.2
+  languageName: unknown
+  linkType: soft
+
 "@sablier/subgraphs-lockup@workspace:apps/lockup":
   version: 0.0.0-use.local
   resolution: "@sablier/subgraphs-lockup@workspace:apps/lockup"
