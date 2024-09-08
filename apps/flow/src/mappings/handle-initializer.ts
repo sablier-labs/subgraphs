@@ -17,12 +17,12 @@ export function handleInitializer(): void {
     watcher.save();
   }
 
-  let factories = getContractsFlow();
-  if (factories.length > 0) {
-    for (let i = 0; i < factories.length; i++) {
-      const address = Address.fromString(factories[i][0]);
-      const alias = factories[i][1];
-      const version = factories[i][2];
+  let flowList = getContractsFlow();
+  if (flowList.length > 0) {
+    for (let i = 0; i < flowList.length; i++) {
+      const address = Address.fromString(flowList[i][0]);
+      const alias = flowList[i][1];
+      const version = flowList[i][2];
 
       FlowTemplate.create(address);
       createContract(address, alias, version);

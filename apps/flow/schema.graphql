@@ -176,7 +176,7 @@ type Stream @entity {
   "action in which the stream rate per second was adjusted"
   lastAdjustmentAction: Action
   "timestamp of the last adjustment action"
-  lastAdjustmentAction: BigInt
+  lastAdjustmentTimestamp: BigInt!
 
   "current balance of the stream"
   availableAmount: BigInt!
@@ -196,8 +196,6 @@ type Stream @entity {
   "position in the batch, only available when created within a batch create transaction"
   position: BigInt!
 
-  "amount of fees paid to the broker"
-  brokerFeeAmount: BigInt!
   "amount of fees paid to the protocol"
   protocolFeeAmount: BigInt!
 }
