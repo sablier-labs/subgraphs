@@ -1,8 +1,7 @@
 export let chainId = 11155111;
 export let chain = "sepolia";
-export let startBlock_lockup = 4067889;
+export let startBlock_protocol = 4067889;
 export let startBlock_merkle = 4904890;
-export let startBlock_flow = 6618000;
 
 /** Rule: keep addresses lowercased */
 
@@ -23,10 +22,6 @@ export let dynamic: string[][] = [
   ["0x73bb6dd3f5828d60f8b3dbc8798eb10fba2c5636", "LD3", "V22"],
 ];
 
-export let flow: string[][] = [
-  ["0xf978034bb3cab5fe88d23db5cb38d510485dab90", "FL", "V22"],
-];
-
 export let tranched: string[][] = [
   ["0x3a1bea13a8c24c0ea2b8fae91e4b2762a59d7af5", "LT3", "V22"],
 ];
@@ -42,9 +37,8 @@ export let registry = "0x584009E9eDe26e212182c9745F5c000191296a78";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
  * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
+ * ↪ 🚨 [Protocol] On any new chain, please create a Lockup Linear stream to kick-off the indexing flow
  */
 
-export let initializer_lockup = linear[0][0];
+export let initializer_protocol = linear[0][0];
 export let initializer_merkle = factory[0][0];
-export let initializer_flow = flow[0][0];

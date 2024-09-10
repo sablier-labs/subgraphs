@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: sablier-v2-flow
+unordered_multichain_mode: true
+field_selection:
+  transaction_fields:
+    - "from"
+    - "to"
+    - "hash"
+    - "transactionIndex"
+contracts:
+  - name: FlowV22
+    handler: src/mappings/index.ts
+    events:
+      - event: Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
+      - event: ApprovalForAll(address indexed owner, address indexed operator, bool approved)
+      - event:
+          CancelLockupStream(uint256 indexed streamId, address indexed sender, address indexed recipient, uint128
+          senderAmount, uint128 recipientAmount)
+      - event:
+          CreateLockupLinearStream(uint256 streamId, address funder, address indexed sender, address indexed recipient,
+          (uint128,uint128,uint128) amounts, address indexed asset, bool cancelable, (uint40,uint40,uint40) range,
+          address broker)
+      - event:
+          CreateLockupDynamicStream(uint256 streamId, address funder, address indexed sender, address indexed recipient,
+          (uint128,uint128,uint128) amounts, address indexed asset, bool cancelable, (uint128,uint64,uint40)[] segments,
+          (uint40,uint40) range, address broker)
+      - event: RenounceLockupStream(uint256 indexed streamId)
+      - event: Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
+      - event: TransferAdmin(address indexed oldAdmin, address indexed newAdmin)
+      - event: WithdrawFromLockupStream(uint256 indexed streamId, address indexed to, uint128 amount)
+networks:
+  - id: 11155111
+    start_block: 4904890
+    contracts:
+      - name: FlowV22
+        address:
+          - 0xf978034bb3cab5fe88d23db5cb38d510485dab90
