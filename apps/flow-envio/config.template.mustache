@@ -11,23 +11,24 @@ contracts:
   - name: FlowV22
     handler: src/mappings/index.ts
     events:
+      - event: AdjustFlowStream(uint256 indexed streamId, uint128 totalDebt, uint128 oldRatePerSecond, uint128 newRatePerSecond)
       - event: Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
       - event: ApprovalForAll(address indexed owner, address indexed operator, bool approved)
       - event:
-          CancelLockupStream(uint256 indexed streamId, address indexed sender, address indexed recipient, uint128
-          senderAmount, uint128 recipientAmount)
-      - event:
-          CreateLockupLinearStream(uint256 streamId, address funder, address indexed sender, address indexed recipient,
-          (uint128,uint128,uint128) amounts, address indexed asset, bool cancelable, (uint40,uint40,uint40) range,
-          address broker)
-      - event:
-          CreateLockupDynamicStream(uint256 streamId, address funder, address indexed sender, address indexed recipient,
-          (uint128,uint128,uint128) amounts, address indexed asset, bool cancelable, (uint128,uint64,uint40)[] segments,
-          (uint40,uint40) range, address broker)
-      - event: RenounceLockupStream(uint256 indexed streamId)
+          CreateFlowStream(uint256 streamId, address indexed sender, address indexed recipient, uint128 ratePerSecond, address indexed token,
+          bool transferable)
+      - event: DepositFlowStream(uint256 indexed streamId, address indexed funder, uint128 amount)
+      - event: PauseFlowStream(uint256 indexed streamId, address indexed sender, address indexed recipient, uint128 totalDebt)
+      - event: RefundFromFlowStream(uint256 indexed streamId, address indexed sender, uint128 amount)
+      - event: RestartFlowStream(uint256 indexed streamId, address indexed sender, uint128 ratePerSecond)
       - event: Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
       - event: TransferAdmin(address indexed oldAdmin, address indexed newAdmin)
-      - event: WithdrawFromLockupStream(uint256 indexed streamId, address indexed to, uint128 amount)
+      - event: 
+          VoidFlowStream(uint256 indexed streamId, address indexed sender, address indexed recipient, address caller, uint128 newTotalDebt,
+          uint128 writtenOffDebt)
+      - event: 
+          WithdrawFromFlowStream( uint256 indexed streamId, address indexed to, address indexed token, address caller, uint128 withdrawAmount,
+          uint40 withdrawTime)
 networks:
   {{#chains}}
   - id: {{id}}
