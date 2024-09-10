@@ -1,5 +1,5 @@
 import { createAction } from "./action";
-import { createContract } from "./contract";
+import { createContract, getContractByAddress } from "./contract";
 import { createStream, getStreamByIdFromSource } from "./stream";
 import { getOrCreateWatcher } from "./watcher";
 
@@ -9,4 +9,5 @@ export {
   createStream,
   createAction,
   getStreamByIdFromSource,
+  getContractByAddress,
 };

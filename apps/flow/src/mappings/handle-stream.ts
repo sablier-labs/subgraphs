@@ -1,20 +1,24 @@
-import { log } from "@graphprotocol/graph-ts";
+import { dataSource, log } from "@graphprotocol/graph-ts";
 import { Stream } from "../generated/types/schema";
 import {
   AdjustFlowStream as EventAdjust,
+  Approval as EventApproval,
+  ApprovalForAll as EventApprovalForAll,
   CreateFlowStream as EventCreate,
   DepositFlowStream as EventDeposit,
   PauseFlowStream as EventPause,
   RefundFromFlowStream as EventRefund,
   RestartFlowStream as EventRestart,
   Transfer as EventTransfer,
+  TransferAdmin as EventTransferAdmin,
   VoidFlowStream as EventVoid,
   WithdrawFromFlowStream as EventWithdraw,
 } from "../generated/types/templates/ContractFlow/SablierFlow";
-import { ADDRESS_ZERO, zero } from "../constants";
+import { ADDRESS_ZERO, one, zero } from "../constants";
 import {
   createAction,
   createStream,
+  getContractByAddress,
   getStreamByIdFromSource,
 } from "../helpers";
 
@@ -336,4 +340,60 @@ export function handleWithdraw(event: EventWithdraw): void {
   stream.save();
   action.stream = stream.id;
   action.save();
+}
+
+export function handleApproval(event: EventApproval): void {
+  let id = event.params.tokenId;
+  let stream = getStreamByIdFromSource(id);
+
+  if (stream == null) {
+    log.info(
+      "[SABLIER] Stream hasn't been registered before this approval event: {}",
+      [id.toHexString()],
+    );
+    return;
+  }
+
+  let action = createAction(event);
+  action.category = "Approval";
+
+  action.addressA = event.params.owner;
+  action.addressB = event.params.approved;
+
+  /** --------------- */
+
+  action.stream = stream.id;
+  action.save();
+}
+
+export function handleApprovalForAll(event: EventApprovalForAll): void {
+  let action = createAction(event);
+  action.category = "ApprovalForAll";
+
+  action.addressA = event.params.owner;
+  action.addressB = event.params.operator;
+  action.amountA = event.params.approved ? one : zero;
+
+  /** --------------- */
+
+  action.save();
+}
+
+/**
+ * Use the TransferAdmin event as an `onCreate` lifecycle step
+ * as it's the first one to be logged after the contract's creation
+ */
+export function handleTransferAdmin(event: EventTransferAdmin): void {
+  let contract = getContractByAddress(dataSource.address());
+  if (contract == null) {
+    log.info(
+      "[SABLIER] Contract hasn't been registered before this transfer admin event: {}",
+      [dataSource.address().toHexString()],
+    );
+    log.error("[SABLIER]", []);
+    return;
+  }
+
+  contract.admin = event.params.newAdmin;
+  contract.save();
 }
