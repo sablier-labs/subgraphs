@@ -32,7 +32,7 @@ export function getContractsFlow(): string[][] {
   return flow.map<string[]>((item) => [
     item[0].toString().toLowerCase(),
     item[1].toString().toLowerCase(),
-    item.length >= 3 ? item[2].toString() : StreamVersion_V21,
+    item.length >= 3 ? item[2].toString() : StreamVersion_V22,
   ]);
 }
 
