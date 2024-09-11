@@ -29,6 +29,7 @@ export function createAction(event: Event, watcher_: Watcher) {
     subgraphId: BigInt(watcher_.actionIndex),
     chainId: BigInt(event.chainId),
     contract_id: generateContractIdFromEvent(event),
+    broker_id: undefined,
     /** --------------- */
     addressA: undefined,
     addressB: undefined,

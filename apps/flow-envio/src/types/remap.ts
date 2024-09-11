@@ -40,7 +40,7 @@ export type RefundArgs = EventRefundArgs_V22;
 export type RestartArgs = EventRestartArgs_V22;
 export type TransferArgs = EventTransferArgs_V22;
 export type TransferAdminArgs = EventTransferAdminArgs_V22;
-export type VoidAdminArgs = EventVoidArgs_V22;
+export type VoidArgs = EventVoidArgs_V22;
 export type WithdrawArgs = EventWithdrawArgs_V22;
 
 /** --------------------------------------------------------------------------------------------------------- */
@@ -127,10 +127,10 @@ export type TransferAdminHandler<
 
 /** ------------------------------------------------------------- */
 
-export type VoidAdminLoader = Loader<VoidAdminArgs>;
-export type VoidAdminHandler<
+export type VoidLoader = Loader<VoidArgs>;
+export type VoidHandler<
   L extends (_1: Loader<E>) => Promise<object>,
-  E = VoidAdminArgs,
+  E = VoidArgs,
 > = Handler<E, Awaited<ReturnType<L>>>;
 
 /** ------------------------------------------------------------- */

@@ -14,7 +14,6 @@ import { configuration } from "../constants";
 
 export function createStream(
   event: Event<CreateArgs>,
-  tokenId: bigint,
   entities: {
     asset: Asset;
     batch: Batch;
@@ -24,6 +23,7 @@ export function createStream(
   },
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
+  const tokenId = event.params.streamId;
 
   const id = generateStreamId(event, contract.address, tokenId);
   const alias = generateStreamAlias(event, contract.address, tokenId);
