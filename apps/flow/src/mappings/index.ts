@@ -15,4 +15,5 @@ export {
 export {
   handleInitializer,
   handleInitializer_Admin,
+  handleInitializer_Create_V22,
 } from "./handle-initializer";

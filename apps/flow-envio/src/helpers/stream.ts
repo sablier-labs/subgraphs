@@ -46,11 +46,11 @@ export function createStream(
     transferable: true,
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
+    ratePerSecond: event.params.ratePerSecond,
 
     /** --------------- */
     withdrawnAmount: 0n,
     availableAmount: 0n,
-    ratePerSecond: 0n,
     depositedAmount: 0n,
     snapshotAmount: 0n,
     protocolFeeAmount: 0n,

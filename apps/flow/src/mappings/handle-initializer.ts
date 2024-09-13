@@ -1,6 +1,9 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { ContractFlow as FlowTemplate } from "../generated/types/templates";
-import { TransferAdmin as EventTransferAdmin } from "../generated/types/templates/ContractFlow/SablierFlow";
+import {
+  CreateFlowStream as EventCreate,
+  TransferAdmin as EventTransferAdmin,
+} from "../generated/types/templates/ContractFlow/SablierFlow";
 import { getContractsFlow } from "../constants";
 import { createContract, getOrCreateWatcher } from "../helpers";
 
@@ -28,6 +31,10 @@ export function handleInitializer(): void {
       createContract(address, alias, version);
     }
   }
+}
+
+export function handleInitializer_Create_V22(_event: EventCreate): void {
+  handleInitializer();
 }
 
 export function handleInitializer_Admin(_event: EventTransferAdmin): void {

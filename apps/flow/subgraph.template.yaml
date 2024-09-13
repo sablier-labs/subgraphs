@@ -26,7 +26,7 @@ dataSources:
           file: ./abis/SablierFlow.json
       eventHandlers:
         - event: CreateFlowStream(uint256,indexed address,indexed address,uint128,indexed address,bool)
-          handler: handleInitializer
+          handler: handleInitializer_Create_V22
         - event: TransferAdmin(indexed address,indexed address)
           handler: handleInitializer_Admin
       file: ./src/mappings/index.ts

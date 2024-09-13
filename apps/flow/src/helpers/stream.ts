@@ -44,11 +44,11 @@ export function createStream(event: EventCreate): Stream | null {
   entity.transferable = event.params.transferable;
   entity.sender = event.params.sender;
   entity.recipient = event.params.recipient;
+  entity.ratePerSecond = event.params.ratePerSecond;
 
   /** --------------- */
   entity.withdrawnAmount = zero;
   entity.availableAmount = zero;
-  entity.ratePerSecond = zero;
   entity.depositedAmount = zero;
   entity.snapshotAmount = zero;
   entity.protocolFeeAmount = zero;

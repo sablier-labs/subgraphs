@@ -1,5 +1,4 @@
 import { dataSource, log } from "@graphprotocol/graph-ts";
-import { Stream } from "../generated/types/schema";
 import {
   AdjustFlowStream as EventAdjust,
   Approval as EventApproval,
@@ -22,23 +21,20 @@ import {
   getStreamByIdFromSource,
 } from "../helpers";
 
-export function handleCreateFlow(event: EventCreate): Stream | null {
+export function handleCreateFlow(event: EventCreate): void {
+  log.info("Entry in handler: ", [event.params.ratePerSecond.toString()]);
   let stream = createStream(event);
-  if (stream == null) {
-    return null;
+  if (stream != null) {
+    let action = createAction(event);
+    action.category = "Create";
+    action.addressA = event.params.sender;
+    action.addressB = event.params.recipient;
+    action.amountA = event.params.ratePerSecond;
+
+    stream.save();
+    action.stream = stream.id;
+    action.save();
   }
-
-  let action = createAction(event);
-  action.category = "Create";
-  action.addressA = event.params.sender;
-  action.addressB = event.params.recipient;
-  action.amountA = event.params.ratePerSecond;
-
-  stream.save();
-  action.stream = stream.id;
-  action.save();
-
-  return stream;
 }
 
 export function handleAdjust(event: EventAdjust): void {
@@ -112,6 +108,7 @@ export function handleDeposit(event: EventDeposit): void {
   // If the the stream still has debt mimic the contract behavior
   if (stream.availableAmount.gt(unpaidDebt)) {
     const extraAmount = stream.availableAmount.minus(unpaidDebt);
+
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(stream.ratePerSecond),
     );
