@@ -67,8 +67,8 @@ async function handler(input: DepositHandler<typeof loader>) {
 
   let depletionTime = stream.depletionTime;
   // If the the stream still has debt mimic the contract behavior
-  if (stream.availableAmount > unpaidDebt) {
-    const extraAmount = stream.availableAmount - unpaidDebt;
+  if (availableAmount > unpaidDebt) {
+    const extraAmount = availableAmount - unpaidDebt;
     depletionTime =
       BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
   }

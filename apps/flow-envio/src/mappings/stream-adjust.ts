@@ -64,7 +64,7 @@ async function handler(input: AdjustHandler<typeof loader>) {
   let depletionTime = stream.depletionTime;
   // The depletionTime should be recalculated only if it is the future at the event time (meaning extra amount exists inside the stream)
   if (stream.depletionTime > BigInt(event.block.timestamp)) {
-    const unpaidDebt = stream.snapshotAmount - stream.withdrawnAmount;
+    const unpaidDebt = snapshotAmount - stream.withdrawnAmount;
     const extraAmount = stream.availableAmount - unpaidDebt;
     depletionTime =
       BigInt(event.block.timestamp) +

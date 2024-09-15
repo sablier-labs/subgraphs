@@ -63,7 +63,7 @@ async function handler(input: RefundHandler<typeof loader>) {
     stream.ratePerSecond *
       (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp) -
     stream.withdrawnAmount;
-  const extraAmount = stream.availableAmount - unpaidDebt;
+  const extraAmount = availableAmount - unpaidDebt;
   const depletionTime =
     BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
 
