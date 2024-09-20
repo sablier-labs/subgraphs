@@ -21,20 +21,20 @@ import {
   getStreamByIdFromSource,
 } from "../helpers";
 
-export function handleCreateFlow(event: EventCreate): void {
-  log.info("Entry in handler: ", [event.params.ratePerSecond.toString()]);
+export function handleCreate(event: EventCreate): void {
   let stream = createStream(event);
-  if (stream != null) {
-    let action = createAction(event);
-    action.category = "Create";
-    action.addressA = event.params.sender;
-    action.addressB = event.params.recipient;
-    action.amountA = event.params.ratePerSecond;
-
-    stream.save();
-    action.stream = stream.id;
-    action.save();
+  if (stream == null) {
+    return;
   }
+  let action = createAction(event);
+  action.category = "Create";
+  action.addressA = event.params.sender;
+  action.addressB = event.params.recipient;
+  action.amountA = event.params.ratePerSecond;
+
+  stream.save();
+  action.stream = stream.id;
+  action.save();
 }
 
 export function handleAdjust(event: EventAdjust): void {
@@ -56,15 +56,16 @@ export function handleAdjust(event: EventAdjust): void {
   /** --------------- */
 
   stream.lastAdjustmentAction = action.id;
-  stream.snapshotAmount = stream.snapshotAmount.plus(
+  const snapshotAmount = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(
       event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
     ),
   );
+
   // The depletionTime should be recalculated only if it is the future at the event time (meaning extra amount exists inside the stream)
   if (stream.depletionTime.gt(event.block.timestamp)) {
-    const unpaidDebt = stream.snapshotAmount.minus(stream.withdrawnAmount);
-    const extraAmount = stream.availableAmount.minus(unpaidDebt);
+    const notWithdrawn = snapshotAmount.minus(stream.withdrawnAmount);
+    const extraAmount = stream.availableAmount.minus(notWithdrawn);
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(event.params.newRatePerSecond),
     );
@@ -72,6 +73,7 @@ export function handleAdjust(event: EventAdjust): void {
 
   stream.ratePerSecond = event.params.newRatePerSecond;
   stream.lastAdjustmentTimestamp = event.block.timestamp;
+  stream.snapshotAmount = snapshotAmount;
 
   stream.save();
   action.stream = stream.id;
@@ -95,25 +97,25 @@ export function handleDeposit(event: EventDeposit): void {
   action.addressA = event.params.funder;
   action.amountA = event.params.amount;
 
-  stream.availableAmount = stream.availableAmount.plus(event.params.amount);
+  const availableAmount = stream.availableAmount.plus(event.params.amount);
   stream.depositedAmount = stream.depositedAmount.plus(event.params.amount);
-  const unpaidDebt = stream.snapshotAmount
-    .plus(
-      stream.ratePerSecond.times(
-        event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
-      ),
-    )
-    .minus(stream.withdrawnAmount);
+  const streamedAmount = stream.snapshotAmount.plus(
+    stream.ratePerSecond.times(
+      event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
+    ),
+  );
+  const notWithdrawn = streamedAmount.minus(stream.withdrawnAmount);
 
   // If the the stream still has debt mimic the contract behavior
-  if (stream.availableAmount.gt(unpaidDebt)) {
-    const extraAmount = stream.availableAmount.minus(unpaidDebt);
+  if (availableAmount.gt(notWithdrawn)) {
+    const extraAmount = stream.availableAmount.minus(notWithdrawn);
 
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(stream.ratePerSecond),
     );
   }
 
+  stream.availableAmount = availableAmount;
   stream.save();
   action.stream = stream.id;
   action.save();
@@ -175,18 +177,22 @@ export function handleRefund(event: EventRefund): void {
   action.amountA = event.params.amount;
 
   stream.availableAmount = stream.availableAmount.minus(event.params.amount);
-  const unpaidDebt = stream.snapshotAmount
-    .plus(
-      stream.ratePerSecond.times(
-        event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
-      ),
-    )
-    .minus(stream.withdrawnAmount);
-  // given that the refund was possible extra amount is positive. Does 0 divided by something throws error ?
-  const extraAmount = stream.availableAmount.minus(unpaidDebt);
-  stream.depletionTime = event.block.timestamp.plus(
-    extraAmount.div(stream.ratePerSecond),
+  stream.refundedAmount = stream.refundedAmount.plus(event.params.amount);
+  const streamedAmount = stream.snapshotAmount.plus(
+    stream.ratePerSecond.times(
+      event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
+    ),
   );
+  const notWithdrawn = streamedAmount.minus(stream.withdrawnAmount);
+  /** If refunded all the available amount the stream start accruing now  */
+  const extraAmount = stream.availableAmount.minus(notWithdrawn);
+  if (extraAmount.equals(zero)) {
+    stream.depletionTime = event.block.timestamp;
+  } else {
+    stream.depletionTime = event.block.timestamp.plus(
+      extraAmount.div(stream.ratePerSecond),
+    );
+  }
 
   stream.save();
   action.stream = stream.id;
@@ -216,14 +222,13 @@ export function handleRestart(event: EventRestart): void {
   stream.voided = false;
   stream.voidedTime = null;
   stream.voidedAction = null;
-  // Restart is actually an adjustment
+  /** Restart is actually an adjustment */
   stream.lastAdjustmentAction = action.id;
   stream.lastAdjustmentTimestamp = event.block.timestamp;
   stream.ratePerSecond = event.params.ratePerSecond;
-  // should be recomputed at the restart
-  const unpaidDebt = stream.snapshotAmount.minus(stream.withdrawnAmount);
-  if (stream.availableAmount.gt(unpaidDebt)) {
-    const extraAmount = stream.availableAmount.minus(unpaidDebt);
+  const notWithdrawn = stream.snapshotAmount.minus(stream.withdrawnAmount);
+  if (stream.availableAmount.gt(notWithdrawn)) {
+    const extraAmount = stream.availableAmount.minus(notWithdrawn);
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(stream.ratePerSecond),
     );
@@ -294,15 +299,17 @@ export function handleVoid(event: EventVoid): void {
   stream.voided = true;
   stream.paused = true;
 
+  stream.pausedTime = event.block.timestamp;
+  stream.pausedAction = action.id;
   stream.voidedTime = event.block.timestamp;
   stream.voidedAction = action.id;
-  // Void is actually an adjustment with the newRate per second equal to zero
+  /**Void is actually an adjustment with the newRate per second equal to zero */
   stream.lastAdjustmentAction = action.id;
   stream.lastAdjustmentTimestamp = event.block.timestamp;
 
   stream.snapshotAmount = stream.withdrawnAmount.plus(stream.availableAmount);
   stream.ratePerSecond = zero;
-  // should be recomputed at the restart
+  /** should be recomputed at the restart */
   stream.depletionTime = zero;
 
   stream.save();
@@ -325,6 +332,7 @@ export function handleWithdraw(event: EventWithdraw): void {
   let action = createAction(event);
   action.category = "Withdraw";
   action.addressA = event.params.caller;
+  action.addressB = event.params.to;
   action.amountA = event.params.withdrawAmount;
 
   stream.availableAmount = stream.availableAmount.minus(

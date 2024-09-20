@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 
 import type { CreateLoader, CreateHandler, Action } from "../types";
 
@@ -112,7 +112,7 @@ async function handler(input: CreateHandler<typeof loader>) {
   await context.Watcher.set(watcher);
 }
 
-FlowV22.CreateFlowStream.handlerWithLoader({
+FlowV10.CreateFlowStream.handlerWithLoader({
   loader,
   handler,
 });

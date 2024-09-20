@@ -29,8 +29,6 @@ type Action @entity {
   "address that triggered the transaction"
   from: Bytes!
 
-  "broker linked to this action (or null if this is does not involve a broker)"
-  broker: Broker
   "stream linked to this action (or null if this is a contract level action)"
   stream: Stream
   "unique global id tracked by the subgraph watcher"
@@ -95,15 +93,6 @@ type Batcher @entity {
   batches: [Batch!]! @derivedFrom(field: "batcher")
 }
 
-type Broker @entity {
-  "unique identifier for the broker, resolving to the broker's address"
-  id: String!
-  "broker address"
-  address: Bytes
-  "actions that involve a Broker"
-  actions: [Action!]! @derivedFrom(field: "broker")
-}
-
 type Contract @entity {
   "unique identifier resolving to contract address"
   id: String!
@@ -144,6 +133,8 @@ type Stream @entity {
   "timestamp of the stream creation (for sorting reasons)"
   timestamp: BigInt!
 
+  "the address that calls the create method (anyone can create a stream on any sender's behalf)"
+  creator: Bytes!
   "manager of the stream, defined at creation"
   sender: Bytes!
   "current recipient of the stream, can withdraw the funds (the recipient can change on stream/nft transfer)"
@@ -154,7 +145,7 @@ type Stream @entity {
 
   "timestamp for the start of the stream"
   startTime: BigInt!
-  "timestamp of the date until the stream is solvent"
+  "timestamp for the moment until the stream is solvent(not in debt)"
   depletionTime: BigInt!
   "flag showing the transferability of the stream (decided when the stream is created)"
   transferable: Boolean!
@@ -178,12 +169,14 @@ type Stream @entity {
   "timestamp of the last adjustment action"
   lastAdjustmentTimestamp: BigInt!
 
-  "current balance of the stream"
+  "current balance of the stream. (Equals to the ERC20 balanceOf, and it is changed by every deposit and withdraw)"
   availableAmount: BigInt!
   "current ratePerSecond of the stream"
   ratePerSecond: BigInt!
   "amount resolving to the sum of all deposits"
   depositedAmount: BigInt!
+  "amount resolving to the sum of all refunds"
+  refundedAmount: BigInt!
   "amount resolving to the sum of all withdrawals"
   withdrawnAmount: BigInt!
   "amount resolving to the streamed amount up until the ratePerSecond is changed"

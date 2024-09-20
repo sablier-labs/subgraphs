@@ -33,7 +33,7 @@ export function handleInitializer(): void {
   }
 }
 
-export function handleInitializer_Create_V22(_event: EventCreate): void {
+export function handleInitializer_Create_V10(_event: EventCreate): void {
   handleInitializer();
 }
 

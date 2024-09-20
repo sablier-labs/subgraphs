@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, RefundHandler, RefundLoader } from "../types";
 
 import {
@@ -58,18 +58,24 @@ async function handler(input: RefundHandler<typeof loader>) {
   watcher = post_action.watcher;
 
   const availableAmount = stream.availableAmount - event.params.amount;
-  const unpaidDebt =
+  const refundedAmount = stream.refundedAmount + event.params.amount;
+  const streamedAmount =
     stream.snapshotAmount +
     stream.ratePerSecond *
-      (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp) -
-    stream.withdrawnAmount;
-  const extraAmount = availableAmount - unpaidDebt;
-  const depletionTime =
-    BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
+      (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp);
+  const notWithdrawn = streamedAmount - stream.withdrawnAmount;
+  const extraAmount = availableAmount - notWithdrawn;
+  /** If refunded all the available amount the stream start accruing now  */
+  let depletionTime = BigInt(event.block.timestamp);
+  if (extraAmount !== 0n) {
+    depletionTime =
+      BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
+  }
 
   stream = {
     ...stream,
     availableAmount,
+    refundedAmount,
     depletionTime,
   };
 
@@ -78,7 +84,7 @@ async function handler(input: RefundHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.RefundFromFlowStream.handlerWithLoader({
+FlowV10.RefundFromFlowStream.handlerWithLoader({
   loader,
   handler,
 });

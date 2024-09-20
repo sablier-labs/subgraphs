@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { TransferAdminHandler, TransferAdminLoader } from "../types";
 
 import { generateContractIdFromEvent, initialize } from "../helpers";
@@ -61,7 +61,7 @@ async function handler(input: TransferAdminHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.TransferAdmin.handlerWithLoader({
+FlowV10.TransferAdmin.handlerWithLoader({
   loader,
   handler,
 });

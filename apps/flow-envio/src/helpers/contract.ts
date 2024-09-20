@@ -52,7 +52,7 @@ export function generateContractIdFromEvent(event: Event) {
 }
 
 export function _initialize(event: Event): Contract[] {
-  const versions = [StreamVersion.V22];
+  const versions = [StreamVersion.V10];
 
   return chains
     .map((chain) => {

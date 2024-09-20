@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, RestartHandler, RestartLoader } from "../types";
 
 import {
@@ -57,10 +57,10 @@ async function handler(input: RestartHandler<typeof loader>) {
 
   watcher = post_action.watcher;
 
-  const unpaidDebt = stream.snapshotAmount - stream.withdrawnAmount;
+  const notWithdrawn = stream.snapshotAmount - stream.withdrawnAmount;
   let depletionTime = stream.depletionTime;
-  if (stream.availableAmount > unpaidDebt) {
-    const extraAmount = stream.availableAmount - unpaidDebt;
+  if (stream.availableAmount > notWithdrawn) {
+    const extraAmount = stream.availableAmount - notWithdrawn;
     depletionTime =
       BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
   }
@@ -73,7 +73,7 @@ async function handler(input: RestartHandler<typeof loader>) {
     voided: false,
     voidedTime: undefined,
     voidedAction_id: undefined,
-    // Restart is actually an adjustment
+    /** Restart is actually an adjustment */
     lastAdjustmentAction_id: action.id,
     lastAdjustmentTimestamp: BigInt(event.block.timestamp),
     ratePerSecond: event.params.ratePerSecond,
@@ -85,7 +85,7 @@ async function handler(input: RestartHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.RestartFlowStream.handlerWithLoader({
+FlowV10.RestartFlowStream.handlerWithLoader({
   loader,
   handler,
 });

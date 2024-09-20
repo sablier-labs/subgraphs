@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, DepositHandler, DepositLoader } from "../types";
 
 import {
@@ -59,16 +59,16 @@ async function handler(input: DepositHandler<typeof loader>) {
 
   const availableAmount = stream.availableAmount + event.params.amount;
   const depositedAmount = stream.depositedAmount + event.params.amount;
-  const unpaidDebt =
+  const streamedAmount =
     stream.snapshotAmount +
     stream.ratePerSecond *
-      (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp) -
-    stream.withdrawnAmount;
+      (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp);
+  const notWithdrawn = streamedAmount - stream.withdrawnAmount;
 
   let depletionTime = stream.depletionTime;
   // If the the stream still has debt mimic the contract behavior
-  if (availableAmount > unpaidDebt) {
-    const extraAmount = availableAmount - unpaidDebt;
+  if (availableAmount > notWithdrawn) {
+    const extraAmount = availableAmount - notWithdrawn;
     depletionTime =
       BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
   }
@@ -85,7 +85,7 @@ async function handler(input: DepositHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.DepositFlowStream.handlerWithLoader({
+FlowV10.DepositFlowStream.handlerWithLoader({
   loader,
   handler,
 });

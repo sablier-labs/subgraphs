@@ -42,11 +42,13 @@ export function createStream(event: EventCreate): Stream | null {
   entity.startTime = event.block.timestamp;
   entity.depletionTime = event.block.timestamp;
   entity.transferable = event.params.transferable;
+  entity.creator = event.transaction.from;
   entity.sender = event.params.sender;
   entity.recipient = event.params.recipient;
   entity.ratePerSecond = event.params.ratePerSecond;
 
   /** --------------- */
+  entity.refundedAmount = zero;
   entity.withdrawnAmount = zero;
   entity.availableAmount = zero;
   entity.depositedAmount = zero;

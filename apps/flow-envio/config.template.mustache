@@ -8,7 +8,7 @@ field_selection:
     - "hash"
     - "transactionIndex"
 contracts:
-  - name: FlowV22
+  - name: FlowV10
     handler: src/mappings/index.ts
     events:
       - event: AdjustFlowStream(uint256 indexed streamId, uint128 totalDebt, uint128 oldRatePerSecond, uint128 newRatePerSecond)
@@ -34,11 +34,11 @@ networks:
   - id: {{id}}
     start_block: {{start_block}}
     contracts:
-      {{#V22.available}}
-      - name: FlowV22
+      {{#V10.available}}
+      - name: FlowV10
         address:
-          {{#V22.flow}}
+          {{#V10.flow}}
           - {{address}}
-          {{/V22.flow}}
-      {{/V22.available}}
+          {{/V10.flow}}
+      {{/V10.available}}
    {{/chains}}

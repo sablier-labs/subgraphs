@@ -1,28 +1,28 @@
 import type {
   /** Event: Adjust Flow stream */
-  FlowV22_AdjustFlowStream_eventArgs as EventAdjustArgs_V22,
+  FlowV10_AdjustFlowStream_eventArgs as EventAdjustArgs_V10,
   /** Event: Approval (NFT) */
-  FlowV22_Approval_eventArgs as EventApprovalArgs_V22,
+  FlowV10_Approval_eventArgs as EventApprovalArgs_V10,
   /** Event: ApprovalForAll (NFT) */
-  FlowV22_ApprovalForAll_eventArgs as EventApprovalForAllArgs_V22,
+  FlowV10_ApprovalForAll_eventArgs as EventApprovalForAllArgs_V10,
   /** Event: Create Create Flow Stream */
-  FlowV22_CreateFlowStream_eventArgs as EventCreateArgs_V22,
+  FlowV10_CreateFlowStream_eventArgs as EventCreateArgs_V10,
   /** Event: Deposit */
-  FlowV22_DepositFlowStream_eventArgs as EventDepositArgs_V22,
+  FlowV10_DepositFlowStream_eventArgs as EventDepositArgs_V10,
   /** Event: Pause */
-  FlowV22_PauseFlowStream_eventArgs as EventPauseArgs_V22,
+  FlowV10_PauseFlowStream_eventArgs as EventPauseArgs_V10,
   /** Event: Refund */
-  FlowV22_RefundFromFlowStream_eventArgs as EventRefundArgs_V22,
+  FlowV10_RefundFromFlowStream_eventArgs as EventRefundArgs_V10,
   /** Event: Restart */
-  FlowV22_RestartFlowStream_eventArgs as EventRestartArgs_V22,
+  FlowV10_RestartFlowStream_eventArgs as EventRestartArgs_V10,
   /** Event: Transfer (NFT) */
-  FlowV22_Transfer_eventArgs as EventTransferArgs_V22,
+  FlowV10_Transfer_eventArgs as EventTransferArgs_V10,
   /** Event: TransferAdmin (Lockup) */
-  FlowV22_TransferAdmin_eventArgs as EventTransferAdminArgs_V22,
+  FlowV10_TransferAdmin_eventArgs as EventTransferAdminArgs_V10,
   /** Event: Restart */
-  FlowV22_VoidFlowStream_eventArgs as EventVoidArgs_V22,
+  FlowV10_VoidFlowStream_eventArgs as EventVoidArgs_V10,
   /** Event: Withdraw */
-  FlowV22_WithdrawFromFlowStream_eventArgs as EventWithdrawArgs_V22,
+  FlowV10_WithdrawFromFlowStream_eventArgs as EventWithdrawArgs_V10,
 } from "../../generated/src/Types.gen";
 
 import type { Loader, Handler } from "./general";
@@ -30,18 +30,18 @@ import type { Loader, Handler } from "./general";
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
-export type AdjustArgs = EventAdjustArgs_V22;
-export type ApprovalArgs = EventApprovalArgs_V22;
-export type ApprovalForAllArgs = EventApprovalForAllArgs_V22;
-export type CreateArgs = EventCreateArgs_V22;
-export type DepositArgs = EventDepositArgs_V22;
-export type PauseArgs = EventPauseArgs_V22;
-export type RefundArgs = EventRefundArgs_V22;
-export type RestartArgs = EventRestartArgs_V22;
-export type TransferArgs = EventTransferArgs_V22;
-export type TransferAdminArgs = EventTransferAdminArgs_V22;
-export type VoidArgs = EventVoidArgs_V22;
-export type WithdrawArgs = EventWithdrawArgs_V22;
+export type AdjustArgs = EventAdjustArgs_V10;
+export type ApprovalArgs = EventApprovalArgs_V10;
+export type ApprovalForAllArgs = EventApprovalForAllArgs_V10;
+export type CreateArgs = EventCreateArgs_V10;
+export type DepositArgs = EventDepositArgs_V10;
+export type PauseArgs = EventPauseArgs_V10;
+export type RefundArgs = EventRefundArgs_V10;
+export type RestartArgs = EventRestartArgs_V10;
+export type TransferArgs = EventTransferArgs_V10;
+export type TransferAdminArgs = EventTransferAdminArgs_V10;
+export type VoidArgs = EventVoidArgs_V10;
+export type WithdrawArgs = EventWithdrawArgs_V10;
 
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */

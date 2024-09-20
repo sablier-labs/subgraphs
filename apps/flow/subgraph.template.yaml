@@ -26,7 +26,7 @@ dataSources:
           file: ./abis/SablierFlow.json
       eventHandlers:
         - event: CreateFlowStream(uint256,indexed address,indexed address,uint128,indexed address,bool)
-          handler: handleInitializer_Create_V22
+          handler: handleInitializer_Create_V10
         - event: TransferAdmin(indexed address,indexed address)
           handler: handleInitializer_Admin
       file: ./src/mappings/index.ts
@@ -64,7 +64,7 @@ templates:
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
         - event: CreateFlowStream(uint256,indexed address,indexed address,uint128,indexed address,bool)
-          handler: handleCreateFlow
+          handler: handleCreate
         - event: DepositFlowStream(indexed uint256,indexed address,uint128)
           handler: handleDeposit
         - event: PauseFlowStream(indexed uint256,indexed address,indexed address,uint128)

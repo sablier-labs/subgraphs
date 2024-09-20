@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, AdjustHandler, AdjustLoader } from "../types";
 
 import {
@@ -62,10 +62,10 @@ async function handler(input: AdjustHandler<typeof loader>) {
     stream.ratePerSecond *
       (BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp);
   let depletionTime = stream.depletionTime;
-  // The depletionTime should be recalculated only if it is the future at the event time (meaning extra amount exists inside the stream)
+  /** The depletionTime should be recalculated only if it is the future at the event time (meaning extra amount exists inside the stream)*/
   if (stream.depletionTime > BigInt(event.block.timestamp)) {
-    const unpaidDebt = snapshotAmount - stream.withdrawnAmount;
-    const extraAmount = stream.availableAmount - unpaidDebt;
+    const notWithdrawn = snapshotAmount - stream.withdrawnAmount;
+    const extraAmount = stream.availableAmount - notWithdrawn;
     depletionTime =
       BigInt(event.block.timestamp) +
       extraAmount / event.params.newRatePerSecond;
@@ -85,7 +85,7 @@ async function handler(input: AdjustHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.AdjustFlowStream.handlerWithLoader({
+FlowV10.AdjustFlowStream.handlerWithLoader({
   loader,
   handler,
 });

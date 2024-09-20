@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, TransferHandler, TransferLoader } from "../types";
 
 import {
@@ -76,7 +76,7 @@ async function handler(input: TransferHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.Transfer.handlerWithLoader({
+FlowV10.Transfer.handlerWithLoader({
   loader,
   handler,
 });

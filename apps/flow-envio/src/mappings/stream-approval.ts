@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, ApprovalHandler, ApprovalLoader } from "../types";
 
 import {
@@ -59,7 +59,7 @@ async function handler(input: ApprovalHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.Approval.handlerWithLoader({
+FlowV10.Approval.handlerWithLoader({
   loader,
   handler,
 });

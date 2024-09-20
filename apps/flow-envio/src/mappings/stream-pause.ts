@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, PauseHandler, PauseLoader } from "../types";
 
 import {
@@ -80,7 +80,7 @@ async function handler(input: PauseHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.PauseFlowStream.handlerWithLoader({
+FlowV10.PauseFlowStream.handlerWithLoader({
   loader,
   handler,
 });

@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, WithdrawHandler, WithdrawLoader } from "../types";
 
 import {
@@ -52,6 +52,7 @@ async function handler(input: WithdrawHandler<typeof loader>) {
 
     /** --------------- */
     addressA: event.params.caller.toLowerCase(),
+    addressB: event.params.to.toLowerCase(),
     amountA: event.params.withdrawAmount,
   };
 
@@ -67,7 +68,7 @@ async function handler(input: WithdrawHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.WithdrawFromFlowStream.handlerWithLoader({
+FlowV10.WithdrawFromFlowStream.handlerWithLoader({
   loader,
   handler,
 });

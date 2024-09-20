@@ -3,7 +3,7 @@ import type {
   ApprovalForAllHandler,
   ApprovalForAllLoader,
 } from "../types";
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import { createAction, getOrCreateWatcher } from "../helpers";
 import { ActionCategory } from "../constants";
 
@@ -44,7 +44,7 @@ async function handler(input: ApprovalForAllHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.ApprovalForAll.handlerWithLoader({
+FlowV10.ApprovalForAll.handlerWithLoader({
   loader,
   handler,
 });

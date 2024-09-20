@@ -44,11 +44,13 @@ export function createStream(
     startTime: BigInt(event.block.timestamp),
     depletionTime: BigInt(event.block.timestamp),
     transferable: true,
+    creator: event.transaction.from!.toLowerCase(),
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
     ratePerSecond: event.params.ratePerSecond,
 
     /** --------------- */
+    refundedAmount: 0n,
     withdrawnAmount: 0n,
     availableAmount: 0n,
     depositedAmount: 0n,

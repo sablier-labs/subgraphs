@@ -1,4 +1,4 @@
-import { FlowV22 } from "../../generated";
+import { FlowV10 } from "../../generated";
 import type { Action, VoidHandler, VoidLoader } from "../types";
 
 import {
@@ -64,13 +64,15 @@ async function handler(input: VoidHandler<typeof loader>) {
     paused: true,
     voidedTime: BigInt(event.block.timestamp),
     voidedAction_id: action.id,
-    // Void is actually an adjustment with the newRate per second equal to zero
+    pausedTime: BigInt(event.block.timestamp),
+    pausedAction_id: action.id,
+    /** Void is actually an adjustment with the newRate per second equal to zero */
     lastAdjustmentAction_id: action.id,
     lastAdjustmentTimestamp: BigInt(event.block.timestamp),
 
     snapshotAmount: stream.withdrawnAmount + stream.availableAmount,
     ratePerSecond: 0n,
-    // should be recomputed at the restart
+    /** should be recomputed at the restart */
     depletionTime: 0n,
   };
 
@@ -79,7 +81,7 @@ async function handler(input: VoidHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-FlowV22.VoidFlowStream.handlerWithLoader({
+FlowV10.VoidFlowStream.handlerWithLoader({
   loader,
   handler,
 });

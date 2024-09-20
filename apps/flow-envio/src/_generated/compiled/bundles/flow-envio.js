@@ -21,16 +21,16 @@ var chains = function () {
     var list = [experimental];
     /** Merging the linear and dynamic arrays with a spread operator will break mustache's template engine */
     return list.map(function (item) {
-        var V22 = {
-            flow: filter(item.flow, "V22"),
+        var V10 = {
+            flow: filter(item.flow, "V10"),
             available: false,
         };
-        V22.available = available(V22);
+        V10.available = available(V10);
         return {
             id: item.chainId,
             name: item.chain,
             start_block: item.startBlock_merkle,
-            V22: V22,
+            V10: V10,
         };
     });
 };

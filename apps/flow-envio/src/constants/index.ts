@@ -5,9 +5,7 @@ export const ADDRESS_ZERO = String(
 );
 
 export const StreamVersion = {
-  V20: "V20",
-  V21: "V21",
-  V22: "V22",
+  V10: "V10",
 } as const;
 
 export const ActionCategory = {
@@ -39,7 +37,7 @@ export function configuration(chainId: number | string | bigint) {
 
   return {
     ...configuration,
-    contracts: [...configuration.V22.flow],
+    contracts: [...configuration.V10.flow],
   };
 }
 
