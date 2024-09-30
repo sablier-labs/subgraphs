@@ -108,7 +108,7 @@ export function handleDeposit(event: EventDeposit): void {
 
   // If the the stream still has debt mimic the contract behavior
   if (availableAmount.gt(notWithdrawn)) {
-    const extraAmount = stream.availableAmount.minus(notWithdrawn);
+    const extraAmount = availableAmount.minus(notWithdrawn);
 
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(stream.ratePerSecond),
@@ -143,13 +143,14 @@ export function handlePause(event: EventPause): void {
   stream.pausedTime = event.block.timestamp;
   stream.pausedAction = action.id;
   // Paused is actually an adjustment with the newRate per second equal to zero
-  stream.lastAdjustmentAction = action.id;
-  stream.lastAdjustmentTimestamp = event.block.timestamp;
   stream.snapshotAmount = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(
       event.block.timestamp.minus(stream.lastAdjustmentTimestamp),
     ),
   );
+  stream.lastAdjustmentAction = action.id;
+  stream.lastAdjustmentTimestamp = event.block.timestamp;
+
   stream.ratePerSecond = zero;
   // should be recomputed at the restart
   stream.depletionTime = zero;
