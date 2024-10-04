@@ -79,6 +79,6 @@ templates:
           handler: handleTransferAdmin
         - event: VoidFlowStream(indexed uint256,indexed address,indexed address,address,uint128,uint128)
           handler: handleVoid
-        - event: WithdrawFromFlowStream(indexed uint256,indexed address,indexed address,address,uint128,uint40)
+        - event: WithdrawFromFlowStream(indexed uint256,indexed address,indexed address,address,uint128,uint128)
           handler: handleWithdraw
       file: ./src/mappings/index.ts

@@ -4,6 +4,10 @@ export const ADDRESS_ZERO = String(
   "0x0000000000000000000000000000000000000000",
 );
 
+export const StreamCategory = {
+  Flow: "Flow",
+} as const;
+
 export const StreamVersion = {
   V10: "V10",
 } as const;

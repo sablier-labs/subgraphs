@@ -36,6 +36,7 @@ export function createStream(event: EventCreate): Stream | null {
   entity.contract = contract.id;
   entity.version = contract.version;
   entity.subgraphId = watcher.streamIndex;
+  entity.category = "Flow";
   entity.hash = event.transaction.hash;
   entity.timestamp = event.block.timestamp;
   entity.chainId = getChainId();

@@ -22,7 +22,7 @@ exports.dynamic = [
     ["0x73bb6dd3f5828d60f8b3dbc8798eb10fba2c5636", "LD3", "V22"],
 ];
 exports.flow = [
-    ["0xf978034bb3cab5fe88d23db5cb38d510485dab90", "FL", "V10"],
+    ["0xbf85cd17ca59b7a2b81d3d776ce1602a7c0af9d9", "FL", "V10"],
 ];
 exports.tranched = [
     ["0x3a1bea13a8c24c0ea2b8fae91e4b2762a59d7af5", "LT3", "V22"],

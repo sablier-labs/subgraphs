@@ -10,7 +10,7 @@ import type {
   CreateArgs,
 } from "../types";
 
-import { configuration } from "../constants";
+import { configuration, StreamCategory } from "../constants";
 
 export function createStream(
   event: Event<CreateArgs>,
@@ -35,6 +35,7 @@ export function createStream(
     tokenId,
     alias,
     asset_id: asset.id,
+    category: StreamCategory.Flow,
     contract_id: contract.id,
     version: contract.version,
     subgraphId: BigInt(watcher.streamIndex),

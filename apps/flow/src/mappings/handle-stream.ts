@@ -233,6 +233,8 @@ export function handleRestart(event: EventRestart): void {
     stream.depletionTime = event.block.timestamp.plus(
       extraAmount.div(stream.ratePerSecond),
     );
+  } else {
+    stream.depletionTime = event.block.timestamp;
   }
 
   stream.save();

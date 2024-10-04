@@ -19,13 +19,13 @@
         "name": "oldRatePerSecond",
         "type": "uint128",
         "indexed": false,
-        "internalType": "uint128"
+        "internalType": "UD21x18"
       },
       {
         "name": "newRatePerSecond",
         "type": "uint128",
         "indexed": false,
-        "internalType": "uint128"
+        "internalType": "UD21x18"
       }
     ],
     "anonymous": false
@@ -101,6 +101,37 @@
   },
   {
     "type": "event",
+    "name": "CollectProtocolRevenue",
+    "inputs": [
+      {
+        "name": "admin",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "contract IERC20"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "revenue",
+        "type": "uint128",
+        "indexed": false,
+        "internalType": "uint128"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "CreateFlowStream",
     "inputs": [
       {
@@ -125,7 +156,7 @@
         "name": "ratePerSecond",
         "type": "uint128",
         "indexed": false,
-        "internalType": "uint128"
+        "internalType": "UD21x18"
       },
       {
         "name": "token",
@@ -256,7 +287,7 @@
         "name": "ratePerSecond",
         "type": "uint128",
         "indexed": false,
-        "internalType": "uint128"
+        "internalType": "UD21x18"
       }
     ],
     "anonymous": false
@@ -282,6 +313,37 @@
         "type": "address",
         "indexed": false,
         "internalType": "contract ISablierFlowNFTDescriptor"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SetProtocolFee",
+    "inputs": [
+      {
+        "name": "admin",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "contract IERC20"
+      },
+      {
+        "name": "oldProtocolFee",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "UD60x18"
+      },
+      {
+        "name": "newProtocolFee",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "UD60x18"
       }
     ],
     "anonymous": false
@@ -402,16 +464,16 @@
         "internalType": "address"
       },
       {
-        "name": "withdrawAmount",
+        "name": "protocolFeeAmount",
         "type": "uint128",
         "indexed": false,
         "internalType": "uint128"
       },
       {
-        "name": "withdrawTime",
-        "type": "uint40",
+        "name": "withdrawAmount",
+        "type": "uint128",
         "indexed": false,
-        "internalType": "uint40"
+        "internalType": "uint128"
       }
     ],
     "anonymous": false

@@ -12,6 +12,10 @@ enum ActionCategory {
   Withdraw
 }
 
+enum StreamCategory {
+  Flow
+}
+
 type Action @entity {
   "unique identifier resolving to transaction hash concatenated with the log index (there may be multiple actions per tx)"
   id: ID!
@@ -124,6 +128,8 @@ type Stream @entity {
   "full version based on the SablierFlow contract versioning system"
   version: String!
 
+  "type of stream (for sorting reasons)"
+  category: StreamCategory!
   "hardcoded chain id"
   chainId: BigInt!
   "contract through which this stream has been created"

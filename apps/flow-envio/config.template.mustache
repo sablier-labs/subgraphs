@@ -27,8 +27,8 @@ contracts:
           VoidFlowStream(uint256 indexed streamId, address indexed sender, address indexed recipient, address caller, uint128 newTotalDebt,
           uint128 writtenOffDebt)
       - event: 
-          WithdrawFromFlowStream( uint256 indexed streamId, address indexed to, address indexed token, address caller, uint128 withdrawAmount,
-          uint40 withdrawTime)
+          WithdrawFromFlowStream( uint256 indexed streamId, address indexed to, address indexed token, address caller, uint128 protocolFeeAmount,
+          uint128 withdrawAmount)
 networks:
   {{#chains}}
   - id: {{id}}
