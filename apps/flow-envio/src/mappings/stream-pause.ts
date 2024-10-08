@@ -72,7 +72,6 @@ async function handler(input: PauseHandler<typeof loader>) {
     lastAdjustmentTimestamp: BigInt(event.block.timestamp),
     snapshotAmount,
     ratePerSecond: 0n,
-    depletionTime: 0n,
   };
 
   context.Action.set(action);

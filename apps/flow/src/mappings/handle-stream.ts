@@ -152,8 +152,6 @@ export function handlePause(event: EventPause): void {
   stream.lastAdjustmentTimestamp = event.block.timestamp;
 
   stream.ratePerSecond = zero;
-  // should be recomputed at the restart
-  stream.depletionTime = zero;
 
   stream.save();
   action.stream = stream.id;
@@ -312,7 +310,6 @@ export function handleVoid(event: EventVoid): void {
 
   stream.snapshotAmount = stream.withdrawnAmount.plus(stream.availableAmount);
   stream.ratePerSecond = zero;
-  /** should be recomputed at the restart */
   stream.depletionTime = zero;
 
   stream.save();
