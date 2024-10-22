@@ -55,6 +55,7 @@ export function createStream(event: EventCreate): Stream | null {
   entity.depositedAmount = zero;
   entity.snapshotAmount = zero;
   entity.protocolFeeAmount = zero;
+  entity.forgivenDebt = zero;
 
   /** --------------- */
   entity.paused = false;

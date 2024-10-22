@@ -71,6 +71,7 @@ async function handler(input: VoidHandler<typeof loader>) {
     lastAdjustmentTimestamp: BigInt(event.block.timestamp),
 
     snapshotAmount: stream.withdrawnAmount + stream.availableAmount,
+    forgivenDebt: event.params.writtenOffDebt,
     ratePerSecond: 0n,
     /** should be recomputed at the restart */
     depletionTime: 0n,

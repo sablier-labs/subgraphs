@@ -309,6 +309,7 @@ export function handleVoid(event: EventVoid): void {
   stream.lastAdjustmentTimestamp = event.block.timestamp;
 
   stream.snapshotAmount = stream.withdrawnAmount.plus(stream.availableAmount);
+  stream.forgivenDebt = event.params.writtenOffDebt;
   stream.ratePerSecond = zero;
   stream.depletionTime = zero;
 

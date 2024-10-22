@@ -57,6 +57,7 @@ export function createStream(
     depositedAmount: 0n,
     snapshotAmount: 0n,
     protocolFeeAmount: 0n,
+    forgivenDebt: 0n,
 
     /** --------------- */
     paused: false,

@@ -187,6 +187,8 @@ type Stream @entity {
   withdrawnAmount: BigInt!
   "amount resolving to the streamed amount up until the ratePerSecond is changed"
   snapshotAmount: BigInt!
+  "amount resolving to the debt that has been forgiven by the void action"
+  forgivenDebt: BigInt!
 
   "actions triggered in the context of this stream"
   actions: [Action!]! @derivedFrom(field: "stream")
