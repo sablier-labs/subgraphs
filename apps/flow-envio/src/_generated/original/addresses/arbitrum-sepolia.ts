@@ -1,6 +1,6 @@
 export let chainId = 421613;
 export let chain = "arbitrum-sepolia";
-export let startBlock_protocol = 2838600;
+export let startBlock_lockup = 2838600;
 export let startBlock_merkle = 2972050;
 
 /** Rule: keep addresses lowercased */
@@ -37,8 +37,8 @@ export let registry = "0x584009E9eDe26e212182c9745F5c000191296a78";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
  * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Protocol] On any new chain, please create a Lockup Linear stream to kick-off the indexing flow
+ * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 
-export let initializer_protocol = linear[0][0];
+export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];

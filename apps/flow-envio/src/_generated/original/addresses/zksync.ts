@@ -1,6 +1,6 @@
 export let chainId = 324;
 export let chain = "zksync-era";
-export let startBlock_protocol = 32472500;
+export let startBlock_lockup = 32472500;
 export let startBlock_merkle = 33148900;
 
 /** Rule: keep addresses lowercased */
@@ -35,8 +35,8 @@ export let registry = "";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
  * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Protocol] On any new chain, please create a Lockup Linear stream to kick-off the indexing flow
+ * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 
-export let initializer_protocol = linear[0][0];
+export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];

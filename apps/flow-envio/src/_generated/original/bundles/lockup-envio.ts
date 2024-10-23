@@ -82,7 +82,7 @@ export const chains = () => {
     return {
       id: item.chainId,
       name: item.chain,
-      start_block: item.startBlock_protocol,
+      start_block: item.startBlock_lockup,
       registry: item.registry?.toLowerCase() || "",
       V20,
       V21,

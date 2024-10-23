@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       envio:
-        specifier: 2.2.0
-        version: 2.2.0
+        specifier: 2.4.4
+        version: 2.4.4
       viem:
         specifier: 2.21.0
         version: 2.21.0(typescript@5.2.2)
@@ -131,13 +131,13 @@ importers:
         version: 11.1.3
       rescript-envsafe:
         specifier: 4.2.0
-        version: 4.2.0(rescript-schema@8.0.0(rescript@11.1.3))(rescript@11.1.3)
+        version: 4.2.0(rescript-schema@8.2.0(rescript@11.1.3))(rescript@11.1.3)
       rescript-express:
         specifier: 0.4.1
         version: 0.4.1(express@4.19.2)
       rescript-schema:
-        specifier: 8.0.0
-        version: 8.0.0(rescript@11.1.3)
+        specifier: 8.2.0
+        version: 8.2.0(rescript@11.1.3)
       root:
         specifier: ../.
         version: link:..
@@ -1158,28 +1158,28 @@ packages:
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
-  envio-darwin-arm64@2.2.0:
-    resolution: {integrity: sha512-K8JUYhty0bA1VwgmeE9FrBBOYwKE9QljO1WZVdATEEmFIPcSLwnsVBTHVHjEArKfU1nTFgKzuNv5igIIvZAvMw==}
+  envio-darwin-arm64@2.4.4:
+    resolution: {integrity: sha512-LGOYDF9Ql/HdnNONUZN+SNqSWJ9h0kWT3IHg+BcCtYjLy0Xo23qEbzJin+qEdgha0MT3+A0NShHDV/E4vNdxPQ==}
     cpu: [arm64]
     os: [darwin]
 
-  envio-darwin-x64@2.2.0:
-    resolution: {integrity: sha512-UA70eN6+4H4fANltjANXL7yS7OLbRF8dVXSLL9Dc0GZSRGGcr0z8Qa7Wfxt9vht7YSH6fPoN8I6KPnaUbbz3tA==}
+  envio-darwin-x64@2.4.4:
+    resolution: {integrity: sha512-VcNQ4OWefCUyA4+nnINMZ8mhTfxDqBv9g67tYGRd+jIalt5sQtuZO0AXOaFi7Fuq+fT+mZRwKmri545uyhe59g==}
     cpu: [x64]
     os: [darwin]
 
-  envio-linux-arm64@2.2.0:
-    resolution: {integrity: sha512-dGJT64Uas+Jl5rXx1EvRpUmKOm1DIt8KfkQll4RDBRwU6ROX5/CYLmbT3FQHxwsRpyflaqzNv1oWKbpCiSOc3Q==}
+  envio-linux-arm64@2.4.4:
+    resolution: {integrity: sha512-UNnaeiOLBeRqSyFTJa59Zat1SclRTAZHj3M9UjFpiyuALnOJkY3b+SzCMzL93KXjx9Wnuokm0y5P85hhyKXMJw==}
     cpu: [arm64]
     os: [linux]
 
-  envio-linux-x64@2.2.0:
-    resolution: {integrity: sha512-1U+X7z6Wuhly2btkCsFshHESnA1Hv3tsK30tZhqGv9+/Lw/hCxTRy9MdzxX/Tbnq/kCKQp0/iRRf+MurE8olqA==}
+  envio-linux-x64@2.4.4:
+    resolution: {integrity: sha512-yItczUkuExhB8Mc/kUoZpiye4dhmSDtHAt5+KLU6voGLLq2lCknhS3FruymYIubqCl/i2/ne0JyZND2/1n6jeg==}
     cpu: [x64]
     os: [linux]
 
-  envio@2.2.0:
-    resolution: {integrity: sha512-uIZap6vAWPdAwchbcT1sG9rV0LjHew149cRXoD/o48g8naSbvfCCtw0OlxT26f6USK3TfxZAB/qf9+QGApKljg==}
+  envio@2.4.4:
+    resolution: {integrity: sha512-4ZtUOgBZ8l2cDnmRW0d60AQ/A5q4DxfDd7I1MQxQiD48Pu5P/H/z6QPk2D7QdE2iza/T0IIVvmTCoubZGURVEw==}
     hasBin: true
 
   error-ex@1.3.2:
@@ -1982,8 +1982,8 @@ packages:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
 
-  npm@10.8.3:
-    resolution: {integrity: sha512-0IQlyAYvVtQ7uOhDFYZCGK8kkut2nh8cpAdA9E6FvRSJaTgtZRZgNjlC5ZCct//L73ygrpY93CxXpRJDtNqPVg==}
+  npm@10.9.0:
+    resolution: {integrity: sha512-ZanDioFylI9helNhl2LNd+ErmVD+H5I53ry41ixlLyCBgkuYb+58CvbAp99hW+zr5L9W4X7CchSoeqKdngOLSw==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     bundledDependencies:
@@ -2298,8 +2298,8 @@ packages:
     peerDependencies:
       express: ^4.17.1
 
-  rescript-schema@8.0.0:
-    resolution: {integrity: sha512-+i/us90Q73HeRZ9Y6BXfogb0BXpfwDmmFhHI+dZkvnzGOLMQEx3kowXv78LfP2ujpedwpN85/aqEPXRb+eBtog==}
+  rescript-schema@8.2.0:
+    resolution: {integrity: sha512-pfRNB9kvafUYe+RgvsExiazJioi/iV8gmjK3xOw/jeSgPIIDoVhflnmpoz+vuiwlulYkNT/7u2+2EsCrph7QKA==}
     peerDependencies:
       rescript: 11.x
 
@@ -3065,7 +3065,7 @@ snapshots:
 
   '@envio-dev/hypersync-client@0.6.2':
     dependencies:
-      npm: 10.8.3
+      npm: 10.9.0
       yarn: 1.22.22
     optionalDependencies:
       '@envio-dev/hypersync-client-darwin-arm64': 0.6.2
@@ -3936,24 +3936,24 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  envio-darwin-arm64@2.2.0:
+  envio-darwin-arm64@2.4.4:
     optional: true
 
-  envio-darwin-x64@2.2.0:
+  envio-darwin-x64@2.4.4:
     optional: true
 
-  envio-linux-arm64@2.2.0:
+  envio-linux-arm64@2.4.4:
     optional: true
 
-  envio-linux-x64@2.2.0:
+  envio-linux-x64@2.4.4:
     optional: true
 
-  envio@2.2.0:
+  envio@2.4.4:
     optionalDependencies:
-      envio-darwin-arm64: 2.2.0
-      envio-darwin-x64: 2.2.0
-      envio-linux-arm64: 2.2.0
-      envio-linux-x64: 2.2.0
+      envio-darwin-arm64: 2.4.4
+      envio-darwin-x64: 2.4.4
+      envio-linux-arm64: 2.4.4
+      envio-linux-x64: 2.4.4
 
   error-ex@1.3.2:
     dependencies:
@@ -4979,7 +4979,7 @@ snapshots:
     dependencies:
       path-key: 3.1.1
 
-  npm@10.8.3: {}
+  npm@10.9.0: {}
 
   object-assign@4.1.1: {}
 
@@ -5223,16 +5223,16 @@ snapshots:
 
   require-directory@2.1.1: {}
 
-  rescript-envsafe@4.2.0(rescript-schema@8.0.0(rescript@11.1.3))(rescript@11.1.3):
+  rescript-envsafe@4.2.0(rescript-schema@8.2.0(rescript@11.1.3))(rescript@11.1.3):
     dependencies:
       rescript: 11.1.3
-      rescript-schema: 8.0.0(rescript@11.1.3)
+      rescript-schema: 8.2.0(rescript@11.1.3)
 
   rescript-express@0.4.1(express@4.19.2):
     dependencies:
       express: 4.19.2
 
-  rescript-schema@8.0.0(rescript@11.1.3):
+  rescript-schema@8.2.0(rescript@11.1.3):
     dependencies:
       rescript: 11.1.3
 

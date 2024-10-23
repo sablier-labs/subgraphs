@@ -24,7 +24,7 @@ export let dynamic: string[][] = [
 ];
 
 export let flow: string[][] = [
-  ["0xf978034bb3cab5fe88d23db5cb38d510485dab90", "FL", "V22"],
+  ["0xbf85cd17ca59b7a2b81d3d776ce1602a7c0af9d9", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [

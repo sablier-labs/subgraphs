@@ -62,7 +62,7 @@ async function handler(input: RestartHandler<typeof loader>) {
   if (stream.availableAmount > notWithdrawn) {
     const extraAmount = stream.availableAmount - notWithdrawn;
     depletionTime =
-      BigInt(event.block.timestamp) + extraAmount / stream.ratePerSecond;
+      BigInt(event.block.timestamp) + extraAmount /event.params.ratePerSecond;
   }
 
   stream = {

@@ -1,6 +1,6 @@
 export let chainId = 11155420;
 export let chain = "optimism-sepolia";
-export let startBlock_protocol = 7451810;
+export let startBlock_lockup = 7451810;
 export let startBlock_merkle = 7452580;
 
 /** Rule: keep addresses lowercased */
@@ -35,8 +35,8 @@ export let registry = "";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
  * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Protocol] On any new chain, please create a Lockup Linear stream to kick-off the indexing flow
+ * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 
-export let initializer_protocol = linear[0][0];
+export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializer_flow = exports.initializer_merkle = exports.initializer_protocol = exports.registry = exports.factory = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_protocol = exports.chain = exports.chainId = void 0;
+exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
 exports.chainId = 11155111;
 exports.chain = "sepolia";
-exports.startBlock_protocol = 4067889;
+exports.startBlock_lockup = 4067889;
 exports.startBlock_merkle = 4904890;
 exports.startBlock_flow = 6618000;
 /** Rule: keep addresses lowercased */
@@ -36,8 +36,8 @@ exports.registry = "0x584009E9eDe26e212182c9745F5c000191296a78";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
  * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Protocol] On any new chain, please create a Lockup Linear stream to kick-off the indexing flow
+ * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
-exports.initializer_protocol = exports.linear[0][0];
+exports.initializer_lockup = exports.linear[0][0];
 exports.initializer_merkle = exports.factory[0][0];
 exports.initializer_flow = exports.flow[0][0];
