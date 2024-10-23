@@ -39,6 +39,7 @@
   "workspaces": [
     "apps/lockup",
     "apps/merkle",
+    "apps/flow",
     "packages/*"
   ]
 }

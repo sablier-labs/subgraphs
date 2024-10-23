@@ -1,0 +1,64 @@
+{
+  "name": "@sablier/v2-subgraphs-flow",
+  "description": "Sablier V2 flow subgraph (The Graph)",
+  "version": "2.2.0",
+  "author": {
+    "name": "Sablier Labs Ltd",
+    "url": "https://sablier.com"
+  },
+  "bugs": {
+    "url": "https://github.com/sablier-labs/v2-subgraphs/issues"
+  },
+  "config": {
+    "dir_chains": "../../packages/constants/src/addresses",
+    "dir_generated": "src/generated",
+    "flags_deploy": "--ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "flags_lint": "--ignore-path ../../.eslintignore .",
+    "flags_prettier": "--config ../../.prettierrc.yml --ignore-path ../../.prettierignore"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.80.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
+    "@trivago/prettier-plugin-sort-imports": "4.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "mustache": "^4.2.0",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.7",
+    "typescript": "5.2.2"
+  },
+  "homepage": "https://github.com/sablier-labs/v2-subgraphs#readme",
+  "license": "LGPL-3.0",
+  "packageManager": "yarn@3.3.1",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sablier-labs/v2-subgraphs.git"
+  },
+  "scripts": {
+    "build": "graph build",
+    "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
+    "clean-generated": "rimraf $npm_package_config_dir_generated",
+    "clean-modules": "rimraf node_modules",
+    "codegen": "graph codegen --output-dir $npm_package_config_dir_generated/types/",
+    "deploy": "graph deploy $npm_package_config_flags_deploy sablier-labs/$NAME",
+    "deploy-studio": "graph deploy --studio $NAME",
+    "deploy-studio:experimental": "CHAIN=experimental yarn setup && NAME=sablier-v2-fl-experimental yarn deploy-studio",
+    "lint-check": "eslint --ignore-path ../../.eslintignore .",
+    "lint-fix": "eslint --fix --ignore-path ../../.eslintignore .",
+    "prettier-check": "yarn prettier $npm_package_config_flags_prettier --check .",
+    "prettier-fix": "yarn prettier $npm_package_config_flags_prettier --loglevel warn --write .",
+    "setup": "yarn clean && yarn template && yarn codegen",
+    "setup:experimental": "yarn clean-generated && CHAIN=experimental yarn setup",
+    "template": "yarn template-chain && yarn template-config && yarn template-env",
+    "template-chain": "tsc $npm_package_config_dir_chains/$CHAIN.ts --outDir $npm_package_config_dir_generated",
+    "template-config": "mustache $npm_package_config_dir_generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml",
+    "template-env": "cp $npm_package_config_dir_chains/$CHAIN.ts $npm_package_config_dir_generated/env.ts"
+  }
+}
