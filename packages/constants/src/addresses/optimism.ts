@@ -2,6 +2,7 @@ export let chainId = 10;
 export let chain = "optimism";
 export let startBlock_lockup = 106405050;
 export let startBlock_merkle = 113621900;
+export let startBlock_flow = 128865000;
 
 /** Rule: keep addresses lowercased */
 
@@ -20,6 +21,10 @@ export let dynamic: string[][] = [
   ["0x6f68516c21e248cddfaf4898e66b2b0adee0e0d6", "LD", "V20"],
   ["0xd6920c1094eabc4b71f3dc411a1566f64f4c206e", "LD2", "V21"],
   ["0x4994325f8d4b4a36bd643128beb3ec3e582192c0", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0x906356e4e6410ea0a97dbc5b071cf394ab0dcd69", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -42,3 +47,4 @@ export let registry = "0x584009e9ede26e212182c9745f5c000191296a78";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

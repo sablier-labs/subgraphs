@@ -2,6 +2,7 @@ export let chainId = 34443;
 export let chain = "mode";
 export let startBlock_lockup = 11343000;
 export let startBlock_merkle = 11343000;
+export let startBlock_flow = 16616000;
 
 export let hypersync = "https://mode.hypersync.xyz";
 
@@ -18,6 +19,10 @@ export let linear: string[][] = [
 
 export let dynamic: string[][] = [
   ["0x704552099f5ad679294d337638b9a57fd4726f52", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0x75970dde488431fc4961494569def3269f20d6b3", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -39,3 +44,4 @@ export let registry = "";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

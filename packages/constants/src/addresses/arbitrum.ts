@@ -2,6 +2,7 @@ export let chainId = 42161;
 export let chain = "arbitrum-one";
 export let startBlock_lockup = 107509950;
 export let startBlock_merkle = 161026550;
+export let startBlock_flow = 281305000;
 
 /** Rule: keep addresses lowercased */
 
@@ -20,6 +21,10 @@ export let dynamic: string[][] = [
   ["0xa9efbef1a35ff80041f567391bdc9813b2d50197", "LD", "V20"],
   ["0xf390ce6f54e4dc7c5a5f7f8689062b7591f7111d", "LD2", "V21"],
   ["0x53f5eeb133b99c6e59108f35bcc7a116da50c5ce", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0x18a12a7035aa56240bcd236bc019aa245dcc015a", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -42,3 +47,4 @@ export let registry = "0x584009e9ede26e212182c9745f5c000191296a78";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

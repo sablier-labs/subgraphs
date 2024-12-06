@@ -2,6 +2,7 @@ export let chainId = 5845;
 export let chain = "tangle";
 export let startBlock_lockup = 2515000;
 export let startBlock_merkle = 2516000;
+export let startBlock_flow = 3296000;
 
 export let hypersync = "https://tangle.hypersync.xyz";
 
@@ -18,6 +19,10 @@ export let linear: string[][] = [
 
 export let dynamic: string[][] = [
   ["0x946654ab30dd6ed10236c89f2c8b2719df653691", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -39,3 +44,4 @@ export let registry = "";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

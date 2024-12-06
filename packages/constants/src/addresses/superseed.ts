@@ -2,6 +2,7 @@ export let chainId = 5330;
 export let chain = "superseed";
 export let startBlock_lockup = 2896100;
 export let startBlock_merkle = 2896400;
+export let startBlock_flow = 3610000;
 
 export let hypersync = "https://extrabud.hypersync.xyz";
 
@@ -18,6 +19,10 @@ export let linear: string[][] = [
 
 export let dynamic: string[][] = [
   ["0x1fa500262b352d821b4e1c933a20f2242b45383d", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0x4f5f9b3fb57bba43aaf90e3f71d8f8f384e88e20", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -39,3 +44,4 @@ export let registry = "";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

@@ -2,6 +2,7 @@ export let chainId = 2818;
 export let chain = "morph";
 export let startBlock_lockup = 45000;
 export let startBlock_merkle = 45000;
+export let startBlock_flow = 980000;
 
 export let hypersync = "https://morph.hypersync.xyz/";
 
@@ -18,6 +19,10 @@ export let linear: string[][] = [
 
 export let dynamic: string[][] = [
   ["0x946654ab30dd6ed10236c89f2c8b2719df653691", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0xfe6972d0ae797fae343e5a58d0c7d8513937f092", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -39,3 +44,4 @@ export let registry = "";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];

@@ -2,6 +2,7 @@ export let chainId = 4689;
 export let chain = "iotex";
 export let startBlock_lockup = 31786000;
 export let startBlock_merkle = 31787000;
+export let startBlock_flow = 33533000;
 
 /** Rule: keep addresses lowercased */
 
@@ -16,6 +17,10 @@ export let linear: string[][] = [
 
 export let dynamic: string[][] = [
   ["0x6fcab41e3b62d05ab4fc729586cb06af2a2662d0", "LD3", "V22"],
+];
+
+export let flow: string[][] = [
+  ["0x1ddc1c21cd39c2fa16366e6036c95342a31831ba", "FL", "V10"],
 ];
 
 export let tranched: string[][] = [
@@ -37,3 +42,4 @@ export let registry = "";
 
 export let initializer_lockup = linear[0][0];
 export let initializer_merkle = factory[0][0];
+export let initializer_flow = flow[0][0];
