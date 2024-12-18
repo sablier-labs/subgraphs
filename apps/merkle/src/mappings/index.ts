@@ -5,7 +5,8 @@ export {
   handleCreateCampaignLT_V22,
 } from "./handle-factory";
 export {
-  handleClaim,
+  handleClaimInstant,
+  handleClaimLockup,
   handleClawback,
   handleTransferAdmin,
 } from "./handle-campaign";

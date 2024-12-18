@@ -6,6 +6,7 @@ enum ActionCategory {
 }
 
 enum CampaignCategory {
+  Instant
   LockupDynamic
   LockupLinear
   LockupTranched
@@ -50,6 +51,9 @@ type Action @entity {
   clawbackFrom: Bytes
   "clawback action data: amount"
   clawbackTo: Bytes
+
+  "fee taken for claim action >= V23"
+  fee: BigInt!
 }
 
 type Activity @entity {
@@ -137,17 +141,6 @@ type Campaign @entity {
   "timestamp for the when the campaign underwent a clawback"
   clawbackTime: BigInt
 
-  "flag showing if the produced stream has a cliff, only available on linear streams"
-  streamCliff: Boolean!
-  "timestamp for the start of the cliff, if there's a streamCliff, only available on linear streams"
-  streamCliffDuration: BigInt
-  "total duration for produced streams"
-  streamTotalDuration: BigInt!
-  "flag showing the *initial* cancelability of the produced streams (making it false is a one-way trip, tracked in the lockup subgraph)"
-  streamCancelable: Boolean!
-  "flag showing the transferability of the produced streams"
-  streamTransferable: Boolean!
-
   "total claimed amount up to this point"
   claimedAmount: BigInt!
   "number of claims requested up to this point"
@@ -157,9 +150,44 @@ type Campaign @entity {
   position: BigInt!
   "extended version of the lockup contracts, prefixed with a '2' (e.g. 'V20`, `V21`, `V22`)"
   version: String!
+  "persisted fee for this campaign"
+  fee: BigInt!
+
+  # Stream: General
+
+  "total duration for produced streams"
+  streamTotalDuration: BigInt!
+  "flag showing the *initial* cancelability of the produced streams (making it false is a one-way trip, tracked in the lockup subgraph)"
+  streamCancelable: Boolean!
+  "flag showing the transferability of the produced streams"
+  streamTransferable: Boolean!
+  "optional label to define the stream shape"
+  streamShape: String!
+
+  # Stream: Lockup Linear
+
+  "flag showing if the produced stream has a cliff, only available on linear streams"
+  streamCliff: Boolean!
+  "timestamp for the start of the cliff, if there's a streamCliff, only available on linear streams"
+  streamCliffDuration: BigInt!
+  "amount to be claimed when the stream cliff is reached, custom for > V23, proportional for early versions < V23"
+  streamCliffAmount: BigInt!
+
+  "flag showing if the produced stream has an initial unlock, only available on linear streams"
+  streamInitial: Boolean!
+  "amount to be initially unlocked at the start of the stream, zero for < V23"
+  streamInitialAmount: BigInt!
+
+  "flag showing if the produced stream has a preset start date or not - starts at claim"
+  streamStart: Boolean!
+  "moment at which the stream starts, null for < V23 as it coincides with the date of claim"
+  streamStartTime: BigInt!
+
+  # Stream: Lockup Tranched
 
   "a set of tranches with unlock percentages instead of concrete amounts, only available on tranched streams"
   streamTranches: [Tranche!]! @derivedFrom(field: "campaign")
+
   "actions triggered in the context of this campaign"
   actions: [Action!]! @derivedFrom(field: "campaign")
   "list of daily activity snapshots for days with 1+ events"

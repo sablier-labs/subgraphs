@@ -1,7 +1,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Asset } from "../generated/types/schema";
-import { ERC20 as ERC20Contract } from "../generated/types/templates/ContractMerkleLockupFactory/ERC20";
-import { ERC20Bytes as ERC20BytesContract } from "../generated/types/templates/ContractMerkleLockupFactory/ERC20Bytes";
+import { ERC20 as ERC20Contract } from "../generated/types/templates/ContractMerkleFactory/ERC20";
+import { ERC20Bytes as ERC20BytesContract } from "../generated/types/templates/ContractMerkleFactory/ERC20Bytes";
 import { getChainId } from "../constants";
 
 export function getOrCreateAsset(address: Address): Asset {

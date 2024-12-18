@@ -1,5 +1,5 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ContractMerkleLockupFactory as FactoryTemplate } from "../generated/types/templates";
+import { ContractMerkleFactory as FactoryTemplate } from "../generated/types/templates";
 import { getContractsFactory } from "../constants";
 import { createFactory, getOrCreateWatcher } from "../helpers";
 
