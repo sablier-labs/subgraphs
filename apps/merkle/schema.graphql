@@ -51,9 +51,6 @@ type Action @entity {
   clawbackFrom: Bytes
   "clawback action data: amount"
   clawbackTo: Bytes
-
-  "fee taken for claim action >= V23"
-  fee: BigInt!
 }
 
 type Activity @entity {

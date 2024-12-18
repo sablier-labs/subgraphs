@@ -1,6 +1,7 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { Asset, Campaign } from "../generated/types/schema";
 import {
+  CreateMerkleLTTranchesWithPercentagesStruct,
   CreateMerkleInstant as EventCreateCampaignInstant_V23,
   CreateMerkleStreamerLL as EventCreateCampaignLL_V21,
   CreateMerkleLL as EventCreateCampaignLL_V22,
@@ -340,7 +341,12 @@ export function createCampaignTranched_V23(
   entity.asset = asset.id;
 
   /** --------------- */
-  entity = createTranches(entity, event.params.tranchesWithPercentages);
+  entity = createTranches(
+    entity,
+    changetype<Array<CreateMerkleLTTranchesWithPercentagesStruct>>(
+      event.params.tranchesWithPercentages,
+    ),
+  );
 
   /** --------------- */
   let nickname = generateCampaignNickname(
