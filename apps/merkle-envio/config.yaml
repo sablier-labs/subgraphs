@@ -237,7 +237,7 @@ networks:
           - 0x56e9180a8d2c35c99f2f8a1a5ab8abe79e876e8c
       - name: MerkleLockupFactoryV23
         address:
-          - 0xa8f509c7a35ff0bdeea0009d900ff7deb3f7eafb
+          - 0x4ecd5a688b0365e61c1a764e8bf96a7c5df5d35f
       - name: MerkleLockupV21
       - name: MerkleLockupV22
       - name: MerkleLockupV23

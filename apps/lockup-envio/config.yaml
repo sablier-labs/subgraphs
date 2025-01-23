@@ -309,7 +309,7 @@ networks:
           - 0x3a1bea13a8c24c0ea2b8fae91e4b2762a59d7af5
       - name: LockupV23
         address:
-          - 0x2dbce44ad5f944e5a588c516c408462c28b1f786
+          - 0xc2da366fd67423b500cdf4712bdb41d0995b0794
   - id: 5330
     start_block: 2896100
     hypersync_config:
