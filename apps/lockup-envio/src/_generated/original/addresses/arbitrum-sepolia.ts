@@ -25,17 +25,21 @@ export let dynamic: string[][] = [
 
 export let flow: string[][] = [
   ["0x781b3b2527f2a0a1e6b429161f2717a8a28b9f46", "FL", "V10"],
+  ["0xf9cbffae10010475a2800a5efc11f4d4780ca48d", "FL2", "V11"],
 ];
 
 export let tranched: string[][] = [
   ["0xaff2effcf38ea4a92e0cc5d7c48456c53358fe1a", "LT3", "V22"],
 ];
 
-export let merged: string[][] = [];
+export let merged: string[][] = [
+  ["0xbf85cd17ca59b7a2b81d3d776ce1602a7c0af9d9", "LK", "V23"],
+];
 
 export let factory: string[][] = [
   ["0xcc87b1a4de285832f226bd585bd54a2184d32105", "MSF2", "V21"],
   ["0xa11561f9e418f2c431b411e1ca22fd3f85d4c831", "MSF3", "V22"],
+  ["0x465e9218c1a8d36169e0c40c01b856a83ce44153", "MSF4", "V23"],
 ];
 
 /** PRBProxy registry */

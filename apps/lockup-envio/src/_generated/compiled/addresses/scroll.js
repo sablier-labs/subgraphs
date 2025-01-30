@@ -23,14 +23,18 @@ exports.dynamic = [
 ];
 exports.flow = [
     ["0x66826f53bffeaab71adc7fe1a77e86f8268848d8", "FL", "V10"],
+    ["0xc4f104ce12cb12484ff67cf0c4bd0561f0014ec2", "FL2", "V11"],
 ];
 exports.tranched = [
     ["0xb0f78ddc01d829d8b567821eb193de8082b57d9d", "LT3", "V22"],
 ];
-exports.merged = [];
+exports.merged = [
+    ["0xcb0b1f1d116ed62135848d8c90eb61afda936da8", "LK", "V23"],
+];
 exports.factory = [
     ["0xb3ade5463000e6c0d376e7d7570f372ebf98bdaf", "MSF2", "V21"],
     ["0x344afe8ad5dba3d55870dc398e0f53b635b2ed0d", "MSF3", "V22"],
+    ["0x6df0bffdb106b19d1e954853f4d14003e21b7854", "MSF4", "V23"],
 ];
 /** PRBProxy registry */
 exports.registry = "0x584009e9ede26e212182c9745f5c000191296a78";
