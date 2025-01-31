@@ -31,7 +31,7 @@ export let tranched: string[][] = [
 ];
 
 export let merged: string[][] = [
-  ["0xe18cf135e1688402fa9b752b2a07c27d48b705bd", "LK", "V23"],
+  ["0xcc926359dbe6b6311d63f8155fcc3b57f3faae80", "LK", "V23"],
 ];
 
 export let factory: string[][] = [
