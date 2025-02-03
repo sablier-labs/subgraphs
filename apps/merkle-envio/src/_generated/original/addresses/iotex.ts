@@ -29,11 +29,12 @@ export let tranched: string[][] = [
 ];
 
 export let merged: string[][] = [
-  ["0xb1c3badbf77c404f8711817ca99c859406b92727", "LK", "V23"],
+  ["0xcaf51434a0af3c43cd5569bc5ecc5aa21d28086e", "LK", "V23"],
 ];
 
 export let factory: string[][] = [
   ["0xf978034bb3cab5fe88d23db5cb38d510485dab90", "MSF3", "V22"],
+  ["0xf08548b1a6db590fec6f1b95e6b41d17791767c2", "MSF4", "V23"],
 ];
 
 /** PRBProxy registry */

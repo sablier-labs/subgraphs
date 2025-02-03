@@ -27,7 +27,7 @@ exports.tranched = [
     ["0x1fb145a47eb9b8bf565273e137356376197b3559", "LT3", "V22"],
 ];
 exports.merged = [
-    ["0xe18cf135e1688402fa9b752b2a07c27d48b705bd", "LK", "V23"],
+    ["0x7bccb3595aa81dbe8a69dd8c46f5c2a3cf76594a", "LK", "V23"],
 ];
 exports.factory = [
     ["0x46de683d20c3575a0381ffd66c10ab6836390140", "MSF2", "V21"],
