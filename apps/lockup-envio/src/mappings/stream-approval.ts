@@ -1,4 +1,4 @@
-import { LockupV20, LockupV21, LockupV22 } from "../../generated";
+import { LockupV20, LockupV21, LockupV22, LockupV23 } from "../../generated";
 import type { Action, ApprovalHandler, ApprovalLoader } from "../types";
 
 import {
@@ -69,6 +69,11 @@ LockupV21.Approval.handlerWithLoader({
 });
 
 LockupV22.Approval.handlerWithLoader({
+  loader,
+  handler,
+});
+
+LockupV23.Approval.handlerWithLoader({
   loader,
   handler,
 });

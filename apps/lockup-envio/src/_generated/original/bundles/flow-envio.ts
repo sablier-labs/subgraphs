@@ -55,7 +55,7 @@ export const chains = () => {
     [morph, definitions.morph],
     [optimism, definitions.optimism],
     [polygon, definitions.polygon],
-    [true ? experimental : sepolia, definitions.sepolia],
+    [false ? experimental : sepolia, definitions.sepolia],
     [scroll, definitions.scroll],
     [superseed, definitions.superseed],
     [tangle, definitions.tangle],

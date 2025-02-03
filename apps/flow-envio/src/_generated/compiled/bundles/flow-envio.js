@@ -55,7 +55,7 @@ var chains = function () {
         [morph, definitions_1.default.morph],
         [optimism, definitions_1.default.optimism],
         [polygon, definitions_1.default.polygon],
-        [true ? experimental : sepolia, definitions_1.default.sepolia],
+        [false ? experimental : sepolia, definitions_1.default.sepolia],
         [scroll, definitions_1.default.scroll],
         [superseed, definitions_1.default.superseed],
         [tangle, definitions_1.default.tangle],

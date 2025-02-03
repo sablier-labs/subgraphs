@@ -299,13 +299,13 @@ export async function createDynamicMergedStream(
   /** -------------- */
 
   const timestamps = (() => {
-      return {
-        startTime: BigInt(event.params.commonParams[7][0]),
-        endTime: BigInt(event.params.commonParams[7][1]),
-        duration:
-          BigInt(event.params.commonParams[7][1]) -
-          BigInt(event.params.commonParams[7][0]),
-      };
+    return {
+      startTime: BigInt(event.params.commonParams[7][0]),
+      endTime: BigInt(event.params.commonParams[7][1]),
+      duration:
+        BigInt(event.params.commonParams[7][1]) -
+        BigInt(event.params.commonParams[7][0]),
+    };
   })() satisfies Entity;
 
   /** --------------- */
@@ -331,7 +331,7 @@ export async function createDynamicMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
-    shape: event.params.commonParams[8]
+    shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -346,14 +346,12 @@ export async function createDynamicMergedStream(
     };
   })() satisfies Entity;
 
-
   /** --------------- */
   /** Segments: created, have to be saved */
   const segments = createSegments(event, entity);
 
   /** --------------- */
   const partProxy = await bindProxy(entity);
-
 
   /** --------------- */
   const stream: Stream = {
@@ -571,16 +569,14 @@ export async function createLinearMergedStream(
   /** -------------- */
 
   const timestamps = (() => {
-
-      return {
-        cliffTime: BigInt(event.params.cliffTime),
-        startTime: BigInt(event.params.commonParams[7][0]),
-        endTime: BigInt(event.params.commonParams[7][1]),
-        duration:
-          BigInt(event.params.commonParams[7][1]) -
-          BigInt(event.params.commonParams[7][0]),
-      };
-
+    return {
+      cliffTime: BigInt(event.params.cliffTime),
+      startTime: BigInt(event.params.commonParams[7][0]),
+      endTime: BigInt(event.params.commonParams[7][1]),
+      duration:
+        BigInt(event.params.commonParams[7][1]) -
+        BigInt(event.params.commonParams[7][0]),
+    };
   })() satisfies Entity;
 
   /** --------------- */
@@ -605,7 +601,7 @@ export async function createLinearMergedStream(
     startTime: timestamps.startTime,
     endTime: timestamps.endTime,
     duration: timestamps.duration,
-    shape: event.params.commonParams[8]
+    shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -644,7 +640,6 @@ export async function createLinearMergedStream(
 
   /** --------------- */
   const partProxy = await bindProxy(entity);
-
 
   /** --------------- */
   const stream: Stream = {
@@ -693,17 +688,21 @@ export async function createTranchedStream(
   /** -------------- */
 
   const timestamps = (() => {
-    return       contract.version == StreamVersion.V22 ? {
-      startTime: BigInt(event.params.timestamps[0]),
-      endTime: BigInt(event.params.timestamps[1]),
-      duration:
-        BigInt(event.params.timestamps[1]) - BigInt(event.params.timestamps[0]),
-    } : {
-      startTime: BigInt(event.params.timestamps[0]),
-      endTime: BigInt(event.params.timestamps[1]),
-      duration:
-        BigInt(event.params.timestamps[1]) - BigInt(event.params.timestamps[0]),
-    };
+    return contract.version == StreamVersion.V22
+      ? {
+          startTime: BigInt(event.params.timestamps[0]),
+          endTime: BigInt(event.params.timestamps[1]),
+          duration:
+            BigInt(event.params.timestamps[1]) -
+            BigInt(event.params.timestamps[0]),
+        }
+      : {
+          startTime: BigInt(event.params.timestamps[0]),
+          endTime: BigInt(event.params.timestamps[1]),
+          duration:
+            BigInt(event.params.timestamps[1]) -
+            BigInt(event.params.timestamps[0]),
+        };
   })() satisfies Entity;
 
   /** --------------- */
@@ -809,7 +808,6 @@ export async function createTranchedMergedStream(
         BigInt(event.params.commonParams[7][0]),
     };
   })() satisfies Entity;
-  
 
   /** --------------- */
 
@@ -837,7 +835,7 @@ export async function createTranchedMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
-    shape: event.params.commonParams[8]
+    shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -853,7 +851,6 @@ export async function createTranchedMergedStream(
 
   /** --------------- */
   const partProxy = await bindProxy(entity);
-
 
   /** --------------- */
   const stream: Stream = {

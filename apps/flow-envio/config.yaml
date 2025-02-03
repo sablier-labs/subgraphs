@@ -119,7 +119,7 @@ networks:
     contracts:
       - name: FlowV10
         address:
-          - 0x83dd52fca44e069020b58155b761a590f12b59d3
+          - 0x5ae8c13f6ae094887322012425b34b0919097d8a
   - id: 534352
     start_block: 1675330
     contracts:

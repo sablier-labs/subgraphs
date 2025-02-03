@@ -174,7 +174,7 @@ export async function createLinearCampaign_V22(
     initialAdmin: event.params.baseParams[3],
     ipfsCID: event.params.baseParams[4],
     merkleRoot: event.params.baseParams[5],
-    name: event.params.baseParams[6],
+    name: event.params.baseParams[6].replace(/\x00/g, ""),
     transferable: event.params.baseParams[7],
   } as const;
 

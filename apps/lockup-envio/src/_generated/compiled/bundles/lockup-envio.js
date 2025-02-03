@@ -7,6 +7,7 @@ var base = require("../addresses/base");
 var baseSepolia = require("../addresses/base-sepolia");
 var blast = require("../addresses/blast");
 var bsc = require("../addresses/bsc");
+var experimental = require("../addresses/experimental");
 var gnosis = require("../addresses/gnosis");
 var linea = require("../addresses/linea");
 var mainnet = require("../addresses/mainnet");
@@ -15,7 +16,7 @@ var morph = require("../addresses/morph");
 var optimism = require("../addresses/optimism");
 var polygon = require("../addresses/polygon");
 var scroll = require("../addresses/scroll");
-// import * as sepolia from "../addresses/sepolia";
+var sepolia = require("../addresses/sepolia");
 var superseed = require("../addresses/superseed");
 var tangle = require("../addresses/tangle");
 var zksync = require("../addresses/zksync");
@@ -55,7 +56,7 @@ var chains = function () {
         [optimism, definitions_1.default.optimism],
         [polygon, definitions_1.default.polygon],
         [scroll, definitions_1.default.scroll],
-        // [true ? experimental : sepolia, definitions.sepolia],
+        [false ? experimental : sepolia, definitions_1.default.sepolia],
         [superseed, definitions_1.default.superseed],
         [tangle, definitions_1.default.tangle],
         [zksync, definitions_1.default.zksync],
