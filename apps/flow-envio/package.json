@@ -18,7 +18,7 @@
     "flags_prettier": "--config ../../.prettierrc.yml --ignore-path ../../.prettierignore"
   },
   "dependencies": {
-    "envio": "2.7.5",
+    "envio": "2.11.10",
     "viem": "2.21.54"
   },
   "devDependencies": {
