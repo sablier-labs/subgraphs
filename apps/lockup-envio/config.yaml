@@ -115,9 +115,9 @@ networks:
           - 0x05a323a4c936fed6d02134c5f0877215cd186b51
           - 0x53f5eeb133b99c6e59108f35bcc7a116da50c5ce
           - 0x0da2c7aa93e7cd43e6b8d043aab5b85cfddf3818
-      - name: LockupV23
-        address:
-          - 0x467d5bf8cfa1a5f99328fbdcb9c751c78934b725
+      # - name: LockupV23
+      #   address:
+      #     - 0x467d5bf8cfa1a5f99328fbdcb9c751c78934b725
   - id: 43114
     start_block: 32164210
     contracts:
@@ -134,9 +134,9 @@ networks:
           - 0xc0bf14afb95ca4c049bdc19e06a3531d8065f6fd
           - 0xe3826241e5eebb3f5fede33f9f677047674d3fbf
           - 0xfa536049652bfb5f57ba8dcfbec1b2b2dd9803d3
-      - name: LockupV23
-        address:
-          - 0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82
+      # - name: LockupV23
+      #   address:
+      #     - 0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82
   - id: 8453
     start_block: 1750270
     contracts:
@@ -153,9 +153,9 @@ networks:
           - 0x4cb16d4153123a74bc724d161050959754f378d8
           - 0xf9e9ed67dd2fab3b3ca024a2d66fcf0764d36742
           - 0xf4937657ed8b3f3cb379eed47b8818ee947beb1e
-      - name: LockupV23
-        address:
-          - 0xb5d78dd3276325f5faf3106cc4acc56e28e0fe3b
+      # - name: LockupV23
+      #   address:
+      #     - 0xb5d78dd3276325f5faf3106cc4acc56e28e0fe3b
   - id: 84532
     start_block: 12641000
     contracts:
@@ -164,9 +164,9 @@ networks:
           - 0xfe7fc0bbde84c239c0ab89111d617dc7cc58049f
           - 0x6dcb73e5f7e8e70be20b3b9cf50e3be4625a91c3
           - 0xb8c724df3ec8f2bf8fa808df2cb5dbab22f3e68c
-      - name: LockupV23
-        address:
-          - 0xedc716e9672f672456d22b02532395c1e62b8c16
+      # - name: LockupV23
+      #   address:
+      #     - 0xedc716e9672f672456d22b02532395c1e62b8c16
   - id: 81457
     start_block: 243800
     contracts:
@@ -179,9 +179,9 @@ networks:
           - 0x9b1468d29b4a5869f00c92517c57f8656e928b93
           - 0xa705de617673e2fe63a4ea0e58c26897601d32a5
           - 0x91fb72e5297e2728c10fde73bde74a4888a68570
-      - name: LockupV23
-        address:
-          - 0xdbb6e9653d7e41766712db22eb08ed3f21009fdd
+      # - name: LockupV23
+      #   address:
+      #     - 0xdbb6e9653d7e41766712db22eb08ed3f21009fdd
   - id: 56
     start_block: 29646270
     contracts:
@@ -198,9 +198,9 @@ networks:
           - 0x88ad3b5c62a46df953a5d428d33d70408f53c408
           - 0xeb6d84c585bf8aea34f05a096d6faa3b8477d146
           - 0xab5f007b33edda56962a0fc428b15d544ea46591
-      - name: LockupV23
-        address:
-          - 0x6e0bad2c077d699841f1929b45bfb93fafbed395
+      # - name: LockupV23
+      #   address:
+      #     - 0x6e0bad2c077d699841f1929b45bfb93fafbed395
   - id: 100
     start_block: 28766600
     contracts:
@@ -217,9 +217,9 @@ networks:
           - 0xf1caeb104ab29271463259335357d57772c90758
           - 0x555eb55cbc477aebbe5652d25d0fea04052d3971
           - 0x59a4b7255a5d01247837600e7828a6f77f664b34
-      - name: LockupV23
-        address:
-          - 0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92
+      # - name: LockupV23
+      #   address:
+      #     - 0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92
   - id: 59144
     start_block: 7728000
     contracts:
@@ -228,9 +228,9 @@ networks:
           - 0xb5d39049510f47ee7f74c528105d225e42747d63
           - 0xf2e46b249cfe09c2b3a2022dc81e0bb4be3336f1
           - 0xc46ce4b77cbc46d17a2eceb2cc8e2ee23d96529f
-      - name: LockupV23
-        address:
-          - 0x6964252561e8762dd10267176eac5078b6291e51
+      # - name: LockupV23
+      #   address:
+      #     - 0x6964252561e8762dd10267176eac5078b6291e51
   - id: 1
     start_block: 17613130
     contracts:
@@ -247,9 +247,9 @@ networks:
           - 0x3962f6585946823440d274ad7c719b02b49de51e
           - 0x9deabf7815b42bf4e9a03eec35a486ff74ee7459
           - 0xf86b359035208e4529686a1825f2d5bee38c28a8
-      - name: LockupV23
-        address:
-          - 0x7c01aa3783577e15fd7e272443d44b92d5b21056
+      # - name: LockupV23
+      #   address:
+      #     - 0x7c01aa3783577e15fd7e272443d44b92d5b21056
   - id: 34443
     start_block: 11343000
     hypersync_config:
@@ -260,9 +260,9 @@ networks:
           - 0xd8c65bd7cb6924ef895b2edca03407c652f5a2c5
           - 0x704552099f5ad679294d337638b9a57fd4726f52
           - 0xbbfa51a10be68714fa33281646b986dae9f52021
-      - name: LockupV23
-        address:
-          - 0x3aebadfc423fd08be4715986f68d5e9a597ec974
+      # - name: LockupV23
+      #   address:
+      #     - 0x3aebadfc423fd08be4715986f68d5e9a597ec974
   - id: 2818
     start_block: 45000
     hypersync_config:
@@ -273,9 +273,9 @@ networks:
           - 0xac19f4181e58efb7094e0cb4e1bb18c79f6aadf4
           - 0x946654ab30dd6ed10236c89f2c8b2719df653691
           - 0x63b92f7e2f69877184c955e63b9d8dff55e52e14
-      - name: LockupV23
-        address:
-          - 0xf3cd08105b6745965149ef02b8abdcea0ae51241
+      # - name: LockupV23
+      #   address:
+      #     - 0xf3cd08105b6745965149ef02b8abdcea0ae51241
   - id: 10
     start_block: 106405050
     contracts:
@@ -292,9 +292,9 @@ networks:
           - 0x5c22471a86e9558ed9d22235dd5e0429207ccf4b
           - 0x4994325f8d4b4a36bd643128beb3ec3e582192c0
           - 0x90952912a50079bef00d5f49c975058d6573acdc
-      - name: LockupV23
-        address:
-          - 0x822e9c4852e978104d82f0f785bfa663c2b700c1
+      # - name: LockupV23
+      #   address:
+      #     - 0x822e9c4852e978104d82f0f785bfa663c2b700c1
   - id: 137
     start_block: 44637120
     contracts:
@@ -311,9 +311,9 @@ networks:
           - 0x8d87c5eddb5644d1a714f85930ca940166e465f0
           - 0x8d4ddc187a73017a5d7cef733841f55115b13762
           - 0xbf67f0a1e847564d0efad475782236d3fa7e9ec2
-      - name: LockupV23
-        address:
-          - 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4
+      # - name: LockupV23
+      #   address:
+      #     - 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4
   - id: 534352
     start_block: 284000
     contracts:
@@ -330,9 +330,9 @@ networks:
           - 0xbc5dc6d77612e636da32af0d85ca3179a57330fd
           - 0xac199bfea92aa4d4c3d8a49fd463ead99c7a6a8f
           - 0xb0f78ddc01d829d8b567821eb193de8082b57d9d
-      - name: LockupV23
-        address:
-          - 0xcb0b1f1d116ed62135848d8c90eb61afda936da8
+      # - name: LockupV23
+      #   address:
+      #     - 0xcb0b1f1d116ed62135848d8c90eb61afda936da8
   - id: 11155111
     start_block: 4067889
     contracts:
@@ -349,9 +349,9 @@ networks:
           - 0x3e435560fd0a03ddf70694b35b673c25c65abb6c
           - 0x73bb6dd3f5828d60f8b3dbc8798eb10fba2c5636
           - 0x3a1bea13a8c24c0ea2b8fae91e4b2762a59d7af5
-      - name: LockupV23
-        address:
-          - 0xd116c275541cdbe7594a202bd6ae4dbca4578462
+      # - name: LockupV23
+      #   address:
+      #     - 0xd116c275541cdbe7594a202bd6ae4dbca4578462
   - id: 5330
     start_block: 2896100
     hypersync_config:
@@ -362,9 +362,9 @@ networks:
           - 0x251fc799344151026d19b959b8f3667416d56b88
           - 0x1fa500262b352d821b4e1c933a20f2242b45383d
           - 0x91211e1760280d3f7df2182ce4d1fd6a1735c202
-      - name: LockupV23
-        address:
-          - 0xf46d1f8c85f215a515f6d738ab3e3ba081f6c083
+      # - name: LockupV23
+      #   address:
+      #     - 0xf46d1f8c85f215a515f6d738ab3e3ba081f6c083
   - id: 5845
     start_block: 2515000
     hypersync_config:
@@ -375,9 +375,9 @@ networks:
           - 0xac19f4181e58efb7094e0cb4e1bb18c79f6aadf4
           - 0x946654ab30dd6ed10236c89f2c8b2719df653691
           - 0x63b92f7e2f69877184c955e63b9d8dff55e52e14
-      - name: LockupV23
-        address:
-          - 0x1cae76b71913598d7664d16641ccb6037d8ed61a
+      # - name: LockupV23
+      #   address:
+      #     - 0x1cae76b71913598d7664d16641ccb6037d8ed61a
   - id: 324
     start_block: 32472500
     contracts:
@@ -390,6 +390,6 @@ networks:
           - 0x8cb69b514e97a904743922e1adf3d1627deeee8d
           - 0xf03f4bf48b108360baf1597fb8053ebe0f5245da
           - 0x1fb145a47eb9b8bf565273e137356376197b3559
-      - name: LockupV23
-        address:
-          - 0x7bccb3595aa81dbe8a69dd8c46f5c2a3cf76594a
+      # - name: LockupV23
+      #   address:
+      #     - 0x7bccb3595aa81dbe8a69dd8c46f5c2a3cf76594a
