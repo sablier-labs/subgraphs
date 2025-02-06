@@ -44,7 +44,6 @@ export async function Envio(
   document: string,
   variables?: Record<string, unknown>,
 ) {
-  console.log("endpoint envio: ", endpoint.Envio);
   return toEnvio(await request(endpoint.Envio, document, variables));
 }
 

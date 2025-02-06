@@ -85,6 +85,7 @@ async function handler(input: ClaimHandler<typeof loader>) {
     category: ActionCategory.Claim,
     campaign_id: campaign.id,
     /** --------------- */
+    fee: event.transaction.value,
     claimIndex: BigInt(event.params.index),
     claimAmount: BigInt(event.params.amount),
     claimRecipient: event.params.recipient.toLowerCase(),
@@ -142,6 +143,7 @@ async function instantHandler(
     category: ActionCategory.Claim,
     campaign_id: campaign.id,
     /** --------------- */
+    fee: event.transaction.value,
     claimIndex: BigInt(event.params.index),
     claimAmount: BigInt(event.params.amount),
     claimRecipient: event.params.recipient.toLowerCase(),
