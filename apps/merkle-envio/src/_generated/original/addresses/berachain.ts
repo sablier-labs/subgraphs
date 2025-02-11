@@ -1,8 +1,8 @@
-export let chainId = 84532;
-export let chain = "base-sepolia";
-export let startBlock_lockup = 12641000;
-export let startBlock_merkle = 12641000;
-export let startBlock_flow = 18780000;
+export let chainId = 80094;
+export let chain = "berachain";
+export let startBlock_lockup = 	770000;
+export let startBlock_merkle = 770000;
+export let startBlock_flow = 770000;
 
 /** Rule: keep addresses lowercased */
 
@@ -12,29 +12,25 @@ export let startBlock_flow = 18780000;
  */
 
 export let linear: string[][] = [
-  ["0xfe7fc0bbde84c239c0ab89111d617dc7cc58049f", "LL3", "V22"],
+  ["0xf2b2cca6b8062996f5b5b7e97e0bc821f1266dbc", "LL2", "V21"],
 ];
 
 export let dynamic: string[][] = [
-  ["0x6dcb73e5f7e8e70be20b3b9cf50e3be4625a91c3", "LD3", "V22"],
+  ["0x1774629dbac6faad3af535a074f4e8399f4f063b", "LD2", "V21"],
 ];
 
 export let flow: string[][] = [
-  ["0xd5f78708d83ac2bc8734a8cdf2d112c1bb3b62a2", "FL", "V10"],
-  ["0xfb6b72a5988a7701a9090c56936269241693a9cc", "FL2", "V11"],
+  ["0xa031544946ed769377128fbd961c9d621c4b4179", "FL2", "V11"],
 ];
 
-export let tranched: string[][] = [
-  ["0xb8c724df3ec8f2bf8fa808df2cb5dbab22f3e68c", "LT3", "V22"],
-];
+export let tranched: string[][] = [];
 
 export let merged: string[][] = [
-  ["0xa4777ca525d43a7af55d45b11b430606d7416f8d", "LK", "V23"],
+  ["0xc19a2542156b5d7960e0ef46e9787e7d336cf428", "LK", "V23"],
 ];
 
 export let factory: string[][] = [
-  ["0x899a05feb160fe912f621733a1d0b39c1446b3eb", "MSF3", "V22"],
-  ["0x6a3466398a66c7ce801989b45c390cdc8717102d", "MSF4", "V23"],
+  ["0x7868af143cc5e6cd03f9b4f5cdd2832695a85d6b", "MSF3", "V22"],
 ];
 
 /** PRBProxy registry */
