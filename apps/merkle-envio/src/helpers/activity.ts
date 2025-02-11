@@ -34,7 +34,7 @@ export async function getOrCreateActivity(
 
 export function createActivity(event: Event, campaignId: string) {
   const timestamp = BigInt(event.block.timestamp);
-  const day = timestamp / (60n * 60n * 24n);
+  const day = BigInt(timestamp) / (60n * 60n * 24n);
 
   const id = generateActivityId(event, campaignId);
 
@@ -57,7 +57,7 @@ export function createActivity(event: Event, campaignId: string) {
 
 export function generateActivityId(event: Event, campaignId: string) {
   const timestamp = BigInt(event.block.timestamp);
-  const day = timestamp / (60n * 60n * 24n);
+  const day = BigInt(timestamp) / (60n * 60n * 24n);
 
   return ""
     .concat("activity")

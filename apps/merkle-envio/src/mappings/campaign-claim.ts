@@ -99,18 +99,25 @@ async function handler(input: ClaimHandler<typeof loader>) {
 
   watcher = post_action.watcher;
 
+  const campaignClaimedAmount =
+    BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
+  const campaignClaimedCount = BigInt(campaign.claimedCount) + 1n;
+
   campaign = {
     ...campaign,
-    claimedAmount: BigInt(campaign.claimedAmount) + BigInt(event.params.amount),
-    claimedCount: BigInt(campaign.claimedCount) + 1n,
+    claimedAmount: campaignClaimedAmount,
+    claimedCount: campaignClaimedCount,
   };
 
   /** ------- Process: Activity -------- */
 
+  const activityClaims = BigInt(activity.claims) + BigInt(1n);
+  const activityAmount = BigInt(activity.amount) + BigInt(event.params.amount);
+
   activity = {
     ...activity,
-    claims: BigInt(activity.claims) + 1n,
-    amount: BigInt(activity.amount) + BigInt(event.params.amount),
+    claims: activityClaims,
+    amount: activityAmount,
   };
 
   context.Action.set(action);
@@ -151,18 +158,25 @@ async function instantHandler(
 
   watcher = post_action.watcher;
 
+  const campaignClaimedAmount =
+    BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
+  const campaignClaimedCount = BigInt(campaign.claimedCount) + 1n;
+
   campaign = {
     ...campaign,
-    claimedAmount: BigInt(campaign.claimedAmount) + BigInt(event.params.amount),
-    claimedCount: BigInt(campaign.claimedCount) + 1n,
+    claimedAmount: campaignClaimedAmount,
+    claimedCount: campaignClaimedCount,
   };
 
   /** ------- Process: Activity -------- */
 
+  const activityClaims = BigInt(activity.claims) + BigInt(1n);
+  const activityAmount = BigInt(activity.amount) + BigInt(event.params.amount);
+
   activity = {
     ...activity,
-    claims: BigInt(activity.claims) + 1n,
-    amount: BigInt(activity.amount) + BigInt(event.params.amount),
+    claims: activityClaims,
+    amount: activityAmount,
   };
 
   context.Action.set(action);
