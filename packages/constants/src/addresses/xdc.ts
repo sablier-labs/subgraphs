@@ -1,5 +1,5 @@
 export let chainId = 50;
-export let chain = "xdc";
+export let chain = "xinfin";
 export let startBlock_lockup = 85225600;
 export let startBlock_merkle = 85226400;
 export let startBlock_flow = 85226800;
