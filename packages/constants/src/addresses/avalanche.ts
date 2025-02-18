@@ -23,17 +23,17 @@ export let dynamic: string[][] = [
   ["0xe3826241e5eebb3f5fede33f9f677047674d3fbf", "LD3", "V22"],
 ];
 
-export let flow: string[][] = [
-  ["0x8c172e42c06302e3cfe555dc4d6b71a756ee186b", "FL", "V10"],
-  ["0xac7cb985d4022a5ebd4a385374ac3d3b487b3c63", "FL2", "V11"],
-];
-
 export let tranched: string[][] = [
   ["0xfa536049652bfb5f57ba8dcfbec1b2b2dd9803d3", "LT3", "V22"],
 ];
 
 export let merged: string[][] = [
   ["0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82", "LK", "V23"],
+];
+
+export let flow: string[][] = [
+  ["0x8c172e42c06302e3cfe555dc4d6b71a756ee186b", "FL", "V10"],
+  ["0xac7cb985d4022a5ebd4a385374ac3d3b487b3c63", "FL2", "V11"],
 ];
 
 export let factory: string[][] = [
@@ -47,8 +47,6 @@ export let registry = "0x584009e9ede26e212182c9745f5c000191296a78";
 
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 
 export let initializer_lockup = linear[0][0];

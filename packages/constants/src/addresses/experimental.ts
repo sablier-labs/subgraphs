@@ -24,17 +24,17 @@ export let dynamic: string[][] = [
   ["0x73bb6dd3f5828d60f8b3dbc8798eb10fba2c5636", "LD3", "V22"],
 ];
 
-export let flow: string[][] = [
-  ["0x5ae8c13f6ae094887322012425b34b0919097d8a", "FL", "V10"],
-  ["0x93fe8f86e881a23e5a2feb4b160514fd332576a6", "FL2", "V11"],
-];
-
 export let tranched: string[][] = [
   ["0x3a1bea13a8c24c0ea2b8fae91e4b2762a59d7af5", "LT3", "V22"],
 ];
 
 export let merged: string[][] = [
   ["0xd116c275541cdbe7594a202bd6ae4dbca4578462", "LK", "V23"],
+];
+
+export let flow: string[][] = [
+  ["0x5ae8c13f6ae094887322012425b34b0919097d8a", "FL", "V10"],
+  ["0x93fe8f86e881a23e5a2feb4b160514fd332576a6", "FL2", "V11"],
 ];
 
 export let factory: string[][] = [
