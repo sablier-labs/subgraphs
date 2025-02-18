@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## V2.3
+
+- **Merkle Lockup** is now accompanied by **Merkle Instant**: the new variant will produce airdrops with tokens instead
+  of streams
+
+- All flavors of **Lockup** contracts have been aggregated in a single **Lockup Merged** contract
+
+- Signatures for all **Create** events have been changed
+
+- A new `fee` is now tracked using `msg.sender` in `Claim` events
+
 ## V2.2
 
 - **Merkle Streamer** has been renamed to **Merkle Lockup**: events will now include this name change e.g.

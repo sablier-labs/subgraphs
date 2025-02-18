@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## V2.3
+
+- All flavors of **Lockup** contracts have been aggregated in a single **Lockup Merged** contract
+
+- Signatures for all **Create** events have been changed
+
+- A new `fee` is now tracked using `msg.sender` in `Withdraw` events
+
+- Cliffs are now non-proportional, meaning cliff amount and cliff duration are independently customizable
+
+- **Lockup Linear** (as part of **Lockup Merged**) now includes an "initial unlock" amount
+
+- All streams will receive a `shape` parameter to identify their supposed shape easily in the UI
+
 ## V2.2
 
 - **Create** events do not include a `protocolFee` amount any more (protocol fees have been removed): the event will be
