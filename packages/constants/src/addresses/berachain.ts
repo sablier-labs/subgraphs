@@ -1,6 +1,6 @@
 export let chainId = 80094;
 export let chain = "berachain";
-export let startBlock_lockup = 	770000;
+export let startBlock_lockup = 770000;
 export let startBlock_merkle = 770000;
 export let startBlock_flow = 770000;
 
@@ -30,7 +30,8 @@ export let merged: string[][] = [
 ];
 
 export let factory: string[][] = [
-  ["0x7868af143cc5e6cd03f9b4f5cdd2832695a85d6b", "MSF3", "V22"],
+  ["0x7a34159cf99f0e04596b7c93c96ff390d806e3be", "MSF2", "V21"],
+  ["0x7868af143cc5e6cd03f9b4f5cdd2832695a85d6b", "MSF4", "V23"],
 ];
 
 /** PRBProxy registry */
