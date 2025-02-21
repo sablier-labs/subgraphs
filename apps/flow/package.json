@@ -42,7 +42,6 @@
     "url": "https://github.com/sablier-labs/v2-subgraphs.git"
   },
   "scripts": {
-    "env": "source ../../.env",
     "build": "graph build",
     "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
     "clean-generated": "rimraf $npm_package_config_dir_generated",
@@ -50,10 +49,10 @@
     "codegen": "graph codegen --output-dir $npm_package_config_dir_generated/types/",
     "create-external:lightlink": "graph create --node https://graph.pegasus.lightlink.io/rpc lightlink/sablier-flow-lightlink",
     "create-external:xdc": "graph create --node https://graph.xinfin.network/ xdc/sablier-flow-xdc",
-    "deploy-external:form": "CHAIN=form yarn setup && graph deploy sablier-flow-form --node https://formapi.0xgraph.xyz/deploy --ipfs https://formapi.0xgraph.xyz/ipfs --deploy-key 0XGRAPH_FORM_KEY",
+    "deploy": "graph deploy --studio $NAME",
+    "deploy-external:form": "CHAIN=form yarn setup && graph deploy sablier-flow-form --node https://formapi.0xgraph.xyz/deploy --ipfs https://formapi.0xgraph.xyz/ipfs --deploy-key",
     "deploy-external:lightlink": "CHAIN=lightlink yarn setup && graph deploy --node https://graph.pegasus.lightlink.io/rpc --ipfs https://api.thegraph.com/ipfs/ lightlink/sablier-flow-lightlink",
     "deploy-external:xdc": "CHAIN=xdc yarn setup && graph deploy --node https://graph.xinfin.network/ --ipfs https://api.thegraph.com/ipfs/ xdc/sablier-flow-xdc",
-    "deploy": "graph deploy --studio $NAME",
     "deploy:abstract": "CHAIN=abstract yarn setup && NAME=sablier-flow-abstract yarn deploy",
     "deploy:arbitrum": "CHAIN=arbitrum yarn setup && NAME=sablier-flow-arbitrum yarn deploy",
     "deploy:arbitrum-sepolia": "CHAIN=arbitrum-sepolia yarn setup && NAME=sablier-flow-arbitrum-sepolia yarn deploy",
