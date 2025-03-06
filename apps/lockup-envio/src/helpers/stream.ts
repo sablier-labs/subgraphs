@@ -331,6 +331,7 @@ export async function createDynamicMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
+    // eslint-disable-next-line no-control-regex
     shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
@@ -601,6 +602,7 @@ export async function createLinearMergedStream(
     startTime: timestamps.startTime,
     endTime: timestamps.endTime,
     duration: timestamps.duration,
+    // eslint-disable-next-line no-control-regex
     shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
@@ -620,6 +622,23 @@ export async function createLinearMergedStream(
       cliff: false,
       cliffAmount: undefined,
       cliffTime: undefined,
+    };
+  })() satisfies Entity;
+
+  /** --------------- */
+  const partInitial = (() => {
+    const initial = event.params.unlockAmounts[0];
+
+    if (initial !== 0n) {
+      return {
+        initial: true,
+        initialAmount: initial,
+      };
+    }
+
+    return {
+      initial: false,
+      initialAmount: undefined,
     };
   })() satisfies Entity;
 
@@ -648,6 +667,7 @@ export async function createLinearMergedStream(
     ...partCliff,
     ...partFees,
     ...partProxy,
+    ...partInitial,
   };
 
   return {
@@ -835,6 +855,7 @@ export async function createTranchedMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
+    // eslint-disable-next-line no-control-regex
     shape: event.params.commonParams[8].replace(/\x00/g, ""),
   } satisfies Entity;
 
