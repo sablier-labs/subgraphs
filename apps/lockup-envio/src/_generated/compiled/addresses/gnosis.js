@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.merged = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
+exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.flow = exports.merged = exports.tranched = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
 exports.chainId = 100;
 exports.chain = "gnosis";
 exports.startBlock_lockup = 28766600;
@@ -21,15 +21,15 @@ exports.dynamic = [
     ["0x1df83c7682080b0f0c26a20c6c9cb8623e0df24e", "LD2", "V21"],
     ["0x555eb55cbc477aebbe5652d25d0fea04052d3971", "LD3", "V22"],
 ];
-exports.flow = [
-    ["0x5515f774a4db42820802333ba575f68a6e85bd13", "FL", "V10"],
-    ["0x34bc0c2bf1f2da51c65cd821ba4133afcacdb8f5", "FL2", "V11"],
-];
 exports.tranched = [
     ["0x59a4b7255a5d01247837600e7828a6f77f664b34", "LT3", "V22"],
 ];
 exports.merged = [
     ["0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92", "LK", "V23"],
+];
+exports.flow = [
+    ["0x5515f774a4db42820802333ba575f68a6e85bd13", "FL", "V10"],
+    ["0x34bc0c2bf1f2da51c65cd821ba4133afcacdb8f5", "FL2", "V11"],
 ];
 exports.factory = [
     ["0x777f66477ff83ababadf39a3f22a8cc3aee43765", "MSF2", "V21"],
@@ -40,8 +40,6 @@ exports.factory = [
 exports.registry = "0x584009e9ede26e212182c9745f5c000191296a78";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 exports.initializer_lockup = exports.linear[0][0];
 exports.initializer_merkle = exports.factory[0][0];

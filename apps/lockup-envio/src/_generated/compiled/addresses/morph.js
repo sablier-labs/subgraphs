@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.merged = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.hypersync = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
+exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.flow = exports.merged = exports.tranched = exports.dynamic = exports.linear = exports.hypersync = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
 exports.chainId = 2818;
 exports.chain = "morph";
 exports.startBlock_lockup = 45000;
@@ -18,15 +18,15 @@ exports.linear = [
 exports.dynamic = [
     ["0x946654ab30dd6ed10236c89f2c8b2719df653691", "LD3", "V22"],
 ];
-exports.flow = [
-    ["0xfe6972d0ae797fae343e5a58d0c7d8513937f092", "FL", "V10"],
-    ["0xf31c8e7d9a0bd310a9d5fb317ba67bb1f0101c6d", "FL2", "V11"],
-];
 exports.tranched = [
     ["0x63b92f7e2f69877184c955e63b9d8dff55e52e14", "LT3", "V22"],
 ];
 exports.merged = [
     ["0xf3cd08105b6745965149ef02b8abdcea0ae51241", "LK", "V23"],
+];
+exports.flow = [
+    ["0xfe6972d0ae797fae343e5a58d0c7d8513937f092", "FL", "V10"],
+    ["0xf31c8e7d9a0bd310a9d5fb317ba67bb1f0101c6d", "FL2", "V11"],
 ];
 exports.factory = [
     ["0x5e73bb96493c10919204045fcdb639d35ad859f8", "MSF3", "V22"],
@@ -36,8 +36,6 @@ exports.factory = [
 exports.registry = "";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 exports.initializer_lockup = exports.linear[0][0];
 exports.initializer_merkle = exports.factory[0][0];
