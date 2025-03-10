@@ -167,21 +167,6 @@ networks:
       - name: LockupV23
         address:
           - 0xa4777ca525d43a7af55d45b11b430606d7416f8d
-  - id: 81457
-    start_block: 243800
-    contracts:
-      - name: LockupV21
-        address:
-          - 0xcb099efc90e88690e287259410b9ae63e1658cc6
-          - 0xdf578c2c70a86945999c65961417057363530a1c
-      - name: LockupV22
-        address:
-          - 0x9b1468d29b4a5869f00c92517c57f8656e928b93
-          - 0xa705de617673e2fe63a4ea0e58c26897601d32a5
-          - 0x91fb72e5297e2728c10fde73bde74a4888a68570
-      - name: LockupV23
-        address:
-          - 0xdbb6e9653d7e41766712db22eb08ed3f21009fdd
   - id: 56
     start_block: 29646270
     contracts:
@@ -201,6 +186,19 @@ networks:
       - name: LockupV23
         address:
           - 0x6e0bad2c077d699841f1929b45bfb93fafbed395
+  - id: 88888
+    start_block: 19125000
+    hypersync_config:
+      url: https://chiliz.hypersync.xyz
+    contracts:
+      - name: LockupV22
+        address:
+          - 0xdf578c2c70a86945999c65961417057363530a1c
+          - 0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2
+          - 0xcb099efc90e88690e287259410b9ae63e1658cc6
+      - name: LockupV23
+        address:
+          - 0x711900e5f55d427cd88e5e3fcae54ccf02de71f4
   - id: 100
     start_block: 28766600
     contracts:

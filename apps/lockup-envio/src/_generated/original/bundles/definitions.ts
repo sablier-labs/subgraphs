@@ -90,11 +90,16 @@ const definitions: Record<string, [Chain, string[]]> = {
     ],
   ],
   chiliz: [
-    chiliz,
-    [
-      "https://chiliz.publicnode.com",
-      "https://rpc.chiliz.com",
-    ]
+    {
+      ...chiliz,
+      contracts: {
+        multicall3: {
+          address: "0x0E6a1Df694c4be9BFFC4D76f2B936bB1A1df7fAC",
+          blockCreated: 8007643,
+        },
+      },
+    },
+    ["https://chiliz.publicnode.com", "https://rpc.chiliz.com"],
   ],
   gnosis: [
     gnosis,

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.merged = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
+exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.flow = exports.merged = exports.tranched = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
 exports.chainId = 324;
 exports.chain = "zksync-era";
 exports.startBlock_lockup = 32472500;
@@ -19,15 +19,15 @@ exports.dynamic = [
     ["0xe6c7324bea8474209103e407779eec600c07cf3f", "LD2", "V21"],
     ["0xf03f4bf48b108360baf1597fb8053ebe0f5245da", "LD3", "V22"],
 ];
-exports.flow = [
-    ["0x015899a075b7c181e357cd0ed000683dbb4f1fce", "FL", "V10"],
-    ["0xe3747379bf7282e0ab5389a63ea053a5256042df", "FL2", "V11"],
-];
 exports.tranched = [
     ["0x1fb145a47eb9b8bf565273e137356376197b3559", "LT3", "V22"],
 ];
 exports.merged = [
     ["0x7bccb3595aa81dbe8a69dd8c46f5c2a3cf76594a", "LK", "V23"],
+];
+exports.flow = [
+    ["0x015899a075b7c181e357cd0ed000683dbb4f1fce", "FL", "V10"],
+    ["0xe3747379bf7282e0ab5389a63ea053a5256042df", "FL2", "V11"],
 ];
 exports.factory = [
     ["0x46de683d20c3575a0381ffd66c10ab6836390140", "MSF2", "V21"],
@@ -38,8 +38,6 @@ exports.factory = [
 exports.registry = "";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 exports.initializer_lockup = exports.linear[0][0];
 exports.initializer_merkle = exports.factory[0][0];

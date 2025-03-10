@@ -19,13 +19,17 @@ export let dynamic: string[][] = [
   ["0xc69c06c030e825ede13f1486078aa9a2e2aaffaf", "LD3", "V22"],
 ];
 
+export let tranched: string[][] = [
+  ["0x28fcae6bda2546c93183eec8638691b2eb184003", "LT3", "V22"],
+];
+
+export let merged: string[][] = [
+  ["0x14eb4ab47b2ec2a71763eaba202a252e176fae88", "LK", "V23"],
+];
+
 export let flow: string[][] = [
   ["0x001f1408515ccd5c1a19a682455ed4efa39dadd6", "FL", "V10"],
   ["0x555b0766f494c641bb522086da4e728ac08c1420", "FL2", "V11"],
-];
-
-export let tranched: string[][] = [
-  ["0x28fcae6bda2546c93183eec8638691b2eb184003", "LT3", "V22"],
 ];
 
 export let factory: string[][] = [
@@ -33,17 +37,11 @@ export let factory: string[][] = [
   ["0x0c72b957347b51285854f015e4d20641655b939a", "MSF4", "V23"],
 ];
 
-export let merged: string[][] = [
-  ["0x14eb4ab47b2ec2a71763eaba202a252e176fae88", "LK", "V23"],
-];
-
 /** PRBProxy registry */
 export let registry = "";
 
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 
 export let initializer_lockup = linear[0][0];

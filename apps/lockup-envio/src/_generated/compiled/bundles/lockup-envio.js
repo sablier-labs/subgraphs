@@ -5,8 +5,8 @@ var arbitrum = require("../addresses/arbitrum");
 var avalanche = require("../addresses/avalanche");
 var base = require("../addresses/base");
 var baseSepolia = require("../addresses/base-sepolia");
-var blast = require("../addresses/blast");
 var bsc = require("../addresses/bsc");
+var chiliz = require("../addresses/chiliz");
 var experimental = require("../addresses/experimental");
 var gnosis = require("../addresses/gnosis");
 var linea = require("../addresses/linea");
@@ -46,8 +46,8 @@ var chains = function () {
         [avalanche, definitions_1.default.avalanche],
         [base, definitions_1.default.base],
         [baseSepolia, definitions_1.default.baseSepolia],
-        [blast, definitions_1.default.blast],
         [bsc, definitions_1.default.bsc],
+        [chiliz, definitions_1.default.chiliz],
         [gnosis, definitions_1.default.gnosis],
         [linea, definitions_1.default.linea],
         [mainnet, definitions_1.default.mainnet],

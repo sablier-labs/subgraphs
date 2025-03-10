@@ -114,22 +114,6 @@ networks:
       - name: MerkleLockupV22
       - name: MerkleLockupV23
       - name: MerkleInstant
-  - id: 81457
-    start_block: 244700
-    contracts:
-      - name: MerkleLockupFactoryV21
-        address:
-          - 0x92fc05e49c27884d554d98a5c01ff0894a9dc29a
-      - name: MerkleLockupFactoryV22
-        address:
-          - 0x3abcdda756d069cf3c7a17410602343966eaff27
-      - name: MerkleLockupFactoryV23
-        address:
-          - 0xdd40b4f5b216f524a55e2e8f75637e8b453e4bd2
-      - name: MerkleLockupV21
-      - name: MerkleLockupV22
-      - name: MerkleLockupV23
-      - name: MerkleInstant
   - id: 56
     start_block: 34438430
     contracts:
@@ -142,6 +126,21 @@ networks:
       - name: MerkleLockupFactoryV23
         address:
           - 0xf9f89d99fb702b06fba16a294b7614089defe068
+      - name: MerkleLockupV21
+      - name: MerkleLockupV22
+      - name: MerkleLockupV23
+      - name: MerkleInstant
+  - id: 88888
+    start_block: 19125000
+    hypersync_config:
+      url: https://chiliz.hypersync.xyz
+    contracts:
+      - name: MerkleLockupFactoryV22
+        address:
+          - 0x92fc05e49c27884d554d98a5c01ff0894a9dc29a
+      - name: MerkleLockupFactoryV23
+        address:
+          - 0xf978034bb3cab5fe88d23db5cb38d510485dab90
       - name: MerkleLockupV21
       - name: MerkleLockupV22
       - name: MerkleLockupV23

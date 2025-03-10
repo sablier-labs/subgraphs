@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.merged = exports.tranched = exports.flow = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
+exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.flow = exports.merged = exports.tranched = exports.dynamic = exports.linear = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
 exports.chainId = 43114;
 exports.chain = "avalanche";
 exports.startBlock_lockup = 32164210;
@@ -21,15 +21,15 @@ exports.dynamic = [
     ["0x0310da0d8ff141166ed47548f00c96464880781f", "LD2", "V21"],
     ["0xe3826241e5eebb3f5fede33f9f677047674d3fbf", "LD3", "V22"],
 ];
-exports.flow = [
-    ["0x8c172e42c06302e3cfe555dc4d6b71a756ee186b", "FL", "V10"],
-    ["0xac7cb985d4022a5ebd4a385374ac3d3b487b3c63", "FL2", "V11"],
-];
 exports.tranched = [
     ["0xfa536049652bfb5f57ba8dcfbec1b2b2dd9803d3", "LT3", "V22"],
 ];
 exports.merged = [
     ["0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82", "LK", "V23"],
+];
+exports.flow = [
+    ["0x8c172e42c06302e3cfe555dc4d6b71a756ee186b", "FL", "V10"],
+    ["0xac7cb985d4022a5ebd4a385374ac3d3b487b3c63", "FL2", "V11"],
 ];
 exports.factory = [
     ["0x4849e797d7aab20fcc8f807efafdfff98a83412e", "MSF2", "V21"],
@@ -40,8 +40,6 @@ exports.factory = [
 exports.registry = "0x584009e9ede26e212182c9745f5c000191296a78";
 /**
  * The initializer contract is used to trigger the indexing of all other contracts.
- * It should be a linear contract, the oldest/first one deployed on this chain.
- * ↪ 🚨 [Lockup] On any new chain, please create a Lockup Linear stream to kick-off indexing
  */
 exports.initializer_lockup = exports.linear[0][0];
 exports.initializer_merkle = exports.factory[0][0];

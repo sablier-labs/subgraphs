@@ -56,18 +56,20 @@ networks:
       - name: FlowV10
         address:
           - 0xd5f78708d83ac2bc8734a8cdf2d112c1bb3b62a2
-  - id: 81457
-    start_block: 244700
-    contracts:
-      - name: FlowV10
-        address:
-          - 0xfdac2799644141856e20e021ac06f231cafc731f
   - id: 56
     start_block: 34438430
     contracts:
       - name: FlowV10
         address:
           - 0xfce01f79247cf450062545e7155d7bd568551d0e
+  - id: 88888
+    start_block: 19125000
+    hypersync_config:
+      url: https://chiliz.hypersync.xyz
+    contracts:
+      - name: FlowV10
+        address:
+          - 0x9efc8663cab0e2d97ad17c9fbfc8392445517e94
   - id: 100
     start_block: 31491790
     contracts:

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore
 var viem_1 = require("viem");
@@ -72,11 +83,13 @@ var definitions = {
         ],
     ],
     chiliz: [
-        chains_1.chiliz,
-        [
-            "https://chiliz.publicnode.com",
-            "https://rpc.chiliz.com",
-        ]
+        __assign(__assign({}, chains_1.chiliz), { contracts: {
+                multicall3: {
+                    address: "0x0E6a1Df694c4be9BFFC4D76f2B936bB1A1df7fAC",
+                    blockCreated: 8007643,
+                },
+            } }),
+        ["https://chiliz.publicnode.com", "https://rpc.chiliz.com"],
     ],
     gnosis: [
         chains_1.gnosis,

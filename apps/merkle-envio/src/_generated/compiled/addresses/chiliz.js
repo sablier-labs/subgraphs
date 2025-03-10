@@ -1,36 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializer_flow = exports.initializer_merkle = exports.initializer_lockup = exports.registry = exports.factory = exports.flow = exports.merged = exports.tranched = exports.dynamic = exports.linear = exports.hypersync = exports.startBlock_flow = exports.startBlock_merkle = exports.startBlock_lockup = exports.chain = exports.chainId = void 0;
-exports.chainId = 5845;
-exports.chain = "tangle";
-exports.startBlock_lockup = 2515000;
-exports.startBlock_merkle = 2516000;
-exports.startBlock_flow = 3296000;
-exports.hypersync = "https://tangle.hypersync.xyz";
+exports.chainId = 88888;
+exports.chain = "chiliz";
+exports.startBlock_lockup = 19125000;
+exports.startBlock_merkle = 19125000;
+exports.startBlock_flow = 19125000;
+exports.hypersync = "https://chiliz.hypersync.xyz";
 /** Rule: keep addresses lowercased */
 /**
  * Keep aliases unique and always in sync with the frontend
  * @example export let linear = [[address1, alias1, version1], [address2, alias2, version2]]
  */
 exports.linear = [
-    ["0xac19f4181e58efb7094e0cb4e1bb18c79f6aadf4", "LL3", "V22"],
+    ["0xdf578c2c70a86945999c65961417057363530a1c", "LL3", "V22"],
 ];
 exports.dynamic = [
-    ["0x946654ab30dd6ed10236c89f2c8b2719df653691", "LD3", "V22"],
+    ["0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2", "LD3", "V22"],
 ];
 exports.tranched = [
-    ["0x63b92f7e2f69877184c955e63b9d8dff55e52e14", "LT3", "V22"],
+    ["0xcb099efc90e88690e287259410b9ae63e1658cc6", "LT3", "V22"],
 ];
 exports.merged = [
-    ["0x1cae76b71913598d7664d16641ccb6037d8ed61a", "LK", "V23"],
+    ["0x711900e5f55d427cd88e5e3fcae54ccf02de71f4", "LK", "V23"],
 ];
 exports.flow = [
-    ["0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2", "FL", "V10"],
-    ["0xcb099efc90e88690e287259410b9ae63e1658cc6", "FL2", "V11"],
+    ["0x9efc8663cab0e2d97ad17c9fbfc8392445517e94", "FL", "V10"],
+    ["0x28eab88ee8a951f78e1028557d0c3fd97af61a33", "FL2", "V11"],
 ];
 exports.factory = [
-    ["0x5e73bb96493c10919204045fcdb639d35ad859f8", "MSF3", "V22"],
-    ["0xd641a0e4509cced67cc24e7bdcde2a31b7f7cf77", "MSF4", "V23"],
+    ["0x92fc05e49c27884d554d98a5c01ff0894a9dc29a", "MSF3", "V22"],
+    ["0xf978034bb3cab5fe88d23db5cb38d510485dab90", "MSF4", "V23"],
 ];
 /** PRBProxy registry */
 exports.registry = "";
