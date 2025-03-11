@@ -2,101 +2,31 @@
 
 # Sablier Subgraphs and Indexers
 
-Sablier relies on specific dependencies to source data or manage off-chain flows. All of these are either public or
-fully open-source, so feel free to roam around and suggest improvements or optimizations where needed.
+Sablier uses a combination of The Graph subgraphs and Envio indexers as a data API.
 
-As an alternative to reading data from the contracts or listening to onchain events, we use a set of subgraphs and
-indexers. These act as a middleware between the chain and our interfaces and allow for caching, formatting and querying
-data.
+In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). For the list of
+endpoints, see [this](https://docs.sablier.com/api/lockup/endpoints).
 
-For every The Graph subgraph you will find a dedicated Envio indexer that mirrors its functionality and can be used as a
-fallback or as a completely alternative query engine.
+## For contributors
 
-## The Graph Subgraphs
+### Adding a new chain
 
-Read more about The Graph [here](https://thegraph.com/docs/en/).
+Create a dedicated configuration, and add it in the [Envio bundles](./packages/constants/src/bundles/) and provide a
+deployment script for the subgraphs.
 
-Sablier supports multiple chains for which we've deployed subgraphs at either the Hosted Network level or within the
-Decentralized Network (see Ethereum, Arbitrum or Polygon's endpoints).
+### Tracking a new address
 
-Subgraphs are configured using `yarn`.
+See the [`constants`](./packages/constants) folder. Specify the chain, append the contract, and run the codegen steps to
+make sure everything runs smoothly.
 
-### Subgraph: Lockup
+### Corepack
 
-The **Lockup** subgraph watches over the core lockup functionality of Sablier. It handles events such as
-`Create Stream`, `Withdraw` or `Transfer`.
+Some versions of Node.js may enforce the usage of [corepack](https://nodejs.org/api/corepack.html). Because this
+repository leverages both `yarn` (for the root workspace and in the Graph packages) and `pnpm` (for Envio), Node.js may
+throw a warning due a missing **exact** `packageManager` entry for `pnpm`. However, this entry should not be added
+because it will mess with Envio's hosted service. We suggest
+[disabling Corepack](https://stackoverflow.com/a/78822612/3873510) to avoid the warning.
 
-[Documentation](https://docs.sablier.com/api/lockup/overview) and
-[Endpoints](https://docs.sablier.com/api/lockup/endpoints).
+## License
 
-### Subgraph: Merkle/Drops
-
-The **Merkle** subgraph watches over the Merkle Lockup functionality from Sablier's periphery contracts. It handles
-events such as `Create Campaign`, `Claim` or `Clawback`. In the client interfaces it is used to track activity for
-Airdrops.
-
-[Documentation](https://docs.sablier.com/api/drops/overview) and
-[Endpoints](https://docs.sablier.com/api/drops/endpoints).
-
-### Subgraph: Flow
-
-The **Flow** subgraph watches over the core flow functionality of Sablier. It handles events such as `Create Stream`,
-`Deposit` or `Adjust`.
-
-[Documentation](https://docs.sablier.com/api/flow/overview) and
-[Endpoints](https://docs.sablier.com/api/flow/endpoints).
-
----
-
-## Envio Indexers
-
-Read more about Envio [here](https://docs.envio.dev).
-
-> [!IMPORTANT]
->
-> When new addresses are added to an Envio indexer (through the shared package) run `pnpm run setup` or `pnpm run dev`
-> to make sure the necessary files get generated.
-
-Indexers are configured using `pnpm`.
-
-### Indexer: Lockup-Envio
-
-The **Lockup-Envio** indexer watches over the core lockup functionality of Sablier. It handles events such as
-`Create Stream`, `Withdraw` or `Transfer`.
-
-[Documentation](https://docs.sablier.com/api/lockup/overview) and
-[Endpoints](https://docs.sablier.com/api/lockup/endpoints).
-
-### Indexer: Merkle-Envio
-
-The **Merkle-Envio** subgraph watches over the Merkle Lockup functionality from Sablier's periphery contracts. It
-handles events such as `Create Campaign`, `Claim` or `Clawback`. In the client interfaces it is used to track activity
-for Airdrops.
-
-[Documentation](https://docs.sablier.com/api/drops/overview) and
-[Endpoints](https://docs.sablier.com/api/drops/endpoints).
-
-### Indexer: Flow-Envio
-
-The **~Flow-Envio** indexer watches over the core flow functionality of Sablier. It handles events such as
-`Create Stream`, `Deposit` or `Adjust`.
-
-[Documentation](https://docs.sablier.com/api/lockup/overview) and
-[Endpoints](https://docs.sablier.com/api/lockup/endpoints).
-
-> [!TIP]
->
-> To track new addresses see the [`constants`](./packages/constants) folder. Pick the chain, append a new contract and
-> run the codegen steps to make sure everything runs smoothly. To add a new chain, create a dedicated configuration and
-> make sure to (1) add it in the envio [bundles](./packages/constants/src/bundles/) (2) add a deployment script for
-> subgraphs.
-
-> [!IMPORTANT]
->
-> Some versions of Node may enforce the usage of [corepack](https://nodejs.org/api/corepack.html). Because this
-> repository leverages both `yarn` (root and the-graph) and `pnpm` (envio) it may scream due to a missing
-> `packageManager` **exact** entry for `pnpm`. If added, it will mess with Envio's hosted service. Therefore, we advise
-> [disabling corepack](https://stackoverflow.com/questions/78795659/how-to-disable-auto-setting-of-packagemanager-when-corepack-is-enabled#comment138977943_78822612)
-> to avoid the warning. It looks like it's being [deprecated](https://www.youtube.com/watch?v=I7qMwaxNNOc) anyway.
-
-<sub>Version Trigger: [26]</sub>
+This repo is licensed under GPL 3-0 or later.
