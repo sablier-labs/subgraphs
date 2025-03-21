@@ -21,8 +21,8 @@
     "babel-register": "^6.26.0"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.95.0",
-    "@graphprotocol/graph-ts": "^0.37.0",
+    "@graphprotocol/graph-cli": "^0.96.0",
+    "@graphprotocol/graph-ts": "^0.38.0",
     "@trivago/prettier-plugin-sort-imports": "4.1.0",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
