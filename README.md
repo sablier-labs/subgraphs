@@ -5,7 +5,11 @@
 Sablier uses a combination of The Graph subgraphs and Envio indexers as a data API.
 
 In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). For the list of
-endpoints, see [this](https://docs.sablier.com/api/lockup/endpoints).
+endpoints, see the docs for each large feature:
+
+- [Lockup](https://docs.sablier.com/api/lockup/endpoints)
+- [Flow](https://docs.sablier.com/api/flow/endpoints)
+- [Merkle / Airdrops](https://docs.sablier.com/api/airdrops/endpoints)
 
 ## For contributors
 
@@ -23,7 +27,7 @@ make sure everything runs smoothly.
 
 Some versions of Node.js may enforce the usage of [corepack](https://nodejs.org/api/corepack.html). Because this
 repository leverages both `yarn` (for the root workspace and in the Graph packages) and `pnpm` (for Envio), Node.js may
-throw a warning due a missing **exact** `packageManager` entry for `pnpm`. However, this entry should not be added
+throw a warning due to a missing **exact** `packageManager` entry for `pnpm`. However, this entry should not be added
 because it will mess with Envio's hosted service. We suggest
 [disabling Corepack](https://stackoverflow.com/a/78822612/3873510) to avoid the warning.
 
