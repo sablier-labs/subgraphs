@@ -1,5 +1,5 @@
 export let chainId = 19991;
-export let chain = "ultra";
+export let chain = "mainnet";
 export let startBlock_lockup = 4858700;
 export let startBlock_merkle = 4858600;
 export let startBlock_flow = 4858900;
