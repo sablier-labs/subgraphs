@@ -43,6 +43,7 @@
     "url": "https://github.com/sablier-labs/subgraphs.git"
   },
   "scripts": {
+    "auth": "graph auth",
     "build": "graph build",
     "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
     "clean-generated": "rimraf $npm_package_config_dir_generated",
