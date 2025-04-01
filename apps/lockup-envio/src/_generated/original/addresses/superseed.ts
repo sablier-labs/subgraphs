@@ -4,7 +4,7 @@ export let startBlock_lockup = 2896100;
 export let startBlock_merkle = 2896400;
 export let startBlock_flow = 3610000;
 
-export let hypersync = "https://extrabud.hypersync.xyz";
+export let hypersync = "https://superseed.hypersync.xyz";
 
 /** Rule: keep addresses lowercased */
 
