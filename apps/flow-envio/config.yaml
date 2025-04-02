@@ -131,7 +131,7 @@ networks:
   - id: 5330
     start_block: 2896400
     hypersync_config:
-      url: https://extrabud.hypersync.xyz
+      url: https://superseed.hypersync.xyz
     contracts:
       - name: FlowV10
         address:
