@@ -30,8 +30,8 @@ export let flow: string[][] = [
 ];
 
 export let factory: string[][] = [
+  ["0x7868af143cc5e6cd03f9b4f5cdd2832695a85d6b", "MSF4", "V23"], // Make this initializer since this is where the first campaign was created
   ["0x7a34159cf99f0e04596b7c93c96ff390d806e3be", "MSF2", "V21"],
-  ["0x7868af143cc5e6cd03f9b4f5cdd2832695a85d6b", "MSF4", "V23"],
 ];
 
 /** PRBProxy registry */

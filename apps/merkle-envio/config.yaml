@@ -287,7 +287,7 @@ networks:
   - id: 5330
     start_block: 2896400
     hypersync_config:
-      url: https://superseed.hypersync.xyz
+      url: https://extrabud.hypersync.xyz
     contracts:
       - name: MerkleLockupFactoryV22
         address:
