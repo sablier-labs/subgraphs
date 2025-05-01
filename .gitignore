@@ -1,17 +1,16 @@
 # Builds
+**/artifacts
+**/benchmarks
 **/build
 **/dist
+**/lib
 **/static
 **/generated
-
-!apps/*-envio/src/generated
-
-apps/*/subgraph.yaml
-packages/*/subgraph.yaml
+**/subgraph.yaml
+!**/_generated
 
 # Node.js
 **/node_modules
-.node_repl_history
 .npm
 .pnp
 .pnp.*
@@ -24,14 +23,10 @@ packages/*/subgraph.yaml
 
 # Linters
 **/.eslintcache
-**/.stylelintcache
 
 # Logs
 *.log
-logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+**/logs
 
 # Misc
 .DS_Store
@@ -39,43 +34,5 @@ yarn-error.log*
 .env.*
 !.env.example
 
-# Next.js
-**/.next
-**/.vercel
-**/next-env.d.ts
-
 # TypeScript cache
 *.tsbuildinfo
-
-
-# Envio
-
-**/lib/*
-**/benchmarks/
-**/artifacts
-**/logs
-*.exe
-*.obj
-*.out
-*.compile
-*.native
-*.byte
-*.cmo
-*.annot
-*.cmi
-*.cmx
-*.cmt
-*.cmti
-*.cma
-*.a
-*.cmxa
-*.obj
-*~
-*.annot
-*.cmj
-*.bak
-*.mlast
-*.mliast
-.merlin
-.bsb.lock
-*.bs.js

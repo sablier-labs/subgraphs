@@ -10,14 +10,12 @@ plugins:
   - "@typescript-eslint"
 root: true
 rules:
-  "prefer-const": "off"
+  "@typescript-eslint/ban-ts-comment": "off"
+  "@typescript-eslint/ban-ts-ignore": "off"
   "@typescript-eslint/ban-types": "off"
   "@typescript-eslint/no-empty-function": "off"
   "@typescript-eslint/no-empty-interface": "off"
   "@typescript-eslint/no-explicit-any": "error"
-  "@typescript-eslint/ban-ts-ignore": "off"
-  "@typescript-eslint/ban-ts-comment": "off"
-  "no-constant-condition": "off"
   "@typescript-eslint/no-floating-promises":
     - error
     - ignoreIIFE: true
@@ -30,7 +28,9 @@ rules:
   curly:
     - error
     - all
-  "no-empty-pattern": "off"
+  no-constant-condition: "off"
+  no-empty-pattern: "off"
   prefer-arrow-callback:
     - error
     - allowNamedFunctions: true
+  prefer-const: "off"

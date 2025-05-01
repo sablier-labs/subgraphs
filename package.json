@@ -1,13 +1,13 @@
 {
-  "name": "@sablier/subgraphs",
-  "description": "Official Sablier Subgraphs",
+  "name": "@sablier/indexers",
+  "description": "Official Sablier indexers",
   "version": "1.0.0",
   "author": {
     "name": "Sablier Labs Ltd",
     "url": "https://sablier.com"
   },
   "bugs": {
-    "url": "https://github.com/sablier-labs/subgraphs/issues"
+    "url": "https://github.com/sablier-labs/indexers/issues"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "4.1.0",
@@ -17,13 +17,13 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.7"
   },
-  "homepage": "https://github.com/sablier-labs/subgraphs#readme",
+  "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@4.9.1",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/sablier-labs/subgraphs.git"
+    "url": "https://github.com/sablier-labs/indexers.git"
   },
   "scripts": {
     "g:all-check": "yarn g:prettier-check && yarn g:lint-check",
@@ -37,9 +37,8 @@
     "g:prettier-fix": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run prettier-fix"
   },
   "workspaces": [
-    "apps/lockup",
-    "apps/merkle",
-    "apps/flow",
-    "packages/*"
+    "the-graph/lockup",
+    "the-graph/flow",
+    "the-graph/merkle"
   ]
 }

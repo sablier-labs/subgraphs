@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "search.exclude": {
+    "**/_generated": true,
+    "**/generated": true,
+    "**/node_modules": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

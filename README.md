@@ -15,13 +15,13 @@ endpoints, see the docs for each large feature:
 
 ### Adding a new chain
 
-Create a dedicated configuration, and add it in the [Envio bundles](./packages/constants/src/bundles/) and provide a
-deployment script for the subgraphs.
+Create a dedicated configuration, and add it in the [Envio bundles](./constants/src/bundles/) and provide a deployment
+script for the subgraphs.
 
 ### Tracking a new address
 
-See the [`constants`](./packages/constants) folder. Specify the chain, append the contract, and run the codegen steps to
-make sure everything runs smoothly.
+See the [`constants`](./constants) folder. Specify the chain, append the contract, and run the codegen steps to make
+sure everything runs smoothly.
 
 ### Corepack
 

@@ -1,17 +1,14 @@
-bracketSpacing: true
 endOfLine: "auto"
+plugins:
+  - "@trivago/prettier-plugin-sort-imports"
 printWidth: 80
-proseWrap: "always"
-semi: true
-singleQuote: false
-tabWidth: 2
 trailingComma: "all"
-useTabs: false
 
 overrides:
   - files: "*.md"
     options:
       printWidth: 120
+      proseWrap: "always"
   - files: ["*.d.ts", "*.ts", "*.tsx"]
     options:
       importOrder:

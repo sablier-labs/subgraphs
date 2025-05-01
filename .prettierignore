@@ -1,13 +1,6 @@
 .yarn
-**/.vscode
-**/.next
 **/build
 **/dist
 **/generated
-**/lib
-**/out
-**/tmp
 **/_generated
-
-apps/*-envio/src/generated
-apps/*-envio/src/_generated
+**/lib

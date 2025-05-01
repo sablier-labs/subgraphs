@@ -1,18 +1,11 @@
 # directories
 .yarn
-**/.next
-**/.vscode
 **/build
 **/dist
+**/_generated
 **/generated
 **/lib
 **/node_modules
-**/*.js
-
-!**/apps/*-envio/src/generated
-!**/src/generated
 
 # files
-next.config.base.js
 *.typegen.ts
-*.js
