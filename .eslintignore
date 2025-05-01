@@ -1,7 +1,5 @@
 # directories
-.yarn
 **/build
-**/dist
 **/_generated
 **/generated
 **/lib

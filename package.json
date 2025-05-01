@@ -1,6 +1,6 @@
 {
   "name": "@sablier/indexers",
-  "description": "Official Sablier indexers",
+  "description": "EVM data indexers for the Sablier Protocol",
   "version": "1.0.0",
   "author": {
     "name": "Sablier Labs Ltd",
@@ -10,35 +10,33 @@
     "url": "https://github.com/sablier-labs/indexers/issues"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "4.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "eslint": "^8.25.0",
-    "prettier": "^2.8.8",
-    "rimraf": "^5.0.7"
+    "@trivago/prettier-plugin-sort-imports": "4.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1"
   },
   "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
-  "packageManager": "yarn@4.9.1",
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
   },
   "scripts": {
-    "g:all-check": "yarn g:prettier-check && yarn g:lint-check",
-    "g:all-fix": "yarn g:prettier-fix && yarn g:lint-fix",
-    "g:auth": "graph auth --product hosted-service",
-    "g:clean": "yarn workspaces foreach --parallel --topological --verbose run clean",
-    "g:clean-modules": "yarn workspaces foreach --parallel --topological --verbose run clean-modules && rimraf node_modules",
-    "g:lint-check": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run lint-check",
-    "g:lint-fix": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run lint-fix",
-    "g:prettier-check": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run prettier-check",
-    "g:prettier-fix": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run prettier-fix"
+    "all": "bun run --filter '*'",
+    "full-check": "bun run all prettier-check && bun run all lint-check",
+    "full-fix": "bun run all prettier-fix && bun run all lint-fix",
+    "graph-auth": "graph auth --product hosted-service",
+    "clean": "bun run all clean",
+    "clean-modules": "bun run all clean-modules && rimraf node_modules",
+    "lint-check": "bun run all lint-check",
+    "lint-fix": "bun run all lint-fix",
+    "prettier-check": "bun run all prettier-check",
+    "prettier-fix": "bun run all prettier-fix"
   },
   "workspaces": [
-    "the-graph/lockup",
-    "the-graph/flow",
-    "the-graph/merkle"
+    "the-graph/*"
   ]
 }

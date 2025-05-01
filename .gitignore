@@ -2,7 +2,6 @@
 **/artifacts
 **/benchmarks
 **/build
-**/dist
 **/lib
 **/static
 **/generated
@@ -11,22 +10,11 @@
 
 # Node.js
 **/node_modules
-.npm
-.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
-# Linters
 **/.eslintcache
 
 # Logs
-*.log
 **/logs
+*.log
 
 # Misc
 .DS_Store

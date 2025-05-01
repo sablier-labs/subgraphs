@@ -1,6 +1,4 @@
-.yarn
 **/build
-**/dist
 **/generated
 **/_generated
 **/lib
