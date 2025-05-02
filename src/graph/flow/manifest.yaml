@@ -1,0 +1,6 @@
+specVersion: 0.0.5
+description: The Graph indexer for Sablier Flow
+repository: https://github.com/sablier-labs/indexers
+schema:
+  file: ../schema.graphql
+# dataSources -> see scripts/generate-manifests.ts

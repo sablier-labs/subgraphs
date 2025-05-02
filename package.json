@@ -9,10 +9,23 @@
   "bugs": {
     "url": "https://github.com/sablier-labs/indexers/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "@biomejs/biome": "1.9.4",
-    "prettier": "^3.5.3",
-    "rimraf": "^6.0.1"
+    "@graphprotocol/graph-cli": "0.96.0",
+    "@graphprotocol/graph-ts": "0.38.0",
+    "@sablier/deployments": "1.0.0-alpha.30",
+    "@types/handlebars": "^4.1",
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash": "^4.17",
+    "@types/node": "^22.15",
+    "change-case": "4.1.2",
+    "dotenv-cli": "^8.0",
+    "handlebars": "^4.7",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17",
+    "prettier": "^3.5",
+    "typescript": "5.8.3",
+    "winston": "^3.17.0"
   },
   "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
@@ -20,25 +33,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
-  },
-  "scripts": {
-    "all": "bun run --filter '*'",
-    "all:envio": "bun run --filter '@indexers/envio-*'",
-    "all:the-graph": "bun run --filter '@indexers/the-graph-*'",
-    "biome:check": "biome check .",
-    "biome:write": "biome check --write .",
-    "g:biome:check": "bun run all biome:check",
-    "g:biome:write": "bun run all biome:write",
-    "g:clean": "bun run all clean",
-    "g:clean-modules": "bun run all clean-modules && rimraf node_modules",
-    "g:full:check": "bun run g:biome:check && bun run g:prettier:check",
-    "g:full:fix": "bun run g:biome:fix && bun run g:prettier:fix",
-    "g:setup": "bun run all:envio setup",
-    "g:setup:arbitrum": "bun run all:the-graph setup:arbitrum",
-    "graph-auth": "graph auth --product hosted-service",
-    "prettier:check": "prettier --cache --check \"**/*.{md,yaml,yml}\"",
-    "prettier:write": "prettier --cache --write --log-level warn \"**/*.{md,yaml,yml}\""
-  },
-
-  "workspaces": ["envio/*", "packages/*", "the-graph/*"]
+  }
 }

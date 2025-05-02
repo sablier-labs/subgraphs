@@ -1,18 +1,18 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": false,
     "esModuleInterop": true,
-    "lib": ["ES2020"],
-    "module": "CommonJS",
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext"],
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
     "noImplicitAny": true,
-    "outDir": "build",
     "resolveJsonModule": true,
-    "rootDirs": ["src", "generated"],
+    "skipLibCheck": true,
     "strict": true,
-    "target": "ES2020",
-    "skipLibCheck": true
+    "target": "ESNext"
   },
-  "exclude": ["./generated", "**/node_modules"],
-  "include": ["**/*.ts"]
+  "exclude": ["envio/**/*.ts", "src/graph/**/*.ts"],
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "deprecated/contracts.ts"]
 }

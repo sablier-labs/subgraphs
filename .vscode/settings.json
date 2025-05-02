@@ -10,9 +10,13 @@
   "[md][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "files.associations": {
+    "src/graph/**/*.ts": "assemblyscript"
+  },
   "search.exclude": {
     "**/_generated": true,
-    "**/generated": true,
+    "**/bindings": true,
+    "**/manifests/**/*.yaml": true,
     "**/node_modules": true
   },
   "typescript.tsdk": "node_modules/typescript/lib"

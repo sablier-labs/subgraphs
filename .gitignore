@@ -1,23 +1,18 @@
-# Builds
+# Directories
+logs
+node_modules
+**/bindings
+**/build
 **/generated
-!**/_generated
-**/config.yaml
-**/subgraph.yaml
+!src/graph/shared/erc20/bindings
 
-# Node.js
-**/node_modules
-**/.eslintcache
-**/pnpm-lock.yaml
-
-# Logs
-**/logs
+# Files
 *.log
-
-# Misc
-.DS_Store
+*.tsbuildinfo
 .env
 .env.*
 !.env.example
-
-# TypeScript cache
-*.tsbuildinfo
+pnpm-lock.yaml
+subgraph.yaml
+**/manifests/**/*.yaml
+**/config.yaml
