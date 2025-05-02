@@ -17,11 +17,8 @@ export const _configurations = (
 > => ({
   [CHAIN_SEPOLIA_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-airdrops-experimental/version/latest",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-airdrops-experimental/version/latest",
     },
     admin: "0xf31b00e025584486f7c37cf0ae0073c97c12c634",
     asset: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
@@ -35,11 +32,8 @@ export const _configurations = (
   },
   [CHAIN_ETHEREUM_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-v2-ms/version/latest",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-v2-ms/version/latest",
     },
     admin: "0x8cc40bc56f32769858061bf8b26f3dd07486e170",
     asset: "0x3bd7d4f524d09f4e331577247a048d56e4b67a7f",

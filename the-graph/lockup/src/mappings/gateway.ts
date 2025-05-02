@@ -1,31 +1,26 @@
-import { ethereum } from "@graphprotocol/graph-ts";
+import type { ethereum } from "@graphprotocol/graph-ts";
+import { zero } from "../constants";
 import {
   CreateLockupDynamicStream as EventCreateDynamic_V20,
-  CreateLockupDynamicStream1 as EventCreateDynamic_V21,
-  CreateLockupDynamicStream2 as EventCreateDynamic_V22,
+  type CreateLockupDynamicStream1 as EventCreateDynamic_V21,
+  type CreateLockupDynamicStream2 as EventCreateDynamic_V22,
 } from "../generated/types/templates/ContractLockupDynamic/SablierLockupDynamic";
 import {
   CancelLockupStream as EventCancel_V20,
-  CancelLockupStream1 as EventCancel_V21_V22_V23,
+  type CancelLockupStream1 as EventCancel_V21_V22_V23,
   CreateLockupLinearStream as EventCreateLinear_V20,
-  CreateLockupLinearStream1 as EventCreateLinear_V21,
-  CreateLockupLinearStream2 as EventCreateLinear_V22,
+  type CreateLockupLinearStream1 as EventCreateLinear_V21,
+  type CreateLockupLinearStream2 as EventCreateLinear_V22,
   WithdrawFromLockupStream as EventWithdraw_V20,
-  WithdrawFromLockupStream1 as EventWithdraw_V21_V22_V23,
+  type WithdrawFromLockupStream1 as EventWithdraw_V21_V22_V23,
 } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
-import {
+import type {
   CreateLockupDynamicStream as EventCreateDynamic_V23,
   CreateLockupLinearStream as EventCreateLinear_V23,
   CreateLockupTranchedStream as EventCreateTranched_V23,
 } from "../generated/types/templates/ContractLockupLinear/SablierLockupMerged";
 import { CreateLockupTranchedStream as EventCreateTranched_V22 } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
-import { zero } from "../constants";
-import {
-  toEventAddress,
-  toEventBoolean,
-  toEventTuple,
-  toValue,
-} from "../utils";
+import { toEventAddress, toEventBoolean, toEventTuple, toValue } from "../utils";
 import {
   handleApproval,
   handleApprovalForAll,
@@ -45,11 +40,9 @@ function handleCancel_V20(event: EventCancel_V20): void {
 
 function handleCancel_V21_V22_V23(event_: EventCancel_V21_V22_V23): void {
   /** Remove asset (<V23 called "asset", >= V23 called "token" ) */
-  let parameters = event_.parameters.filter(
-    (value) => !["asset", "token"].includes(value.name),
-  );
+  const parameters = event_.parameters.filter((value) => !["asset", "token"].includes(value.name));
 
-  let event = new EventCancel_V20(
+  const event = new EventCancel_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -69,11 +62,9 @@ function handleWithdraw_V20(event: EventWithdraw_V20): void {
 
 function handleWithdraw_V21_V22_V23(event_: EventWithdraw_V21_V22_V23): void {
   /** Remove asset (<V23 called "asset", >= V23 called "token" ) */
-  let parameters = event_.parameters.filter(
-    (value) => !["asset", "token"].includes(value.name),
-  );
+  const parameters = event_.parameters.filter((value) => !["asset", "token"].includes(value.name));
 
-  let event = new EventWithdraw_V20(
+  const event = new EventWithdraw_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -93,11 +84,9 @@ function handleCreateLinear_V20(event: EventCreateLinear_V20): void {
 
 function handleCreateLinear_V21(event_: EventCreateLinear_V21): void {
   /** Remove transferable, handled later in this gateway */
-  let parameters_no_transferrable = event_.parameters.filter(
-    (value) => value.name != "transferable",
-  );
+  const parameters_no_transferrable = event_.parameters.filter((value) => value.name !== "transferable");
 
-  let event = new EventCreateLinear_V20(
+  const event = new EventCreateLinear_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -108,7 +97,7 @@ function handleCreateLinear_V21(event_: EventCreateLinear_V21): void {
     event_.receipt,
   );
 
-  let stream = handleCreateLinear(event);
+  const stream = handleCreateLinear(event);
   if (stream == null) {
     return;
   }
@@ -120,36 +109,34 @@ function handleCreateLinear_V21(event_: EventCreateLinear_V21): void {
 }
 
 function handleCreateLinear_V22(event_: EventCreateLinear_V22): void {
-  let parameters_no_fee = event_.parameters;
+  const parameters_no_fee = event_.parameters;
 
   /** Handle amounts [deposit, protocol fee, broker fee] */
-  let deposit = toValue(event_.params.amounts.deposit);
-  let protocolFee = toValue(zero);
-  let brokerFee = toValue(event_.params.amounts.brokerFee);
+  const deposit = toValue(event_.params.amounts.deposit);
+  const protocolFee = toValue(zero);
+  const brokerFee = toValue(event_.params.amounts.brokerFee);
 
-  let amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
+  const amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
   parameters_no_fee[4] = toEventTuple("amounts", amounts);
 
   /**
    * Handle range [start, cliff, end]
    * When cliff is zero, pass it as zero as per <V22 logic.
    */
-  let parameters_no_cliff = parameters_no_fee;
+  const parameters_no_cliff = parameters_no_fee;
   if (event_.params.timestamps.cliff.isZero()) {
-    let start = toValue(event_.params.timestamps.start);
-    let cliff = toValue(event_.params.timestamps.start);
-    let end = toValue(event_.params.timestamps.end);
+    const start = toValue(event_.params.timestamps.start);
+    const cliff = toValue(event_.params.timestamps.start);
+    const end = toValue(event_.params.timestamps.end);
 
-    let range = changetype<ethereum.Tuple>([start, cliff, end]);
+    const range = changetype<ethereum.Tuple>([start, cliff, end]);
     parameters_no_cliff[8] = toEventTuple("range", range);
   }
 
   /** Remove transferable, handled later in this gateway */
-  let parameters_no_transferrable = parameters_no_cliff.filter(
-    (value) => value.name != "transferable",
-  );
+  const parameters_no_transferrable = parameters_no_cliff.filter((value) => value.name !== "transferable");
 
-  let event = new EventCreateLinear_V20(
+  const event = new EventCreateLinear_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -160,7 +147,7 @@ function handleCreateLinear_V22(event_: EventCreateLinear_V22): void {
     event_.receipt,
   );
 
-  let stream = handleCreateLinear(event);
+  const stream = handleCreateLinear(event);
   if (stream == null) {
     return;
   }
@@ -173,24 +160,24 @@ function handleCreateLinear_V22(event_: EventCreateLinear_V22): void {
 
 function handleCreateLinear_V23(event_: EventCreateLinear_V23): void {
   /** Handle amounts [deposit, protocol fee, broker fee] */
-  let deposit = toValue(event_.params.commonParams.amounts.deposit);
-  let protocolFee = toValue(zero);
-  let brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
+  const deposit = toValue(event_.params.commonParams.amounts.deposit);
+  const protocolFee = toValue(zero);
+  const brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
 
-  let amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
+  const amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
 
   /**
    * Handle range [start, cliff, end]
    * Since cliff is handled later in the gateway, pass it as zero as per <V22 logic.
    */
-  let start = toValue(event_.params.commonParams.timestamps.start);
-  let cliff = toValue(event_.params.commonParams.timestamps.start);
-  let end = toValue(event_.params.commonParams.timestamps.end);
+  const start = toValue(event_.params.commonParams.timestamps.start);
+  const cliff = toValue(event_.params.commonParams.timestamps.start);
+  const end = toValue(event_.params.commonParams.timestamps.end);
 
-  let range = changetype<ethereum.Tuple>([start, cliff, end]);
+  const range = changetype<ethereum.Tuple>([start, cliff, end]);
 
   /** Rebuild parameters */
-  let parameters = [
+  const parameters = [
     event_.parameters[0], // streamId
     toEventAddress("funder", event_.params.commonParams.funder),
     toEventAddress("sender", event_.params.commonParams.sender),
@@ -202,7 +189,7 @@ function handleCreateLinear_V23(event_: EventCreateLinear_V23): void {
     toEventAddress("broker", event_.params.commonParams.broker),
   ];
 
-  let event = new EventCreateLinear_V20(
+  const event = new EventCreateLinear_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -213,7 +200,7 @@ function handleCreateLinear_V23(event_: EventCreateLinear_V23): void {
     event_.receipt,
   );
 
-  let stream = handleCreateLinear(event);
+  const stream = handleCreateLinear(event);
   if (stream == null) {
     return;
   }
@@ -244,11 +231,9 @@ function handleCreateDynamic_V20(event: EventCreateDynamic_V20): void {
 
 function handleCreateDynamic_V21(event_: EventCreateDynamic_V21): void {
   /** Remove transferable, handled later in this gateway */
-  let parameters_no_transferrable = event_.parameters.filter(
-    (value) => value.name != "transferable",
-  );
+  const parameters_no_transferrable = event_.parameters.filter((value) => value.name !== "transferable");
 
-  let event = new EventCreateDynamic_V20(
+  const event = new EventCreateDynamic_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -259,7 +244,7 @@ function handleCreateDynamic_V21(event_: EventCreateDynamic_V21): void {
     event_.receipt,
   );
 
-  let stream = handleCreateDynamic(event);
+  const stream = handleCreateDynamic(event);
   if (stream == null) {
     return;
   }
@@ -271,22 +256,20 @@ function handleCreateDynamic_V21(event_: EventCreateDynamic_V21): void {
 }
 
 function handleCreateDynamic_V22(event_: EventCreateDynamic_V22): void {
-  let parameters_no_fee = event_.parameters;
+  const parameters_no_fee = event_.parameters;
 
   /** Handle amounts [deposit, protocol fee, broker fee] */
-  let deposit = toValue(event_.params.amounts.deposit);
-  let protocolFee = toValue(zero);
-  let brokerFee = toValue(event_.params.amounts.brokerFee);
+  const deposit = toValue(event_.params.amounts.deposit);
+  const protocolFee = toValue(zero);
+  const brokerFee = toValue(event_.params.amounts.brokerFee);
 
-  let amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
+  const amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
   parameters_no_fee[4] = toEventTuple("amounts", amounts);
 
   /** Remove transferable, handled later in this gateway */
-  let parameters_no_transferrable = event_.parameters.filter(
-    (value) => value.name != "transferable",
-  );
+  const parameters_no_transferrable = event_.parameters.filter((value) => value.name !== "transferable");
 
-  let event = new EventCreateDynamic_V20(
+  const event = new EventCreateDynamic_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -297,7 +280,7 @@ function handleCreateDynamic_V22(event_: EventCreateDynamic_V22): void {
     event_.receipt,
   );
 
-  let stream = handleCreateDynamic(event);
+  const stream = handleCreateDynamic(event);
   if (stream == null) {
     return;
   }
@@ -310,21 +293,21 @@ function handleCreateDynamic_V22(event_: EventCreateDynamic_V22): void {
 
 function handleCreateDynamic_V23(event_: EventCreateDynamic_V23): void {
   /** Handle amounts [deposit, protocol fee, broker fee] */
-  let deposit = toValue(event_.params.commonParams.amounts.deposit);
-  let protocolFee = toValue(zero);
-  let brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
+  const deposit = toValue(event_.params.commonParams.amounts.deposit);
+  const protocolFee = toValue(zero);
+  const brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
 
-  let amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
+  const amounts = changetype<ethereum.Tuple>([deposit, protocolFee, brokerFee]);
 
   /** Handle range [start, end] */
 
-  let start = toValue(event_.params.commonParams.timestamps.start);
-  let end = toValue(event_.params.commonParams.timestamps.end);
+  const start = toValue(event_.params.commonParams.timestamps.start);
+  const end = toValue(event_.params.commonParams.timestamps.end);
 
-  let range = changetype<ethereum.Tuple>([start, end]);
+  const range = changetype<ethereum.Tuple>([start, end]);
 
   /** Rebuild parameters */
-  let parameters = [
+  const parameters = [
     event_.parameters[0], // streamId
     toEventAddress("funder", event_.params.commonParams.funder),
     toEventAddress("sender", event_.params.commonParams.sender),
@@ -337,7 +320,7 @@ function handleCreateDynamic_V23(event_: EventCreateDynamic_V23): void {
     toEventAddress("broker", event_.params.commonParams.broker),
   ];
 
-  let event = new EventCreateDynamic_V20(
+  const event = new EventCreateDynamic_V20(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -348,7 +331,7 @@ function handleCreateDynamic_V23(event_: EventCreateDynamic_V23): void {
     event_.receipt,
   );
 
-  let stream = handleCreateDynamic(event);
+  const stream = handleCreateDynamic(event);
   if (stream == null) {
     return;
   }
@@ -362,7 +345,7 @@ function handleCreateDynamic_V23(event_: EventCreateDynamic_V23): void {
 }
 
 function handleCreateTranched_V22(event: EventCreateTranched_V22): void {
-  let stream = handleCreateTranched(event);
+  const stream = handleCreateTranched(event);
   if (stream == null) {
     return;
   }
@@ -374,20 +357,20 @@ function handleCreateTranched_V22(event: EventCreateTranched_V22): void {
 
 function handleCreateTranched_V23(event_: EventCreateTranched_V23): void {
   /** Handle amounts [deposit, broker fee] */
-  let deposit = toValue(event_.params.commonParams.amounts.deposit);
-  let brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
+  const deposit = toValue(event_.params.commonParams.amounts.deposit);
+  const brokerFee = toValue(event_.params.commonParams.amounts.brokerFee);
 
-  let amounts = changetype<ethereum.Tuple>([deposit, brokerFee]);
+  const amounts = changetype<ethereum.Tuple>([deposit, brokerFee]);
 
   /** Handle range [start, end] */
 
-  let start = toValue(event_.params.commonParams.timestamps.start);
-  let end = toValue(event_.params.commonParams.timestamps.end);
+  const start = toValue(event_.params.commonParams.timestamps.start);
+  const end = toValue(event_.params.commonParams.timestamps.end);
 
-  let timestamps = changetype<ethereum.Tuple>([start, end]);
+  const timestamps = changetype<ethereum.Tuple>([start, end]);
 
   /** Rebuild parameters */
-  let parameters = [
+  const parameters = [
     event_.parameters[0], // streamId
     toEventAddress("funder", event_.params.commonParams.funder),
     toEventAddress("sender", event_.params.commonParams.sender),
@@ -401,7 +384,7 @@ function handleCreateTranched_V23(event_: EventCreateTranched_V23): void {
     toEventAddress("broker", event_.params.commonParams.broker),
   ];
 
-  let event = new EventCreateTranched_V22(
+  const event = new EventCreateTranched_V22(
     event_.address,
     event_.logIndex,
     event_.transactionLogIndex,
@@ -411,7 +394,7 @@ function handleCreateTranched_V23(event_: EventCreateTranched_V23): void {
     parameters,
     event_.receipt,
   );
-  let stream = handleCreateTranched(event);
+  const stream = handleCreateTranched(event);
   if (stream == null) {
     return;
   }

@@ -1,11 +1,7 @@
-import type {
-  Action,
-  ApprovalForAllHandler,
-  ApprovalForAllLoader,
-} from "../types";
 import { FlowV10 } from "../../generated";
 import { ActionCategory } from "../constants";
 import { createAction, getOrCreateWatcher } from "../helpers";
+import type { Action, ApprovalForAllHandler, ApprovalForAllLoader } from "../types";
 
 async function loader(input: ApprovalForAllLoader) {
   const { context, event } = input;
@@ -22,8 +18,7 @@ async function handler(input: ApprovalForAllHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
 
   const post_action = createAction(event, watcher);
 

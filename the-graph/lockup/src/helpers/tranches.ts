@@ -1,25 +1,20 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { Stream, Tranche } from "../generated/types/schema";
-import { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
+import { BigInt as GraphBigInt } from "@graphprotocol/graph-ts";
 import { zero } from "../constants";
+import { type Stream, Tranche } from "../generated/types/schema";
+import type { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
 
 export class TrancheInput {
-  amount: BigInt;
-  timestamp: BigInt;
+  amount: GraphBigInt;
+  timestamp: GraphBigInt;
 
-  constructor(amount: BigInt, timestamp: BigInt) {
+  constructor(amount: GraphBigInt, timestamp: GraphBigInt) {
     this.amount = amount;
     this.timestamp = timestamp;
   }
 }
 
-export function createTranche(
-  id: string,
-  streamed: BigInt,
-  last: TrancheInput,
-  current: TrancheInput,
-): Tranche {
-  let tranche = new Tranche(id);
+export function createTranche(id: string, streamed: GraphBigInt, last: TrancheInput, current: TrancheInput): Tranche {
+  const tranche = new Tranche(id);
   tranche.amount = current.amount;
   tranche.timestamp = current.timestamp;
 
@@ -32,31 +27,23 @@ export function createTranche(
   return tranche;
 }
 
-export function createTranches(
-  stream: Stream,
-  event: EventCreateTranched,
-): Stream {
-  let tranches = event.params.tranches;
+export function createTranches(stream: Stream, event: EventCreateTranched): Stream {
+  const tranches = event.params.tranches;
 
   let streamed = zero;
-  let inputs: TrancheInput[] = [new TrancheInput(zero, stream.startTime)];
+  const inputs: TrancheInput[] = [new TrancheInput(zero, stream.startTime)];
 
   for (let i = 0; i < tranches.length; i++) {
-    let item = tranches[i];
+    const item = tranches[i];
     inputs.push(new TrancheInput(item.amount, item.timestamp));
   }
 
   for (let i = 1; i < inputs.length; i++) {
-    let id = stream.id.concat("-").concat(i.toString());
-    let tranche: Tranche = createTranche(
-      id,
-      streamed,
-      inputs[i - 1],
-      inputs[i],
-    );
+    const id = stream.id.concat("-").concat(i.toString());
+    const tranche: Tranche = createTranche(id, streamed, inputs[i - 1], inputs[i]);
 
     tranche.stream = stream.id;
-    tranche.position = BigInt.fromI32(i - 1);
+    tranche.position = GraphBigInt.fromI32(i - 1);
     tranche.save();
 
     streamed = streamed.plus(inputs[i].amount);

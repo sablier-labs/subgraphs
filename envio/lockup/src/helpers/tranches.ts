@@ -1,11 +1,4 @@
-import type {
-  CreateTranchedArgs,
-  CreateTranchedMergedArgs,
-  Event,
-  Mutable,
-  Stream,
-  Tranche,
-} from "../types";
+import type { CreateTranchedArgs, CreateTranchedMergedArgs, Event, Mutable, Stream, Tranche } from "../types";
 
 type Entity = Partial<Mutable<Tranche>>;
 
@@ -19,12 +12,7 @@ class TrancheInput {
   }
 }
 
-function createTranche(
-  id: string,
-  streamed: bigint,
-  last: TrancheInput,
-  current: TrancheInput,
-) {
+function createTranche(id: string, streamed: bigint, last: TrancheInput, current: TrancheInput) {
   const entity = {
     id,
     amount: current.amount,
@@ -47,9 +35,9 @@ export function createTranches(
   let streamed = 0n;
   const inputs: TrancheInput[] = [new TrancheInput(0n, stream.startTime)];
 
-  event.params.tranches.forEach((item) => {
+  for (const item of event.params.tranches) {
     inputs.push(new TrancheInput(BigInt(item[0]), BigInt(item[1])));
-  });
+  }
 
   const tranches: Tranche[] = [];
 

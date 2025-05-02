@@ -1,28 +1,16 @@
-import type { Action, RestartHandler, RestartLoader } from "../types";
 import { FlowV10 } from "../../generated";
 import { ActionCategory } from "../constants";
-import {
-  createAction,
-  generateStreamId,
-  getOrCreateWatcher,
-  getStream,
-} from "../helpers";
+import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../helpers";
+import type { Action, RestartHandler, RestartLoader } from "../types";
 import { toScaled } from "../utils";
 
 async function loader(input: RestartLoader) {
   const { context, event } = input;
 
-  const streamId = generateStreamId(
-    event,
-    event.srcAddress,
-    event.params.streamId,
-  );
+  const streamId = generateStreamId(event, event.srcAddress, event.params.streamId);
   const watcherId = event.chainId.toString();
 
-  const [stream, watcher] = await Promise.all([
-    context.Stream.get(streamId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
 
   return {
     stream,
@@ -35,13 +23,10 @@ async function handler(input: RestartHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let stream =
-    loaded.stream ??
-    (await getStream(event, event.params.streamId, context.Stream.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let stream = loaded.stream ?? (await getStream(event, event.params.streamId, context.Stream.get));
 
-  let asset = await context.Asset.get(stream.asset_id);
+  const asset = await context.Asset.get(stream.asset_id);
 
   if (!asset) {
     return;
@@ -62,27 +47,17 @@ async function handler(input: RestartHandler<typeof loader>) {
 
   watcher = post_action.watcher;
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    asset.decimals,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, asset.decimals); /** Scaled 18D */
 
-  const notWithdrawnScaled =
-    stream.snapshotAmount - withdrawnAmountScaled; /** Scaled 18D */
+  const notWithdrawnScaled = stream.snapshotAmount - withdrawnAmountScaled; /** Scaled 18D */
 
-  const availableAmountScaled = toScaled(
-    stream.availableAmount,
-    asset.decimals,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(stream.availableAmount, asset.decimals); /** Scaled 18D */
 
   let depletionTime = BigInt(event.block.timestamp);
   if (availableAmountScaled > notWithdrawnScaled) {
-    const extraAmountScaled =
-      availableAmountScaled - notWithdrawnScaled; /** Scaled 18D */
+    const extraAmountScaled = availableAmountScaled - notWithdrawnScaled; /** Scaled 18D */
 
-    depletionTime =
-      BigInt(event.block.timestamp) +
-      extraAmountScaled / event.params.ratePerSecond;
+    depletionTime = BigInt(event.block.timestamp) + extraAmountScaled / event.params.ratePerSecond;
   }
 
   stream = {

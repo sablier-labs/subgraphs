@@ -7,7 +7,6 @@ var base = require("../addresses/base");
 var baseSepolia = require("../addresses/base-sepolia");
 var bsc = require("../addresses/bsc");
 var chiliz = require("../addresses/chiliz");
-var experimental = require("../addresses/experimental");
 var gnosis = require("../addresses/gnosis");
 var linea = require("../addresses/linea");
 var mainnet = require("../addresses/mainnet");
@@ -22,7 +21,7 @@ var tangle = require("../addresses/tangle");
 var zksync = require("../addresses/zksync");
 var definitions_1 = require("./definitions");
 var available = function (v) {
-    return (v.linear.length + v.dynamic.length + v.tranched.length + v.merged.length > 0);
+    return v.linear.length + v.dynamic.length + v.tranched.length + v.merged.length > 0;
 };
 var filter = function (list, version) {
     return (list
@@ -56,7 +55,7 @@ var chains = function () {
         [optimism, definitions_1.default.optimism],
         [polygon, definitions_1.default.polygon],
         [scroll, definitions_1.default.scroll],
-        [false ? experimental : sepolia, definitions_1.default.sepolia],
+        [sepolia, definitions_1.default.sepolia],
         [superseed, definitions_1.default.superseed],
         [tangle, definitions_1.default.tangle],
         [zksync, definitions_1.default.zksync],

@@ -20,11 +20,8 @@ export const _configurations = (
 > => ({
   [CHAIN_SEPOLIA_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-flow-experimental/version/latest",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-flow-experimental/version/latest",
     },
     token: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
     recipient: "0x8468cD99Cea5EB7279Adf189fAe632FFb06b2F6F",

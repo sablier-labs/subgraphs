@@ -2,16 +2,10 @@ import { GraphQLClient } from "graphql-request";
 import { endpoint } from "./constants";
 
 function _replacer(_k: string, v: unknown) {
-  return typeof v === "number"
-    ? v.toLocaleString("en-US", { useGrouping: false })
-    : v;
+  return typeof v === "number" ? v.toLocaleString("en-US", { useGrouping: false }) : v;
 }
 
-export async function request(
-  endpoint: string,
-  document: string,
-  variables?: Record<string, unknown>,
-) {
+export async function request(endpoint: string, document: string, variables?: Record<string, unknown>) {
   try {
     const client = new GraphQLClient(endpoint);
     const response = await client.request(document, variables);
@@ -40,17 +34,11 @@ function toTheGraph<T>(response: T) {
   return JSON.parse(JSON.stringify(response, _replacer)) as T;
 }
 
-export async function Envio(
-  document: string,
-  variables?: Record<string, unknown>,
-) {
+export async function Envio(document: string, variables?: Record<string, unknown>) {
   return toEnvio(await request(endpoint.Envio, document, variables));
 }
 
-export async function TheGraph(
-  document: string,
-  variables?: Record<string, unknown>,
-) {
+export async function TheGraph(document: string, variables?: Record<string, unknown>) {
   return toTheGraph(await request(endpoint.TheGraph, document, variables));
 }
 
@@ -87,11 +75,7 @@ function reformat(source: object) {
       const isEmpty = isArray && (replicate as Array<object>).length === 0;
 
       const plural = isArray ? replicate : [];
-      const single = isArray
-        ? !isEmpty
-          ? replicate[0]
-          : undefined
-        : replicate;
+      const single = isArray ? (!isEmpty ? replicate[0] : undefined) : replicate;
 
       value = {
         ...value,
@@ -109,7 +93,7 @@ function reassign(source: object | undefined) {
     return undefined;
   }
 
-  let value = JSON.stringify(source);
+  const value = JSON.stringify(source);
 
   return JSON.parse(value);
 }

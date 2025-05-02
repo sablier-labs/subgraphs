@@ -1,14 +1,4 @@
-import type {
-  Action,
-  TransferAdminHandler,
-  TransferAdminLoader,
-} from "../types";
-import {
-  MerkleInstant,
-  MerkleLockupV21,
-  MerkleLockupV22,
-  MerkleLockupV23,
-} from "../../generated";
+import { MerkleInstant, MerkleLockupV21, MerkleLockupV22, MerkleLockupV23 } from "../../generated";
 import { ADDRESS_ZERO, ActionCategory } from "../constants";
 import {
   createAction,
@@ -17,6 +7,7 @@ import {
   getCampaign,
   getOrCreateWatcher,
 } from "../helpers";
+import type { Action, TransferAdminHandler, TransferAdminLoader } from "../types";
 
 async function loader(input: TransferAdminLoader) {
   const { context, event } = input;
@@ -24,14 +15,9 @@ async function loader(input: TransferAdminLoader) {
   const campaignId = generateCampaignId(event, event.srcAddress);
   const watcherId = event.chainId.toString();
 
-  const [campaign, watcher] = await Promise.all([
-    context.Campaign.get(campaignId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [campaign, watcher] = await Promise.all([context.Campaign.get(campaignId), context.Watcher.get(watcherId)]);
 
-  const asset = campaign?.asset_id
-    ? await context.Asset.get(campaign?.asset_id)
-    : undefined;
+  const asset = campaign?.asset_id ? await context.Asset.get(campaign?.asset_id) : undefined;
 
   return {
     asset,
@@ -54,11 +40,9 @@ async function handler(input: TransferAdminHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let campaign =
-    loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
-  let asset = loaded.asset;
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let campaign = loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
+  const asset = loaded.asset;
 
   if (!asset) {
     return;

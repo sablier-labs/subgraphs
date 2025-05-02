@@ -1,8 +1,6 @@
 import { chains as generator } from "../_generated/original/bundles/flow-envio";
 
-export const ADDRESS_ZERO = String(
-  "0x0000000000000000000000000000000000000000",
-);
+export const ADDRESS_ZERO = String("0x0000000000000000000000000000000000000000");
 
 export const FLOW_SCALED_DECIMALS = 18n;
 
@@ -48,8 +46,7 @@ export function configuration(chainId: number | string | bigint) {
   };
 }
 
-export type ActionCategory =
-  (typeof ActionCategory)[keyof typeof ActionCategory];
+export type ActionCategory = (typeof ActionCategory)[keyof typeof ActionCategory];
 
 export type CacheCategory = (typeof CacheCategory)[keyof typeof CacheCategory];
 

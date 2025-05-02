@@ -1,6 +1,6 @@
 import { hexToString, trim } from "viem";
 
-export { Cache } from "./cache";
+export { initCache } from "./cache";
 export { framework } from "./framework";
 
 export function fromHex(value: unknown | string) {

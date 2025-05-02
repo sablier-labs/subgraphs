@@ -21,12 +21,8 @@ exports.dynamic = [
     ["0x1df83c7682080b0f0c26a20c6c9cb8623e0df24e", "LD2", "V21"],
     ["0x555eb55cbc477aebbe5652d25d0fea04052d3971", "LD3", "V22"],
 ];
-exports.tranched = [
-    ["0x59a4b7255a5d01247837600e7828a6f77f664b34", "LT3", "V22"],
-];
-exports.merged = [
-    ["0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92", "LK", "V23"],
-];
+exports.tranched = [["0x59a4b7255a5d01247837600e7828a6f77f664b34", "LT3", "V22"]];
+exports.merged = [["0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92", "LK", "V23"]];
 exports.flow = [
     ["0x5515f774a4db42820802333ba575f68a6e85bd13", "FL", "V10"],
     ["0x34bc0c2bf1f2da51c65cd821ba4133afcacdb8f5", "FL2", "V11"],

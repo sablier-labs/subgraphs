@@ -7,14 +7,11 @@ export async function initialize(
   loaderContract: (id: string) => Promise<Contract | undefined>,
   loaded?: { contract?: Contract; watcher?: Watcher },
 ) {
-  const watcher =
-    loaded?.watcher ?? (await getOrCreateWatcher(event, loaderWatcher));
+  const watcher = loaded?.watcher ?? (await getOrCreateWatcher(event, loaderWatcher));
 
   if (watcher.initialized) {
     try {
-      const contract =
-        loaded?.contract ??
-        (await getContract(event, event.srcAddress, loaderContract));
+      const contract = loaded?.contract ?? (await getContract(event, event.srcAddress, loaderContract));
 
       return {
         contract,
@@ -28,9 +25,7 @@ export async function initialize(
 
   /** If the contract isn't already configured, we've just started indexing. Prepare the contracts. */
   const contracts = _initialize(event);
-  const contract = contracts.find(
-    (c) => c.id === generateContractId(event, event.srcAddress),
-  );
+  const contract = contracts.find((c) => c.id === generateContractId(event, event.srcAddress));
 
   if (!contract) {
     throw new Error("Missing contract instance at initialization");
@@ -59,10 +54,7 @@ function createWatcher(event: Event): Watcher {
   return entity;
 }
 
-export async function getOrCreateWatcher(
-  event: Event,
-  loader: (id: string) => Promise<Watcher | undefined>,
-) {
+export async function getOrCreateWatcher(event: Event, loader: (id: string) => Promise<Watcher | undefined>) {
   const watcher = await loader(event.chainId.toString());
 
   if (watcher === undefined) {

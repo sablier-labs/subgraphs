@@ -1,7 +1,8 @@
 import { dataSource, log } from "@graphprotocol/graph-ts";
-import { Stream } from "../generated/types/schema";
-import { CreateLockupDynamicStream as EventCreateDynamic } from "../generated/types/templates/ContractLockupDynamic/SablierLockupDynamic";
-import {
+import { ADDRESS_ZERO, one, zero } from "../constants";
+import type { Stream } from "../generated/types/schema";
+import type { CreateLockupDynamicStream as EventCreateDynamic } from "../generated/types/templates/ContractLockupDynamic/SablierLockupDynamic";
+import type {
   Approval as EventApproval,
   ApprovalForAll as EventApprovalForAll,
   CancelLockupStream as EventCancel,
@@ -10,33 +11,24 @@ import {
   TransferAdmin as EventTransferAdmin,
   WithdrawFromLockupStream as EventWithdraw,
 } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
-import { CreateLockupLinearStream as EventCreateLinear } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
-import { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
-import { ADDRESS_ZERO, one, zero } from "../constants";
-import {
-  createAction,
-  getContractByAddress,
-  getStreamByIdFromSource,
-} from "../helpers";
-import {
-  createDynamicStream,
-  createLinearStream,
-  createTranchedStream,
-} from "../helpers/stream";
+import type { CreateLockupLinearStream as EventCreateLinear } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
+import type { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
+import { createAction, getContractByAddress, getStreamByIdFromSource } from "../helpers";
+import { createDynamicStream, createLinearStream, createTranchedStream } from "../helpers/stream";
 
 export function handleCreateLinear(event: EventCreateLinear): Stream | null {
-  let stream = createLinearStream(event);
+  const stream = createLinearStream(event);
   if (stream == null) {
     return null;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Create";
   action.addressA = event.params.sender;
   action.addressB = event.params.recipient;
   action.amountA = event.params.amounts.deposit;
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream.renounceAction = action.id;
     stream.renounceTime = event.block.timestamp;
   }
@@ -48,18 +40,18 @@ export function handleCreateLinear(event: EventCreateLinear): Stream | null {
 }
 
 export function handleCreateDynamic(event: EventCreateDynamic): Stream | null {
-  let stream = createDynamicStream(event);
+  const stream = createDynamicStream(event);
   if (stream == null) {
     return null;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Create";
   action.addressA = event.params.sender;
   action.addressB = event.params.recipient;
   action.amountA = event.params.amounts.deposit;
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream.renounceAction = action.id;
     stream.renounceTime = event.block.timestamp;
   }
@@ -71,21 +63,19 @@ export function handleCreateDynamic(event: EventCreateDynamic): Stream | null {
   return stream;
 }
 
-export function handleCreateTranched(
-  event: EventCreateTranched,
-): Stream | null {
-  let stream = createTranchedStream(event);
+export function handleCreateTranched(event: EventCreateTranched): Stream | null {
+  const stream = createTranchedStream(event);
   if (stream == null) {
     return null;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Create";
   action.addressA = event.params.sender;
   action.addressB = event.params.recipient;
   action.amountA = event.params.amounts.deposit;
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream.renounceAction = action.id;
     stream.renounceTime = event.block.timestamp;
   }
@@ -98,18 +88,15 @@ export function handleCreateTranched(
 }
 
 export function handleCancel(event: EventCancel): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Cancel";
   action.addressA = event.params.sender;
   action.addressB = event.params.recipient;
@@ -129,14 +116,14 @@ export function handleCancel(event: EventCancel): void {
 }
 
 export function handleRenounce(event: EventRenounce): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
 
   if (stream == null) {
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Renounce";
 
   /** --------------- */
@@ -161,18 +148,15 @@ export function handleTransfer(event: EventTransfer): void {
 
   /** --------------- */
 
-  let id = event.params.tokenId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.tokenId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this transfer event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this transfer event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Transfer";
 
   action.addressA = event.params.from;
@@ -181,11 +165,11 @@ export function handleTransfer(event: EventTransfer): void {
   /** --------------- */
 
   stream.recipient = event.params.to;
-  let parties = [stream.sender, event.params.to];
+  const parties = [stream.sender, event.params.to];
 
   if (stream.proxied === true) {
     /** Without explicit copies, AssemblyScript will crash (i.e. don't use stream.proxender directly) */
-    let proxender = stream.proxender;
+    const proxender = stream.proxender;
     if (proxender !== null) {
       parties.push(proxender);
     }
@@ -199,26 +183,23 @@ export function handleTransfer(event: EventTransfer): void {
 }
 
 export function handleWithdraw(event: EventWithdraw): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this withdraw event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this withdraw event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Withdraw";
   action.addressA = event.transaction.from;
   action.addressB = event.params.to;
   action.amountB = event.params.amount;
 
   /** --------------- */
-  let amount = event.params.amount;
-  let withdrawn = stream.withdrawnAmount.plus(amount);
+  const amount = event.params.amount;
+  const withdrawn = stream.withdrawnAmount.plus(amount);
   stream.withdrawnAmount = withdrawn;
 
   if (stream.canceledAction) {
@@ -233,18 +214,15 @@ export function handleWithdraw(event: EventWithdraw): void {
 }
 
 export function handleApproval(event: EventApproval): void {
-  let id = event.params.tokenId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.tokenId;
+  const stream = getStreamByIdFromSource(id);
 
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this approval event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this approval event: {}", [id.toHexString()]);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Approval";
 
   action.addressA = event.params.owner;
@@ -256,7 +234,7 @@ export function handleApproval(event: EventApproval): void {
   action.save();
 }
 export function handleApprovalForAll(event: EventApprovalForAll): void {
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "ApprovalForAll";
 
   action.addressA = event.params.owner;
@@ -273,12 +251,11 @@ export function handleApprovalForAll(event: EventApprovalForAll): void {
  * as it's the first one to be logged after the contract's creation
  */
 export function handleTransferAdmin(event: EventTransferAdmin): void {
-  let contract = getContractByAddress(dataSource.address());
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this transfer admin event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this transfer admin event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
     return;
   }

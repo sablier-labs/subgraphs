@@ -43,10 +43,7 @@ export const fallbacks: { id: number; rpcEndpoints: string[] }[] = [
   },
   {
     id: library.blast.id,
-    rpcEndpoints: [
-      ...library.blast.rpcUrls.default.http,
-      "https://blast.blockpi.network/v1/rpc/public",
-    ],
+    rpcEndpoints: [...library.blast.rpcUrls.default.http, "https://blast.blockpi.network/v1/rpc/public"],
   },
   {
     id: library.bsc.id,

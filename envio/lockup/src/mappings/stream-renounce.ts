@@ -1,27 +1,15 @@
-import type { Action, RenounceHandler, RenounceLoader } from "../types";
 import { LockupV20, LockupV21, LockupV22, LockupV23 } from "../../generated";
 import { ActionCategory } from "../constants";
-import {
-  createAction,
-  generateStreamId,
-  getOrCreateWatcher,
-  getStream,
-} from "../helpers";
+import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../helpers";
+import type { Action, RenounceHandler, RenounceLoader } from "../types";
 
 async function loader(input: RenounceLoader) {
   const { context, event } = input;
 
-  const streamId = generateStreamId(
-    event,
-    event.srcAddress,
-    event.params.streamId,
-  );
+  const streamId = generateStreamId(event, event.srcAddress, event.params.streamId);
   const watcherId = event.chainId.toString();
 
-  const [stream, watcher] = await Promise.all([
-    context.Stream.get(streamId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
 
   return {
     stream,
@@ -34,11 +22,8 @@ async function handler(input: RenounceHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let stream =
-    loaded.stream ??
-    (await getStream(event, event.params.streamId, context.Stream.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let stream = loaded.stream ?? (await getStream(event, event.params.streamId, context.Stream.get));
 
   /** ------- Process -------- */
 

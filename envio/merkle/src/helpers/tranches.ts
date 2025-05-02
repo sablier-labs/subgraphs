@@ -26,19 +26,16 @@ function createTranche(id: string, last: TrancheInput, current: TrancheInput) {
   return entity;
 }
 
-export function createTranches(
-  event: Event<CreateTranchedArgs>,
-  campaign: Pick<Campaign, "id">,
-) {
-  let params = event.params.tranchesWithPercentages;
+export function createTranches(event: Event<CreateTranchedArgs>, campaign: Pick<Campaign, "id">) {
+  const params = event.params.tranchesWithPercentages;
   let last = new TrancheInput(0n, 0n);
 
   const tranches: Tranche[] = [];
 
   for (let i = 0; i < params.length; i++) {
-    let id = campaign.id.concat("-").concat(i.toString());
-    let current = new TrancheInput(params[i][0], params[i][1]);
-    let tranche = {
+    const id = campaign.id.concat("-").concat(i.toString());
+    const current = new TrancheInput(params[i][0], params[i][1]);
+    const tranche = {
       ...createTranche(id, last, current),
       campaign_id: campaign.id,
       position: BigInt(i),

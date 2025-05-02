@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, log } from "@graphprotocol/graph-ts";
+import { type Address, Bytes, BigInt as GraphBigInt, log } from "@graphprotocol/graph-ts";
 import {
   chainId,
   dynamic,
@@ -9,22 +9,20 @@ import {
   tranched,
 } from "../generated/env";
 
-export let zero = BigInt.fromI32(0);
-export let one = BigInt.fromI32(1);
-export let two = BigInt.fromI32(2);
-export let d18 = BigInt.fromI32(18);
+export const zero = GraphBigInt.fromI32(0);
+export const one = GraphBigInt.fromI32(1);
+export const two = GraphBigInt.fromI32(2);
+export const d18 = GraphBigInt.fromI32(18);
 
-export let put = 0;
-export let call = 1;
+export const put = 0;
+export const call = 1;
 
-export let ADDRESS_ZERO = Bytes.fromHexString(
-  "0x0000000000000000000000000000000000000000",
-);
+export const ADDRESS_ZERO = Bytes.fromHexString("0x0000000000000000000000000000000000000000");
 
-export let StreamVersion_V20 = "V20"; /** Not in use */
-export let StreamVersion_V21 = "V21";
-export let StreamVersion_V22 = "V22";
-export let StreamVersion_V23 = "V23";
+export const StreamVersion_V20 = "V20"; /** Not in use */
+export const StreamVersion_V21 = "V21";
+export const StreamVersion_V22 = "V22";
+export const StreamVersion_V23 = "V23";
 
 export function getContractInitializer(): string {
   return initializer.toLowerCase();
@@ -34,7 +32,7 @@ export function getContractsFactory(): string[][] {
   if (factory.length === 0) {
     return [];
   }
-  return factory.map<string[]>((item) => [
+  return factory.map<string[]>((item: string[]) => [
     item[0].toString().toLowerCase(),
     item[1].toString().toLowerCase(),
     item.length >= 3 ? item[2].toString() : StreamVersion_V21,
@@ -57,7 +55,7 @@ export function getContractsShapes(): string[][] {
     aggregate = aggregate.concat(merged);
   }
 
-  return aggregate.map<string[]>((item) => [
+  return aggregate.map<string[]>((item: string[]) => [
     item[0].toString().toLowerCase(),
     item[1].toString().toLowerCase(),
     item.length >= 3 ? item[2].toString() : StreamVersion_V21,
@@ -65,16 +63,14 @@ export function getContractsShapes(): string[][] {
 }
 
 export function isWhitelistedShape(address: Address): bool {
-  let shapes = getContractsShapes();
-  let addresses = shapes.map<string>((item) =>
-    item[0].toString().toLowerCase(),
-  );
+  const shapes = getContractsShapes();
+  const addresses = shapes.map<string>((item) => item[0].toString().toLowerCase());
 
   return addresses.includes(address.toHexString().toLowerCase());
 }
 
-export function getChainId(): BigInt {
-  return BigInt.fromI32(chainId);
+export function getChainId(): GraphBigInt {
+  return GraphBigInt.fromI32(chainId);
 }
 
 export function log_exit(message: string, dependencies: string[] = []): void {

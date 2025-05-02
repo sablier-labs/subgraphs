@@ -1,6 +1,6 @@
-import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ContractMerkleFactory as FactoryTemplate } from "../generated/types/templates";
+import { Address, type ethereum } from "@graphprotocol/graph-ts";
 import { getContractsFactory } from "../constants";
+import { ContractMerkleFactory as FactoryTemplate } from "../generated/types/templates";
 import { createFactory, getOrCreateWatcher } from "../helpers";
 
 /**
@@ -8,15 +8,14 @@ import { createFactory, getOrCreateWatcher } from "../helpers";
  */
 
 export function handleInitializer(_event: ethereum.Event): void {
-  let watcher = getOrCreateWatcher();
+  const watcher = getOrCreateWatcher();
   if (watcher.initialized) {
     return;
-  } else {
-    watcher.initialized = true;
-    watcher.save();
   }
+  watcher.initialized = true;
+  watcher.save();
 
-  let factories = getContractsFactory();
+  const factories = getContractsFactory();
   if (factories.length > 0) {
     for (let i = 0; i < factories.length; i++) {
       const address = Address.fromString(factories[i][0]);

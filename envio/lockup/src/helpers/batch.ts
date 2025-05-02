@@ -58,15 +58,9 @@ export function createBatch(event: Event, batcher: Batcher) {
 /** --------------------------------------------------------------------------------------------------------- */
 
 export function generateBatchId(event: Event): string {
-  return ""
-    .concat(event.transaction.hash.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString());
+  return "".concat(event.transaction.hash.toLowerCase()).concat("-").concat(event.chainId.toString());
 }
 
 export function generateBatcherId(event: Event, sender: Address): string {
-  return ""
-    .concat(sender.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString());
+  return "".concat(sender.toLowerCase()).concat("-").concat(event.chainId.toString());
 }

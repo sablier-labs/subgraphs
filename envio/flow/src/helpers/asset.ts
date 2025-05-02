@@ -1,12 +1,8 @@
-import type { Address, Asset, Event } from "../types";
 import { CacheCategory } from "../constants";
-import { Cache, framework, fromHex } from "../utils";
+import type { Address, Asset, Event } from "../types";
+import { framework, fromHex, initCache } from "../utils";
 
-export async function getAsset(
-  event: Event,
-  address: Address,
-  loader: (id: string) => Promise<Asset | undefined>,
-) {
+export async function getAsset(event: Event, address: Address, loader: (id: string) => Promise<Asset | undefined>) {
   const id = generateAssetId(event, address.toLowerCase());
   const loaded = await loader(id);
 
@@ -56,7 +52,7 @@ export function generateAssetId(event: Event, address: Address) {
 }
 
 async function details(address: Address, chainId: number) {
-  const cache = Cache.init(CacheCategory.Token, chainId);
+  const cache = initCache(CacheCategory.Token, chainId);
   const token = cache.read(address.toLowerCase());
 
   if (token) {

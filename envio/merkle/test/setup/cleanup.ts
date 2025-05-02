@@ -52,11 +52,7 @@ export const cleanup = {
   metadata: cleanup_metadata,
 };
 
-export function cleanup_asset(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Asset {
+export function cleanup_asset(source: unknown, skip: boolean, vendor?: Vendor): Asset {
   const value = { ...(source as Asset) };
 
   if (skip) {
@@ -71,11 +67,7 @@ export function cleanup_asset(
   return value;
 }
 
-export function cleanup_factory(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Factory {
+export function cleanup_factory(source: unknown, skip: boolean, vendor?: Vendor): Factory {
   const value = { ...(source as Factory) };
 
   if (skip) {
@@ -90,11 +82,7 @@ export function cleanup_factory(
   return value;
 }
 
-export function cleanup_action(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Action {
+export function cleanup_action(source: unknown, skip: boolean, vendor?: Vendor): Action {
   const value = { ...(source as Action) };
 
   if (skip) {
@@ -115,29 +103,19 @@ export function cleanup_action(
   return value;
 }
 
-export function cleanup_actions(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Actions {
+export function cleanup_actions(source: unknown, skip: boolean, vendor?: Vendor): Actions {
   const value = { ...(source as Actions) };
 
   if (skip) {
     return value;
   }
 
-  value.actions = value.actions.map((action) =>
-    cleanup_action(action, skip, vendor),
-  );
+  value.actions = value.actions.map((action) => cleanup_action(action, skip, vendor));
 
   return value;
 }
 
-export function cleanup_campaign(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Campaign {
+export function cleanup_campaign(source: unknown, skip: boolean, vendor?: Vendor): Campaign {
   const value = { ...(source as Campaign) };
 
   if (skip) {
@@ -153,37 +131,25 @@ export function cleanup_campaign(
   }
 
   if (value.actions?.length) {
-    value.actions = value.actions.map((action) =>
-      cleanup_action(action, skip, vendor),
-    );
+    value.actions = value.actions.map((action) => cleanup_action(action, skip, vendor));
   }
 
   return value;
 }
 
-export function cleanup_campaigns(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Campaigns {
+export function cleanup_campaigns(source: unknown, skip: boolean, vendor?: Vendor): Campaigns {
   const value = { ...(source as Campaigns) };
 
   if (skip) {
     return value;
   }
 
-  value.campaigns = value.campaigns.map((campaign) =>
-    cleanup_campaign(campaign, skip, vendor),
-  );
+  value.campaigns = value.campaigns.map((campaign) => cleanup_campaign(campaign, skip, vendor));
 
   return value;
 }
 
-export function cleanup_metadata(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Metadata {
+export function cleanup_metadata(source: unknown, skip: boolean, vendor?: Vendor): Metadata {
   const value = { ...(source as Metadata) };
 
   if (skip) {
@@ -192,8 +158,6 @@ export function cleanup_metadata(
 
   return {
     campaign: cleanup_campaign(value.campaign, skip, vendor),
-    actions: value.actions.map((action) =>
-      cleanup_action(action, skip, vendor),
-    ),
+    actions: value.actions.map((action) => cleanup_action(action, skip, vendor)),
   };
 }

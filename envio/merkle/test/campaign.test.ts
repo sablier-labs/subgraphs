@@ -12,11 +12,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       chainId,
     } as const;
 
-    const received = cleanup.campaigns(
-      await Envio(envioQueries.getCampaigns, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.campaigns(await Envio(envioQueries.getCampaigns, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.campaigns(
       await TheGraph(theGraphQueries.getCampaigns, variables),
@@ -24,9 +20,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -38,11 +32,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       airdropId: configuration.airdropIds[0],
     } as const;
 
-    const received = cleanup.campaign(
-      await Envio(envioQueries.getCampaignById, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.campaign(await Envio(envioQueries.getCampaignById, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.campaign(
       await TheGraph(theGraphQueries.getCampaignById, variables),
@@ -61,11 +51,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       chainId,
     } as const;
 
-    const received = cleanup.actions(
-      await Envio(envioQueries.getActions_ByCampaign, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.actions(await Envio(envioQueries.getActions_ByCampaign, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.actions(
       await TheGraph(theGraphQueries.getActions_ByCampaign, variables),
@@ -73,9 +59,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.actions.length}, ${expected.actions.length} results.`,
-    );
+    console.info(`Comparing ${received.actions.length}, ${expected.actions.length} results.`);
 
     expect(received.actions.length).toBeGreaterThan(0);
     expect(received.actions.length).toEqual(expected.actions.length);
@@ -103,9 +87,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -121,11 +103,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       chainId,
     } as const;
 
-    const received = cleanup.campaigns(
-      await Envio(envioQueries.getCampaigns_ByIds, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.campaigns(await Envio(envioQueries.getCampaigns_ByIds, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.campaigns(
       await TheGraph(theGraphQueries.getCampaigns_ByIds, variables),
@@ -133,9 +111,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -163,9 +139,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -194,9 +168,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -225,9 +197,7 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
@@ -262,31 +232,19 @@ describe(`Campaigns (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio
       received.campaigns.push(...received_slice.campaigns);
       expected.campaigns.push(...expected_slice.campaigns);
 
-      const expected_subgraphId =
-        expected_slice.campaigns?.[variables.first - 1]?.subgraphId;
-      const received_subgraphId =
-        received_slice.campaigns?.[variables.first - 1]?.subgraphId;
+      const expected_subgraphId = expected_slice.campaigns?.[variables.first - 1]?.subgraphId;
+      const received_subgraphId = received_slice.campaigns?.[variables.first - 1]?.subgraphId;
 
-      if (
-        received_slice.campaigns.length < variables.first &&
-        expected_slice.campaigns.length < variables.first
-      ) {
+      if (received_slice.campaigns.length < variables.first && expected_slice.campaigns.length < variables.first) {
         done = true;
-      } else if (
-        !expected_subgraphId ||
-        expected_subgraphId !== received_subgraphId
-      ) {
+      } else if (!expected_subgraphId || expected_subgraphId !== received_subgraphId) {
         done = true;
       } else {
-        variables.subgraphId = parseInt(
-          expected_slice.campaigns[variables.first - 1].subgraphId,
-        );
+        variables.subgraphId = Number.parseInt(expected_slice.campaigns[variables.first - 1].subgraphId);
       }
     }
 
-    console.info(
-      `Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`,
-    );
+    console.info(`Comparing ${received.campaigns.length}, ${expected.campaigns.length} results.`);
 
     expect(received.campaigns.length).toBeGreaterThan(0);
     expect(received.campaigns.length).toEqual(expected.campaigns.length);

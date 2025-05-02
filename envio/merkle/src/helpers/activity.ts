@@ -59,10 +59,5 @@ export function generateActivityId(event: Event, campaignId: string) {
   const timestamp = BigInt(event.block.timestamp);
   const day = BigInt(timestamp) / (60n * 60n * 24n);
 
-  return ""
-    .concat("activity")
-    .concat("-")
-    .concat(campaignId)
-    .concat("-")
-    .concat(day.toString());
+  return "".concat("activity").concat("-").concat(campaignId).concat("-").concat(day.toString());
 }

@@ -1,28 +1,16 @@
-import type { Action, VoidHandler, VoidLoader } from "../types";
 import { FlowV10 } from "../../generated";
 import { ActionCategory } from "../constants";
-import {
-  createAction,
-  generateStreamId,
-  getOrCreateWatcher,
-  getStream,
-} from "../helpers";
+import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../helpers";
+import type { Action, VoidHandler, VoidLoader } from "../types";
 import { toScaled } from "../utils";
 
 async function loader(input: VoidLoader) {
   const { context, event } = input;
 
-  const streamId = generateStreamId(
-    event,
-    event.srcAddress,
-    event.params.streamId,
-  );
+  const streamId = generateStreamId(event, event.srcAddress, event.params.streamId);
   const watcherId = event.chainId.toString();
 
-  const [stream, watcher] = await Promise.all([
-    context.Stream.get(streamId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
 
   return {
     stream,
@@ -35,13 +23,10 @@ async function handler(input: VoidHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let stream =
-    loaded.stream ??
-    (await getStream(event, event.params.streamId, context.Stream.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let stream = loaded.stream ?? (await getStream(event, event.params.streamId, context.Stream.get));
 
-  let asset = await context.Asset.get(stream.asset_id);
+  const asset = await context.Asset.get(stream.asset_id);
 
   if (!asset) {
     return;
@@ -63,25 +48,15 @@ async function handler(input: VoidHandler<typeof loader>) {
     amountB: event.params.writtenOffDebt,
   };
 
-  const timeSinceLastSnapshot =
-    BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp;
+  const timeSinceLastSnapshot = BigInt(event.block.timestamp) - stream.lastAdjustmentTimestamp;
 
-  const snapshotAmountScaled =
-    stream.snapshotAmount +
-    stream.ratePerSecond * timeSinceLastSnapshot; /** Scaled 18D */
+  const snapshotAmountScaled = stream.snapshotAmount + stream.ratePerSecond * timeSinceLastSnapshot; /** Scaled 18D */
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    asset.decimals,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, asset.decimals); /** Scaled 18D */
 
-  const availableAmountScaled = toScaled(
-    stream.availableAmount,
-    asset.decimals,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(stream.availableAmount, asset.decimals); /** Scaled 18D */
 
-  const maxAvailableScaled =
-    withdrawnAmountScaled + availableAmountScaled; /** Scaled 18D */
+  const maxAvailableScaled = withdrawnAmountScaled + availableAmountScaled; /** Scaled 18D */
 
   watcher = post_action.watcher;
   stream = {
@@ -97,9 +72,7 @@ async function handler(input: VoidHandler<typeof loader>) {
     lastAdjustmentTimestamp: BigInt(event.block.timestamp),
 
     snapshotAmount:
-      maxAvailableScaled < snapshotAmountScaled
-        ? maxAvailableScaled
-        : snapshotAmountScaled /** Scaled 18D */,
+      maxAvailableScaled < snapshotAmountScaled ? maxAvailableScaled : snapshotAmountScaled /** Scaled 18D */,
     forgivenDebt: event.params.writtenOffDebt,
     ratePerSecond: 0n,
     /** should be recomputed at the restart */

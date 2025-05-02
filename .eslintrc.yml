@@ -1,3 +1,0 @@
-# For VSCode integration
-extends:
-  - "./.eslintrc.base.yml"

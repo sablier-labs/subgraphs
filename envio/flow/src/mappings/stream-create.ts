@@ -1,4 +1,3 @@
-import type { Action, CreateHandler, CreateLoader } from "../types";
 import { FlowV10 } from "../../generated";
 import { ActionCategory } from "../constants";
 import {
@@ -13,6 +12,7 @@ import {
   getOrCreateBatcher,
   initialize,
 } from "../helpers";
+import type { Action, CreateHandler, CreateLoader } from "../types";
 
 async function loader(input: CreateLoader) {
   const { context, event } = input;
@@ -45,27 +45,17 @@ async function handler(input: CreateHandler<typeof loader>) {
 
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(event, event.params.token, context.Asset.get));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.token, context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
-  let { stream, ...post_create } = await createStream(event, {
+  const { stream, ...post_create } = await createStream(event, {
     asset,
     batch,
     batcher,

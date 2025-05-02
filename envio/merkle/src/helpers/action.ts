@@ -2,10 +2,7 @@ import type { Action, Event, Mutable, Watcher } from "../types";
 
 type Entity = Partial<Mutable<Action>>;
 
-export async function getAction(
-  event: Event,
-  loader: (id: string) => Promise<Action | undefined>,
-) {
+export async function getAction(event: Event, loader: (id: string) => Promise<Action | undefined>) {
   const id = generateActionId(event);
   const loaded = await loader(id);
 

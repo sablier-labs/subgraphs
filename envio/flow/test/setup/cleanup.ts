@@ -51,11 +51,7 @@ export const cleanup = {
   streams: cleanup_streams,
 };
 
-export function cleanup_action(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Action {
+export function cleanup_action(source: unknown, skip: boolean, vendor?: Vendor): Action {
   const value = { ...(source as Action) };
 
   if (skip) {
@@ -74,11 +70,7 @@ export function cleanup_action(
   return value;
 }
 
-export function cleanup_asset(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Asset {
+export function cleanup_asset(source: unknown, skip: boolean, vendor?: Vendor): Asset {
   const value = { ...(source as Asset) };
 
   if (skip) {
@@ -93,11 +85,7 @@ export function cleanup_asset(
   return value;
 }
 
-export function cleanup_batch(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Batch {
+export function cleanup_batch(source: unknown, skip: boolean, vendor?: Vendor): Batch {
   const value = { ...(source as Batch) };
 
   if (skip) {
@@ -112,11 +100,7 @@ export function cleanup_batch(
   return value;
 }
 
-export function cleanup_batcher(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Batcher {
+export function cleanup_batcher(source: unknown, skip: boolean, vendor?: Vendor): Batcher {
   const value = { ...(source as Batcher) };
 
   if (skip) {
@@ -131,11 +115,7 @@ export function cleanup_batcher(
   return value;
 }
 
-export function cleanup_contract(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Contract {
+export function cleanup_contract(source: unknown, skip: boolean, vendor?: Vendor): Contract {
   const value = { ...(source as Contract) };
 
   if (skip) {
@@ -150,11 +130,7 @@ export function cleanup_contract(
   return value;
 }
 
-export function cleanup_stream(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Stream {
+export function cleanup_stream(source: unknown, skip: boolean, vendor?: Vendor): Stream {
   const value = { ...(source as Stream) };
 
   if (skip) {
@@ -174,28 +150,20 @@ export function cleanup_stream(
   }
 
   if (value.actions?.length) {
-    value.actions = value.actions.map((action) =>
-      cleanup_action(action, skip, vendor),
-    );
+    value.actions = value.actions.map((action) => cleanup_action(action, skip, vendor));
   }
 
   return value;
 }
 
-export function cleanup_streams(
-  source: unknown,
-  skip: boolean,
-  vendor?: Vendor,
-): Streams {
+export function cleanup_streams(source: unknown, skip: boolean, vendor?: Vendor): Streams {
   const value = { ...(source as Streams) };
 
   if (skip) {
     return value;
   }
 
-  value.streams = value.streams.map((stream) =>
-    cleanup_stream(stream, skip, vendor),
-  );
+  value.streams = value.streams.map((stream) => cleanup_stream(stream, skip, vendor));
 
   return value;
 }

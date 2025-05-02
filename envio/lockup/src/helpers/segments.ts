@@ -1,11 +1,4 @@
-import type {
-  CreateDynamicArgs,
-  CreateDynamicMergedArgs,
-  Event,
-  Mutable,
-  Segment,
-  Stream,
-} from "../types";
+import type { CreateDynamicArgs, CreateDynamicMergedArgs, Event, Mutable, Segment, Stream } from "../types";
 
 type Entity = Partial<Mutable<Segment>>;
 
@@ -21,12 +14,7 @@ class SegmentInput {
   }
 }
 
-function createSegment(
-  id: string,
-  streamed: bigint,
-  last: SegmentInput,
-  current: SegmentInput,
-) {
+function createSegment(id: string, streamed: bigint, last: SegmentInput, current: SegmentInput) {
   const entity = {
     id,
     amount: current.amount,
@@ -50,11 +38,9 @@ export function createSegments(
   let streamed = 0n;
   const inputs: SegmentInput[] = [new SegmentInput(0n, 0n, stream.startTime)];
 
-  event.params.segments.forEach((item) => {
-    inputs.push(
-      new SegmentInput(BigInt(item[0]), BigInt(item[1]), BigInt(item[2])),
-    );
-  });
+  for (const item of event.params.segments) {
+    inputs.push(new SegmentInput(BigInt(item[0]), BigInt(item[1]), BigInt(item[2])));
+  }
 
   const segments: Segment[] = [];
 

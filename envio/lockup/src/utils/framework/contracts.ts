@@ -1,7 +1,7 @@
 import { erc20Abi, erc20Abi_bytes32 } from "viem";
 import PRBProxy from "../../../abis/PRBProxy.json";
 import PRBProxyRegistry from "../../../abis/PRBProxyRegistry.json";
-import { Address } from "../../types";
+import type { Address } from "../../types";
 
 export function getERC20Contract(address: Address) {
   return { address: address as `0x${string}`, abi: erc20Abi };

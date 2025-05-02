@@ -1,4 +1,2 @@
-**/build
-**/generated
-**/_generated
-**/lib
+**/config.yaml
+**/subgraph.yaml

@@ -1,8 +1,8 @@
-import { Watcher } from "../generated/types/schema";
 import { getChainId, one } from "../constants";
+import { Watcher } from "../generated/types/schema";
 
 export function getOrCreateWatcher(): Watcher {
-  let id = "1";
+  const id = "1";
   let entity = Watcher.load(id);
 
   if (entity == null) {

@@ -1,14 +1,4 @@
-import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { Asset, Campaign } from "../generated/types/schema";
-import {
-  CreateMerkleLTTranchesWithPercentagesStruct,
-  CreateMerkleInstant as EventCreateCampaignInstant_V23,
-  CreateMerkleStreamerLL as EventCreateCampaignLL_V21,
-  CreateMerkleLL as EventCreateCampaignLL_V22,
-  CreateMerkleLL1 as EventCreateCampaignLL_V23,
-  CreateMerkleLT as EventCreateCampaignLT_V22,
-  CreateMerkleLT1 as EventCreateCampaignLT_V23,
-} from "../generated/types/templates/ContractMerkleFactory/SablierMerkleFactory";
+import type { Address, ethereum } from "@graphprotocol/graph-ts";
 import {
   ADDRESS_ZERO,
   StreamVersion_V21,
@@ -19,6 +9,16 @@ import {
   one,
   zero,
 } from "../constants";
+import { type Asset, Campaign } from "../generated/types/schema";
+import type {
+  CreateMerkleLTTranchesWithPercentagesStruct,
+  CreateMerkleInstant as EventCreateCampaignInstant_V23,
+  CreateMerkleStreamerLL as EventCreateCampaignLL_V21,
+  CreateMerkleLL as EventCreateCampaignLL_V22,
+  CreateMerkleLL1 as EventCreateCampaignLL_V23,
+  CreateMerkleLT as EventCreateCampaignLT_V22,
+  CreateMerkleLT1 as EventCreateCampaignLT_V23,
+} from "../generated/types/templates/ContractMerkleFactory/SablierMerkleFactory";
 import { getOrCreateAsset } from "./asset";
 import { getFactoryByAddress } from "./factory";
 import { createTranches } from "./tranches";
@@ -36,7 +36,7 @@ function createCampaign(id: string, event: ethereum.Event): Campaign | null {
   }
 
   /** --------------- */
-  let watcher = getOrCreateWatcher();
+  const watcher = getOrCreateWatcher();
 
   /** --------------- */
   entity = new Campaign(id);
@@ -73,13 +73,13 @@ function createCampaign(id: string, event: ethereum.Event): Campaign | null {
   entity.fee = zero;
 
   /** --------------- */
-  let factory = getFactoryByAddress(event.address);
+  const factory = getFactoryByAddress(event.address);
   if (factory == null) {
     log_exit("Factory not yet registered at this address");
     return null;
   }
   entity.factory = factory.id;
-  let index = factory.campaignIndex.plus(one);
+  const index = factory.campaignIndex.plus(one);
   factory.campaignIndex = index;
   factory.save();
 
@@ -93,11 +93,9 @@ function createCampaign(id: string, event: ethereum.Event): Campaign | null {
   return entity;
 }
 
-export function createCampaignLinear_V21(
-  event: EventCreateCampaignLL_V21,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleStreamer);
-  let entity = createCampaign(id, event);
+export function createCampaignLinear_V21(event: EventCreateCampaignLL_V21): Campaign | null {
+  const id = generateCampaignId(event.params.merkleStreamer);
+  const entity = createCampaign(id, event);
 
   if (entity == null) {
     log_exit("Campaign is missing.");
@@ -127,27 +125,20 @@ export function createCampaignLinear_V21(
   entity.version = StreamVersion_V21;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.asset);
+  const asset = getOrCreateAsset(event.params.asset);
   entity.asset = asset.id;
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
-    event.params.admin,
-    asset,
-    "",
-    StreamVersion_V21,
-  );
+  const nickname = generateCampaignNickname(event.params.admin, asset, "", StreamVersion_V21);
   entity.nickname = nickname;
 
   /** --------------- */
   return entity;
 }
 
-export function createCampaignLinear_V22(
-  event: EventCreateCampaignLL_V22,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleLL);
-  let entity = createCampaign(id, event);
+export function createCampaignLinear_V22(event: EventCreateCampaignLL_V22): Campaign | null {
+  const id = generateCampaignId(event.params.merkleLL);
+  const entity = createCampaign(id, event);
 
   if (entity == null) {
     log_exit("Campaign is missing.");
@@ -177,11 +168,11 @@ export function createCampaignLinear_V22(
   entity.version = StreamVersion_V22;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.baseParams.asset);
+  const asset = getOrCreateAsset(event.params.baseParams.asset);
   entity.asset = asset.id;
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.baseParams.initialAdmin,
     asset,
     event.params.baseParams.name,
@@ -193,11 +184,9 @@ export function createCampaignLinear_V22(
   return entity;
 }
 
-export function createCampaignLinear_V23(
-  event: EventCreateCampaignLL_V23,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleLL);
-  let entity = createCampaign(id, event);
+export function createCampaignLinear_V23(event: EventCreateCampaignLL_V23): Campaign | null {
+  const id = generateCampaignId(event.params.merkleLL);
+  const entity = createCampaign(id, event);
 
   if (entity == null) {
     log_exit("Campaign is missing.");
@@ -236,11 +225,11 @@ export function createCampaignLinear_V23(
   entity.version = StreamVersion_V23;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.baseParams.token);
+  const asset = getOrCreateAsset(event.params.baseParams.token);
   entity.asset = asset.id;
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.baseParams.initialAdmin,
     asset,
     event.params.baseParams.campaignName,
@@ -252,10 +241,8 @@ export function createCampaignLinear_V23(
   return entity;
 }
 
-export function createCampaignTranched_V22(
-  event: EventCreateCampaignLT_V22,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleLT);
+export function createCampaignTranched_V22(event: EventCreateCampaignLT_V22): Campaign | null {
+  const id = generateCampaignId(event.params.merkleLT);
   let entity = createCampaign(id, event);
 
   if (entity == null) {
@@ -283,14 +270,14 @@ export function createCampaignTranched_V22(
   entity.version = StreamVersion_V22;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.baseParams.asset);
+  const asset = getOrCreateAsset(event.params.baseParams.asset);
   entity.asset = asset.id;
 
   /** --------------- */
   entity = createTranches(entity, event.params.tranchesWithPercentages);
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.baseParams.initialAdmin,
     asset,
     event.params.baseParams.name,
@@ -302,10 +289,8 @@ export function createCampaignTranched_V22(
   return entity;
 }
 
-export function createCampaignTranched_V23(
-  event: EventCreateCampaignLT_V23,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleLT);
+export function createCampaignTranched_V23(event: EventCreateCampaignLT_V23): Campaign | null {
+  const id = generateCampaignId(event.params.merkleLT);
   let entity = createCampaign(id, event);
 
   if (entity == null) {
@@ -338,19 +323,17 @@ export function createCampaignTranched_V23(
   entity.version = StreamVersion_V23;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.baseParams.token);
+  const asset = getOrCreateAsset(event.params.baseParams.token);
   entity.asset = asset.id;
 
   /** --------------- */
   entity = createTranches(
     entity,
-    changetype<Array<CreateMerkleLTTranchesWithPercentagesStruct>>(
-      event.params.tranchesWithPercentages,
-    ),
+    changetype<Array<CreateMerkleLTTranchesWithPercentagesStruct>>(event.params.tranchesWithPercentages),
   );
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.baseParams.initialAdmin,
     asset,
     event.params.baseParams.campaignName,
@@ -362,11 +345,9 @@ export function createCampaignTranched_V23(
   return entity;
 }
 
-export function createCampaignInstant_V23(
-  event: EventCreateCampaignInstant_V23,
-): Campaign | null {
-  let id = generateCampaignId(event.params.merkleInstant);
-  let entity = createCampaign(id, event);
+export function createCampaignInstant_V23(event: EventCreateCampaignInstant_V23): Campaign | null {
+  const id = generateCampaignId(event.params.merkleInstant);
+  const entity = createCampaign(id, event);
 
   if (entity == null) {
     log_exit("Campaign is missing.");
@@ -392,11 +373,11 @@ export function createCampaignInstant_V23(
   entity.version = StreamVersion_V23;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.baseParams.token);
+  const asset = getOrCreateAsset(event.params.baseParams.token);
   entity.asset = asset.id;
 
   /** --------------- */
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.baseParams.initialAdmin,
     asset,
     event.params.baseParams.campaignName,
@@ -412,27 +393,18 @@ export function createCampaignInstant_V23(
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateCampaignNickname(
-  admin: Address,
-  asset: Asset,
-  name: string,
-  version: string,
-): string {
+export function generateCampaignNickname(admin: Address, asset: Asset, name: string, version: string): string {
   if (version === StreamVersion_V21) {
-    let prefix = admin.toHexString().slice(0, 6);
-    let suffix = admin.toHexString().slice(-4);
+    const prefix = admin.toHexString().slice(0, 6);
+    const suffix = admin.toHexString().slice(-4);
 
     return `${asset.symbol} by ${prefix}..${suffix}`;
-  } else {
-    return `${asset.symbol} in ${name || ""}`;
   }
+  return `${asset.symbol} in ${name || ""}`;
 }
 
 export function generateCampaignId(address: Address): string {
-  let id = ""
-    .concat(address.toHexString())
-    .concat("-")
-    .concat(getChainId().toString());
+  const id = "".concat(address.toHexString()).concat("-").concat(getChainId().toString());
 
   return id;
 }

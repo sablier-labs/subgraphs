@@ -4,7 +4,6 @@ import * as base from "../addresses/base";
 import * as baseSepolia from "../addresses/base-sepolia";
 import * as bsc from "../addresses/bsc";
 import * as chiliz from "../addresses/chiliz";
-import * as experimental from "../addresses/experimental";
 import * as gnosis from "../addresses/gnosis";
 import * as linea from "../addresses/linea";
 import * as mainnet from "../addresses/mainnet";
@@ -25,9 +24,7 @@ const available = (v: {
   tranched: unknown[];
   merged: unknown[];
 }) => {
-  return (
-    v.linear.length + v.dynamic.length + v.tranched.length + v.merged.length > 0
-  );
+  return v.linear.length + v.dynamic.length + v.tranched.length + v.merged.length > 0;
 };
 
 const filter = (list: string[][], version: string) => {
@@ -63,7 +60,7 @@ export const chains = () => {
     [optimism, definitions.optimism],
     [polygon, definitions.polygon],
     [scroll, definitions.scroll],
-    [false ? experimental : sepolia, definitions.sepolia],
+    [sepolia, definitions.sepolia],
     [superseed, definitions.superseed],
     [tangle, definitions.tangle],
     [zksync, definitions.zksync],

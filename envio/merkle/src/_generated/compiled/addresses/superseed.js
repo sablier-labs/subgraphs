@@ -12,18 +12,10 @@ exports.hypersync = "https://extrabud.hypersync.xyz";
  * Keep aliases unique and always in sync with the frontend
  * @example export let linear = [[address1, alias1, version1], [address2, alias2, version2]]
  */
-exports.linear = [
-    ["0x251fc799344151026d19b959b8f3667416d56b88", "LL3", "V22"],
-];
-exports.dynamic = [
-    ["0x1fa500262b352d821b4e1c933a20f2242b45383d", "LD3", "V22"],
-];
-exports.tranched = [
-    ["0x91211e1760280d3f7df2182ce4d1fd6a1735c202", "LT3", "V22"],
-];
-exports.merged = [
-    ["0xf46d1f8c85f215a515f6d738ab3e3ba081f6c083", "LK", "V23"],
-];
+exports.linear = [["0x251fc799344151026d19b959b8f3667416d56b88", "LL3", "V22"]];
+exports.dynamic = [["0x1fa500262b352d821b4e1c933a20f2242b45383d", "LD3", "V22"]];
+exports.tranched = [["0x91211e1760280d3f7df2182ce4d1fd6a1735c202", "LT3", "V22"]];
+exports.merged = [["0xf46d1f8c85f215a515f6d738ab3e3ba081f6c083", "LK", "V23"]];
 exports.flow = [
     ["0x4f5f9b3fb57bba43aaf90e3f71d8f8f384e88e20", "FL", "V10"],
     ["0x40e75bb2f2aa3507d3a332872829c71be19ef623", "FL2", "V11"],

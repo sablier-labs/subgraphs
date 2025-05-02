@@ -1,26 +1,26 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { type Address, BigInt as GraphBigInt } from "@graphprotocol/graph-ts";
+import { getChainId } from "../constants";
 import { Asset } from "../generated/types/schema";
 import { ERC20 as ERC20Contract } from "../generated/types/templates/ContractMerkleFactory/ERC20";
 import { ERC20Bytes as ERC20BytesContract } from "../generated/types/templates/ContractMerkleFactory/ERC20Bytes";
-import { getChainId } from "../constants";
 
 export function getOrCreateAsset(address: Address): Asset {
-  let id = generateAssetId(address);
+  const id = generateAssetId(address);
   let entity = Asset.load(id);
 
   if (entity == null) {
     entity = new Asset(id);
 
-    let contract = ERC20Contract.bind(address);
-    let decimals = contract.decimals();
-    let name = getAssetName(address);
-    let symbol = getAssetSymbol(address);
+    const contract = ERC20Contract.bind(address);
+    const decimals = contract.decimals();
+    const name = getAssetName(address);
+    const symbol = getAssetSymbol(address);
 
     entity.chainId = getChainId();
     entity.address = address;
     entity.symbol = symbol;
     entity.name = name;
-    entity.decimals = BigInt.fromI32(decimals);
+    entity.decimals = GraphBigInt.fromI32(decimals);
 
     entity.save();
   }
@@ -29,39 +29,36 @@ export function getOrCreateAsset(address: Address): Asset {
 }
 
 function getAssetSymbol(address: Address): string {
-  let contract = ERC20Contract.bind(address);
-  let symbol = contract.try_symbol();
+  const contract = ERC20Contract.bind(address);
+  const symbol = contract.try_symbol();
 
   if (symbol.reverted) {
-    let contractBytes = ERC20BytesContract.bind(address);
-    let symbolBytes = contractBytes.try_symbol();
+    const contractBytes = ERC20BytesContract.bind(address);
+    const symbolBytes = contractBytes.try_symbol();
 
     if (symbolBytes.reverted) {
       return "Unknown";
-    } else {
-      return symbolBytes.value.toString();
     }
-  } else {
-    return symbol.value;
+    return symbolBytes.value.toString();
   }
+  return symbol.value;
 }
 
 function getAssetName(address: Address): string {
-  let contract = ERC20Contract.bind(address);
-  let name = contract.try_name();
+  const contract = ERC20Contract.bind(address);
+  const name = contract.try_name();
 
   if (name.reverted) {
-    let contractBytes = ERC20BytesContract.bind(address);
-    let nameBytes = contractBytes.try_name();
+    const contractBytes = ERC20BytesContract.bind(address);
+    const nameBytes = contractBytes.try_name();
 
     if (nameBytes.reverted) {
       return "Unknown";
-    } else {
-      return nameBytes.value.toString();
     }
-  } else {
-    return name.value;
+    return nameBytes.value.toString();
   }
+
+  return name.value;
 }
 
 /** --------------------------------------------------------------------------------------------------------- */

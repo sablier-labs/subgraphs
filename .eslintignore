@@ -1,9 +1,0 @@
-# directories
-**/build
-**/_generated
-**/generated
-**/lib
-**/node_modules
-
-# files
-*.typegen.ts

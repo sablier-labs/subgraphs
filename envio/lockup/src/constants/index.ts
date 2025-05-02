@@ -1,8 +1,8 @@
 import { chains as generator } from "../_generated/original/bundles/lockup-envio";
 
-export const ADDRESS_ZERO = String(
-  "0x0000000000000000000000000000000000000000",
-);
+export const ADDRESS_ZERO = String("0x0000000000000000000000000000000000000000");
+export const NULL_BYTE = String.fromCharCode(0);
+export const NULL_BYTE_REGEX = new RegExp(NULL_BYTE, "g");
 
 export const StreamVersion = {
   V20: "V20",
@@ -63,14 +63,11 @@ export function configuration(chainId: number | string | bigint) {
   };
 }
 
-export type ActionCategory =
-  (typeof ActionCategory)[keyof typeof ActionCategory];
+export type ActionCategory = (typeof ActionCategory)[keyof typeof ActionCategory];
 
 export type CacheCategory = (typeof CacheCategory)[keyof typeof CacheCategory];
 
-export type StreamCategory =
-  (typeof StreamCategory)[keyof typeof StreamCategory];
-export type ContractCategory =
-  (typeof ContractCategory)[keyof typeof ContractCategory];
+export type StreamCategory = (typeof StreamCategory)[keyof typeof StreamCategory];
+export type ContractCategory = (typeof ContractCategory)[keyof typeof ContractCategory];
 
 export type StreamVersion = (typeof StreamVersion)[keyof typeof StreamVersion];

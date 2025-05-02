@@ -1,28 +1,22 @@
 import { Address } from "@graphprotocol/graph-ts";
-import { Claim as EventClaimInstant } from "../generated/types/templates/ContractMerkleFactory/SablierMerkleInstant";
-import {
+import { ADDRESS_ZERO, log_exit, one } from "../constants";
+import type { Claim as EventClaimInstant } from "../generated/types/templates/ContractMerkleFactory/SablierMerkleInstant";
+import type {
   Claim as EventClaimLockup,
   Clawback as EventClawback,
   TransferAdmin as EventTransferAdmin,
 } from "../generated/types/templates/ContractMerkleFactory/SablierMerkleLL";
-import { ADDRESS_ZERO, log_exit, one } from "../constants";
-import {
-  createAction,
-  generateStreamId,
-  getCampaignById,
-  getOrCreateActivity,
-  getOrCreateAsset,
-} from "../helpers";
+import { createAction, generateStreamId, getCampaignById, getOrCreateActivity, getOrCreateAsset } from "../helpers";
 import { generateCampaignNickname } from "../helpers/campaign";
 
 export function handleClaimLockup(event: EventClaimLockup): void {
-  let action = createAction(event, "Claim");
+  const action = createAction(event, "Claim");
   if (action == null) {
     log_exit("Campaign not registered yet, cannot bind action");
     return;
   }
 
-  let campaign = getCampaignById(action.campaign);
+  const campaign = getCampaignById(action.campaign);
   if (campaign == null) {
     log_exit("Campaign not registered yet");
     return;
@@ -34,10 +28,7 @@ export function handleClaimLockup(event: EventClaimLockup): void {
   action.claimAmount = event.params.amount;
   action.claimRecipient = event.params.recipient;
   action.claimTokenId = event.params.streamId;
-  action.claimStreamId = generateStreamId(
-    campaign.lockup,
-    event.params.streamId,
-  );
+  action.claimStreamId = generateStreamId(campaign.lockup, event.params.streamId);
   action.fee = event.transaction.value;
 
   /** --------------- */
@@ -49,7 +40,7 @@ export function handleClaimLockup(event: EventClaimLockup): void {
   campaign.save();
 
   /** --------------- */
-  let activity = getOrCreateActivity(campaign.id, event);
+  const activity = getOrCreateActivity(campaign.id, event);
   if (activity == null) {
     log_exit("Activity not registered yet");
     return;
@@ -61,13 +52,13 @@ export function handleClaimLockup(event: EventClaimLockup): void {
 }
 
 export function handleClaimInstant(event: EventClaimInstant): void {
-  let action = createAction(event, "Claim");
+  const action = createAction(event, "Claim");
   if (action == null) {
     log_exit("Campaign not registered yet, cannot bind action");
     return;
   }
 
-  let campaign = getCampaignById(action.campaign);
+  const campaign = getCampaignById(action.campaign);
   if (campaign == null) {
     log_exit("Campaign not registered yet");
     return;
@@ -90,7 +81,7 @@ export function handleClaimInstant(event: EventClaimInstant): void {
   campaign.save();
 
   /** --------------- */
-  let activity = getOrCreateActivity(campaign.id, event);
+  const activity = getOrCreateActivity(campaign.id, event);
   if (activity == null) {
     log_exit("Activity not registered yet");
     return;
@@ -102,13 +93,13 @@ export function handleClaimInstant(event: EventClaimInstant): void {
 }
 
 export function handleClawback(event: EventClawback): void {
-  let action = createAction(event, "Clawback");
+  const action = createAction(event, "Clawback");
   if (action == null) {
     log_exit("Campaign not registered yet, cannot bind action");
     return;
   }
 
-  let campaign = getCampaignById(action.campaign);
+  const campaign = getCampaignById(action.campaign);
   if (campaign == null) {
     log_exit("Campaign not registered yet");
     return;
@@ -132,13 +123,13 @@ export function handleTransferAdmin(event: EventTransferAdmin): void {
     return;
   }
 
-  let action = createAction(event, "TransferAdmin");
+  const action = createAction(event, "TransferAdmin");
   if (action == null) {
     log_exit("Campaign not registered yet, cannot bind action");
     return;
   }
 
-  let campaign = getCampaignById(action.campaign);
+  const campaign = getCampaignById(action.campaign);
   if (campaign == null) {
     log_exit("Campaign not registered yet");
     return;
@@ -149,7 +140,7 @@ export function handleTransferAdmin(event: EventTransferAdmin): void {
 
   /** --------------- */
 
-  let nickname = generateCampaignNickname(
+  const nickname = generateCampaignNickname(
     event.params.newAdmin,
     getOrCreateAsset(Address.fromString(campaign.asset)),
     campaign.name,

@@ -1,6 +1,6 @@
-import type { Mutable, Stream } from "../types";
 import { CacheCategory, StreamVersion, configuration } from "../constants";
-import { Cache, framework } from "../utils";
+import type { Mutable, Stream } from "../types";
+import { framework, initCache } from "../utils";
 
 type Entity = Partial<Mutable<Stream>>;
 
@@ -10,8 +10,8 @@ export async function bindProxy({
   sender,
   version,
 }: Pick<Stream, "chainId" | "parties" | "sender" | "version">) {
-  if (version == StreamVersion.V20) {
-    const cache = Cache.init(CacheCategory.Proxy, chainId);
+  if (version === StreamVersion.V20) {
+    const cache = initCache(CacheCategory.Proxy, chainId);
     const entry = cache.read(sender);
 
     if (entry) {
@@ -40,12 +40,10 @@ export async function bindProxy({
         });
         const owner_ = (proxy_results[0] || "") as string;
 
-        if (owner_ && owner_.length) {
+        if (owner_?.length) {
           const owner = owner_.toLowerCase();
 
-          const registry = framework.getPRBProxyRegistryContract(
-            chain.registry,
-          );
+          const registry = framework.getPRBProxyRegistryContract(chain.registry);
 
           const registry_results = await client.multicall({
             allowFailure: false,

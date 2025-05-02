@@ -101,14 +101,7 @@ var definitions = {
             "https://rpc.tornadoeth.cash/gnosis",
         ],
     ],
-    linea: [
-        chains_1.linea,
-        [
-            "https://linea.blockpi.network/v1/rpc/public",
-            "https://rpc.linea.build",
-            "https://1rpc.io/linea",
-        ],
-    ],
+    linea: [chains_1.linea, ["https://linea.blockpi.network/v1/rpc/public", "https://rpc.linea.build", "https://1rpc.io/linea"]],
     optimism: [
         chains_1.optimism,
         [
@@ -157,14 +150,7 @@ var definitions = {
             "https://endpoints.omniatech.io/v1/zksync-era/mainnet/public",
         ],
     ],
-    mode: [
-        chains_1.mode,
-        [
-            "https://mainnet.mode.network",
-            "https://mode.gateway.tenderly.co",
-            "https://1rpc.io/mode",
-        ],
-    ],
+    mode: [chains_1.mode, ["https://mainnet.mode.network", "https://mode.gateway.tenderly.co", "https://1rpc.io/mode"]],
     morph: [
         (0, viem_1.defineChain)({
             id: 2818,

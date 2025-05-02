@@ -1,3 +1,18 @@
+import { MerkleLockupFactoryV21, MerkleLockupFactoryV22, MerkleLockupFactoryV23 } from "../../generated";
+import { ActionCategory, isWhitelistedShape } from "../constants";
+import {
+  createAction,
+  createInstantCampaign_V23,
+  createLinearCampaign_V21,
+  createLinearCampaign_V22,
+  createLinearCampaign_V23,
+  createTranchedCampaign_V22,
+  createTranchedCampaign_V23,
+  generateAssetId,
+  generateFactoryIdFromEvent,
+  getOrCreateAsset,
+  initialize,
+} from "../helpers";
 import type {
   Action,
   CreateInstantHandler_V23,
@@ -19,25 +34,6 @@ import type {
   CreateTranchedRegister_V22,
   CreateTranchedRegister_V23,
 } from "../types";
-import {
-  MerkleLockupFactoryV21,
-  MerkleLockupFactoryV22,
-  MerkleLockupFactoryV23,
-} from "../../generated";
-import { ActionCategory, isWhitelistedShape } from "../constants";
-import {
-  createAction,
-  createInstantCampaign_V23,
-  createLinearCampaign_V21,
-  createLinearCampaign_V22,
-  createLinearCampaign_V23,
-  createTranchedCampaign_V22,
-  createTranchedCampaign_V23,
-  generateAssetId,
-  generateFactoryIdFromEvent,
-  getOrCreateAsset,
-  initialize,
-} from "../helpers";
 
 async function loaderLinear_V21(input: CreateLinearLoader_V21) {
   const { context, event } = input;
@@ -159,9 +155,7 @@ async function loaderInstant_V23(input: CreateInstantLoader_V23) {
   };
 }
 
-async function handlerLinear_V21(
-  input: CreateLinearHandler_V21<typeof loaderLinear_V21>,
-) {
+async function handlerLinear_V21(input: CreateLinearHandler_V21<typeof loaderLinear_V21>) {
   const { context, event } = input;
 
   /** ------- Authorize -------- */
@@ -172,23 +166,15 @@ async function handlerLinear_V21(
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.asset,
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.asset, context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, ...post_create } = await createLinearCampaign_V21(event, {
+  const { campaign, ...post_create } = await createLinearCampaign_V21(event, {
     asset,
     factory,
     watcher,
@@ -223,9 +209,7 @@ async function handlerLinear_V21(
   await context.Watcher.set(watcher);
 }
 
-async function handlerLinear_V22(
-  input: CreateLinearHandler_V22<typeof loaderLinear_V22>,
-) {
+async function handlerLinear_V22(input: CreateLinearHandler_V22<typeof loaderLinear_V22>) {
   const { context, event } = input;
 
   /** ------- Authorize -------- */
@@ -236,23 +220,15 @@ async function handlerLinear_V22(
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.baseParams[0],
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.baseParams[0], context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, ...post_create } = await createLinearCampaign_V22(event, {
+  const { campaign, ...post_create } = await createLinearCampaign_V22(event, {
     asset,
     factory,
     watcher,
@@ -287,9 +263,7 @@ async function handlerLinear_V22(
   await context.Watcher.set(watcher);
 }
 
-async function handlerLinear_V23(
-  input: CreateLinearHandler_V23<typeof loaderLinear_V23>,
-) {
+async function handlerLinear_V23(input: CreateLinearHandler_V23<typeof loaderLinear_V23>) {
   const { context, event } = input;
 
   /** ------- Authorize -------- */
@@ -300,23 +274,15 @@ async function handlerLinear_V23(
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.baseParams[0],
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.baseParams[0], context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, ...post_create } = await createLinearCampaign_V23(event, {
+  const { campaign, ...post_create } = await createLinearCampaign_V23(event, {
     asset,
     factory,
     watcher,
@@ -350,9 +316,7 @@ async function handlerLinear_V23(
   await context.Campaign.set(campaign);
   await context.Watcher.set(watcher);
 }
-async function handlerTranched_V22(
-  input: CreateTranchedHandler_V22<typeof loaderTranched_V22>,
-) {
+async function handlerTranched_V22(input: CreateTranchedHandler_V22<typeof loaderTranched_V22>) {
   const { context, event } = input;
 
   /** ------- Authorize -------- */
@@ -363,30 +327,19 @@ async function handlerTranched_V22(
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.baseParams[0],
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.baseParams[0], context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, tranches, ...post_create } = await createTranchedCampaign_V22(
-    event,
-    {
-      asset,
-      factory,
-      watcher,
-    },
-  );
+  const { campaign, tranches, ...post_create } = await createTranchedCampaign_V22(event, {
+    asset,
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -422,9 +375,7 @@ async function handlerTranched_V22(
   await context.Campaign.set(campaign);
   await context.Watcher.set(watcher);
 }
-async function handlerTranched_V23(
-  input: CreateTranchedHandler_V23<typeof loaderTranched_V23>,
-) {
+async function handlerTranched_V23(input: CreateTranchedHandler_V23<typeof loaderTranched_V23>) {
   const { context, event } = input;
 
   /** ------- Authorize -------- */
@@ -435,30 +386,19 @@ async function handlerTranched_V23(
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.baseParams[0],
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.baseParams[0], context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, tranches, ...post_create } = await createTranchedCampaign_V23(
-    event,
-    {
-      asset,
-      factory,
-      watcher,
-    },
-  );
+  const { campaign, tranches, ...post_create } = await createTranchedCampaign_V23(event, {
+    asset,
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -495,30 +435,20 @@ async function handlerTranched_V23(
   await context.Watcher.set(watcher);
 }
 
-async function handlerInstant_V23(
-  input: CreateInstantHandler_V23<typeof loaderInstant_V23>,
-) {
+async function handlerInstant_V23(input: CreateInstantHandler_V23<typeof loaderInstant_V23>) {
   const { context, event } = input;
 
   /** ------- Initialize -------- */
 
-  let { watcher, factory, factories } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Factory.get,
-  );
+  let { watcher, factory, factories } = await initialize(event, context.Watcher.get, context.Factory.get);
 
   /** ------- Fetch -------- */
 
-  let asset = await getOrCreateAsset(
-    event,
-    event.params.baseParams[0],
-    context.Asset.get,
-  );
+  const asset = await getOrCreateAsset(event, event.params.baseParams[0], context.Asset.get);
 
   /** ------- Process -------- */
 
-  let { campaign, ...post_create } = await createInstantCampaign_V23(event, {
+  const { campaign, ...post_create } = await createInstantCampaign_V23(event, {
     asset,
     factory,
     watcher,

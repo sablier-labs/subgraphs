@@ -1,4 +1,4 @@
-import { Address } from "@graphprotocol/graph-ts";
+import type { Address } from "@graphprotocol/graph-ts";
 import { SablierLockupInitializer as SablierLockupContract } from "../generated/types/ContractInitializer/SablierLockupInitializer";
 import { Contract } from "../generated/types/schema";
 
@@ -6,13 +6,8 @@ export function getContractByAddress(address: Address): Contract | null {
   return Contract.load(generateContractId(address));
 }
 
-export function createContract(
-  address: Address,
-  alias: string,
-  version: string,
-  category: string,
-): Contract {
-  let id = generateContractId(address);
+export function createContract(address: Address, alias: string, version: string, category: string): Contract {
+  const id = generateContractId(address);
   let entity = getContractByAddress(address);
 
   if (entity == null) {
@@ -29,8 +24,8 @@ export function createContract(
    * For initializers, the following code will resolve the admin address as the TransferAdmin event may not be picked up.
    */
 
-  let contract = SablierLockupContract.bind(address);
-  let admin = contract.try_admin();
+  const contract = SablierLockupContract.bind(address);
+  const admin = contract.try_admin();
   if (!admin.reverted) {
     entity.admin = admin.value;
   }

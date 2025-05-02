@@ -1,8 +1,8 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import type { Bytes, BigInt as GraphBigInt } from "@graphprotocol/graph-ts";
 import { getChainId } from "../constants";
 
-export function generateStreamId(contract: Bytes, tokenId: BigInt): string {
-  let id = ""
+export function generateStreamId(contract: Bytes, tokenId: GraphBigInt): string {
+  const id = ""
     .concat(contract.toHexString())
     .concat("-")
     .concat(getChainId().toString())

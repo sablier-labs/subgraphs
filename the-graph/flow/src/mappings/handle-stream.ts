@@ -1,5 +1,6 @@
 import { dataSource, log } from "@graphprotocol/graph-ts";
-import {
+import { ADDRESS_ZERO, one, zero } from "../constants";
+import type {
   AdjustFlowStream as EventAdjust,
   Approval as EventApproval,
   ApprovalForAll as EventApprovalForAll,
@@ -13,21 +14,15 @@ import {
   VoidFlowStream as EventVoid,
   WithdrawFromFlowStream as EventWithdraw,
 } from "../generated/types/templates/ContractFlow/SablierFlow";
-import { ADDRESS_ZERO, FLOW_SCALED_DECIMALS, one, zero } from "../constants";
-import {
-  createAction,
-  createStream,
-  getContractByAddress,
-  getStreamByIdFromSource,
-} from "../helpers";
+import { createAction, createStream, getContractByAddress, getStreamByIdFromSource } from "../helpers";
 import { toScaled } from "../utils";
 
 export function handleCreate(event: EventCreate): void {
-  let stream = createStream(event);
+  const stream = createStream(event);
   if (stream == null) {
     return;
   }
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Create";
   action.addressA = event.params.sender;
   action.addressB = event.params.recipient;
@@ -39,18 +34,15 @@ export function handleCreate(event: EventCreate): void {
 }
 
 export function handleAdjust(event: EventAdjust): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Adjust";
   action.amountA = event.params.oldRatePerSecond; /** Scaled 18D */
   action.amountB = event.params.newRatePerSecond; /** Scaled 18D */
@@ -60,9 +52,7 @@ export function handleAdjust(event: EventAdjust): void {
 
   /** --------------- */
 
-  const timeSinceLastSnapshot = event.block.timestamp.minus(
-    stream.lastAdjustmentTimestamp,
-  );
+  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
 
   const snapshotAmountScaled = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(timeSinceLastSnapshot),
@@ -71,26 +61,15 @@ export function handleAdjust(event: EventAdjust): void {
   /** The depletionTime should be recalculated only if depletion is happening in the future (meaning extra amount exists inside the stream) */
 
   if (stream.depletionTime.gt(event.block.timestamp)) {
-    const withdrawnAmountScaled = toScaled(
-      stream.withdrawnAmount,
-      stream.asset,
-    ); /** Scaled 18D */
+    const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
 
-    const notWithdrawnScaled = snapshotAmountScaled.minus(
-      withdrawnAmountScaled,
-    ); /** Scaled 18D */
+    const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
 
-    const availableAmountScaled = toScaled(
-      stream.availableAmount,
-      stream.asset,
-    ); /** Scaled 18D */
+    const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
 
-    const extraAmountScaled =
-      availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
+    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
 
-    stream.depletionTime = event.block.timestamp.plus(
-      extraAmountScaled.div(event.params.newRatePerSecond),
-    );
+    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(event.params.newRatePerSecond));
   }
 
   stream.ratePerSecond = event.params.newRatePerSecond; /** Scaled 18D */
@@ -103,18 +82,15 @@ export function handleAdjust(event: EventAdjust): void {
 }
 
 export function handleDeposit(event: EventDeposit): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Deposit";
   action.addressA = event.params.funder;
   action.amountA = event.params.amount;
@@ -124,38 +100,25 @@ export function handleDeposit(event: EventDeposit): void {
   stream.depositedAmount = stream.depositedAmount.plus(event.params.amount);
 
   const availableAmount = stream.availableAmount.plus(event.params.amount);
-  const availableAmountScaled = toScaled(
-    availableAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(availableAmount, stream.asset); /** Scaled 18D */
 
-  const timeSinceLastSnapshot = event.block.timestamp.minus(
-    stream.lastAdjustmentTimestamp,
-  );
+  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
 
   const snapshotAmountScaled = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(timeSinceLastSnapshot),
   ); /** Scaled 18D */
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
 
-  const notWithdrawnScaled = snapshotAmountScaled.minus(
-    withdrawnAmountScaled,
-  ); /** Scaled 18D */
+  const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
 
   /** If the the stream still has debt mimic the contract behavior */
 
   if (availableAmountScaled.gt(notWithdrawnScaled)) {
-    const extraAmountScaled =
-      availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
+    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
 
     if (!stream.ratePerSecond.isZero()) {
-      stream.depletionTime = event.block.timestamp.plus(
-        extraAmountScaled.div(stream.ratePerSecond),
-      );
+      stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
     }
   }
 
@@ -166,18 +129,15 @@ export function handleDeposit(event: EventDeposit): void {
 }
 
 export function handlePause(event: EventPause): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Pause";
   action.addressA = event.params.recipient;
   action.addressB = event.params.sender;
@@ -191,9 +151,7 @@ export function handlePause(event: EventPause): void {
 
   /* Paused is actually an adjustment with the newRate per second equal to zero */
 
-  const timeSinceLastSnapshot = event.block.timestamp.minus(
-    stream.lastAdjustmentTimestamp,
-  );
+  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
 
   const snapshotAmountScaled = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(timeSinceLastSnapshot),
@@ -211,18 +169,15 @@ export function handlePause(event: EventPause): void {
 }
 
 export function handleRefund(event: EventRefund): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Refund";
   action.addressA = event.params.sender;
   action.amountA = event.params.amount;
@@ -232,27 +187,17 @@ export function handleRefund(event: EventRefund): void {
   stream.refundedAmount = stream.refundedAmount.plus(event.params.amount);
 
   stream.availableAmount = stream.availableAmount.minus(event.params.amount);
-  const availableAmountScaled = toScaled(
-    stream.availableAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
 
-  const timeSinceLastSnapshot = event.block.timestamp.minus(
-    stream.lastAdjustmentTimestamp,
-  );
+  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
 
   const snapshotAmountScaled = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(timeSinceLastSnapshot),
   ); /** Scaled 18D */
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
 
-  const notWithdrawnScaled = snapshotAmountScaled.minus(
-    withdrawnAmountScaled,
-  ); /** Scaled 18D */
+  const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
 
   /** If refunded all the available amount the stream start accruing now  */
   const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled);
@@ -260,9 +205,7 @@ export function handleRefund(event: EventRefund): void {
   if (extraAmountScaled.equals(zero) || stream.ratePerSecond.equals(zero)) {
     stream.depletionTime = event.block.timestamp;
   } else {
-    stream.depletionTime = event.block.timestamp.plus(
-      extraAmountScaled.div(stream.ratePerSecond),
-    );
+    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
   }
 
   stream.save();
@@ -271,18 +214,15 @@ export function handleRefund(event: EventRefund): void {
 }
 
 export function handleRestart(event: EventRestart): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Restart";
   action.addressA = event.params.sender;
   action.amountA = event.params.ratePerSecond; /** Scaled 18D */
@@ -300,27 +240,16 @@ export function handleRestart(event: EventRestart): void {
   stream.lastAdjustmentTimestamp = event.block.timestamp;
   stream.ratePerSecond = event.params.ratePerSecond; /** Scaled 18D */
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
 
-  const notWithdrawnScaled = stream.snapshotAmount.minus(
-    withdrawnAmountScaled,
-  ); /** Scaled 18D */
+  const notWithdrawnScaled = stream.snapshotAmount.minus(withdrawnAmountScaled); /** Scaled 18D */
 
-  const availableAmountScaled = toScaled(
-    stream.availableAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
 
   if (availableAmountScaled.gt(notWithdrawnScaled)) {
-    const extraAmountScaled =
-      availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
+    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
 
-    stream.depletionTime = event.block.timestamp.plus(
-      extraAmountScaled.div(stream.ratePerSecond),
-    );
+    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
   } else {
     stream.depletionTime = event.block.timestamp;
   }
@@ -342,18 +271,15 @@ export function handleTransfer(event: EventTransfer): void {
 
   /** --------------- */
 
-  let id = event.params.tokenId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.tokenId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this transfer event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this transfer event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Transfer";
 
   action.addressA = event.params.from;
@@ -369,45 +295,32 @@ export function handleTransfer(event: EventTransfer): void {
 }
 
 export function handleVoid(event: EventVoid): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Void";
   action.addressA = event.params.recipient;
   action.addressB = event.params.sender;
   action.amountA = event.params.newTotalDebt;
   action.amountB = event.params.writtenOffDebt;
 
-  const timeSinceLastSnapshot = event.block.timestamp.minus(
-    stream.lastAdjustmentTimestamp,
-  );
+  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
 
   const snapshotAmountScaled = stream.snapshotAmount.plus(
     stream.ratePerSecond.times(timeSinceLastSnapshot),
   ); /** Scaled 18D */
 
-  const withdrawnAmountScaled = toScaled(
-    stream.withdrawnAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
 
-  const availableAmountScaled = toScaled(
-    stream.availableAmount,
-    stream.asset,
-  ); /** Scaled 18D */
+  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
 
-  const maxAvailableScaled = withdrawnAmountScaled.plus(
-    availableAmountScaled,
-  ); /** Scaled 18D */
+  const maxAvailableScaled = withdrawnAmountScaled.plus(availableAmountScaled); /** Scaled 18D */
 
   stream.voided = true;
   stream.paused = true;
@@ -433,29 +346,22 @@ export function handleVoid(event: EventVoid): void {
 }
 
 export function handleWithdraw(event: EventWithdraw): void {
-  let id = event.params.streamId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.streamId;
+  const stream = getStreamByIdFromSource(id);
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this cancel event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this cancel event: {}", [id.toHexString()]);
     log.error("[SABLIER]", []);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Withdraw";
   action.addressA = event.params.caller;
   action.addressB = event.params.to;
   action.amountA = event.params.withdrawAmount;
 
-  stream.availableAmount = stream.availableAmount.minus(
-    event.params.withdrawAmount,
-  );
-  stream.withdrawnAmount = stream.withdrawnAmount.plus(
-    event.params.withdrawAmount,
-  );
+  stream.availableAmount = stream.availableAmount.minus(event.params.withdrawAmount);
+  stream.withdrawnAmount = stream.withdrawnAmount.plus(event.params.withdrawAmount);
 
   stream.save();
   action.stream = stream.id;
@@ -463,18 +369,15 @@ export function handleWithdraw(event: EventWithdraw): void {
 }
 
 export function handleApproval(event: EventApproval): void {
-  let id = event.params.tokenId;
-  let stream = getStreamByIdFromSource(id);
+  const id = event.params.tokenId;
+  const stream = getStreamByIdFromSource(id);
 
   if (stream == null) {
-    log.info(
-      "[SABLIER] Stream hasn't been registered before this approval event: {}",
-      [id.toHexString()],
-    );
+    log.info("[SABLIER] Stream hasn't been registered before this approval event: {}", [id.toHexString()]);
     return;
   }
 
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "Approval";
 
   action.addressA = event.params.owner;
@@ -487,7 +390,7 @@ export function handleApproval(event: EventApproval): void {
 }
 
 export function handleApprovalForAll(event: EventApprovalForAll): void {
-  let action = createAction(event);
+  const action = createAction(event);
   action.category = "ApprovalForAll";
 
   action.addressA = event.params.owner;
@@ -504,12 +407,11 @@ export function handleApprovalForAll(event: EventApprovalForAll): void {
  * as it's the first one to be logged after the contract's creation
  */
 export function handleTransferAdmin(event: EventTransferAdmin): void {
-  let contract = getContractByAddress(dataSource.address());
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this transfer admin event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this transfer admin event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
     return;
   }

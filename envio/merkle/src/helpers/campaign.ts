@@ -1,3 +1,4 @@
+import { ADDRESS_ZERO, NULL_BYTE_REGEX, StreamCategory, StreamVersion } from "../constants";
 import type {
   Address,
   Asset,
@@ -13,7 +14,6 @@ import type {
   Mutable,
   Watcher,
 } from "../types";
-import { ADDRESS_ZERO, StreamCategory, StreamVersion } from "../constants";
 import { createTranches } from "./tranches";
 
 type Entity = Partial<Mutable<Campaign>>;
@@ -89,20 +89,16 @@ export async function createLinearCampaign_V21(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleStreamer,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleStreamer, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(event.params.expiration) !== 0n,
     expiration: BigInt(event.params.expiration),
@@ -153,14 +149,10 @@ export async function createLinearCampaign_V22(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleLL,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleLL, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -173,11 +165,11 @@ export async function createLinearCampaign_V22(
     initialAdmin: event.params.baseParams[3],
     ipfsCID: event.params.baseParams[4],
     merkleRoot: event.params.baseParams[5],
-    name: event.params.baseParams[6].replace(/\x00/g, ""),
+    name: event.params.baseParams[6].replace(NULL_BYTE_REGEX, ""),
     transferable: event.params.baseParams[7],
   } as const;
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(params.expiration) !== 0n,
     expiration: BigInt(params.expiration),
@@ -229,14 +221,10 @@ export async function createLinearCampaign_V23(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleLL,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleLL, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -255,7 +243,7 @@ export async function createLinearCampaign_V23(
     fee: event.params.fee,
   } as const;
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(params.expiration) !== 0n,
     expiration: BigInt(params.expiration),
@@ -309,14 +297,10 @@ export async function createTranchedCampaign_V22(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleLT,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleLT, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -333,7 +317,7 @@ export async function createTranchedCampaign_V22(
     transferable: event.params.baseParams[7],
   } as const;
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(params.expiration) !== 0n,
     expiration: BigInt(params.expiration),
@@ -388,14 +372,10 @@ export async function createTranchedCampaign_V23(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleLT,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleLT, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -414,7 +394,7 @@ export async function createTranchedCampaign_V23(
     fee: event.params.fee,
   } as const;
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(params.expiration) !== 0n,
     expiration: BigInt(params.expiration),
@@ -471,14 +451,10 @@ export async function createInstantCampaign_V23(
 ) {
   let { asset, factory, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createCampaign(
-    event,
-    event.params.merkleInstant,
-    {
-      factory,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createCampaign(event, event.params.merkleInstant, {
+    factory,
+    watcher,
+  });
 
   watcher = post_create.watcher;
 
@@ -495,7 +471,7 @@ export async function createInstantCampaign_V23(
     fee: event.params.fee,
   } as const;
 
-  let entity = {
+  const entity = {
     ...partial,
     expires: BigInt(params.expiration) !== 0n,
     expiration: BigInt(params.expiration),
@@ -533,10 +509,7 @@ export async function createInstantCampaign_V23(
   };
 }
 
-export async function getCampaign(
-  event: Event,
-  loader: (id: string) => Promise<Campaign | undefined>,
-) {
+export async function getCampaign(event: Event, loader: (id: string) => Promise<Campaign | undefined>) {
   const id = generateCampaignId(event, event.srcAddress);
   const loaded = await loader(id);
 
@@ -551,25 +524,19 @@ export async function getCampaign(
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateCampaignNickname(
-  campaign: Pick<Campaign, "admin" | "name" | "version">,
-  asset: Asset,
-): string {
+export function generateCampaignNickname(campaign: Pick<Campaign, "admin" | "name" | "version">, asset: Asset): string {
   if (campaign.version === StreamVersion.V21) {
-    let prefix = campaign.admin.slice(0, 6);
-    let suffix = campaign.admin.slice(-4);
+    const prefix = campaign.admin.slice(0, 6);
+    const suffix = campaign.admin.slice(-4);
 
     return `${asset.symbol} by ${prefix}..${suffix}`;
-  } else {
-    return `${asset.symbol} in ${campaign.name || ""}`;
   }
+
+  return `${asset.symbol} in ${campaign.name || ""}`;
 }
 
 export function generateCampaignId(event: Event, address: Address) {
-  let id = ""
-    .concat(address.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString());
+  const id = "".concat(address.toLowerCase()).concat("-").concat(event.chainId.toString());
 
   return id;
 }

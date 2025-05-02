@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import * as F from "./fragments";
 
-export const getCampaigns_ByAdminByIds = gql/* GraphQL */ `
+export const getCampaigns_ByAdminByIds = gql /* GraphQL */`
   query getCampaigns_ByAdminByIds(
     $first: Int!
     $skip: Int!
@@ -36,7 +36,7 @@ export const getCampaigns_ByAdminByIds = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns_ByAdminByAsset = gql/* GraphQL */ `
+export const getCampaigns_ByAdminByAsset = gql /* GraphQL */`
   query getCampaigns_ByAdminByAsset(
     $first: Int!
     $skip: Int!
@@ -71,7 +71,7 @@ export const getCampaigns_ByAdminByAsset = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns_ByAdmin = gql/* GraphQL */ `
+export const getCampaigns_ByAdmin = gql /* GraphQL */`
   query getCampaigns_ByAdmin(
     $first: Int!
     $skip: Int!
@@ -105,7 +105,7 @@ export const getCampaigns_ByAdmin = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns_ByIds = gql/* GraphQL */ `
+export const getCampaigns_ByIds = gql /* GraphQL */`
   query getCampaigns_ByIds(
     $first: Int!
     $skip: Int!
@@ -139,7 +139,7 @@ export const getCampaigns_ByIds = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns_ByAsset = gql/* GraphQL */ `
+export const getCampaigns_ByAsset = gql /* GraphQL */`
   query getCampaigns_ByAsset(
     $first: Int!
     $skip: Int!
@@ -172,7 +172,7 @@ export const getCampaigns_ByAsset = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns = gql/* GraphQL */ `
+export const getCampaigns = gql /* GraphQL */`
   query getCampaigns(
     $first: Int!
     $subgraphId: numeric!
@@ -202,7 +202,7 @@ export const getCampaigns = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaigns_Asc = gql/* GraphQL */ `
+export const getCampaigns_Asc = gql /* GraphQL */`
   query getCampaigns($first: Int!, $subgraphId: numeric!, $chainId: numeric!) {
     Campaign(
       limit: $first
@@ -222,7 +222,7 @@ export const getCampaigns_Asc = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getCampaignById = gql/* GraphQL */ `
+export const getCampaignById = gql /* GraphQL */`
   query getCampaignById($airdropId: String!) {
     Campaign(where: { id: { _eq: $airdropId } }) {
       ...CampaignFragment
@@ -237,7 +237,7 @@ export const getCampaignById = gql/* GraphQL */ `
   ${F.TrancheFragment_Envio}
 `;
 
-export const getActions_ByCampaign = gql/* GraphQL */ `
+export const getActions_ByCampaign = gql /* GraphQL */`
   query getActions_ByCampaign(
     $first: Int!
     $airdropId: String!
@@ -270,7 +270,7 @@ export const getActions_ByCampaign = gql/* GraphQL */ `
   ${F.AssetFragment_Envio}
 `;
 
-export const getMetadata_ByCampaign = gql/* GraphQL */ `
+export const getMetadata_ByCampaign = gql /* GraphQL */`
   query getMetadata_ByCampaign(
     $campaignId: String!
     $campaignIdClone: String!

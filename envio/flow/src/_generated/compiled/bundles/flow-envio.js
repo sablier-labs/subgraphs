@@ -7,7 +7,6 @@ var base = require("../addresses/base");
 var baseSepolia = require("../addresses/base-sepolia");
 var bsc = require("../addresses/bsc");
 var chiliz = require("../addresses/chiliz");
-var experimental = require("../addresses/experimental");
 var gnosis = require("../addresses/gnosis");
 var linea = require("../addresses/linea");
 var mainnet = require("../addresses/mainnet");
@@ -55,7 +54,7 @@ var chains = function () {
         [morph, definitions_1.default.morph],
         [optimism, definitions_1.default.optimism],
         [polygon, definitions_1.default.polygon],
-        [false ? experimental : sepolia, definitions_1.default.sepolia],
+        [sepolia, definitions_1.default.sepolia],
         [scroll, definitions_1.default.scroll],
         [superseed, definitions_1.default.superseed],
         [tangle, definitions_1.default.tangle],

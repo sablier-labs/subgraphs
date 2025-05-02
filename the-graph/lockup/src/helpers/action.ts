@@ -1,6 +1,6 @@
-import { dataSource, ethereum, log } from "@graphprotocol/graph-ts";
-import { Action } from "../generated/types/schema";
+import { dataSource, type ethereum, log } from "@graphprotocol/graph-ts";
 import { getChainId, one } from "../constants";
+import { Action } from "../generated/types/schema";
 import { getContractByAddress } from "./contract";
 import { getOrCreateWatcher } from "./watcher";
 
@@ -9,9 +9,9 @@ export function getActionById(id: string): Action | null {
 }
 
 export function createAction(event: ethereum.Event): Action {
-  let watcher = getOrCreateWatcher();
-  let id = generateActionId(event);
-  let entity = new Action(id);
+  const watcher = getOrCreateWatcher();
+  const id = generateActionId(event);
+  const entity = new Action(id);
 
   entity.block = event.block.number;
   entity.from = event.transaction.from;
@@ -22,12 +22,11 @@ export function createAction(event: ethereum.Event): Action {
   entity.fee = event.transaction.value;
 
   /** --------------- */
-  let contract = getContractByAddress(dataSource.address());
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.debug(
-      "[SABLIER] Contract hasn't been registered before this action event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.debug("[SABLIER] Contract hasn't been registered before this action event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
   } else {
     entity.contract = contract.id;
@@ -45,8 +44,5 @@ export function createAction(event: ethereum.Event): Action {
 /** --------------------------------------------------------------------------------------------------------- */
 
 export function generateActionId(event: ethereum.Event): string {
-  return ""
-    .concat(event.transaction.hash.toHexString())
-    .concat("-")
-    .concat(event.logIndex.toString());
+  return "".concat(event.transaction.hash.toHexString()).concat("-").concat(event.logIndex.toString());
 }

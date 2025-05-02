@@ -1,3 +1,4 @@
+import { NULL_BYTE_REGEX, StreamCategory, StreamVersion, configuration } from "../constants";
 import type {
   Address,
   Asset,
@@ -15,7 +16,6 @@ import type {
   Stream,
   Watcher,
 } from "../types";
-import { StreamCategory, StreamVersion, configuration } from "../constants";
 import { bindProxy } from "./proxy";
 import { createSegments } from "./segments";
 import { createTranches } from "./tranches";
@@ -139,16 +139,12 @@ export async function createDynamicStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -157,16 +153,12 @@ export async function createDynamicStream(
   /** -------------- */
 
   const timestamps = (() => {
-    if (
-      contract.version == StreamVersion.V20 ||
-      contract.version == StreamVersion.V21
-    ) {
+    if (contract.version === StreamVersion.V20 || contract.version === StreamVersion.V21) {
       if ("range" in event.params) {
         return {
           startTime: BigInt(event.params.range[0]),
           endTime: BigInt(event.params.range[1]),
-          duration:
-            BigInt(event.params.range[1]) - BigInt(event.params.range[0]),
+          duration: BigInt(event.params.range[1]) - BigInt(event.params.range[0]),
         };
       }
     }
@@ -175,9 +167,7 @@ export async function createDynamicStream(
       return {
         startTime: BigInt(event.params.timestamps[0]),
         endTime: BigInt(event.params.timestamps[1]),
-        duration:
-          BigInt(event.params.timestamps[1]) -
-          BigInt(event.params.timestamps[0]),
+        duration: BigInt(event.params.timestamps[1]) - BigInt(event.params.timestamps[0]),
       };
     }
 
@@ -186,17 +176,14 @@ export async function createDynamicStream(
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     ...timestamps,
     category: StreamCategory.LockupDynamic,
     funder: event.params.funder.toLowerCase(),
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
-    parties: [
-      event.params.sender.toLowerCase(),
-      event.params.recipient.toLowerCase(),
-    ],
+    parties: [event.params.sender.toLowerCase(), event.params.recipient.toLowerCase()],
 
     cliff: false,
     cliffAmount: undefined,
@@ -214,10 +201,7 @@ export async function createDynamicStream(
 
   /** -------------- */
   const partFees = (() => {
-    if (
-      contract.version == StreamVersion.V20 ||
-      contract.version == StreamVersion.V21
-    ) {
+    if (contract.version === StreamVersion.V20 || contract.version === StreamVersion.V21) {
       if (event.params.amounts.length === 3) {
         return {
           protocolFeeAmount: BigInt(event.params.amounts[1]),
@@ -244,10 +228,7 @@ export async function createDynamicStream(
 
   /** --------------- */
   const partTransferable = {
-    transferable:
-      "transferable" in event.params
-        ? event.params.transferable
-        : entity.transferable,
+    transferable: "transferable" in event.params ? event.params.transferable : entity.transferable,
   };
 
   /** --------------- */
@@ -280,16 +261,12 @@ export async function createDynamicMergedStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -301,25 +278,20 @@ export async function createDynamicMergedStream(
     return {
       startTime: BigInt(event.params.commonParams[7][0]),
       endTime: BigInt(event.params.commonParams[7][1]),
-      duration:
-        BigInt(event.params.commonParams[7][1]) -
-        BigInt(event.params.commonParams[7][0]),
+      duration: BigInt(event.params.commonParams[7][1]) - BigInt(event.params.commonParams[7][0]),
     };
   })() satisfies Entity;
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     ...timestamps,
     category: StreamCategory.LockupDynamic,
     funder: event.params.commonParams[0].toLowerCase(),
     sender: event.params.commonParams[1].toLowerCase(),
     recipient: event.params.commonParams[2].toLowerCase(),
-    parties: [
-      event.params.commonParams[1].toLowerCase(),
-      event.params.commonParams[2].toLowerCase(),
-    ],
+    parties: [event.params.commonParams[1].toLowerCase(), event.params.commonParams[2].toLowerCase()],
 
     cliff: false,
     cliffAmount: undefined,
@@ -330,8 +302,7 @@ export async function createDynamicMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
-    // eslint-disable-next-line no-control-regex
-    shape: event.params.commonParams[8].replace(/\x00/g, ""),
+    shape: event.params.commonParams[8].replace(NULL_BYTE_REGEX, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -382,16 +353,12 @@ export async function createLinearStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -400,17 +367,13 @@ export async function createLinearStream(
   /** -------------- */
 
   const timestamps = (() => {
-    if (
-      contract.version == StreamVersion.V20 ||
-      contract.version == StreamVersion.V21
-    ) {
+    if (contract.version === StreamVersion.V20 || contract.version === StreamVersion.V21) {
       if ("range" in event.params) {
         return {
           cliffTime: BigInt(event.params.range[1]),
           startTime: BigInt(event.params.range[0]),
           endTime: BigInt(event.params.range[2]),
-          duration:
-            BigInt(event.params.range[2]) - BigInt(event.params.range[0]),
+          duration: BigInt(event.params.range[2]) - BigInt(event.params.range[0]),
         };
       }
     }
@@ -420,9 +383,7 @@ export async function createLinearStream(
         cliffTime: BigInt(event.params.timestamps[1]),
         startTime: BigInt(event.params.timestamps[0]),
         endTime: BigInt(event.params.timestamps[2]),
-        duration:
-          BigInt(event.params.timestamps[2]) -
-          BigInt(event.params.timestamps[0]),
+        duration: BigInt(event.params.timestamps[2]) - BigInt(event.params.timestamps[0]),
       };
     }
 
@@ -431,16 +392,13 @@ export async function createLinearStream(
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     category: StreamCategory.LockupLinear,
     funder: event.params.funder.toLowerCase(),
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
-    parties: [
-      event.params.sender.toLowerCase(),
-      event.params.recipient.toLowerCase(),
-    ],
+    parties: [event.params.sender.toLowerCase(), event.params.recipient.toLowerCase()],
 
     depositAmount: BigInt(event.params.amounts[0]),
     intactAmount: BigInt(event.params.amounts[0]),
@@ -458,11 +416,8 @@ export async function createLinearStream(
     const cliffTime = BigInt(timestamps.cliffTime);
     let cliff = BigInt(cliffTime) - BigInt(entity.startTime);
 
-    if (
-      contract.version != StreamVersion.V21 &&
-      contract.version != StreamVersion.V20
-    ) {
-      if (cliffTime == 0n) {
+    if (contract.version !== StreamVersion.V21 && contract.version !== StreamVersion.V20) {
+      if (cliffTime === 0n) {
         cliff = 0n;
       }
     }
@@ -470,8 +425,7 @@ export async function createLinearStream(
     if (cliff !== 0n) {
       return {
         cliff: true,
-        cliffAmount:
-          (BigInt(deposit) * BigInt(cliff)) / BigInt(entity.duration),
+        cliffAmount: (BigInt(deposit) * BigInt(cliff)) / BigInt(entity.duration),
         cliffTime,
       };
     }
@@ -485,10 +439,7 @@ export async function createLinearStream(
 
   /** -------------- */
   const partFees = (() => {
-    if (
-      contract.version == StreamVersion.V20 ||
-      contract.version == StreamVersion.V21
-    ) {
+    if (contract.version === StreamVersion.V20 || contract.version === StreamVersion.V21) {
       if (event.params.amounts.length === 3) {
         return {
           protocolFeeAmount: BigInt(event.params.amounts[1]),
@@ -515,10 +466,7 @@ export async function createLinearStream(
 
   /** --------------- */
   const partTransferable = {
-    transferable:
-      "transferable" in event.params
-        ? event.params.transferable
-        : entity.transferable,
+    transferable: "transferable" in event.params ? event.params.transferable : entity.transferable,
   };
 
   /** --------------- */
@@ -551,16 +499,12 @@ export async function createLinearMergedStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -573,24 +517,19 @@ export async function createLinearMergedStream(
       cliffTime: BigInt(event.params.cliffTime),
       startTime: BigInt(event.params.commonParams[7][0]),
       endTime: BigInt(event.params.commonParams[7][1]),
-      duration:
-        BigInt(event.params.commonParams[7][1]) -
-        BigInt(event.params.commonParams[7][0]),
+      duration: BigInt(event.params.commonParams[7][1]) - BigInt(event.params.commonParams[7][0]),
     };
   })() satisfies Entity;
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     category: StreamCategory.LockupLinear,
     funder: event.params.commonParams[0].toLowerCase(),
     sender: event.params.commonParams[1].toLowerCase(),
     recipient: event.params.commonParams[2].toLowerCase(),
-    parties: [
-      event.params.commonParams[1].toLowerCase(),
-      event.params.commonParams[2].toLowerCase(),
-    ],
+    parties: [event.params.commonParams[1].toLowerCase(), event.params.commonParams[2].toLowerCase()],
 
     depositAmount: BigInt(event.params.commonParams[3][0]),
     intactAmount: BigInt(event.params.commonParams[3][0]),
@@ -601,8 +540,7 @@ export async function createLinearMergedStream(
     startTime: timestamps.startTime,
     endTime: timestamps.endTime,
     duration: timestamps.duration,
-    // eslint-disable-next-line no-control-regex
-    shape: event.params.commonParams[8].replace(/\x00/g, ""),
+    shape: event.params.commonParams[8].replace(NULL_BYTE_REGEX, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -689,16 +627,12 @@ export async function createTranchedStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -707,36 +641,29 @@ export async function createTranchedStream(
   /** -------------- */
 
   const timestamps = (() => {
-    return contract.version == StreamVersion.V22
+    return contract.version === StreamVersion.V22
       ? {
           startTime: BigInt(event.params.timestamps[0]),
           endTime: BigInt(event.params.timestamps[1]),
-          duration:
-            BigInt(event.params.timestamps[1]) -
-            BigInt(event.params.timestamps[0]),
+          duration: BigInt(event.params.timestamps[1]) - BigInt(event.params.timestamps[0]),
         }
       : {
           startTime: BigInt(event.params.timestamps[0]),
           endTime: BigInt(event.params.timestamps[1]),
-          duration:
-            BigInt(event.params.timestamps[1]) -
-            BigInt(event.params.timestamps[0]),
+          duration: BigInt(event.params.timestamps[1]) - BigInt(event.params.timestamps[0]),
         };
   })() satisfies Entity;
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     ...timestamps,
     category: StreamCategory.LockupTranched,
     funder: event.params.funder.toLowerCase(),
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
-    parties: [
-      event.params.sender.toLowerCase(),
-      event.params.recipient.toLowerCase(),
-    ],
+    parties: [event.params.sender.toLowerCase(), event.params.recipient.toLowerCase()],
 
     cliff: false,
     cliffAmount: undefined,
@@ -766,10 +693,7 @@ export async function createTranchedStream(
 
   /** --------------- */
   const partTransferable = {
-    transferable:
-      "transferable" in event.params
-        ? event.params.transferable
-        : entity.transferable,
+    transferable: "transferable" in event.params ? event.params.transferable : entity.transferable,
   };
 
   /** --------------- */
@@ -801,16 +725,12 @@ export async function createTranchedMergedStream(
 ) {
   let { asset, batch, batcher, contract, watcher } = entities;
 
-  const { entity: partial, ...post_create } = createStream(
-    event,
-    event.params.streamId,
-    {
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  const { entity: partial, ...post_create } = createStream(event, event.params.streamId, {
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -822,25 +742,20 @@ export async function createTranchedMergedStream(
     return {
       startTime: BigInt(event.params.commonParams[7][0]),
       endTime: BigInt(event.params.commonParams[7][1]),
-      duration:
-        BigInt(event.params.commonParams[7][1]) -
-        BigInt(event.params.commonParams[7][0]),
+      duration: BigInt(event.params.commonParams[7][1]) - BigInt(event.params.commonParams[7][0]),
     };
   })() satisfies Entity;
 
   /** --------------- */
 
-  let entity = {
+  const entity = {
     ...partial,
     ...timestamps,
     category: StreamCategory.LockupTranched,
     funder: event.params.commonParams[0].toLowerCase(),
     sender: event.params.commonParams[1].toLowerCase(),
     recipient: event.params.commonParams[2].toLowerCase(),
-    parties: [
-      event.params.commonParams[1].toLowerCase(),
-      event.params.commonParams[2].toLowerCase(),
-    ],
+    parties: [event.params.commonParams[1].toLowerCase(), event.params.commonParams[2].toLowerCase()],
 
     cliff: false,
     cliffAmount: undefined,
@@ -854,8 +769,7 @@ export async function createTranchedMergedStream(
 
     cancelable: event.params.commonParams[5],
     transferable: event.params.commonParams[6],
-    // eslint-disable-next-line no-control-regex
-    shape: event.params.commonParams[8].replace(/\x00/g, ""),
+    shape: event.params.commonParams[8].replace(NULL_BYTE_REGEX, ""),
   } satisfies Entity;
 
   /** --------------- */
@@ -907,12 +821,8 @@ export async function getStream(
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateStreamId(
-  event: Event,
-  address: Address,
-  tokenId: bigint | string,
-) {
-  let id = ""
+export function generateStreamId(event: Event, address: Address, tokenId: bigint | string) {
+  const id = ""
     .concat(address.toLowerCase())
     .concat("-")
     .concat(event.chainId.toString())
@@ -922,21 +832,15 @@ export function generateStreamId(
   return id;
 }
 
-export function generateStreamAlias(
-  event: Event,
-  address: Address,
-  tokenId: bigint,
-) {
+export function generateStreamAlias(event: Event, address: Address, tokenId: bigint) {
   const chain = configuration(event.chainId);
-  const contract = chain.contracts.find(
-    (c) => c.address === address.toLowerCase(),
-  );
+  const contract = chain.contracts.find((c) => c.address === address.toLowerCase());
 
   if (!contract) {
     throw new Error("Missing or mismatched contract in configuration");
   }
 
-  let id = ""
+  const id = ""
     .concat(contract.alias.toLowerCase())
     .concat("-")
     .concat(event.chainId.toString())

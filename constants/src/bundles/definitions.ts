@@ -111,14 +111,7 @@ const definitions: Record<string, [Chain, string[]]> = {
       "https://rpc.tornadoeth.cash/gnosis",
     ],
   ],
-  linea: [
-    linea,
-    [
-      "https://linea.blockpi.network/v1/rpc/public",
-      "https://rpc.linea.build",
-      "https://1rpc.io/linea",
-    ],
-  ],
+  linea: [linea, ["https://linea.blockpi.network/v1/rpc/public", "https://rpc.linea.build", "https://1rpc.io/linea"]],
   optimism: [
     optimism,
     [
@@ -167,14 +160,7 @@ const definitions: Record<string, [Chain, string[]]> = {
       "https://endpoints.omniatech.io/v1/zksync-era/mainnet/public",
     ],
   ],
-  mode: [
-    mode,
-    [
-      "https://mainnet.mode.network",
-      "https://mode.gateway.tenderly.co",
-      "https://1rpc.io/mode",
-    ],
-  ],
+  mode: [mode, ["https://mainnet.mode.network", "https://mode.gateway.tenderly.co", "https://1rpc.io/mode"]],
   morph: [
     defineChain({
       id: 2818,

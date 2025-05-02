@@ -1,17 +1,14 @@
-import type { TransferAdminHandler, TransferAdminLoader } from "../types";
 import { FlowV10 } from "../../generated";
 import { ADDRESS_ZERO } from "../constants";
 import { generateContractIdFromEvent, initialize } from "../helpers";
+import type { TransferAdminHandler, TransferAdminLoader } from "../types";
 
 async function loader(input: TransferAdminLoader) {
   const { context, event } = input;
   const contractId = generateContractIdFromEvent(event);
   const watcherId = event.chainId.toString();
 
-  const [contract, watcher] = await Promise.all([
-    context.Contract.get(contractId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [contract, watcher] = await Promise.all([context.Contract.get(contractId), context.Watcher.get(watcherId)]);
 
   return {
     contract,
@@ -33,12 +30,7 @@ async function handler(input: TransferAdminHandler<typeof loader>) {
 
   /** ------- Initialize -------- */
 
-  let { contract, contracts, watcher } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { contract, contracts, watcher } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Process -------- */
 

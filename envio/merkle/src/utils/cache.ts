@@ -1,26 +1,20 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { CacheCategory } from "../constants";
-import { Address } from "../types";
+import type { Address } from "../types";
 
 type Shape = Record<string, Record<string, string>>;
 
-type ShapeToken = Shape &
-  Record<Address, { decimals: string; name: string; symbol: string }>;
+type ShapeToken = Shape & Record<Address, { decimals: string; name: string; symbol: string }>;
 
-export class Cache {
-  static init<C = CacheCategory>(
-    category: C,
-    chainId: number | string | bigint,
-  ) {
-    if (!Object.values(CacheCategory).find((c) => c === category)) {
-      throw new Error("Unsupported cache category");
-    }
-
-    type S = ShapeToken;
-    const entry = new Entry<S>(`${category}-${chainId.toString()}`);
-    return entry;
+export function initCache<C = CacheCategory>(category: C, chainId: number | string | bigint) {
+  if (!Object.values(CacheCategory).find((c) => c === category)) {
+    throw new Error("Unsupported cache category");
   }
+
+  type S = ShapeToken;
+  const entry = new Entry<S>(`${category}-${chainId.toString()}`);
+  return entry;
 }
 
 export class Entry<T extends Shape> {
@@ -59,14 +53,14 @@ export class Entry<T extends Shape> {
     if (!this.memory || Object.values(this.memory).length === 0) {
       this.memory = fields;
     } else {
-      Object.keys(fields).forEach((key) => {
+      for (const key in fields) {
         if (!this.memory[key]) {
           this.memory[key] = {};
         }
-        Object.keys(fields[key]).forEach((nested) => {
+        for (const nested in fields[key]) {
           this.memory[key][nested] = fields[key][nested];
-        });
-      });
+        }
+      }
     }
 
     this.publish();

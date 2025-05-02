@@ -1,15 +1,5 @@
-import type {
-  Address,
-  Asset,
-  Batch,
-  Batcher,
-  Contract,
-  CreateArgs,
-  Event,
-  Stream,
-  Watcher,
-} from "../types";
 import { StreamCategory, configuration } from "../constants";
+import type { Address, Asset, Batch, Batcher, Contract, CreateArgs, Event, Stream, Watcher } from "../types";
 
 export function createStream(
   event: Event<CreateArgs>,
@@ -44,7 +34,7 @@ export function createStream(
     startTime: BigInt(event.block.timestamp),
     depletionTime: BigInt(event.block.timestamp),
     transferable: event.params.transferable,
-    creator: event.transaction.from!.toLowerCase(),
+    creator: event.transaction.from?.toLowerCase() || "",
     sender: event.params.sender.toLowerCase(),
     recipient: event.params.recipient.toLowerCase(),
     ratePerSecond: event.params.ratePerSecond /** [Scaled 18D] */,
@@ -147,12 +137,8 @@ export async function getStream(
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateStreamId(
-  event: Event,
-  address: Address,
-  tokenId: bigint | string,
-) {
-  let id = ""
+export function generateStreamId(event: Event, address: Address, tokenId: bigint | string) {
+  const id = ""
     .concat(address.toLowerCase())
     .concat("-")
     .concat(event.chainId.toString())
@@ -162,21 +148,15 @@ export function generateStreamId(
   return id;
 }
 
-export function generateStreamAlias(
-  event: Event,
-  address: Address,
-  tokenId: bigint,
-) {
+export function generateStreamAlias(event: Event, address: Address, tokenId: bigint) {
   const chain = configuration(event.chainId);
-  const contract = chain.contracts.find(
-    (c) => c.address === address.toLowerCase(),
-  );
+  const contract = chain.contracts.find((c) => c.address === address.toLowerCase());
 
   if (!contract) {
     throw new Error("Missing or mismatched contract in configuration");
   }
 
-  let id = ""
+  const id = ""
     .concat(contract.alias.toLowerCase())
     .concat("-")
     .concat(event.chainId.toString())

@@ -13,21 +13,11 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       chainId,
     } as const;
 
-    const received = cleanup.streams(
-      await Envio(envioQueries.getStreams, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.streams(await Envio(envioQueries.getStreams, variables), SKIP_CLEANUP, "Envio");
 
-    const expected = cleanup.streams(
-      await TheGraph(theGraphQueries.getStreams, variables),
-      SKIP_CLEANUP,
-      "TheGraph",
-    );
+    const expected = cleanup.streams(await TheGraph(theGraphQueries.getStreams, variables), SKIP_CLEANUP, "TheGraph");
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -41,11 +31,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       subgraphId: 0,
     } as const;
 
-    const received = cleanup.streams(
-      await Envio(envioQueries.getStreams_Asc, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.streams(await Envio(envioQueries.getStreams_Asc, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.streams(
       await TheGraph(theGraphQueries.getStreams_Asc, variables),
@@ -53,9 +39,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -75,26 +59,18 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     } as const;
 
     const received = cleanup.streams(
-      await Envio(
-        envioQueries.getStreams_BySenderByRecipientByIdsByToken,
-        variables,
-      ),
+      await Envio(envioQueries.getStreams_BySenderByRecipientByIdsByToken, variables),
       SKIP_CLEANUP,
       "Envio",
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySenderByRecipientByIdsByToken,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySenderByRecipientByIdsByToken, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -113,26 +89,18 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     } as const;
 
     const received = cleanup.streams(
-      await Envio(
-        envioQueries.getStreams_BySender_Or_ByRecipient_Or_ByToken,
-        variables,
-      ),
+      await Envio(envioQueries.getStreams_BySender_Or_ByRecipient_Or_ByToken, variables),
       SKIP_CLEANUP,
       "Envio",
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySender_Or_ByRecipient_Or_ByToken,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySender_Or_ByRecipient_Or_ByToken, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -157,17 +125,12 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySenderByRecipientByIds,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySenderByRecipientByIds, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -192,17 +155,12 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySenderByIdsByToken,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySenderByIdsByToken, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -227,17 +185,12 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_ByRecipientByIdsByToken,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_ByRecipientByIdsByToken, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -256,26 +209,18 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     } as const;
 
     const received = cleanup.streams(
-      await Envio(
-        envioQueries.getStreams_BySenderByRecipientByToken,
-        variables,
-      ),
+      await Envio(envioQueries.getStreams_BySenderByRecipientByToken, variables),
       SKIP_CLEANUP,
       "Envio",
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySenderByRecipientByToken,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySenderByRecipientByToken, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -304,9 +249,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -335,9 +278,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -366,9 +307,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -397,9 +336,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -428,9 +365,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -459,9 +394,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -485,17 +418,12 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     );
 
     const expected = cleanup.streams(
-      await TheGraph(
-        theGraphQueries.getStreams_BySender_Or_ByRecipient,
-        variables,
-      ),
+      await TheGraph(theGraphQueries.getStreams_BySender_Or_ByRecipient, variables),
       SKIP_CLEANUP,
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -511,11 +439,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       sender: configuration.sender.toLowerCase(),
     } as const;
 
-    const received = cleanup.streams(
-      await Envio(envioQueries.getStreams_BySender, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.streams(await Envio(envioQueries.getStreams_BySender, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.streams(
       await TheGraph(theGraphQueries.getStreams_BySender, variables),
@@ -523,9 +447,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -553,9 +475,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -571,11 +491,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       streamIds: configuration.streamIds,
     } as const;
 
-    const received = cleanup.streams(
-      await Envio(envioQueries.getStreams_ByIds, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.streams(await Envio(envioQueries.getStreams_ByIds, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.streams(
       await TheGraph(theGraphQueries.getStreams_ByIds, variables),
@@ -583,9 +499,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -601,11 +515,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       token: configuration.token.toLowerCase(),
     } as const;
 
-    const received = cleanup.streams(
-      await Envio(envioQueries.getStreams_ByToken, variables),
-      SKIP_CLEANUP,
-      "Envio",
-    );
+    const received = cleanup.streams(await Envio(envioQueries.getStreams_ByToken, variables), SKIP_CLEANUP, "Envio");
 
     const expected = cleanup.streams(
       await TheGraph(theGraphQueries.getStreams_ByToken, variables),
@@ -613,9 +523,7 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       "TheGraph",
     );
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -650,31 +558,19 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       received.streams.push(...received_slice.streams);
       expected.streams.push(...expected_slice.streams);
 
-      const expected_subgraphId =
-        expected_slice.streams?.[variables.first - 1]?.subgraphId;
-      const received_subgraphId =
-        received_slice.streams?.[variables.first - 1]?.subgraphId;
+      const expected_subgraphId = expected_slice.streams?.[variables.first - 1]?.subgraphId;
+      const received_subgraphId = received_slice.streams?.[variables.first - 1]?.subgraphId;
 
-      if (
-        received_slice.streams.length < variables.first &&
-        expected_slice.streams.length < variables.first
-      ) {
+      if (received_slice.streams.length < variables.first && expected_slice.streams.length < variables.first) {
         done = true;
-      } else if (
-        !expected_subgraphId ||
-        expected_subgraphId !== received_subgraphId
-      ) {
+      } else if (!expected_subgraphId || expected_subgraphId !== received_subgraphId) {
         done = true;
       } else {
-        variables.subgraphId = parseInt(
-          expected_slice.streams[variables.first - 1].subgraphId,
-        );
+        variables.subgraphId = Number.parseInt(expected_slice.streams[variables.first - 1].subgraphId);
       }
     }
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);
@@ -709,31 +605,19 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
       received.streams.push(...received_slice.streams);
       expected.streams.push(...expected_slice.streams);
 
-      const expected_subgraphId =
-        expected_slice.streams?.[variables.first - 1]?.subgraphId;
-      const received_subgraphId =
-        received_slice.streams?.[variables.first - 1]?.subgraphId;
+      const expected_subgraphId = expected_slice.streams?.[variables.first - 1]?.subgraphId;
+      const received_subgraphId = received_slice.streams?.[variables.first - 1]?.subgraphId;
 
-      if (
-        received_slice.streams.length < variables.first &&
-        expected_slice.streams.length < variables.first
-      ) {
+      if (received_slice.streams.length < variables.first && expected_slice.streams.length < variables.first) {
         done = true;
-      } else if (
-        !expected_subgraphId ||
-        expected_subgraphId !== received_subgraphId
-      ) {
+      } else if (!expected_subgraphId || expected_subgraphId !== received_subgraphId) {
         done = true;
       } else {
-        variables.subgraphId = parseInt(
-          expected_slice.streams[variables.first - 1].subgraphId,
-        );
+        variables.subgraphId = Number.parseInt(expected_slice.streams[variables.first - 1].subgraphId);
       }
     }
 
-    console.info(
-      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
-    );
+    console.info(`Comparing ${received.streams.length}, ${expected.streams.length} results.`);
 
     expect(received.streams.length).toBeGreaterThan(0);
     expect(received.streams.length).toEqual(expected.streams.length);

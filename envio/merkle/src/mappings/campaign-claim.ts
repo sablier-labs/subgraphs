@@ -1,16 +1,4 @@
-import type {
-  Action,
-  ClaimHandler,
-  ClaimLoader,
-  InstantClaimHandler,
-  InstantClaimLoader,
-} from "../types";
-import {
-  MerkleInstant,
-  MerkleLockupV21,
-  MerkleLockupV22,
-  MerkleLockupV23,
-} from "../../generated";
+import { MerkleInstant, MerkleLockupV21, MerkleLockupV22, MerkleLockupV23 } from "../../generated";
 import { ActionCategory } from "../constants";
 import {
   createAction,
@@ -21,6 +9,7 @@ import {
   getOrCreateActivity,
   getOrCreateWatcher,
 } from "../helpers";
+import type { Action, ClaimHandler, ClaimLoader, InstantClaimHandler, InstantClaimLoader } from "../types";
 
 async function loader(input: ClaimLoader) {
   const { context, event } = input;
@@ -67,13 +56,9 @@ async function handler(input: ClaimHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let campaign =
-    loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
-  let activity =
-    loaded.activity ??
-    (await getOrCreateActivity(event, campaign?.id, context.Activity.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let campaign = loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
+  let activity = loaded.activity ?? (await getOrCreateActivity(event, campaign?.id, context.Activity.get));
 
   /** ------- Process -------- */
 
@@ -89,17 +74,12 @@ async function handler(input: ClaimHandler<typeof loader>) {
     claimAmount: BigInt(event.params.amount),
     claimRecipient: event.params.recipient.toLowerCase(),
     claimTokenId: BigInt(event.params.streamId),
-    claimStreamId: generateStreamId(
-      event,
-      campaign.lockup,
-      event.params.streamId,
-    ),
+    claimStreamId: generateStreamId(event, campaign.lockup, event.params.streamId),
   };
 
   watcher = post_action.watcher;
 
-  const campaignClaimedAmount =
-    BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
+  const campaignClaimedAmount = BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
   const campaignClaimedCount = BigInt(campaign.claimedCount) + 1n;
 
   campaign = {
@@ -125,20 +105,14 @@ async function handler(input: ClaimHandler<typeof loader>) {
   context.Watcher.set(watcher);
 }
 
-async function instantHandler(
-  input: InstantClaimHandler<typeof instantLoader>,
-) {
+async function instantHandler(input: InstantClaimHandler<typeof instantLoader>) {
   const { context, event, loaderReturn: loaded } = input;
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let campaign =
-    loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
-  let activity =
-    loaded.activity ??
-    (await getOrCreateActivity(event, campaign?.id, context.Activity.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let campaign = loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
+  let activity = loaded.activity ?? (await getOrCreateActivity(event, campaign?.id, context.Activity.get));
 
   /** ------- Process -------- */
 
@@ -157,8 +131,7 @@ async function instantHandler(
 
   watcher = post_action.watcher;
 
-  const campaignClaimedAmount =
-    BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
+  const campaignClaimedAmount = BigInt(campaign.claimedAmount) + BigInt(event.params.amount);
   const campaignClaimedCount = BigInt(campaign.claimedCount) + 1n;
 
   campaign = {

@@ -1,27 +1,15 @@
-import type { Action, WithdrawHandler, WithdrawLoader } from "../types";
 import { FlowV10 } from "../../generated";
 import { ActionCategory } from "../constants";
-import {
-  createAction,
-  generateStreamId,
-  getOrCreateWatcher,
-  getStream,
-} from "../helpers";
+import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../helpers";
+import type { Action, WithdrawHandler, WithdrawLoader } from "../types";
 
 async function loader(input: WithdrawLoader) {
   const { context, event } = input;
 
-  const streamId = generateStreamId(
-    event,
-    event.srcAddress,
-    event.params.streamId,
-  );
+  const streamId = generateStreamId(event, event.srcAddress, event.params.streamId);
   const watcherId = event.chainId.toString();
 
-  const [stream, watcher] = await Promise.all([
-    context.Stream.get(streamId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
 
   return {
     stream,
@@ -34,11 +22,8 @@ async function handler(input: WithdrawHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let stream =
-    loaded.stream ??
-    (await getStream(event, event.params.streamId, context.Stream.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let stream = loaded.stream ?? (await getStream(event, event.params.streamId, context.Stream.get));
 
   /** ------- Process -------- */
 

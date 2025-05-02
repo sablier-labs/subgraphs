@@ -1,5 +1,5 @@
-import type { Address, Contract, Event } from "../types";
 import { StreamVersion, chains } from "../constants";
+import type { Address, Contract, Event } from "../types";
 
 export async function getContract(
   event: Event,
@@ -15,12 +15,7 @@ export async function getContract(
   return loaded;
 }
 
-export function createContract(
-  event: Event,
-  address: Address,
-  alias: string,
-  version: StreamVersion,
-) {
+export function createContract(event: Event, address: Address, alias: string, version: StreamVersion) {
   const entity: Contract = {
     id: generateContractId(event, address),
     address: address.toLowerCase(),
@@ -38,33 +33,21 @@ export function createContract(
 /** --------------------------------------------------------------------------------------------------------- */
 
 export function generateContractId(event: Event, address: Address) {
-  return ""
-    .concat(address.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString());
+  return "".concat(address.toLowerCase()).concat("-").concat(event.chainId.toString());
 }
 
 export function generateContractIdFromEvent(event: Event) {
-  return ""
-    .concat(event.srcAddress.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString());
+  return "".concat(event.srcAddress.toLowerCase()).concat("-").concat(event.chainId.toString());
 }
 
 export function _initialize(event: Event): Contract[] {
   const versions = [StreamVersion.V10, StreamVersion.V11];
 
-  return chains
-    .map((chain) => {
-      return versions
-        .map((version) => {
-          const FL = chain[version].flow.map((flow) =>
-            createContract(event, flow.address, flow.alias, version),
-          );
+  return chains.flatMap((chain) => {
+    return versions.flatMap((version) => {
+      const FL = chain[version].flow.map((flow) => createContract(event, flow.address, flow.alias, version));
 
-          return [FL].flat();
-        })
-        .flat();
-    })
-    .flat();
+      return [FL].flat();
+    });
+  });
 }

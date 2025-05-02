@@ -24,9 +24,7 @@ export async function initialize(
 
   /** If the factory isn't already configured, we've just started indexing. Prepare the contracts. */
   const factories = _initialize(event);
-  const factory = factories.find(
-    (f) => f.id === generateFactoryId(event, event.srcAddress),
-  );
+  const factory = factories.find((f) => f.id === generateFactoryId(event, event.srcAddress));
 
   if (!factory) {
     throw new Error("Missing factory instance at initialization");
@@ -55,10 +53,7 @@ function createWatcher(event: Event): Watcher {
   return entity;
 }
 
-export async function getOrCreateWatcher(
-  event: Event,
-  loader: (id: string) => Promise<Watcher | undefined>,
-) {
+export async function getOrCreateWatcher(event: Event, loader: (id: string) => Promise<Watcher | undefined>) {
   const watcher = await loader(event.chainId.toString());
 
   if (watcher === undefined) {

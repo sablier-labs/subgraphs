@@ -1,17 +1,7 @@
-import type { Action, ClawbackHandler, ClawbackLoader } from "../types";
-import {
-  MerkleInstant,
-  MerkleLockupV21,
-  MerkleLockupV22,
-  MerkleLockupV23,
-} from "../../generated";
+import { MerkleInstant, MerkleLockupV21, MerkleLockupV22, MerkleLockupV23 } from "../../generated";
 import { ActionCategory } from "../constants";
-import {
-  createAction,
-  generateCampaignId,
-  getCampaign,
-  getOrCreateWatcher,
-} from "../helpers";
+import { createAction, generateCampaignId, getCampaign, getOrCreateWatcher } from "../helpers";
+import type { Action, ClawbackHandler, ClawbackLoader } from "../types";
 
 async function loader(input: ClawbackLoader) {
   const { context, event } = input;
@@ -19,10 +9,7 @@ async function loader(input: ClawbackLoader) {
   const campaignId = generateCampaignId(event, event.srcAddress);
   const watcherId = event.chainId.toString();
 
-  const [campaign, watcher] = await Promise.all([
-    context.Campaign.get(campaignId),
-    context.Watcher.get(watcherId),
-  ]);
+  const [campaign, watcher] = await Promise.all([context.Campaign.get(campaignId), context.Watcher.get(watcherId)]);
 
   return {
     campaign,
@@ -35,10 +22,8 @@ async function handler(input: ClawbackHandler<typeof loader>) {
 
   /** ------- Fetch -------- */
 
-  let watcher =
-    loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let campaign =
-    loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
+  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
+  let campaign = loaded.campaign ?? (await getCampaign(event, context.Campaign.get));
 
   /** ------- Process -------- */
 

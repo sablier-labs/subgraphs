@@ -47,97 +47,97 @@ export type WithdrawArgs = EventWithdrawArgs_V10;
 /** --------------------------------------------------------------------------------------------------------- */
 
 export type AdjustLoader = Loader<AdjustArgs>;
-export type AdjustHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = AdjustArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type AdjustHandler<L extends (_1: Loader<E>) => Promise<object>, E = AdjustArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type ApprovalLoader = Loader<ApprovalArgs>;
-export type ApprovalHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = ApprovalArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type ApprovalHandler<L extends (_1: Loader<E>) => Promise<object>, E = ApprovalArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type ApprovalForAllLoader = Loader<ApprovalForAllArgs>;
-export type ApprovalForAllHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = ApprovalForAllArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type ApprovalForAllHandler<L extends (_1: Loader<E>) => Promise<object>, E = ApprovalForAllArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type CreateLoader = Loader<CreateArgs>;
-export type CreateHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = CreateArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type CreateHandler<L extends (_1: Loader<E>) => Promise<object>, E = CreateArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type DepositLoader = Loader<DepositArgs>;
-export type DepositHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = DepositArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type DepositHandler<L extends (_1: Loader<E>) => Promise<object>, E = DepositArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type PauseLoader = Loader<PauseArgs>;
-export type PauseHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = PauseArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type PauseHandler<L extends (_1: Loader<E>) => Promise<object>, E = PauseArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type RefundLoader = Loader<RefundArgs>;
-export type RefundHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = RefundArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type RefundHandler<L extends (_1: Loader<E>) => Promise<object>, E = RefundArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type RestartLoader = Loader<RestartArgs>;
-export type RestartHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = RestartArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type RestartHandler<L extends (_1: Loader<E>) => Promise<object>, E = RestartArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type TransferLoader = Loader<TransferArgs>;
-export type TransferHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = TransferArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type TransferHandler<L extends (_1: Loader<E>) => Promise<object>, E = TransferArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type TransferAdminLoader = Loader<TransferAdminArgs>;
-export type TransferAdminHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = TransferAdminArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type TransferAdminHandler<L extends (_1: Loader<E>) => Promise<object>, E = TransferAdminArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 
 export type VoidLoader = Loader<VoidArgs>;
-export type VoidHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = VoidArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type VoidHandler<L extends (_1: Loader<E>) => Promise<object>, E = VoidArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** ------------------------------------------------------------- */
 export type WithdrawLoader = Loader<WithdrawArgs>;
-export type WithdrawHandler<
-  L extends (_1: Loader<E>) => Promise<object>,
-  E = WithdrawArgs,
-> = Handler<E, Awaited<ReturnType<L>>>;
+export type WithdrawHandler<L extends (_1: Loader<E>) => Promise<object>, E = WithdrawArgs> = Handler<
+  E,
+  Awaited<ReturnType<L>>
+>;
 
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */

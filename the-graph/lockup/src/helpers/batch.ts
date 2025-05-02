@@ -1,9 +1,9 @@
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { Batch, Batcher } from "../generated/types/schema";
+import { type Address, BigInt as GraphBigInt, type ethereum } from "@graphprotocol/graph-ts";
 import { one, zero } from "../constants";
+import { Batch, Batcher } from "../generated/types/schema";
 
 export function getOrCreateBatcher(sender: Address): Batcher {
-  let id = generateBatcherId(sender);
+  const id = generateBatcherId(sender);
   let entity = Batcher.load(id);
 
   if (entity == null) {
@@ -15,13 +15,10 @@ export function getOrCreateBatcher(sender: Address): Batcher {
   return entity;
 }
 
-export function getOrCreateBatch(
-  event: ethereum.Event,
-  sender: Address,
-): Batch {
-  let id = generateBatchId(event);
+export function getOrCreateBatch(event: ethereum.Event, sender: Address): Batch {
+  const id = generateBatchId(event);
   let entity = Batch.load(id);
-  let batcher = getOrCreateBatcher(sender);
+  const batcher = getOrCreateBatcher(sender);
 
   if (entity == null) {
     entity = new Batch(id);
@@ -31,8 +28,8 @@ export function getOrCreateBatch(
     entity.size = one;
   } else {
     entity.size = entity.size.plus(one);
-    if (BigInt.compare(entity.size, one) == 1 && entity.label == null) {
-      let label = batcher.batchIndex.plus(one).toString();
+    if (GraphBigInt.compare(entity.size, one) === 1 && entity.label == null) {
+      const label = batcher.batchIndex.plus(one).toString();
       entity.label = label;
       batcher.batchIndex = batcher.batchIndex.plus(one);
       batcher.save();

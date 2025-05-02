@@ -1,35 +1,34 @@
-import { BigInt, dataSource, log } from "@graphprotocol/graph-ts";
-import { Stream } from "../generated/types/schema";
-import { CreateFlowStream as EventCreate } from "../generated/types/templates/ContractFlow/SablierFlow";
+import { type BigInt as GraphBigInt, dataSource, log } from "@graphprotocol/graph-ts";
 import { getChainId, one, zero } from "../constants";
+import { Stream } from "../generated/types/schema";
+import type { CreateFlowStream as EventCreate } from "../generated/types/templates/ContractFlow/SablierFlow";
 import { getOrCreateAsset } from "./asset";
 import { getOrCreateBatch } from "./batch";
 import { getContractByAddress } from "./contract";
 import { getOrCreateWatcher } from "./watcher";
 
 export function createStream(event: EventCreate): Stream | null {
-  let watcher = getOrCreateWatcher();
-  let contract = getContractByAddress(dataSource.address());
+  const watcher = getOrCreateWatcher();
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this create event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this create event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
     return null;
   }
 
-  let tokenId = event.params.streamId;
+  const tokenId = event.params.streamId;
 
-  let id = generateStreamId(tokenId);
+  const id = generateStreamId(tokenId);
   if (id == null) {
     return null;
   }
 
-  let alias = generateStreamAlias(tokenId);
+  const alias = generateStreamAlias(tokenId);
 
   /** --------------- */
-  let entity = new Stream(id);
+  const entity = new Stream(id);
   /** --------------- */
   entity.tokenId = tokenId;
   entity.alias = alias;
@@ -70,11 +69,11 @@ export function createStream(event: EventCreate): Stream | null {
   entity.lastAdjustmentTimestamp = event.block.timestamp;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.token);
+  const asset = getOrCreateAsset(event.params.token);
   entity.asset = asset.id;
 
   /** --------------- */
-  let batch = getOrCreateBatch(event, event.params.sender);
+  const batch = getOrCreateBatch(event, event.params.sender);
   entity.batch = batch.id;
   entity.position = batch.size.minus(one);
 
@@ -89,18 +88,15 @@ export function createStream(event: EventCreate): Stream | null {
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateStreamId(tokenId: BigInt): string {
-  let contract = getContractByAddress(dataSource.address());
+export function generateStreamId(tokenId: GraphBigInt): string {
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this event: {}", [dataSource.address().toHexString()]);
     log.error("[SABLIER]", []);
     return "";
   }
 
-  let id = ""
+  const id = ""
     .concat(contract.address.toHexString())
     .concat("-")
     .concat(getChainId().toString())
@@ -110,27 +106,20 @@ export function generateStreamId(tokenId: BigInt): string {
   return id;
 }
 
-export function generateStreamAlias(tokenId: BigInt): string {
-  let contract = getContractByAddress(dataSource.address());
+export function generateStreamAlias(tokenId: GraphBigInt): string {
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this event: {}", [dataSource.address().toHexString()]);
     log.error("[SABLIER]", []);
     return "";
   }
 
-  let id = contract.alias
-    .concat("-")
-    .concat(getChainId().toString())
-    .concat("-")
-    .concat(tokenId.toString());
+  const id = contract.alias.concat("-").concat(getChainId().toString()).concat("-").concat(tokenId.toString());
 
   return id;
 }
 
-export function getStreamByIdFromSource(tokenId: BigInt): Stream | null {
-  let id = generateStreamId(tokenId);
+export function getStreamByIdFromSource(tokenId: GraphBigInt): Stream | null {
+  const id = generateStreamId(tokenId);
   return Stream.load(id);
 }

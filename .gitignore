@@ -1,16 +1,13 @@
 # Builds
-**/artifacts
-**/benchmarks
-**/build
-**/lib
-**/static
 **/generated
-**/subgraph.yaml
 !**/_generated
+**/config.yaml
+**/subgraph.yaml
 
 # Node.js
 **/node_modules
 **/.eslintcache
+**/pnpm-lock.yaml
 
 # Logs
 **/logs

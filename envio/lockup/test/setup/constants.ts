@@ -22,11 +22,8 @@ export const _configurations = (
 > => ({
   [CHAIN_SEPOLIA_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-lockup-experimental/version/latest",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-lockup-experimental/version/latest",
     },
     token: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
     recipient: "0xf31b00e025584486f7c37cf0ae0073c97c12c634",
@@ -44,11 +41,8 @@ export const _configurations = (
   },
   [CHAIN_ETHEREUM_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-v2/version/latest/",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-v2/version/latest/",
     },
     token: "0x3bd7d4f524d09f4e331577247a048d56e4b67a7f",
     recipient: "0x0ed07480ce890937bdd6c9ea442a1a88d78727d5",
@@ -62,11 +56,8 @@ export const _configurations = (
   },
   [CHAIN_OPTIMISM_ID]: {
     endpoint: {
-      Envio: REMOTE
-        ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
-        : "http://localhost:8080/v1/graphql",
-      TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-v2-optimism/version/latest",
+      Envio: REMOTE ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql` : "http://localhost:8080/v1/graphql",
+      TheGraph: "https://api.studio.thegraph.com/query/57079/sablier-v2-optimism/version/latest",
     },
     token: "0x1e925de1c68ef83bd98ee3e130ef14a50309c01b",
     recipient: "0xf748879edbe8cca140940788163d7be4d2a2e46a",

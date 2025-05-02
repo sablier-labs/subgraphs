@@ -1,10 +1,10 @@
 import { Address } from "@graphprotocol/graph-ts";
+import { getContractsFlow } from "../constants";
 import { ContractFlow as FlowTemplate } from "../generated/types/templates";
-import {
+import type {
   CreateFlowStream as EventCreate,
   TransferAdmin as EventTransferAdmin,
 } from "../generated/types/templates/ContractFlow/SablierFlow";
-import { getContractsFlow } from "../constants";
 import { createContract, getOrCreateWatcher } from "../helpers";
 
 /**
@@ -12,15 +12,14 @@ import { createContract, getOrCreateWatcher } from "../helpers";
  */
 
 export function handleInitializer(): void {
-  let watcher = getOrCreateWatcher();
+  const watcher = getOrCreateWatcher();
   if (watcher.initialized) {
     return;
-  } else {
-    watcher.initialized = true;
-    watcher.save();
   }
+  watcher.initialized = true;
+  watcher.save();
 
-  let flowList = getContractsFlow();
+  const flowList = getContractsFlow();
   if (flowList.length > 0) {
     for (let i = 0; i < flowList.length; i++) {
       const address = Address.fromString(flowList[i][0]);

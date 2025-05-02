@@ -1,18 +1,3 @@
-import type {
-  Action,
-  CreateDynamicHandler,
-  CreateDynamicLoader,
-  CreateDynamicMergedHandler,
-  CreateDynamicMergedLoader,
-  CreateLinearHandler,
-  CreateLinearLoader,
-  CreateLinearMergedHandler,
-  CreateLinearMergedLoader,
-  CreateTranchedHandler,
-  CreateTranchedLoader,
-  CreateTranchedMergedHandler,
-  CreateTranchedMergedLoader,
-} from "../types";
 import { LockupV20, LockupV21, LockupV22, LockupV23 } from "../../generated";
 import { ActionCategory } from "../constants";
 import {
@@ -32,6 +17,21 @@ import {
   getOrCreateBatcher,
   initialize,
 } from "../helpers";
+import type {
+  Action,
+  CreateDynamicHandler,
+  CreateDynamicLoader,
+  CreateDynamicMergedHandler,
+  CreateDynamicMergedLoader,
+  CreateLinearHandler,
+  CreateLinearLoader,
+  CreateLinearMergedHandler,
+  CreateLinearMergedLoader,
+  CreateTranchedHandler,
+  CreateTranchedLoader,
+  CreateTranchedMergedHandler,
+  CreateTranchedMergedLoader,
+} from "../types";
 
 async function loader(
   input:
@@ -78,23 +78,13 @@ async function handlerDynamic(input: CreateDynamicHandler<typeof loader>) {
 
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
@@ -126,7 +116,7 @@ async function handlerDynamic(input: CreateDynamicHandler<typeof loader>) {
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,
@@ -159,51 +149,28 @@ async function handlerDynamic(input: CreateDynamicHandler<typeof loader>) {
   await context.Watcher.set(watcher);
 }
 
-async function handlerDynamicMerged(
-  input: CreateDynamicMergedHandler<typeof loader>,
-) {
+async function handlerDynamicMerged(input: CreateDynamicMergedHandler<typeof loader>) {
   const { context, event, loaderReturn: loaded } = input;
 
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(
-      event,
-      event.params.commonParams[4],
-      context.Asset.get,
-    ));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(
-      event,
-      event.params.commonParams[1],
-      context.Batcher.get,
-    ));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.commonParams[4], context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.commonParams[1], context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
-  let { stream, segments, ...post_create } = await createDynamicMergedStream(
-    event,
-    {
-      asset,
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  let { stream, segments, ...post_create } = await createDynamicMergedStream(event, {
+    asset,
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -225,7 +192,7 @@ async function handlerDynamicMerged(
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,
@@ -263,23 +230,13 @@ async function handlerLinear(input: CreateLinearHandler<typeof loader>) {
 
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
@@ -311,7 +268,7 @@ async function handlerLinear(input: CreateLinearHandler<typeof loader>) {
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,
@@ -338,38 +295,18 @@ async function handlerLinear(input: CreateLinearHandler<typeof loader>) {
   await context.Watcher.set(watcher);
 }
 
-async function handlerLinearMerged(
-  input: CreateLinearMergedHandler<typeof loader>,
-) {
+async function handlerLinearMerged(input: CreateLinearMergedHandler<typeof loader>) {
   const { context, event, loaderReturn: loaded } = input;
 
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(
-      event,
-      event.params.commonParams[4],
-      context.Asset.get,
-    ));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(
-      event,
-      event.params.commonParams[1],
-      context.Batcher.get,
-    ));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.commonParams[4], context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.commonParams[1], context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
@@ -401,7 +338,7 @@ async function handlerLinearMerged(
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,
@@ -432,23 +369,13 @@ async function handlerTranched(input: CreateTranchedHandler<typeof loader>) {
   const { context, event, loaderReturn: loaded } = input;
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.asset, context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.sender, context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
@@ -480,7 +407,7 @@ async function handlerTranched(input: CreateTranchedHandler<typeof loader>) {
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,
@@ -513,50 +440,27 @@ async function handlerTranched(input: CreateTranchedHandler<typeof loader>) {
   await context.Watcher.set(watcher);
 }
 
-async function handlerTranchedMerged(
-  input: CreateTranchedMergedHandler<typeof loader>,
-) {
+async function handlerTranchedMerged(input: CreateTranchedMergedHandler<typeof loader>) {
   const { context, event, loaderReturn: loaded } = input;
   /** ------- Initialize -------- */
 
-  let { watcher, contract, contracts } = await initialize(
-    event,
-    context.Watcher.get,
-    context.Contract.get,
-    loaded,
-  );
+  let { watcher, contract, contracts } = await initialize(event, context.Watcher.get, context.Contract.get, loaded);
 
   /** ------- Fetch -------- */
 
-  let asset =
-    loaded.asset ??
-    (await getOrCreateAsset(
-      event,
-      event.params.commonParams[4],
-      context.Asset.get,
-    ));
-  let batcher =
-    loaded.batcher ??
-    (await getOrCreateBatcher(
-      event,
-      event.params.commonParams[1],
-      context.Batcher.get,
-    ));
-  let batch =
-    loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
+  const asset = loaded.asset ?? (await getOrCreateAsset(event, event.params.commonParams[4], context.Asset.get));
+  let batcher = loaded.batcher ?? (await getOrCreateBatcher(event, event.params.commonParams[1], context.Batcher.get));
+  let batch = loaded.batch ?? (await getOrCreateBatch(event, batcher, context.Batch.get));
 
   /** ------- Process -------- */
 
-  let { stream, tranches, ...post_create } = await createTranchedMergedStream(
-    event,
-    {
-      asset,
-      batch,
-      batcher,
-      contract,
-      watcher,
-    },
-  );
+  let { stream, tranches, ...post_create } = await createTranchedMergedStream(event, {
+    asset,
+    batch,
+    batcher,
+    contract,
+    watcher,
+  });
 
   batch = post_create.batch;
   batcher = post_create.batcher;
@@ -578,7 +482,7 @@ async function handlerTranchedMerged(
 
   /** ------- Non-Cancelable -------- */
 
-  if (stream.cancelable == false) {
+  if (stream.cancelable === false) {
     stream = {
       ...stream,
       renounceAction_id: action.id,

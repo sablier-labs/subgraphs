@@ -1,9 +1,9 @@
 import { chains as generator_lockup } from "../_generated/original/bundles/lockup-envio";
 import { chains as generator_merkle } from "../_generated/original/bundles/merkle-envio";
 
-export const ADDRESS_ZERO = String(
-  "0x0000000000000000000000000000000000000000",
-);
+export const ADDRESS_ZERO = String("0x0000000000000000000000000000000000000000");
+export const NULL_BYTE = String.fromCharCode(0);
+export const NULL_BYTE_REGEX = new RegExp(NULL_BYTE, "g");
 
 export const StreamVersion = {
   V20: "V20",
@@ -40,50 +40,32 @@ export function configuration(chainId: number | string | bigint) {
 
   return {
     ...configuration,
-    contracts: [
-      ...configuration.V21.factory,
-      ...configuration.V22.factory,
-      ...configuration.V23.factory,
-    ],
+    contracts: [...configuration.V21.factory, ...configuration.V22.factory, ...configuration.V23.factory],
   };
 }
 
-export function isWhitelistedShape(
-  chainId: number | string | bigint,
-  address: string,
-) {
-  const configuration = generator_lockup().find(
-    (c) => String(c.id) === chainId.toString(),
-  );
+export function isWhitelistedShape(chainId: number | string | bigint, address: string) {
+  const configuration = generator_lockup().find((c) => String(c.id) === chainId.toString());
   if (!configuration) {
     throw new Error("Missing chain configuration");
   }
 
-  const contracts = [
-    configuration?.V20,
-    configuration?.V21,
-    configuration?.V22,
-    configuration?.V23,
-  ]
-    .map((item) => [
-      ...(item?.linear || []),
-      ...(item?.dynamic || []),
-      ...(item?.tranched || []),
-      ...(item?.merged || []),
-    ])
-    .flat();
+  const contracts = [configuration?.V20, configuration?.V21, configuration?.V22, configuration?.V23].flatMap((item) => [
+    ...(item?.linear || []),
+    ...(item?.dynamic || []),
+    ...(item?.tranched || []),
+    ...(item?.merged || []),
+  ]);
 
   const addresses = contracts.map((c) => c.address.toLowerCase());
 
   return addresses.includes(address.toLowerCase());
 }
 
-export type ActionCategory =
-  (typeof ActionCategory)[keyof typeof ActionCategory];
+export type ActionCategory = (typeof ActionCategory)[keyof typeof ActionCategory];
 
 export type CacheCategory = (typeof CacheCategory)[keyof typeof CacheCategory];
 
-export type StreamCategory =
-  (typeof StreamCategory)[keyof typeof StreamCategory];
+export type StreamCategory = (typeof StreamCategory)[keyof typeof StreamCategory];
 
 export type StreamVersion = (typeof StreamVersion)[keyof typeof StreamVersion];

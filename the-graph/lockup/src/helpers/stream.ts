@@ -1,9 +1,9 @@
-import { BigInt, dataSource, ethereum, log } from "@graphprotocol/graph-ts";
-import { Stream } from "../generated/types/schema";
-import { CreateLockupDynamicStream as EventCreateDynamic } from "../generated/types/templates/ContractLockupDynamic/SablierLockupDynamic";
-import { CreateLockupLinearStream as EventCreateLinear } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
-import { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
+import { type BigInt as GraphBigInt, dataSource, type ethereum, log } from "@graphprotocol/graph-ts";
 import { getChainId, one, zero } from "../constants";
+import { Stream } from "../generated/types/schema";
+import type { CreateLockupDynamicStream as EventCreateDynamic } from "../generated/types/templates/ContractLockupDynamic/SablierLockupDynamic";
+import type { CreateLockupLinearStream as EventCreateLinear } from "../generated/types/templates/ContractLockupLinear/SablierLockupLinear";
+import type { CreateLockupTranchedStream as EventCreateTranched } from "../generated/types/templates/ContractLockupTranched/SablierLockupTranched";
 import { getOrCreateAsset } from "./asset";
 import { getOrCreateBatch } from "./batch";
 import { getContractByAddress } from "./contract";
@@ -12,28 +12,27 @@ import { createSegments } from "./segments";
 import { createTranches } from "./tranches";
 import { getOrCreateWatcher } from "./watcher";
 
-function createStream(tokenId: BigInt, event: ethereum.Event): Stream | null {
-  let watcher = getOrCreateWatcher();
-  let contract = getContractByAddress(dataSource.address());
+function createStream(tokenId: GraphBigInt, event: ethereum.Event): Stream | null {
+  const watcher = getOrCreateWatcher();
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this create event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this create event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
     return null;
   }
 
   /** --------------- */
-  let id = generateStreamId(tokenId);
+  const id = generateStreamId(tokenId);
   if (id == null) {
     return null;
   }
 
-  let alias = generateStreamAlias(tokenId);
+  const alias = generateStreamAlias(tokenId);
 
   /** --------------- */
-  let entity = new Stream(id);
+  const entity = new Stream(id);
   /** --------------- */
   entity.tokenId = tokenId;
   entity.alias = alias;
@@ -67,19 +66,18 @@ function createStream(tokenId: BigInt, event: ethereum.Event): Stream | null {
 }
 
 export function createLinearStream(event: EventCreateLinear): Stream | null {
-  let tokenId = event.params.streamId;
-  let entity = createStream(tokenId, event);
+  const tokenId = event.params.streamId;
+  const entity = createStream(tokenId, event);
 
   if (entity == null) {
     return null;
   }
 
-  let contract = getContractByAddress(dataSource.address());
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this create event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this create event: {}", [
+      dataSource.address().toHexString(),
+    ]);
     log.error("[SABLIER]", []);
     return null;
   }
@@ -101,11 +99,11 @@ export function createLinearStream(event: EventCreateLinear): Stream | null {
   entity.cancelable = event.params.cancelable;
 
   /** --------------- */
-  let deposit = event.params.amounts.deposit;
-  let duration = event.params.range.end.minus(event.params.range.start);
+  const deposit = event.params.amounts.deposit;
+  const duration = event.params.range.end.minus(event.params.range.start);
 
   /** --------------- */
-  let cliff = event.params.range.cliff.minus(event.params.range.start);
+  const cliff = event.params.range.cliff.minus(event.params.range.start);
 
   /** Cliff logic for <V22, anything above will be handled in the gateway */
   if (!cliff.isZero()) {
@@ -119,23 +117,23 @@ export function createLinearStream(event: EventCreateLinear): Stream | null {
   entity.duration = duration;
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.asset);
+  const asset = getOrCreateAsset(event.params.asset);
   entity.asset = asset.id;
 
   /** --------------- */
-  let batch = getOrCreateBatch(event, event.params.sender);
+  const batch = getOrCreateBatch(event, event.params.sender);
   entity.batch = batch.id;
   entity.position = batch.size.minus(one);
 
   /** --------------- */
-  let resolved = bindProxyOwner(entity);
+  const resolved = bindProxyOwner(entity);
 
   resolved.save();
   return resolved;
 }
 
 export function createDynamicStream(event: EventCreateDynamic): Stream | null {
-  let tokenId = event.params.streamId;
+  const tokenId = event.params.streamId;
   let entity = createStream(tokenId, event);
 
   if (entity == null) {
@@ -162,11 +160,11 @@ export function createDynamicStream(event: EventCreateDynamic): Stream | null {
   entity.duration = event.params.range.end.minus(event.params.range.start);
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.asset);
+  const asset = getOrCreateAsset(event.params.asset);
   entity.asset = asset.id;
 
   /** --------------- */
-  let batch = getOrCreateBatch(event, event.params.sender);
+  const batch = getOrCreateBatch(event, event.params.sender);
   entity.batch = batch.id;
   entity.position = batch.size.minus(one);
 
@@ -177,16 +175,14 @@ export function createDynamicStream(event: EventCreateDynamic): Stream | null {
   entity = createSegments(entity, event);
 
   /** --------------- */
-  let resolved = bindProxyOwner(entity);
+  const resolved = bindProxyOwner(entity);
 
   resolved.save();
   return resolved;
 }
 
-export function createTranchedStream(
-  event: EventCreateTranched,
-): Stream | null {
-  let tokenId = event.params.streamId;
+export function createTranchedStream(event: EventCreateTranched): Stream | null {
+  const tokenId = event.params.streamId;
   let entity = createStream(tokenId, event);
 
   if (entity == null) {
@@ -210,16 +206,14 @@ export function createTranchedStream(
   entity.cancelable = event.params.cancelable;
   entity.cliff = false;
 
-  entity.duration = event.params.timestamps.end.minus(
-    event.params.timestamps.start,
-  );
+  entity.duration = event.params.timestamps.end.minus(event.params.timestamps.start);
 
   /** --------------- */
-  let asset = getOrCreateAsset(event.params.asset);
+  const asset = getOrCreateAsset(event.params.asset);
   entity.asset = asset.id;
 
   /** --------------- */
-  let batch = getOrCreateBatch(event, event.params.sender);
+  const batch = getOrCreateBatch(event, event.params.sender);
   entity.batch = batch.id;
   entity.position = batch.size.minus(one);
 
@@ -230,7 +224,7 @@ export function createTranchedStream(
   entity = createTranches(entity, event);
 
   /** --------------- */
-  let resolved = bindProxyOwner(entity);
+  const resolved = bindProxyOwner(entity);
 
   resolved.save();
   return resolved;
@@ -240,18 +234,15 @@ export function createTranchedStream(
 /** --------------------------------------------------------------------------------------------------------- */
 /** --------------------------------------------------------------------------------------------------------- */
 
-export function generateStreamId(tokenId: BigInt): string {
-  let contract = getContractByAddress(dataSource.address());
+export function generateStreamId(tokenId: GraphBigInt): string {
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this event: {}", [dataSource.address().toHexString()]);
     log.error("[SABLIER]", []);
     return "";
   }
 
-  let id = ""
+  const id = ""
     .concat(contract.address.toHexString())
     .concat("-")
     .concat(getChainId().toString())
@@ -261,27 +252,20 @@ export function generateStreamId(tokenId: BigInt): string {
   return id;
 }
 
-export function generateStreamAlias(tokenId: BigInt): string {
-  let contract = getContractByAddress(dataSource.address());
+export function generateStreamAlias(tokenId: GraphBigInt): string {
+  const contract = getContractByAddress(dataSource.address());
   if (contract == null) {
-    log.info(
-      "[SABLIER] Contract hasn't been registered before this event: {}",
-      [dataSource.address().toHexString()],
-    );
+    log.info("[SABLIER] Contract hasn't been registered before this event: {}", [dataSource.address().toHexString()]);
     log.error("[SABLIER]", []);
     return "";
   }
 
-  let id = contract.alias
-    .concat("-")
-    .concat(getChainId().toString())
-    .concat("-")
-    .concat(tokenId.toString());
+  const id = contract.alias.concat("-").concat(getChainId().toString()).concat("-").concat(tokenId.toString());
 
   return id;
 }
 
-export function getStreamByIdFromSource(tokenId: BigInt): Stream | null {
-  let id = generateStreamId(tokenId);
+export function getStreamByIdFromSource(tokenId: GraphBigInt): Stream | null {
+  const id = generateStreamId(tokenId);
   return Stream.load(id);
 }

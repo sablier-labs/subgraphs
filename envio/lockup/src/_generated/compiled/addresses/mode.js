@@ -12,18 +12,10 @@ exports.hypersync = "https://mode.hypersync.xyz";
  * Keep aliases unique and always in sync with the frontend
  * @example export let linear = [[address1, alias1, version1], [address2, alias2, version2]]
  */
-exports.linear = [
-    ["0xd8c65bd7cb6924ef895b2edca03407c652f5a2c5", "LL3", "V22"],
-];
-exports.dynamic = [
-    ["0x704552099f5ad679294d337638b9a57fd4726f52", "LD3", "V22"],
-];
-exports.tranched = [
-    ["0xbbfa51a10be68714fa33281646b986dae9f52021", "LT3", "V22"],
-];
-exports.merged = [
-    ["0x3aebadfc423fd08be4715986f68d5e9a597ec974", "LK", "V23"],
-];
+exports.linear = [["0xd8c65bd7cb6924ef895b2edca03407c652f5a2c5", "LL3", "V22"]];
+exports.dynamic = [["0x704552099f5ad679294d337638b9a57fd4726f52", "LD3", "V22"]];
+exports.tranched = [["0xbbfa51a10be68714fa33281646b986dae9f52021", "LT3", "V22"]];
+exports.merged = [["0x3aebadfc423fd08be4715986f68d5e9a597ec974", "LK", "V23"]];
 exports.flow = [
     ["0x75970dde488431fc4961494569def3269f20d6b3", "FL", "V10"],
     ["0xc968e8eefe19bd6de8868df40d9740be127a172a", "FL2", "V11"],

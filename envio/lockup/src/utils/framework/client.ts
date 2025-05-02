@@ -1,4 +1,4 @@
-import { createPublicClient, fallback, http } from "viem";
+import { http, createPublicClient, fallback } from "viem";
 import { chains } from "../../constants";
 
 const clients = chains
@@ -11,15 +11,10 @@ const clients = chains
           multicall: true,
         },
         chain: definition,
-        transport: fallback(
-          [...(definition.rpcUrls.default.http || []), ...RPCs].map((e) =>
-            http(e),
-          ) || [],
-          {
-            rank: false,
-            retryCount: 5,
-          },
-        ),
+        transport: fallback([...(definition.rpcUrls.default.http || []), ...RPCs].map((e) => http(e)) || [], {
+          rank: false,
+          retryCount: 5,
+        }),
       });
 
       if (client !== undefined && client?.chain?.id !== undefined) {
@@ -32,9 +27,7 @@ const clients = chains
   .filter((client) => client);
 
 export function getClient(chainId: number | string | bigint) {
-  const client = clients.find(
-    (c) => c?.chain?.id.toString() === chainId.toString(),
-  );
+  const client = clients.find((c) => c?.chain?.id.toString() === chainId.toString());
 
   if (!client) {
     console.error(clients);

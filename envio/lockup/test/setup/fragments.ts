@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 
-export const ContractFragment_Envio = gql/* GraphQL */ `
+export const ContractFragment_Envio = gql /* GraphQL */`
   fragment ContractFragment on Contract {
     id
     address
@@ -9,7 +9,7 @@ export const ContractFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const ActionFragment_Envio = gql/* GraphQL */ `
+export const ActionFragment_Envio = gql /* GraphQL */`
   fragment ActionFragment on Action {
     id
     chainId
@@ -32,7 +32,7 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const BatchFragment_Envio = gql/* GraphQL */ `
+export const BatchFragment_Envio = gql /* GraphQL */`
   fragment BatchFragment on Batch {
     id
     label
@@ -40,7 +40,7 @@ export const BatchFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const SegmentFragment_Envio = gql/* GraphQL */ `
+export const SegmentFragment_Envio = gql /* GraphQL */`
   fragment SegmentFragment on Segment {
     id
     position
@@ -54,7 +54,7 @@ export const SegmentFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const AssetFragment_Envio = gql/* GraphQL */ `
+export const AssetFragment_Envio = gql /* GraphQL */`
   fragment AssetFragment on Asset {
     id
     address
@@ -65,7 +65,7 @@ export const AssetFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const TrancheFragment_Envio = gql/* GraphQL */ `
+export const TrancheFragment_Envio = gql /* GraphQL */`
   fragment TrancheFragment on Tranche {
     id
     position
@@ -78,7 +78,7 @@ export const TrancheFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const StreamFragment_Envio = gql/* GraphQL */ `
+export const StreamFragment_Envio = gql /* GraphQL */`
   fragment StreamFragment on Stream {
     id
     tokenId
@@ -129,7 +129,7 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
   }
 `;
 
-export const ContractFragment_TheGraph = gql/* GraphQL */ `
+export const ContractFragment_TheGraph = gql /* GraphQL */`
   fragment ContractFragment on Contract {
     id
     address
@@ -138,7 +138,7 @@ export const ContractFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const ActionFragment_TheGraph = gql/* GraphQL */ `
+export const ActionFragment_TheGraph = gql /* GraphQL */`
   fragment ActionFragment on Action {
     id
     chainId
@@ -161,7 +161,7 @@ export const ActionFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const BatchFragment_TheGraph = gql/* GraphQL */ `
+export const BatchFragment_TheGraph = gql /* GraphQL */`
   fragment BatchFragment on Batch {
     id
     label
@@ -169,7 +169,7 @@ export const BatchFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const SegmentFragment_TheGraph = gql/* GraphQL */ `
+export const SegmentFragment_TheGraph = gql /* GraphQL */`
   fragment SegmentFragment on Segment {
     id
     position
@@ -183,7 +183,7 @@ export const SegmentFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const AssetFragment_TheGraph = gql/* GraphQL */ `
+export const AssetFragment_TheGraph = gql /* GraphQL */`
   fragment AssetFragment on Asset {
     id
     address
@@ -194,7 +194,7 @@ export const AssetFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const TrancheFragment_TheGraph = gql/* GraphQL */ `
+export const TrancheFragment_TheGraph = gql /* GraphQL */`
   fragment TrancheFragment on Tranche {
     id
     position
@@ -207,7 +207,7 @@ export const TrancheFragment_TheGraph = gql/* GraphQL */ `
   }
 `;
 
-export const StreamFragment_TheGraph = gql/* GraphQL */ `
+export const StreamFragment_TheGraph = gql /* GraphQL */`
   fragment StreamFragment on Stream {
     id
     tokenId
