@@ -1,5 +1,5 @@
 {
-  "name": "@sablier/indexers-graph-lockup",
+  "name": "@indexers/the-graph-lockup",
   "description": "The Graph indexer for Sablier Lockup",
   "version": "1.0.0",
   "author": {
@@ -8,11 +8,6 @@
   },
   "bugs": {
     "url": "https://github.com/sablier-labs/indexers/issues"
-  },
-  "config": {
-    "dir_chains": "../../constants/src/addresses",
-    "dir_generated": "src/generated",
-    "flags_deploy": "--ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
@@ -35,13 +30,13 @@
     "url": "https://github.com/sablier-labs/indexers.git"
   },
   "scripts": {
-    "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
-    "clean-generated": "rimraf $npm_package_config_dir_generated",
+    "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml",
+    "clean-generated": "rimraf src/generated",
     "clean-modules": "rimraf node_modules",
     "prettier:check": "prettier --check --cache --ignore-path ../../.prettierignore \"**/*.{md,yaml,yml}\"",
     "prettier:write": "prettier --write --cache --ignore-path ../../.prettierignore --log-level warn \"**/*.{md,yaml,yml}\"",
     "build": "graph build",
-    "codegen": "graph codegen --output-dir $npm_package_config_dir_generated/types/",
+    "codegen": "graph codegen --output-dir src/generated/types/",
     "create-external:lightlink": "graph create --node https://graph.pegasus.lightlink.io/rpc lightlink/sablier-lockup-lightlink",
     "create-external:ultra": "dotenv -e ./../../.env -- bun run create-external:ultra-command",
     "create-external:ultra-command": "curl --location https://graph.evm.ultra.io --header \"CF-Access-Client-Id: $ULTRA_HEADER_ID\" --header \"CF-Access-Client-Secret: $ULTRA_HEADER_SECRET\" --header \"Content-Type: application/json\" --data '{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"subgraph_create\", \"params\": {\"name\": \"sablier-lockup-ultra\"}}'",
@@ -109,8 +104,8 @@
     "setup:zksync": "bun run clean-generated && CHAIN=zksync bun run setup",
     "setup:zksync-sepolia": "bun run clean-generated && CHAIN=zksync-sepolia bun run setup",
     "template": "bun run template-chain && bun run template-config && bun run template-env",
-    "template-chain": "tsc $npm_package_config_dir_chains/$CHAIN.ts --outDir $npm_package_config_dir_generated",
-    "template-config": "mustache $npm_package_config_dir_generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml",
-    "template-env": "cp $npm_package_config_dir_chains/$CHAIN.ts $npm_package_config_dir_generated/env.ts"
+    "template-chain": "tsc ../../constants/addresses/$CHAIN.ts --outDir src/generated",
+    "template-config": "mustache src/generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml",
+    "template-env": "cp ../../constants/addresses/$CHAIN.ts src/generated/env.ts"
   }
 }

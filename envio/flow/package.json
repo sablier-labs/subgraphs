@@ -1,5 +1,5 @@
 {
-  "name": "@sablier/indexers-envio-flow",
+  "name": "@indexers/envio-flow",
   "description": "Envio indexer for Sablier Flow",
   "version": "1.0.0",
   "author": {
@@ -8,12 +8,6 @@
   },
   "bugs": {
     "url": "https://github.com/sablier-labs/indexers/issues"
-  },
-  "config": {
-    "dir_source": "../../constants/src",
-    "dir_chains": "src/_generated/original",
-    "dir_compiled": "src/_generated/compiled",
-    "dir_generated": "src/_generated"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
@@ -44,8 +38,7 @@
   "scripts": {
     "biome:check": "biome check .",
     "biome:write": "biome check --write .",
-    "clean": "rimraf tsconfig.tsbuildinfo config.yaml build generated $npm_package_config_dir_generated",
-    "clean-generated": "rimraf $npm_package_config_dir_generated && rimraf generated",
+    "clean": "rimraf config.yaml tsconfig.tsbuildinfo",
     "clean-modules": "rimraf node_modules",
     "codegen": "envio codegen",
     "dev": "MAX_BATCH_SIZE=1 && bun run setup && bun run envio dev",
@@ -54,7 +47,7 @@
     "setup": "bun run clean && bun run template && bun run codegen",
     "start": "ts-node generated/src/Index.bs.js",
     "template": "bun run template-move && bun run template-chain && bun run template-config",
-    "template-chain": "tsc --skipLibCheck $npm_package_config_dir_chains/bundles/flow-envio.ts --outDir $npm_package_config_dir_compiled",
+    "template-chain": "tsc ../../constants/bundles/flow-envio.ts --outDir $src/generated",
     "template-config": "mustache $npm_package_config_dir_compiled/bundles/flow-envio.js config.template.mustache > config.yaml",
     "template-move": "mkdir $npm_package_config_dir_generated && cp -R $npm_package_config_dir_source $npm_package_config_dir_chains",
     "test": "bun run jest --verbose",

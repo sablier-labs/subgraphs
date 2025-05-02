@@ -1,0 +1,36 @@
+import { ChainId } from "@sablier/deployments/dist/chains/ids";
+
+const isSupported: Record<number, boolean> = {
+  [ChainId.ABSTRACT]: true,
+  [ChainId.ARBITRUM_ONE]: true,
+  [ChainId.ARBITRUM_SEPOLIA]: true,
+  [ChainId.AVALANCHE]: true,
+  [ChainId.BASE]: true,
+  [ChainId.BASE_SEPOLIA]: true,
+  [ChainId.BERACHAIN]: true,
+  [ChainId.BLAST]: true,
+  [ChainId.BSC]: true,
+  [ChainId.CHILIZ]: true,
+  [ChainId.ETHEREUM]: true,
+  [ChainId.FORM]: true,
+  [ChainId.GNOSIS]: true,
+  [ChainId.IOTEX]: true,
+  [ChainId.LIGHTLINK]: true,
+  [ChainId.LINEA]: true,
+  [ChainId.MODE]: true,
+  [ChainId.MORPH]: true,
+  [ChainId.OP_MAINNET]: true,
+  [ChainId.OP_SEPOLIA]: true,
+  [ChainId.POLYGON]: true,
+  [ChainId.SCROLL]: true,
+  [ChainId.SEI]: true,
+  [ChainId.SUPERSEED]: true,
+  [ChainId.TANGLE]: true,
+  [ChainId.ULTRA]: true,
+  [ChainId.UNICHAIN]: true,
+  [ChainId.XDC]: true,
+  [ChainId.ZK_SYNC_ERA]: true,
+  [ChainId.ZK_SYNC_SEPOLIA]: true,
+};
+
+export default isSupported;

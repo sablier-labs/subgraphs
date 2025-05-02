@@ -1,5 +1,5 @@
 specVersion: 0.0.5
-description: sablier-merkle
+description: The Graph indexer for Sablier Airdrops
 repository: https://github.com/sablier-labs/indexers
 schema:
   file: ./schema.graphql

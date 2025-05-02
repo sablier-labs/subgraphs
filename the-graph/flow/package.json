@@ -1,5 +1,5 @@
 {
-  "name": "@sablier/indexers-graph-flow",
+  "name": "@indexers/the-graph-flow",
   "description": "The Graph indexer for Sablier Flow",
   "version": "2.2.0",
   "author": {
@@ -9,21 +9,20 @@
   "bugs": {
     "url": "https://github.com/sablier-labs/indexers/issues"
   },
-  "config": {
-    "dir_chains": "../../constants/src/addresses",
-    "dir_generated": "src/generated",
-    "flags_deploy": "--ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
-  },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
     "@graphprotocol/graph-cli": "0.96.0",
     "@graphprotocol/graph-ts": "0.38.0",
+    "@indexers/utils": "workspace:*",
+    "@types/handlebars": "^4.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
     "dotenv-cli": "^8.0.0",
+    "handlebars": "^4.7.8",
     "mustache": "^4.2.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
     "typescript": "5.5.2"
   },
   "homepage": "https://github.com/sablier-labs/indexers#readme",
@@ -36,12 +35,12 @@
   },
   "scripts": {
     "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
-    "clean-generated": "rimraf $npm_package_config_dir_generated",
+    "clean-generated": "rimraf src/generated",
     "clean-modules": "rimraf node_modules",
     "prettier:check": "bun run prettier --check --cache --config ../../.prettierrc.yml --ignore-path ../../.prettierignore .",
     "prettier:write": "bun run prettier --write --cache --config ../../.prettierrc.yml --ignore-path ../../.prettierignore --log-level warn .",
     "build": "graph build",
-    "codegen": "graph codegen --output-dir $npm_package_config_dir_generated/types/",
+    "codegen": "graph codegen --output-dir src/generated/types/",
     "create-external:lightlink": "graph create --node https://graph.pegasus.lightlink.io/rpc lightlink/sablier-flow-lightlink",
     "create-external:ultra": "dotenv -e ./../../.env -- bun run create-external:ultra-command",
     "create-external:ultra-command": "curl --location https://graph.evm.ultra.io --header \"CF-Access-Client-Id: $ULTRA_HEADER_ID\" --header \"CF-Access-Client-Secret: $ULTRA_HEADER_SECRET\" --header \"Content-Type: application/json\" --data '{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"subgraph_create\", \"params\": {\"name\": \"sablier-flow-ultra\"}}'",
@@ -107,8 +106,8 @@
     "setup:zksync": "bun run clean-generated && CHAIN=zksync bun run setup",
     "setup:zksync-sepolia": "bun run clean-generated && CHAIN=zksync-sepolia bun run setup",
     "template": "bun run template-chain && bun run template-config && bun run template-env",
-    "template-chain": "tsc $npm_package_config_dir_chains/$CHAIN.ts --outDir $npm_package_config_dir_generated",
-    "template-config": "mustache $npm_package_config_dir_generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml",
-    "template-env": "cp $npm_package_config_dir_chains/$CHAIN.ts $npm_package_config_dir_generated/env.ts"
+    "template-chain": "tsc ../../constants/addresses/$CHAIN.ts --outDir src/generated",
+    "template-config": "mustache src/generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml",
+    "template-env": "cp ../../constants/addresses/$CHAIN.ts src/generated/env.ts"
   }
 }

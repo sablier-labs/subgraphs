@@ -1,5 +1,5 @@
 {
-  "name": "@sablier/indexers-envio-lockup",
+  "name": "@indexers/envio-lockup",
   "description": "Envio indexer for Sablier Lockup",
   "version": "1.0.0",
   "author": {
@@ -54,7 +54,7 @@
     "setup": "bun run clean && bun run template && bun run codegen",
     "start": "ts-node generated/src/Index.bs.js",
     "template": "bun run template-move && bun run template-chain && bun run template-config",
-    "template-chain": "tsc --skipLibCheck $npm_package_config_dir_chains/bundles/lockup-envio.ts --outDir $npm_package_config_dir_compiled",
+    "template-chain": "tsc $npm_package_config_dir_chains/bundles/lockup-envio.ts --outDir $npm_package_config_dir_compiled",
     "template-config": "mustache $npm_package_config_dir_compiled/bundles/lockup-envio.js config.template.mustache > config.yaml",
     "template-move": "mkdir $npm_package_config_dir_generated && cp -R $npm_package_config_dir_source $npm_package_config_dir_chains",
     "test": "bun run jest --verbose",

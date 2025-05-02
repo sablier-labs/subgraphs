@@ -1,6 +1,6 @@
 specVersion: 0.0.5
-description: sablier-v2-flow
-repository: https://github.com/sablier-labs/v2-subgraphs
+description: The Graph indexer for Sablier Flow
+repository: https://github.com/sablier-labs/indexers
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,9 +8,9 @@ dataSources:
     name: ContractInitializer
     network: {{chain}}
     source:
-      address: "{{initializer_flow}}"
+      address: "{{initializerAddress}}"
       abi: SablierFlow
-      startBlock: {{startBlock_flow}}
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

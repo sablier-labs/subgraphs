@@ -1,5 +1,5 @@
 {
-  "name": "@sablier/indexers-graph-merkle",
+  "name": "@indexers/the-graph-merkle",
   "description": "The Graph indexer for Sablier Airdrops",
   "version": "1.0.0",
   "author": {
@@ -8,11 +8,6 @@
   },
   "bugs": {
     "url": "https://github.com/sablier-labs/indexers/issues"
-  },
-  "config": {
-    "dir_chains": "../../constants/src/addresses",
-    "dir_generated": "src/generated",
-    "flags_deploy": "--ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
@@ -36,13 +31,13 @@
   },
   "scripts": {
     "clean": "rimraf tsconfig.tsbuildinfo subgraph.yaml build",
-    "clean-generated": "rimraf $npm_package_config_dir_generated",
+    "clean-generated": "rimraf src/generated",
     "clean-modules": "rimraf node_modules",
     "prettier:check": "prettier --check --cache --ignore-path ../../.prettierignore \"**/*.{md,yaml,yml}\"",
     "prettier:write": "prettier --write --cache --ignore-path ../../.prettierignore --log-level warn \"**/*.{md,yaml,yml}\"",
     "auth": "graph auth",
     "build": "graph build",
-    "codegen": "graph codegen --output-dir $npm_package_config_dir_generated/types/",
+    "codegen": "graph codegen --output-dir src/generated/types/",
     "create-external:lightlink": "graph create --node https://graph.pegasus.lightlink.io/rpc lightlink/sablier-airdrops-lightlink",
     "create-external:ultra": "dotenv -e ./../../.env -- bun run create-external:ultra-command",
     "create-external:ultra-command": "curl --location https://graph.evm.ultra.io --header \"CF-Access-Client-Id: $ULTRA_HEADER_ID\" --header \"CF-Access-Client-Secret: $ULTRA_HEADER_SECRET\" --header \"Content-Type: application/json\" --data '{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"subgraph_create\", \"params\": {\"name\": \"sablier-airdrops-ultra\"}}'",
@@ -108,8 +103,8 @@
     "setup:zksync": "bun run clean-generated && CHAIN=zksync bun run setup",
     "setup:zksync-sepolia": "bun run clean-generated && CHAIN=zksync-sepolia bun run setup",
     "template": "bun run template-chain && bun run template-subgraph && bun run template-env",
-    "template-chain": "tsc $npm_package_config_dir_chains/$CHAIN.ts --outDir $npm_package_config_dir_generated",
-    "template-env": "cp $npm_package_config_dir_chains/$CHAIN.ts $npm_package_config_dir_generated/env.ts",
-    "template-subgraph": "mustache $npm_package_config_dir_generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml"
+    "template-chain": "tsc ../../constants/addresses/$CHAIN.ts --outDir src/generated",
+    "template-env": "cp ../../constants/addresses/$CHAIN.ts src/generated/env.ts",
+    "template-subgraph": "mustache src/generated/$CHAIN.js subgraph.template.yaml > subgraph.yaml"
   }
 }

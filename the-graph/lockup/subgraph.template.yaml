@@ -1,5 +1,5 @@
 specVersion: 0.0.5
-description: sablier-lockup
+description: The Graph indexer for Sablier Lockup
 repository: https://github.com/sablier-labs/indexers
 schema:
   file: ./schema.graphql
