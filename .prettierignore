@@ -1,4 +1,8 @@
-**/generated
+# Directories
+**/build
 **/_generated
+**/generated
+
+# Files
 **/config.yaml
-**/subgraph.yaml
+**/manifests/**/*.yaml

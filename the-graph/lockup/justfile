@@ -1,0 +1,5 @@
+import '../shared/scripts.just'
+
+# Show available commands
+default:
+    @just --list

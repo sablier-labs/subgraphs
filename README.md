@@ -16,14 +16,41 @@ categorized into three main components:
 - [Flow Indexers](https://docs.sablier.com/api/flow/indexers) - Monitor streaming payment flows
 - [Merkle Indexers](https://docs.sablier.com/api/airdrops/indexers) - Manage airdrop distribution data
 
-## For contributors
+## Contributing
 
-### Adding a new chain
+Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion or submit a PR. For
+any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
 
-TODO
+## Pre Requisites
 
-Create a dedicated configuration, and add it in the [Envio bundles](./constants/src/bundles/) and provide a deployment
-script for the subgraphs.
+You will need the following software on your machine:
+
+- [Git](https://git-scm.com/downloads)
+- [Node.Js](https://nodejs.org/en/download)
+- [Bun](https://bun.sh)
+- [Just](https://github.com/casey/just)
+
+## Set Up
+
+Clone this repository:
+
+```shell
+$ git clone git@github.com:sablier-labs/indexers.git && cd indexers
+```
+
+Then, run this to install the Node.js dependencies and build the contracts:
+
+```shell
+$ bun install
+```
+
+Now you can start making changes.
+
+To see a list of all available scripts:
+
+```shell
+$ bun run
+```
 
 ## License
 
