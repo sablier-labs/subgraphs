@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-ignore This is not a proper package since it messes up with imports and package managers. Viem will be implicitly installed.
 import type { Chain } from "viem";
 // @ts-ignore
 import { defineChain } from "viem";

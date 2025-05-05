@@ -6,7 +6,7 @@ exports.chain = "superseed";
 exports.startBlock_lockup = 2896100;
 exports.startBlock_merkle = 2896400;
 exports.startBlock_flow = 3610000;
-exports.hypersync = "https://extrabud.hypersync.xyz";
+exports.hypersync = "https://superseed.hypersync.xyz";
 /** Rule: keep addresses lowercased */
 /**
  * Keep aliases unique and always in sync with the frontend
