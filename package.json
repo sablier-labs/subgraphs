@@ -1,45 +1,36 @@
 {
-  "name": "@sablier/subgraphs",
-  "description": "Official Sablier Subgraphs",
+  "name": "@sablier/indexers",
+  "description": "EVM data indexers for the Sablier Protocol",
   "version": "1.0.0",
   "author": {
     "name": "Sablier Labs Ltd",
     "url": "https://sablier.com"
   },
   "bugs": {
-    "url": "https://github.com/sablier-labs/subgraphs/issues"
+    "url": "https://github.com/sablier-labs/indexers/issues"
   },
-  "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "4.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "eslint": "^8.25.0",
-    "prettier": "^2.8.8",
-    "rimraf": "^5.0.7"
+  "dependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@graphprotocol/graph-cli": "0.96.0",
+    "@graphprotocol/graph-ts": "0.38.0",
+    "@sablier/deployments": "1.0.0-alpha.29",
+    "@types/handlebars": "^4.1",
+    "@types/lodash": "^4.17",
+    "@types/node": "^22.15",
+    "dotenv-cli": "^8.0",
+    "handlebars": "^4.7",
+    "lodash": "^4.17",
+    "mustache": "^4.2",
+    "prettier": "^3.5",
+    "rimraf": "^6.0",
+    "typescript": "5.8.3",
+    "winston": "^3.17.0"
   },
-  "homepage": "https://github.com/sablier-labs/subgraphs#readme",
+  "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
-  "packageManager": "yarn@3.3.1",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/sablier-labs/subgraphs.git"
-  },
-  "scripts": {
-    "g:all-check": "yarn g:prettier-check && yarn g:lint-check",
-    "g:all-fix": "yarn g:prettier-fix && yarn g:lint-fix",
-    "g:auth": "graph auth --product hosted-service",
-    "g:clean": "yarn workspaces foreach --parallel --topological --verbose run clean",
-    "g:clean-modules": "yarn workspaces foreach --parallel --topological --verbose run clean-modules && rimraf node_modules",
-    "g:lint-check": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run lint-check",
-    "g:lint-fix": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run lint-fix",
-    "g:prettier-check": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run prettier-check",
-    "g:prettier-fix": "yarn workspaces foreach --parallel --topological --verbose ${WORKSPACE_FLAGS:-} run prettier-fix"
-  },
-  "workspaces": [
-    "apps/lockup",
-    "apps/merkle",
-    "apps/flow",
-    "packages/*"
-  ]
+    "url": "https://github.com/sablier-labs/indexers.git"
+  }
 }

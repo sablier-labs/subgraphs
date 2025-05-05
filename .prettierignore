@@ -1,13 +1,8 @@
-.yarn
-**/.vscode
-**/.next
+# Directories
 **/build
-**/dist
-**/generated
-**/lib
-**/out
-**/tmp
 **/_generated
+**/generated
 
-apps/*-envio/src/generated
-apps/*-envio/src/_generated
+# Files
+**/config.yaml
+**/manifests/**/*.yaml

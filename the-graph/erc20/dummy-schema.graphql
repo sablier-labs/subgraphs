@@ -1,0 +1,4 @@
+# Dummy schema needed solely for generating the ERC-20 types
+type Asset @entity(immutable: true) {
+  id: ID!
+}

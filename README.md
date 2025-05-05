@@ -1,35 +1,56 @@
 ![Sablier Branding](/assets/banner-subgraphs.png)
 
-# Sablier Subgraphs and Indexers
+# Sablier Indexers
 
-Sablier uses a combination of The Graph subgraphs and Envio indexers as a data API.
+A collection of EVM data indexers for the Sablier Protocol.
 
-In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). For the list of
-endpoints, see the docs for each large feature:
+These indexers serve as the backbone for the [Sablier Interface](https://app.sablier.com), providing real-time data
+access and analytics capabilities.
 
-- [Lockup](https://docs.sablier.com/api/lockup/endpoints)
-- [Flow](https://docs.sablier.com/api/flow/endpoints)
-- [Merkle / Airdrops](https://docs.sablier.com/api/airdrops/endpoints)
+## Documentation
 
-## For contributors
+In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). Our indexers are
+categorized into three main components:
 
-### Adding a new chain
+- [Lockup Indexers](https://docs.sablier.com/api/lockup/indexers) - Track and analyze lockup contract data
+- [Flow Indexers](https://docs.sablier.com/api/flow/indexers) - Monitor streaming payment flows
+- [Merkle Indexers](https://docs.sablier.com/api/airdrops/indexers) - Manage airdrop distribution data
 
-Create a dedicated configuration, and add it in the [Envio bundles](./packages/constants/src/bundles/) and provide a
-deployment script for the subgraphs.
+## Contributing
 
-### Tracking a new address
+Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion or submit a PR. For
+any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
 
-See the [`constants`](./packages/constants) folder. Specify the chain, append the contract, and run the codegen steps to
-make sure everything runs smoothly.
+## Pre Requisites
 
-### Corepack
+You will need the following software on your machine:
 
-Some versions of Node.js may enforce the usage of [corepack](https://nodejs.org/api/corepack.html). Because this
-repository leverages both `yarn` (for the root workspace and in the Graph packages) and `pnpm` (for Envio), Node.js may
-throw a warning due to a missing **exact** `packageManager` entry for `pnpm`. However, this entry should not be added
-because it will mess with Envio's hosted service. We suggest
-[disabling Corepack](https://stackoverflow.com/a/78822612/3873510) to avoid the warning.
+- [Git](https://git-scm.com/downloads)
+- [Node.Js](https://nodejs.org/en/download)
+- [Bun](https://bun.sh)
+- [Just](https://github.com/casey/just)
+
+## Set Up
+
+Clone this repository:
+
+```shell
+$ git clone git@github.com:sablier-labs/indexers.git && cd indexers
+```
+
+Then, run this to install the Node.js dependencies and build the contracts:
+
+```shell
+$ bun install
+```
+
+Now you can start making changes.
+
+To see a list of all available scripts:
+
+```shell
+$ bun run
+```
 
 ## License
 
