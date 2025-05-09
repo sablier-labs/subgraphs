@@ -1,3 +1,6 @@
+# Set default log level if not specified
+export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
+
 # Show available commands
 default:
   @just --list
@@ -15,7 +18,7 @@ check: biome-check prettier-check tsc-check
 
 # Clean build files
 clean:
-  rm -rf **/bindings **/build
+  rm -rf **/bindings **/build **/logs
 
 # Fix all issues
 fix: biome-write prettier-write
@@ -23,6 +26,10 @@ fix: biome-write prettier-write
 # Generate the subgraph manifests using the Handlebars YAML templates
 generate-manifests protocol="" chain_name="":
   bun run scripts/generate-manifests.ts {{protocol}} {{chain_name}}
+
+# List available log levels
+log-levels:
+  @echo "Available log levels: error, warn, info, http, verbose, debug, silly"
 
 # Check markdown and YAML files with Prettier
 prettier-check:

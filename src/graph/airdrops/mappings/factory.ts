@@ -15,13 +15,13 @@ import {
 } from "../bindings/types/templates/ContractMerkleFactory/SablierMerkleFactory";
 import { isWhitelistedShape } from "../config";
 import {
-  createAction,
   createCampaignInstant_V23,
   createCampaignLinear_V21,
   createCampaignLinear_V22,
   createCampaignLinear_V23,
   createCampaignTranched_V22,
   createCampaignTranched_V23,
+  createEntityAction,
 } from "../schema";
 
 export function handleCreateCampaignLL_V21(event: EventCreateCampaignLL_V21): void {
@@ -38,7 +38,7 @@ export function handleCreateCampaignLL_V21(event: EventCreateCampaignLL_V21): vo
   ContractCampaignLL.create(event.params.merkleStreamer);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -61,7 +61,7 @@ export function handleCreateCampaignLL_V22(event: EventCreateCampaignLL_V22): vo
   ContractCampaignLL.create(event.params.merkleLL);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -84,7 +84,7 @@ export function handleCreateCampaignLL_V23(event: EventCreateCampaignLL_V23): vo
   ContractCampaignLL.create(event.params.merkleLL);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -107,7 +107,7 @@ export function handleCreateCampaignLT_V22(event: EventCreateCampaignLT_V22): vo
   ContractCampaignLT.create(event.params.merkleLT);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -130,7 +130,7 @@ export function handleCreateCampaignLT_V23(event: EventCreateCampaignLT_V23): vo
   ContractCampaignLT.create(event.params.merkleLT);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -148,7 +148,7 @@ export function handleCreateCampaignInstant_V23(event: EventCreateCampaignInstan
   ContractCampaignInstant.create(event.params.merkleInstant);
   campaign.save();
 
-  const action = createAction(event, "Create");
+  const action = createEntityAction(event, "Create");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;

@@ -3,10 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 import winston, { format } from "winston";
 
-const LOG_FILE_PATH: string = process.env.LOG_FILE_PATH || "logs/debug.log";
+const REPO_ROOT = path.resolve(__dirname, "..");
 const LOG_LEVEL: string = process.env.LOG_LEVEL || "info";
+const LOG_FILE_PATH: string = process.env.LOG_FILE_PATH || path.join(REPO_ROOT, `logs/${LOG_LEVEL}.log`);
 
-// Create transports array starting with console
 const transports: winston.transport[] = [
   new winston.transports.Console({
     format: format.combine(
@@ -18,7 +18,6 @@ const transports: winston.transport[] = [
   }),
 ];
 
-// Add file transport if LOG_FILE_PATH is set
 if (LOG_FILE_PATH) {
   const logDir = path.dirname(LOG_FILE_PATH);
   if (!fs.existsSync(logDir)) {

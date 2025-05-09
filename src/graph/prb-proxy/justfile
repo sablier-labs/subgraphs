@@ -1,0 +1,2 @@
+codegen:
+  bun run graph codegen manifest.yaml --output-dir bindings

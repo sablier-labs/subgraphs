@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["src/graph/shared/**/bindings/**/*.ts"],
+    "ignore": ["src/graph/erc20/**/bindings", "src/graph/prb-proxy/**/bindings"],
     "include": ["*.graphql", "*.js", "*.json", "*.jsonc", "*.ts"],
     "maxSize": 5242880 // 5MB
   },
@@ -29,13 +29,18 @@
   "organizeImports": {
     "enabled": true
   },
+  /* These are AssemblyScript files, not TypeScript */
   "overrides": [
     {
       "include": ["src/graph/*"],
       "linter": {
         "rules": {
+          "complexity": {
+            "useOptionalChain": "off"
+          },
           "style": {
-            "useImportType": "off"
+            "useImportType": "off",
+            "useTemplate": "off"
           }
         }
       }

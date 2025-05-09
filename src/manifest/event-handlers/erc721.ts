@@ -9,10 +9,19 @@
 import type { Manifest } from "../../types";
 import { resolveEventHandler as resolve } from "../helpers";
 
-const erc721EventHandlers: Manifest.EventHandler[] = [
-  resolve("ERC721", "Approval"),
-  resolve("ERC721", "ApprovalForAll"),
-  resolve("ERC721", "Transfer"),
+const erc721Handlers: Manifest.EventHandler[] = [
+  resolve({
+    contractName: "ERC721",
+    eventName: "Approval",
+  }),
+  resolve({
+    contractName: "ERC721",
+    eventName: "ApprovalForAll",
+  }),
+  resolve({
+    contractName: "ERC721",
+    eventName: "Transfer",
+  }),
 ];
 
-export default erc721EventHandlers;
+export default erc721Handlers;

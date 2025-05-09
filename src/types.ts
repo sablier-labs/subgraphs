@@ -1,13 +1,22 @@
-export declare namespace Manifest {
+/** @see {@link ./graph/flow/manifests/*.yaml} */
+export namespace Manifest {
   export interface ABI {
     name: string;
     file: string;
   }
 
   export interface Context {
+    alias: {
+      data: string;
+      type: "String";
+    };
     chainId: {
       data: number;
-      type: string;
+      type: "BigInt";
+    };
+    version: {
+      data: string;
+      type: "String";
     };
   }
 
@@ -49,5 +58,26 @@ export declare namespace Manifest {
       file: string;
     };
     dataSources: DataSource[];
+  }
+}
+
+export namespace Config {
+  export type ContractList<V extends string> = Array<{
+    contractName: string;
+    versions: V[];
+  }>;
+
+  export namespace Map {
+    interface ComponentMap<T> {
+      [protocol: string]: {
+        [version: string]: {
+          [contractName: string]: T;
+        };
+      };
+    }
+
+    export type Entities = ComponentMap<string[]>;
+    export type ABIEntries = ComponentMap<Manifest.ABI[]>;
+    export type EventHandlers = ComponentMap<Manifest.EventHandler[]>;
   }
 }

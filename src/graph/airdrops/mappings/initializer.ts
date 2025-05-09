@@ -1,14 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { TemplateMerkleFactory } from "../bindings";
 import { getContractsFactory } from "../config";
-import { createFactory, getOrCreateWatcher } from "../schema";
+import { createFactory, getOrCreateEntityWatcher } from "../schema";
 
 /**
  * Use the oldest linear contract as a trigger to start indexing all the other contracts.
  */
 
 export function handleInitializer(_event: ethereum.Event): void {
-  const watcher = getOrCreateWatcher();
+  const watcher = getOrCreateEntityWatcher();
   if (watcher.initialized) {
     return;
   }

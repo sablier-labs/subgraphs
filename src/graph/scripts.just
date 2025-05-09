@@ -9,6 +9,11 @@ auth:
 
 # Build the subgraph
 build:
+  @# @if [ ! -d "bindings" ]; then \
+  @#   echo "bindings directory doesn't exist, running codegen..."; \
+  @#   just codegen; \
+  @# fi
+  just codegen
   bun run graph build manifests/ethereum.yaml
 
 # Clean files

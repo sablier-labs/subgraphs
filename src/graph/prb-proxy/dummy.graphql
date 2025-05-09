@@ -1,0 +1,4 @@
+# Dummy schema needed solely for generating the PRBProxy bindings
+type Proxy @entity(immutable: true) {
+  id: ID!
+}

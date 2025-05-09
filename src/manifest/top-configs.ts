@@ -20,7 +20,7 @@ function get(name: string) {
     description: `The Graph indexer for Sablier ${name}`,
     repository: "https://github.com/sablier-labs/indexers",
     schema: {
-      file: "../schema.graphql", // relative to the `manifests` directory
+      file: "../schema.graphql",
     },
   };
 }

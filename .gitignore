@@ -5,6 +5,7 @@ node_modules
 **/build
 **/generated
 !src/graph/shared/erc20/bindings
+!src/graph/shared/prb-proxy/bindings
 
 # Files
 *.log

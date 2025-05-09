@@ -8,6 +8,12 @@ import type { Manifest } from "../src/types";
 import logger from "../src/winston";
 
 /*//////////////////////////////////////////////////////////////////////////
+                                CONSTANTS
+//////////////////////////////////////////////////////////////////////////*/
+
+const TEMPLATE_DIR = path.join(__dirname, "../src/graph");
+
+/*//////////////////////////////////////////////////////////////////////////
                                     CLI
 //////////////////////////////////////////////////////////////////////////*/
 
@@ -46,11 +52,6 @@ if (require.main === module) {
 
   if (!["flow", "lockup"].includes(protocolArg)) {
     logger.error("❌ Error: Protocol argument must be either 'flow' or 'lockup'");
-    process.exit(1);
-  }
-
-  if (protocolArg === "lockup") {
-    logger.error("❌ Error: The 'lockup' protocol is not supported yet");
     process.exit(1);
   }
 
@@ -98,7 +99,6 @@ function generateManifestFile(
   protocol: "flow" | "lockup",
   chain: (typeof supportedChains)[number],
 ): { success: boolean; error?: string; relativeOutputPath?: string } {
-  const TEMPLATE_DIR = path.join(__dirname, "../src/graph");
   const OUTPUT_DIR = path.join(TEMPLATE_DIR, `${protocol}/manifests`);
 
   try {
@@ -132,10 +132,8 @@ function generateManifestFile(
  * @returns Number of successfully generated manifests
  */
 function generateAllManifests(protocol: "flow" | "lockup"): number {
-  const TEMPLATE_DIR = path.join(__dirname, "../src/graph");
   const OUTPUT_DIR = path.join(TEMPLATE_DIR, `${protocol}/manifests`);
 
-  // Delete existing manifests if requested
   if (fs.existsSync(OUTPUT_DIR)) {
     const files = fs.readdirSync(OUTPUT_DIR);
     let deletedCount = 0;
@@ -150,9 +148,7 @@ function generateAllManifests(protocol: "flow" | "lockup"): number {
     if (deletedCount > 0) {
       logger.verbose(`🗑️  Deleted ${deletedCount} existing manifest${deletedCount !== 1 ? "s" : ""}`);
     }
-  }
-  // Create output directory if it doesn't exist
-  else {
+  } else {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     logger.verbose(`📁 Created directory:      ${getRelative(OUTPUT_DIR)}`);
   }

@@ -1,18 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "lib": ["ESNext"],
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "noEmit": true,
     "noImplicitAny": true,
+    "paths": {
+      "@src": ["src"],
+      "@src/*": ["src/*"]
+    },
     "resolveJsonModule": true,
+    "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext"
   },
   "exclude": ["envio/**/*.ts", "src/graph/**/*.ts"],
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "deprecated/contracts.ts"]
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
 }

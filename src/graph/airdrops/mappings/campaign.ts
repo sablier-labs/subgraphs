@@ -8,16 +8,16 @@ import {
   TransferAdmin as EventTransferAdmin,
 } from "../bindings/types/templates/ContractMerkleFactory/SablierMerkleLL";
 import {
-  createAction,
+  createEntityAction,
   generateCampaignNickname,
   generateStreamIdWithContract,
   getCampaignById,
   getOrCreateActivity,
-  getOrCreateAsset,
+  getOrCreateEntityAsset,
 } from "../schema";
 
 export function handleClaimLockup(event: EventClaimLockup): void {
-  const action = createAction(event, "Claim");
+  const action = createEntityAction(event, "Claim");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -59,7 +59,7 @@ export function handleClaimLockup(event: EventClaimLockup): void {
 }
 
 export function handleClaimInstant(event: EventClaimInstant): void {
-  const action = createAction(event, "Claim");
+  const action = createEntityAction(event, "Claim");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -100,7 +100,7 @@ export function handleClaimInstant(event: EventClaimInstant): void {
 }
 
 export function handleClawback(event: EventClawback): void {
-  const action = createAction(event, "Clawback");
+  const action = createEntityAction(event, "Clawback");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -130,7 +130,7 @@ export function handleTransferAdmin(event: EventTransferAdmin): void {
     return;
   }
 
-  const action = createAction(event, "TransferAdmin");
+  const action = createEntityAction(event, "TransferAdmin");
   if (action == null) {
     logError("Campaign not registered yet, cannot bind action");
     return;
@@ -149,7 +149,7 @@ export function handleTransferAdmin(event: EventTransferAdmin): void {
 
   const nickname = generateCampaignNickname(
     event.params.newAdmin,
-    getOrCreateAsset(Address.fromString(campaign.asset)),
+    getOrCreateEntityAsset(Address.fromString(campaign.asset)),
     campaign.name,
     campaign.version,
   );

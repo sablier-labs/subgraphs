@@ -4,7 +4,7 @@
     "quickfix.biome": "always",
     "source.organizeImports.biome": "always"
   },
-  "[javascript][json][jsonc][typescript]": {
+  "[graphql][javascript][json][jsonc][typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[md][yaml]": {
@@ -16,8 +16,11 @@
   "search.exclude": {
     "**/_generated": true,
     "**/bindings": true,
+    "**/deprecated": true,
     "**/manifests/**/*.yaml": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/src/graph/lockup/bindings": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "asls.include": ["src/the-graph/**/*.ts", "src/the-graph/*.ts"]
 }
