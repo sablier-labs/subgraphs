@@ -2,7 +2,7 @@
   "recommendations": [
     "biomejs.biome",
     "esbenp.prettier-vscode",
-    "kumar-harsh.graphql-for-vscode",
-    "nefrob.vscode-just-syntax"
+    "nefrob.vscode-just-syntax",
+    "orsenkucher.vscode-graphql"
   ]
 }

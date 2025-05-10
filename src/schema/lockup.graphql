@@ -1,6 +1,3 @@
-# ---------------------------------------------------------------------------- #
-#                                      Enums                                   #
-# ---------------------------------------------------------------------------- #
 enum ActionCategory {
   Approval
   ApprovalForAll
@@ -11,214 +8,12 @@ enum ActionCategory {
   Withdraw
 }
 
-enum ContractCategory {
-  LockupDynamic
-  LockupLinear
-  LockupMerged
-  LockupTranched
-}
-
 enum StreamCategory {
   LockupDynamic
   LockupLinear
   LockupTranched
 }
 
-# ---------------------------------------------------------------------------- #
-#                                    Action                                    #
-# ---------------------------------------------------------------------------- #
-type Action @entity {
-  # ------------------------------------ IDs ----------------------------------- #
-  """
-  Unique identifier resolving to transaction hash concatenated with the log index (there may be multiple actions per tx)
-  """
-  id: ID!
-
-  """
-  Unique global id tracked by the subgraph watcher
-  """
-  subgraphId: BigInt!
-
-  # -------------------------------- Transaction ------------------------------- #
-  """
-  Block number of the Ethereum transaction
-  """
-  block: BigInt!
-
-  """
-  The id of the chain, e.g. 137 for Polygon
-  """
-  chainId: BigInt!
-
-  """
-  Hash of the Ethereum transaction that triggered this action
-  """
-  hash: Bytes!
-
-  """
-  Address that triggered the transaction
-  """
-  from: Bytes!
-
-  """
-  Unix timestamp of the Ethereum transaction
-  """
-  timestamp: BigInt!
-
-  # --------------------------------- Metadata ----------------------------------- #
-  """
-  Category of action e.g. Deposit or Withdraw
-  """
-  category: ActionCategory!
-
-  """
-  Contract through which the stream action was triggered
-  """
-  contract: Bytes!
-
-  """
-  Stream linked to this action (or null if this is a contract level action)
-  """
-  stream: Stream
-
-  # --------------------------------- Addresses ---------------------------------- #
-  """
-  Address of an actor, differs based on action type e.g. for Create it resolves to the sender
-  """
-  addressA: Bytes
-
-  """
-  Address of an actor, differs based on action type e.g. for Transfer it resolves to the new recipient
-  """
-  addressB: Bytes
-
-  # ---------------------------------- Amounts ----------------------------------- #
-  """
-  Amount, differs based on action type e.g. for Deposit it resolves to the depositAmount
-  """
-  amountA: BigInt
-
-  """
-  Amount, differs based on action type e.g. for Withdraw it resolves to the refundedAmount
-  """
-  amountB: BigInt
-
-  """
-  Amount, records the fee paid for certain actions, in base asset (e.g. withdraw is payable >V23)
-  """
-  fee: BigInt
-}
-
-# ---------------------------------------------------------------------------- #
-#                                     Asset                                    #
-# ---------------------------------------------------------------------------- #
-type Asset @entity(immutable: true) {
-  """
-  Unique identifier resolving to the ERC20 token address
-  """
-  id: ID!
-
-  """
-  Address of the ERC20 token
-  """
-  address: Bytes!
-
-  """
-  The id of the chain, e.g. 137 for Polygon
-  """
-  chainId: BigInt!
-
-  """
-  Decimals of the ERC20 token
-  """
-  decimals: BigInt!
-
-  """
-  Name of the ERC20 token
-  """
-  name: String!
-
-  """
-  Streams that rely on this token
-  """
-  streams: [Stream!]! @derivedFrom(field: "asset")
-
-  """
-  Symbol of the ERC20 token
-  """
-  symbol: String!
-}
-
-# ---------------------------------------------------------------------------- #
-#                                     Batch                                    #
-# ---------------------------------------------------------------------------- #
-type Batch @entity {
-  """
-  Unique identifier of the batch, resolving to the hash of the parent transaction
-  """
-  id: String!
-
-  # -------------------------------- Transaction ------------------------------- #
-  """
-  Hash of the Ethereum transaction that created this batch
-  """
-  hash: Bytes!
-
-  """
-  Timestamp of the transaction that created this batch
-  """
-  timestamp: BigInt!
-
-  # ------------------------------- Batch Fields ------------------------------- #
-  """
-  Batcher account that started this batch, i.e., the sender
-  """
-  batcher: Batcher
-
-  """
-  Index of the batch resolving to a conditional counter of 2+ stream batches, filtered by sender (label is null for batches containing a single stream, for filtering)
-  """
-  label: String
-
-  """
-  Number of streams that are part of this batch
-  """
-  size: BigInt!
-
-  """
-  Streams that are part of this batch
-  """
-  streams: [Stream!]! @derivedFrom(field: "batch")
-}
-
-# ---------------------------------------------------------------------------- #
-#                                    Batcher                                   #
-# ---------------------------------------------------------------------------- #
-type Batcher @entity {
-  """
-  Unique identifier of the batcher account, i.e., the sender address
-  """
-  id: String!
-
-  """
-  Address of the sender
-  """
-  address: Bytes!
-
-  """
-  Numeric index, will be used to construct the batch label
-  """
-  batchIndex: BigInt!
-
-  """
-  Batches started by this batcher (sender)
-  """
-  batches: [Batch!]! @derivedFrom(field: "batcher")
-}
-
-# ---------------------------------------------------------------------------- #
-#                                    Segment                                   #
-# ---------------------------------------------------------------------------- #
 type Segment @entity {
   """
   Unique identifier: {streamId}-{position}
@@ -272,9 +67,6 @@ type Segment @entity {
   stream: Stream!
 }
 
-# ---------------------------------------------------------------------------- #
-#                                    Stream                                    #
-# ---------------------------------------------------------------------------- #
 type Stream @entity {
   # ------------------------------------ IDs ----------------------------------- #
   """
@@ -493,9 +285,6 @@ type Stream @entity {
   tranches: [Tranche!]! @derivedFrom(field: "stream")
 }
 
-# ---------------------------------------------------------------------------- #
-#                                    Tranche                                   #
-# ---------------------------------------------------------------------------- #
 type Tranche @entity {
   """
   Unique identifier: {streamId}-{position}
@@ -541,39 +330,4 @@ type Tranche @entity {
   Timestamp resolving to the end moment of the tranche
   """
   timestamp: BigInt!
-}
-
-# ---------------------------------------------------------------------------- #
-#                                    Watcher                                   #
-# ---------------------------------------------------------------------------- #
-type Watcher @entity {
-  """
-  Unique identifier for the watcher, resolving to the chainId - there is one watcher for entire subgraph
-  """
-  id: String!
-
-  """
-  Global index for streams
-  """
-  actionIndex: BigInt!
-
-  """
-  Hardcoded chain id
-  """
-  chainId: BigInt!
-
-  """
-  Flag indicating the initialization status of the subgraph
-  """
-  initialized: Boolean!
-
-  """
-  List of logs, for debugging purposes
-  """
-  logs: [String!]!
-
-  """
-  Global index for streams
-  """
-  streamIndex: BigInt!
 }

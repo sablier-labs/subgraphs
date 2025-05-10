@@ -1,0 +1,83 @@
+type Action @entity {
+  # ------------------------------------ ID ------------------------------------ #
+  """
+  Unique identifier resolving to transaction hash concatenated with the log index (there may be multiple actions per tx)
+  """
+  id: ID!
+
+  """
+  Unique global id tracked by the subgraph watcher
+  """
+  subgraphId: BigInt!
+
+  foo: Int!
+
+  # -------------------------------- Transaction ------------------------------- #
+  """
+  Block number of the Ethereum transaction
+  """
+  block: BigInt!
+
+  """
+  The id of the chain, e.g. 137 for Polygon
+  """
+  chainId: BigInt!
+
+  """
+  Hash of the Ethereum transaction that triggered this action
+  """
+  hash: Bytes!
+
+  """
+  Address that triggered the transaction
+  """
+  from: Bytes!
+
+  """
+  Unix timestamp of the Ethereum transaction
+  """
+  timestamp: BigInt!
+
+  # --------------------------------- Metadata --------------------------------- #
+  """
+  Category of action, e.g. Deposit
+  """
+  category: ActionCategory!
+
+  """
+  Contract through which the stream actions was triggered
+  """
+  contract: Bytes!
+
+  """
+  Stream linked to this action (or null if this is a contract level action)
+  """
+  stream: Stream
+
+  # --------------------------------- Addresses -------------------------------- #
+  """
+  Address of an actor, differs based on action type e.g. for Create it resolves to the sender
+  """
+  addressA: Bytes
+
+  """
+  Address of an actor, differs based on action type e.g. for Transfer it resolves to the new recipient
+  """
+  addressB: Bytes
+
+  # ---------------------------------- Amounts --------------------------------- #
+  """
+  Amount, differs based on action type, e.g. for Deposit it resolves to the depositAmount
+  """
+  amountA: BigInt
+
+  """
+  Amount, differs based on action type, e.g. for Withdraw it resolves to the refundedAmount
+  """
+  amountB: BigInt
+
+  """
+  Amount, records the fee paid for certain actions, in base asset (e.g. withdraw is payable >V10)
+  """
+  fee: BigInt
+}

@@ -23,13 +23,27 @@ clean:
 # Fix all issues
 fix: biome-write prettier-write
 
-# Generate the subgraph manifests using the Handlebars YAML templates
-generate-manifests protocol="" chain_name="":
-  bun run scripts/generate-manifests.ts {{protocol}} {{chain_name}}
+# Generate the GraphQL schema and subgraph manifest
+codegen protocol="all" chain_name="":
+  @just codegen-manifest {{protocol}} {{chain_name}}
+  @just codegen-schema {{protocol}}
 
-# List available log levels
-log-levels:
+# Generate the subgraph manifest
+codegen-manifest protocol="all" chain_name="":
+  bun run scripts/codegen-manifest.ts {{protocol}} {{chain_name}}
+
+# Generate the GraphQL schema
+codegen-schema protocol="all":
+  bun run scripts/codegen-schema.ts {{protocol}}
+
+# Print available log levels
+print-log-levels:
   @echo "Available log levels: error, warn, info, http, verbose, debug, silly"
+
+# Print available protocol arguments
+print-protocol-args:
+  @echo "Available protocol arguments: all, flow, lockup, airdrops"
+  @echo "'all' will run the codegen for all protocols"
 
 # Check markdown and YAML files with Prettier
 prettier-check:

@@ -1,5 +1,5 @@
 {
   "extends": "@graphprotocol/graph-ts/types/tsconfig.base.json",
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../codegen-schema.ts"],
   "exclude": ["./airdrops/**/*.ts"]
 }

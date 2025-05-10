@@ -1,14 +1,8 @@
 import "../scripts.just"
 
+# Set protocol name
+export PROTOCOL := "lockup"
+
 # Show available commands
 default:
   @just --list
-
-# Generate bindings
-codegen: clean
-  @just _generate_manifest lockup ethereum
-  bun run graph codegen manifests/ethereum.yaml --output-dir bindings
-
-# Deploy the subgraph
-deploy chain_name:
-  bun run graph deploy sablier-lockup-{{chain_name}}

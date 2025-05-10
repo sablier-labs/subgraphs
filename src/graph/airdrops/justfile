@@ -5,7 +5,7 @@ default:
   @just --list
 
 # Generate bindings
-codegen: clean
+codegen-bindings: clean
   @just generate_manifest airdrops ethereum
   bun run graph codegen manifests/ethereum.yaml --output-dir bindings
 

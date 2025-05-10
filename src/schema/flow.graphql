@@ -1,0 +1,199 @@
+enum ActionCategory {
+  Approval
+  ApprovalForAll
+  Adjust
+  Create
+  Deposit
+  Pause
+  Refund
+  Restart
+  Transfer
+  Void
+  Withdraw
+}
+
+enum StreamCategory {
+  Flow
+}
+
+type Stream @entity {
+  # ------------------------------------ IDs ----------------------------------- #
+  """
+  Unique identifier: {contractAddress}-{chainId}-{tokenId}
+  """
+  id: String!
+
+  """
+  Like the id: {contractAlias}-{chainId}-{tokenId}
+  """
+  alias: String!
+
+  """
+  The id of the chain, e.g. 137 for Polygon
+  """
+  chainId: BigInt!
+
+  """
+  Unique global id as tracked by the subgraph watcher
+  🚨 This may change if new data sources are added and the chronological order of streams changes.
+  """
+  subgraphId: BigInt!
+
+  """
+  Stream id provided by the Flow contract; this is the ERC-721 tokenId
+  """
+  tokenId: BigInt!
+
+  # -------------------------------- Transaction ------------------------------- #
+  """
+  Hash of the Ethereum transaction that created this stream
+  """
+  hash: Bytes!
+
+  """
+  Timestamp of the stream creation (used for sorting)
+  """
+  timestamp: BigInt!
+
+  # ---------------------------------- Actions --------------------------------- #
+  """
+  Actions triggered in the context of this stream
+  """
+  actions: [Action!]! @derivedFrom(field: "stream")
+
+  """
+  Action in which the stream rate per second was adjusted
+  """
+  lastAdjustmentAction: Action
+
+  """
+  Action in which the stream was paused
+  """
+  pausedAction: Action
+
+  """
+  Action in which the stream was voided
+  """
+  voidedAction: Action
+
+  # ----------------------------------- Flow ----------------------------------- #
+  """
+  ERC-20 token distributed via this stream
+  """
+  asset: Asset!
+
+  """
+  Current balance of the stream. (Equals to the ERC20 balanceOf, and it is changed by every deposit and withdraw)
+  """
+  availableAmount: BigInt!
+
+  """
+  The batch the stream is part of, only available when created within a batch create transaction
+  """
+  batch: Batch!
+
+  """
+  Category used for sorting
+  """
+  category: StreamCategory!
+
+  """
+  The Flow contract the stream originates from
+  """
+  contract: Bytes!
+
+  """
+  The address that calls the create method (anyone can create a stream on any sender's behalf)
+  """
+  creator: Bytes!
+
+  """
+  Unix timestamp for the moment until the stream is solvent (not in debt)
+  """
+  depletionTime: BigInt!
+
+  """
+  Amount resolving to the sum of all deposits
+  """
+  depositedAmount: BigInt!
+
+  """
+  Amount resolving to the debt that was forgiven by the void action
+  """
+  forgivenDebt: BigInt!
+
+  """
+  Timestamp of the last adjustment action
+  """
+  lastAdjustmentTimestamp: BigInt!
+
+  """
+  Flag indicating if a stream is paused
+  """
+  paused: Boolean!
+
+  """
+  Unix timestamp of the paused action
+  """
+  pausedTime: BigInt
+
+  """
+  Position in the batch, only available when created within a batch create transaction
+  """
+  position: BigInt!
+
+  """
+  [Scaled 18D] current ratePerSecond of the stream, scaled to 18 decimals
+  """
+  ratePerSecond: BigInt!
+
+  """
+  Current recipient of the stream, can withdraw the funds (the recipient can change on stream/nft transfer)
+  """
+  recipient: Bytes!
+
+  """
+  Amount resolving to the sum of all refunds
+  """
+  refundedAmount: BigInt!
+
+  """
+  Manager of the stream, defined at creation by the funder (usually the same as the funder)
+  """
+  sender: Bytes!
+
+  """
+  [Scaled 18D] amount resolving to the streamed amount up until the ratePerSecond is changed, scaled to 18 decimals
+  """
+  snapshotAmount: BigInt!
+
+  """
+  Unix timestamp for the start of the stream
+  """
+  startTime: BigInt!
+
+  """
+  Flag indicating the transferability of the stream (decided when the stream is created)
+  """
+  transferable: Boolean!
+
+  """
+  Version of Flow contract, e.g. v1.0
+  """
+  version: String!
+
+  """
+  Flag indicating if a stream is voided
+  """
+  voided: Boolean!
+
+  """
+  Unix timestamp of the voided action
+  """
+  voidedTime: BigInt
+
+  """
+  Amount resolving to the sum of all withdrawals
+  """
+  withdrawnAmount: BigInt!
+}

@@ -1,18 +1,8 @@
 import "../scripts.just"
 
+# Set protocol name
+export PROTOCOL := "flow"
+
 # Show available commands
 default:
   @just --list
-
-# Generate bindings
-codegen: clean
-  @just _generate_manifest flow ethereum
-  bun run graph codegen manifests/ethereum.yaml --output-dir bindings
-
-# Deploy the subgraph; you need to run the `auth` command first
-deploy chain_name:
-  bun run graph deploy sablier-flow-{{chain_name}} manifests/{{chain_name}}.yaml
-
-  # Generate the manifest for a specific chain
-generate_manifest chain_name:
-  @just _generate_manifest flow {{chain_name}}

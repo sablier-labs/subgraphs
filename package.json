@@ -13,16 +13,15 @@
     "@biomejs/biome": "1.9.4",
     "@graphprotocol/graph-cli": "0.96.0",
     "@graphprotocol/graph-ts": "0.38.0",
+    "@graphql-tools/load-files": "^7.0.1",
+    "@graphql-tools/merge": "^9.0.24",
     "@sablier/deployments": "1.0.0-alpha.30",
-    "@types/handlebars": "^4.1",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash": "^4.17",
     "@types/node": "^22.15",
-    "callsites": "^4.2.0",
-    "change-case": "4.1.2",
-    "dotenv-cli": "^8.0",
-    "handlebars": "^4.7",
+    "fs-extra": "^11.3.0",
+    "graphql": "^16.11.0",
     "jest": "^29.7.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17",
@@ -38,5 +37,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4"
   }
 }

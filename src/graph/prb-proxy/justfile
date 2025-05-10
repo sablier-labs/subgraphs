@@ -1,2 +1,3 @@
-codegen:
+codegen-bindings:
+  rm -rf bindings
   bun run graph codegen manifest.yaml --output-dir bindings

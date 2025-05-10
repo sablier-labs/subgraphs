@@ -1,0 +1,31 @@
+type Watcher @entity {
+  """
+  The chain ID. There is one watcher per subgraph.
+  """
+  id: String!
+
+  """
+  Global index for actions.
+  """
+  actionIndex: BigInt!
+
+  """
+  The id of the chain, e.g., 137 for Polygon.
+  """
+  chainId: BigInt!
+
+  """
+  Flag indicating the initialization status of the subgraph.
+  """
+  initialized: Boolean!
+
+  """
+  List of logs, for debugging purposes
+  """
+  logs: [String!]!
+
+  """
+  Global index for streams.
+  """
+  streamIndex: BigInt!
+}

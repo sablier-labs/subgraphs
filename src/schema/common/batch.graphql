@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------- #
+#                                     Batch                                    #
+# ---------------------------------------------------------------------------- #
+type Batch @entity {
+  """
+  Unique identifier of the batch, resolving to the hash of the parent transaction
+  """
+  id: String!
+
+  # -------------------------------- Transaction ------------------------------- #
+  """
+  Hash of the Ethereum transaction that created this batch
+  """
+  hash: Bytes!
+
+  """
+  Timestamp of the transaction that created this batch
+  """
+  timestamp: BigInt!
+
+  # ------------------------------- Batch Fields ------------------------------- #
+  """
+  Batcher account that started this batch, i.e., the sender
+  """
+  batcher: Batcher
+
+  """
+  Index of the batch resolving to a conditional counter of 2+ stream batches, filtered by sender
+  Label is null for batches containing a single stream.
+  """
+  label: String
+
+  """
+  Number of streams that are part of this batch
+  """
+  size: BigInt!
+
+  """
+  Streams that are part of this batch
+  """
+  streams: [Stream!]! @derivedFrom(field: "batch")
+}
+
+# ---------------------------------------------------------------------------- #
+#                                    Batcher                                   #
+# ---------------------------------------------------------------------------- #
+type Batcher @entity {
+  """
+  Unique identifier of the batcher account, i.e., the sender address
+  """
+  id: String!
+
+  """
+  Address of the sender
+  """
+  address: Bytes!
+
+  """
+  Numeric index, will be used to construct the batch label
+  """
+  batchIndex: BigInt!
+
+  """
+  Batches started by this batcher (sender)
+  """
+  batches: [Batch!]! @derivedFrom(field: "batcher")
+}

@@ -4,16 +4,16 @@ node_modules
 **/bindings
 **/build
 **/generated
-!src/graph/shared/erc20/bindings
-!src/graph/shared/prb-proxy/bindings
+!src/graph/erc20/bindings
+!src/graph/prb-proxy/bindings
 
 # Files
 *.log
 *.tsbuildinfo
-.env
-.env.*
+.env*
 !.env.example
+config.yaml
 pnpm-lock.yaml
+schema.graphql
 subgraph.yaml
 **/manifests/**/*.yaml
-**/config.yaml

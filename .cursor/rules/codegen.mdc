@@ -1,6 +1,0 @@
----
-description:
-globs: **/*.ts
-alwaysApply: false
----
-If the code edit suggestions include a file that imports things from a "bindings" directory, nevermind those linting errors. Just inform the user about it so that they can run `graph codegen` and generate the appropriate bindings.

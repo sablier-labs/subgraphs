@@ -21,6 +21,5 @@
     "**/node_modules": true,
     "**/src/graph/lockup/bindings": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "asls.include": ["src/the-graph/**/*.ts", "src/the-graph/*.ts"]
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
