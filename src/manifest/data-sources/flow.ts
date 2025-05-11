@@ -1,5 +1,5 @@
 import type { Sablier } from "@sablier/deployments";
-import type { Config, Manifest } from "../../types";
+import type { Config, Manifest } from "@src/types";
 import { createSources } from "./helpers";
 
 const FLOW_CONTRACTS: Config.ContractList<Sablier.Version.Flow> = [

@@ -29,171 +29,173 @@ type Stream @entity {
   alias: String!
 
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g., 137 for Polygon.
   """
   chainId: BigInt!
 
   """
-  Unique global id as tracked by the subgraph watcher
+  Unique global id as tracked by the `Watcher` entity.
   🚨 This may change if new data sources are added and the chronological order of streams changes.
   """
   subgraphId: BigInt!
 
   """
-  Stream id provided by the Flow contract; this is the ERC-721 tokenId
+  The id provided by the Lockup contract. This is the ERC-721 tokenId.
   """
   tokenId: BigInt!
 
   # -------------------------------- Transaction ------------------------------- #
   """
-  Hash of the Ethereum transaction that created this stream
+  Hash of the Ethereum transaction that created this stream.
   """
   hash: Bytes!
 
   """
-  Timestamp of the stream creation (used for sorting)
+  Timestamp of the Ethereum transaction that created this stream.
   """
   timestamp: BigInt!
 
   # ---------------------------------- Actions --------------------------------- #
   """
-  Actions triggered in the context of this stream
+  Actions triggered by this stream.
   """
   actions: [Action!]! @derivedFrom(field: "stream")
 
   """
-  Action in which the stream rate per second was adjusted
+  Action in which the payment rate was adjusted.
   """
   lastAdjustmentAction: Action
 
   """
-  Action in which the stream was paused
+  Action in which the stream was paused.
   """
   pausedAction: Action
 
   """
-  Action in which the stream was voided
+  Action in which the stream was voided.
   """
   voidedAction: Action
 
   # ----------------------------------- Flow ----------------------------------- #
   """
-  ERC-20 token distributed via this stream
+  ERC-20 token distributed via this stream.
   """
   asset: Asset!
 
   """
-  Current balance of the stream. (Equals to the ERC20 balanceOf, and it is changed by every deposit and withdraw)
+  This is equivalent to the value returned by ERC20.balanceOf, and it changes after deposit and withdrawal.
   """
   availableAmount: BigInt!
 
   """
-  The batch the stream is part of, only available when created within a batch create transaction
+  The batch the stream may be part of.
+  Note: this is available only when created within a batch create transaction.
   """
   batch: Batch!
 
   """
-  Category used for sorting
+  Category used for sorting.
   """
   category: StreamCategory!
 
   """
-  The Flow contract the stream originates from
+  The Flow contract the stream originates from.
   """
   contract: Bytes!
 
   """
-  The address that calls the create method (anyone can create a stream on any sender's behalf)
+  The account that created the stream, which can be different from the sender.
   """
   creator: Bytes!
 
   """
-  Unix timestamp for the moment until the stream is solvent (not in debt)
+  Unix timestamp indicating the time when the stream will become insolvent.
   """
   depletionTime: BigInt!
 
   """
-  Amount resolving to the sum of all deposits
+  The sum of all deposits.
   """
   depositedAmount: BigInt!
 
   """
-  Amount resolving to the debt that was forgiven by the void action
+  The amount of debt forgiven by a void action.
   """
   forgivenDebt: BigInt!
 
   """
-  Timestamp of the last adjustment action
+  Unix timestamp for when the payment rate was adjusted.
   """
   lastAdjustmentTimestamp: BigInt!
 
   """
-  Flag indicating if a stream is paused
+  Flag indicating if a stream is paused.
   """
   paused: Boolean!
 
   """
-  Unix timestamp of the paused action
+  Unix timestamp for when the stream was paused.
   """
   pausedTime: BigInt
 
   """
-  Position in the batch, only available when created within a batch create transaction
+  Position in the batch, if available.
   """
   position: BigInt!
 
   """
-  [Scaled 18D] current ratePerSecond of the stream, scaled to 18 decimals
+  Current payment rate per second, denominated in 18 decimals.
   """
   ratePerSecond: BigInt!
 
   """
-  Current recipient of the stream, can withdraw the funds (the recipient can change on stream/nft transfer)
+  Current recipient of the stream, with permission to withdraw funds to any third-party address.
+  Note: the recipient can change on NFT transfer.
   """
   recipient: Bytes!
 
   """
-  Amount resolving to the sum of all refunds
+  The sum of all refunds.
   """
   refundedAmount: BigInt!
 
   """
-  Manager of the stream, defined at creation by the funder (usually the same as the funder)
+  Manager of the stream, defined at creation by the creator. This is usually the same as the creator.
   """
   sender: Bytes!
 
   """
-  [Scaled 18D] amount resolving to the streamed amount up until the ratePerSecond is changed, scaled to 18 decimals
+  The amount streamed up until the time of the last adjustment, denominated in 18 decimals.
   """
   snapshotAmount: BigInt!
 
   """
-  Unix timestamp for the start of the stream
+  Unix timestamp for the start of the stream.
   """
   startTime: BigInt!
 
   """
-  Flag indicating the transferability of the stream (decided when the stream is created)
+  Flag indicating the transferability of the stream. This is set when the stream is created, and cannot be changed later.
   """
   transferable: Boolean!
 
   """
-  Version of Flow contract, e.g. v1.0
+  Version of Flow contract, e.g. v1.0.
   """
   version: String!
 
   """
-  Flag indicating if a stream is voided
+  Flag indicating if a stream is voided.
   """
   voided: Boolean!
 
   """
-  Unix timestamp of the voided action
+  Unix timestamp for when the stream was voided.
   """
   voidedTime: BigInt
 
   """
-  Amount resolving to the sum of all withdrawals
+  The sum of all withdrawn amounts.
   """
   withdrawnAmount: BigInt!
 }

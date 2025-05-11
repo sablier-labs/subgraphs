@@ -1,67 +1,65 @@
-# ---------------------------------------------------------------------------- #
-#                                     Batch                                    #
-# ---------------------------------------------------------------------------- #
+"""
+Creating streams in bulk is possible using the SablierBatchLockup contract.
+See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/SablierBatchLockup.sol
+
+The entity can be immutable because a batch is only updated in the same block.
+See https://thegraph.com/docs/en/subgraphs/developing/creating/ql-schema/#defining-entities
+"""
 type Batch @entity {
   """
-  Unique identifier of the batch, resolving to the hash of the parent transaction
+  The hash of the parent transaction.
   """
   id: String!
 
   # -------------------------------- Transaction ------------------------------- #
   """
-  Hash of the Ethereum transaction that created this batch
+  Hash of the Ethereum transaction that created this batch.
   """
   hash: Bytes!
 
   """
-  Timestamp of the transaction that created this batch
+  Timestamp of the transaction that created this batch.
   """
   timestamp: BigInt!
 
   # ------------------------------- Batch Fields ------------------------------- #
   """
-  Batcher account that started this batch, i.e., the sender
+  The sender address that created this batch.
   """
   batcher: Batcher
 
   """
-  Index of the batch resolving to a conditional counter of 2+ stream batches, filtered by sender
-  Label is null for batches containing a single stream.
-  """
-  label: String
-
-  """
-  Number of streams that are part of this batch
+  Number of streams part of this batch.
   """
   size: BigInt!
 
   """
-  Streams that are part of this batch
+  Streams part of this batch.
   """
   streams: [Stream!]! @derivedFrom(field: "batch")
 }
 
-# ---------------------------------------------------------------------------- #
-#                                    Batcher                                   #
-# ---------------------------------------------------------------------------- #
+"""
+Sender address that created batches.
+"""
 type Batcher @entity {
   """
-  Unique identifier of the batcher account, i.e., the sender address
+  The sender address.
   """
   id: String!
 
   """
-  Address of the sender
+  Alias for `id`.
   """
   address: Bytes!
 
   """
-  Numeric index, will be used to construct the batch label
+  Numerical index.
   """
   batchIndex: BigInt!
 
   """
-  Batches started by this batcher (sender)
+  Batches started by this sender.
   """
   batches: [Batch!]! @derivedFrom(field: "batcher")
 }

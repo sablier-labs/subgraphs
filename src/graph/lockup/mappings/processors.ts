@@ -1,9 +1,8 @@
 /**
  * @file Processors are bits of reusable logic that is used by multiple event handlers.
  */
-import { Address, BigInt as BInt, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { logError } from "../../logger";
-import { ActionParams } from "../../params";
 import { EntityStream } from "../bindings";
 import {
   createEntityAction,
@@ -12,6 +11,7 @@ import {
   createEntityStreamTranched,
   loadEntityStream,
 } from "../entities";
+import { ActionParams } from "../params";
 import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../params";
 
 /* -------------------------------------------------------------------------- */
@@ -20,10 +20,10 @@ import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTran
 
 class CancelParams {
   recipient: Address;
-  recipientAmount: BInt;
+  recipientAmount: BigInt;
   sender: Address;
-  senderAmount: BInt;
-  streamId: BInt;
+  senderAmount: BigInt;
+  streamId: BigInt;
 }
 
 export function processCancel(event: ethereum.Event, params: CancelParams): void {
@@ -34,11 +34,12 @@ export function processCancel(event: ethereum.Event, params: CancelParams): void
     return;
   }
   params;
-  const action = createEntityAction(event, "Cancel", {
+  const action = createEntityAction(event, {
     addressA: params.sender,
     addressB: params.recipient,
     amountA: params.senderAmount,
     amountB: params.recipientAmount,
+    category: "Cancel",
     streamId: stream.id,
   } as ActionParams);
 
@@ -92,10 +93,11 @@ export function processCreateTranched(
 }
 
 function processCreate(event: ethereum.Event, params: CreateCommonParams, stream: EntityStream): EntityStream {
-  const action = createEntityAction(event, "Create", {
+  const action = createEntityAction(event, {
     addressA: params.sender,
     addressB: params.recipient,
     amountA: params.depositAmount,
+    category: "Create",
     streamId: stream.id,
   } as ActionParams);
 
@@ -113,8 +115,8 @@ function processCreate(event: ethereum.Event, params: CreateCommonParams, stream
 /* -------------------------------------------------------------------------- */
 
 class WithdrawParams {
-  amount: BInt;
-  streamId: BInt;
+  amount: BigInt;
+  streamId: BigInt;
   to: Address;
 }
 
@@ -127,10 +129,11 @@ export function processWithdraw(event: ethereum.Event, params: WithdrawParams): 
   }
 
   const amount = params.amount;
-  createEntityAction(event, "Withdraw", {
+  createEntityAction(event, {
     addressA: event.transaction.from,
     addressB: params.to,
     amountB: amount,
+    category: "Withdraw",
     streamId: stream.id,
   } as ActionParams);
 

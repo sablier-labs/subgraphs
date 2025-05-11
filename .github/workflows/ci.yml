@@ -1,0 +1,41 @@
+name: "CI"
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{github.workflow}}-${{github.ref}}
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  ci:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v4"
+
+      - name: "Install Bun"
+        uses: "oven-sh/setup-bun@v2"
+        with:
+          bun-version: "latest"
+
+      - name: "Install Just"
+        uses: "extractions/setup-just@v3"
+        with:
+          just-version: "1"
+
+      - name: "Install the Node.js dependencies"
+        run: "just install-frozen"
+
+      - name: "Check the code"
+        run: "just check"
+
+      - name: "Run the tests"
+        run: "just test"
+
+      - name: "Add summary"
+        run: | # shell
+          echo "## CI result" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY

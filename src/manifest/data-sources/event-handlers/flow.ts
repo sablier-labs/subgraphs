@@ -1,6 +1,6 @@
-import type { Config, Manifest } from "../../types";
-import { resolveEventHandler } from "../helpers";
+import type { Config, Manifest } from "@src/types";
 import erc721 from "./erc721";
+import { resolveEventHandler } from "./helpers";
 
 function resolve(eventName: string) {
   return resolveEventHandler({
@@ -24,17 +24,15 @@ const baseHandlers: Manifest.EventHandler[] = [
 ];
 
 /** v1.1 event handlers are the same as v1.0 handlers because the ABIs are identical. */
-const v1_0Handlers = {
-  SablierFlow: baseHandlers,
-};
-const v1_1Handlers = {
-  SablierFlow: baseHandlers,
-};
+const v1_0Handlers = baseHandlers;
+const v1_1Handlers = baseHandlers;
 
 const flowHandlers: Config.Map.EventHandlers = {
   flow: {
-    "v1.0": v1_0Handlers,
-    "v1.1": v1_1Handlers,
+    SablierFlow: {
+      "v1.0": v1_0Handlers,
+      "v1.1": v1_1Handlers,
+    },
   },
 } as const;
 

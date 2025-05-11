@@ -1,5 +1,5 @@
 import type { Sablier } from "@sablier/deployments";
-import type { Manifest } from "../../types";
+import type { Manifest } from "@src/types";
 import { getFlowSources } from "./flow";
 import { getLockupSources } from "./lockup";
 

@@ -1,4 +1,4 @@
-import { BigInt as BInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../constants";
 import { EntitySegment, EntityStream } from "../bindings";
 import { Segment } from "../params";
@@ -23,7 +23,7 @@ export function addSegments(stream: EntityStream, segments: Array<Segment>): Ent
     segment.endTime = current.milestone;
 
     segment.stream = stream.id;
-    segment.position = BInt.fromI32(i - 1);
+    segment.position = BigInt.fromI32(i - 1);
     segment.save();
 
     streamed = streamed.plus(current.amount);

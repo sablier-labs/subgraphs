@@ -2,10 +2,12 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
+import { GRAPH_DIR, SCHEMA_DIR } from "@src/paths";
 import logger from "@src/winston";
 import { print } from "graphql";
-import { AUTOGEN_COMMENT, GRAPH_DIR, SCHEMA_DIR } from "./constants";
-import { getRelative, validateProtocolArg } from "./helpers";
+import { AUTOGEN_COMMENT } from "../constants";
+import { getRelative, validateProtocolArg } from "../helpers";
+
 /* -------------------------------------------------------------------------- */
 /*                                     CLI                                    */
 /* -------------------------------------------------------------------------- */
@@ -14,10 +16,10 @@ import { getRelative, validateProtocolArg } from "./helpers";
  * CLI for generating GraphQL schema files
  *
  * @example Generate schema for Flow:
- * bun run scripts/codegen-schema.ts flow
+ * bun run scripts/codegen/schema.ts flow
  *
  * @example Generate schema for all protocols:
- * bun run scripts/codegen-schema.ts all
+ * bun run scripts/codegen/schema.ts all
  *
  * @param {string} protocol - Required. Either 'flow', 'lockup', or 'all'
  */

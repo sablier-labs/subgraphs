@@ -1,83 +1,84 @@
-type Action @entity {
-  # ------------------------------------ ID ------------------------------------ #
+"""
+A generic entity for tracking protocol actions. There may be multiple actions for a single tx.
+"""
+type Action @entity(immutable: true) {
   """
-  Unique identifier resolving to transaction hash concatenated with the log index (there may be multiple actions per tx)
+  Unique identifier: {txHash}-{logIndex}
   """
-  id: ID!
+  id: String!
 
   """
-  Unique global id tracked by the subgraph watcher
+  Unique global id as tracked by the `Watcher` entity.
   """
   subgraphId: BigInt!
 
-  foo: Int!
-
   # -------------------------------- Transaction ------------------------------- #
   """
-  Block number of the Ethereum transaction
+  Block number of the Ethereum transaction.
   """
   block: BigInt!
 
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g. 137 for Polygon.
   """
   chainId: BigInt!
 
   """
-  Hash of the Ethereum transaction that triggered this action
-  """
-  hash: Bytes!
-
-  """
-  Address that triggered the transaction
+  The msg.sender of the Ethereum transaction.
   """
   from: Bytes!
 
   """
-  Unix timestamp of the Ethereum transaction
+  Hash of the Ethereum transaction.
+  """
+  hash: Bytes!
+
+  """
+  Unix timestamp of the Ethereum transaction.
   """
   timestamp: BigInt!
 
   # --------------------------------- Metadata --------------------------------- #
   """
-  Category of action, e.g. Deposit
+  Category of action, e.g., Deposit.
   """
   category: ActionCategory!
 
   """
-  Contract through which the stream actions was triggered
+  Contract through which the action was triggered.
   """
   contract: Bytes!
 
   """
-  Stream linked to this action (or null if this is a contract level action)
+  Stream linked to this action, if any.
   """
   stream: Stream
 
   # --------------------------------- Addresses -------------------------------- #
   """
-  Address of an actor, differs based on action type e.g. for Create it resolves to the sender
+  Address of 1st actor. Who this is depends upon the action type, e.g. for Create, it is the sender.
   """
   addressA: Bytes
 
   """
-  Address of an actor, differs based on action type e.g. for Transfer it resolves to the new recipient
+  Address of 2nd actor. Who this is depends upon the action type, e.g. for Transfer, it is the recipient.
   """
   addressB: Bytes
 
   # ---------------------------------- Amounts --------------------------------- #
   """
-  Amount, differs based on action type, e.g. for Deposit it resolves to the depositAmount
+  1st amount. What this is depends upon the action type, e.g. for Deposit, it is the deposit amount.
   """
   amountA: BigInt
 
   """
-  Amount, differs based on action type, e.g. for Withdraw it resolves to the refundedAmount
+  2nd amount. What this is depends upon the action type, e.g. for Withdraw, it is the refund amount.
   """
   amountB: BigInt
 
   """
-  Amount, records the fee paid for certain actions, in base asset (e.g. withdraw is payable >V10)
+  The Sablier fee paid in the native token of the chain, e.g., ETH for Ethereum Mainnet.
+  See https://docs.sablier.com/concepts/fees
   """
   fee: BigInt
 }

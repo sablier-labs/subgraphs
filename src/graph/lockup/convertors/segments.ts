@@ -1,4 +1,4 @@
-import { BigInt as BInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { StructSegmentV1_0, StructSegmentV1_1, StructSegmentV1_2, StructSegmentV2_0 } from "../bindings";
 import { Segment } from "../params";
 
@@ -44,9 +44,9 @@ export function convertSegmentsV2_0(segments: Array<StructSegmentV2_0>): Array<S
 
 function convertSegments<T>(
   segments: Array<T>,
-  getAmount: (segment: T) => BInt,
-  getExponent: (segment: T) => BInt,
-  getMilestone: (segment: T) => BInt,
+  getAmount: (segment: T) => BigInt,
+  getExponent: (segment: T) => BigInt,
+  getMilestone: (segment: T) => BigInt,
 ): Array<Segment> {
   const result: Segment[] = [];
 

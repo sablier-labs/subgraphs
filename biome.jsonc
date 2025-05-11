@@ -41,6 +41,9 @@
           "style": {
             "useImportType": "off",
             "useTemplate": "off"
+          },
+          "suspicious": {
+            "noShadowRestrictedNames": "off"
           }
         }
       }

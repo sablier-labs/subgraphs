@@ -1,4 +1,4 @@
-import type { Config } from "../../types";
+import type { Config } from "@src/types";
 import flow from "./flow";
 import lockup from "./lockup";
 

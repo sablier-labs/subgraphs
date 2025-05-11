@@ -30,11 +30,19 @@ codegen protocol="all" chain_name="":
 
 # Generate the subgraph manifest
 codegen-manifest protocol="all" chain_name="":
-  bun run scripts/codegen-manifest.ts {{protocol}} {{chain_name}}
+  bun run scripts/codegen/manifest.ts {{protocol}} {{chain_name}}
 
 # Generate the GraphQL schema
 codegen-schema protocol="all":
-  bun run scripts/codegen-schema.ts {{protocol}}
+  bun run scripts/codegen/schema.ts {{protocol}}
+
+# Install the Node.js dependencies
+install:
+  bun install
+
+# Install the Node.js dependencies with frozen lockfile
+install-frozen:
+  bun install --frozen-lockfile
 
 # Print available log levels
 print-log-levels:
@@ -52,6 +60,10 @@ prettier-check:
 # Format markdown and YAML files with Prettier
 prettier-write:
   bun run prettier --cache --write --log-level warn "**/*.{md,yaml,yml}"
+
+# Run Jest tests
+test:
+  bun run jest
 
 # Type check with TypeScript
 tsc-check:

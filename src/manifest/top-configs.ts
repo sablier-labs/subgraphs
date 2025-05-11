@@ -1,4 +1,4 @@
-import type { Manifest } from "../types";
+import type { Manifest } from "@src/types";
 
 const topConfigs: Record<string, Omit<Manifest.TopConfig, "dataSources">> = {
   airdrops: {

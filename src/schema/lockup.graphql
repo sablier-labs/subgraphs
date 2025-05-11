@@ -14,29 +14,30 @@ enum StreamCategory {
   LockupTranched
 }
 
-type Segment @entity {
+type Segment @entity(immutable: true) {
   """
   Unique identifier: {streamId}-{position}
   """
   id: String!
 
   """
-  Amount resolving to the value streamed during this segment
+  Amount distributed by this segment.
   """
   amount: BigInt!
 
   """
-  Derived amount resoling to the total amount streamed until the end of the segment
+  Total amount distributed at `endTime`. This is the sum of this segment's amount and all previous segments' amounts.
   """
   endAmount: BigInt!
 
   """
-  Identical with the `milestone` field.
+  Alias for the `milestone` field.
   """
   endTime: BigInt!
 
   """
-  Exponent for the time passed percentage of the main amount compute function
+  Exponent used for the streamed amount calculations.
+  See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/types/DataTypes.sol#L279-L288
   """
   exponent: BigInt!
 
@@ -46,23 +47,23 @@ type Segment @entity {
   milestone: BigInt!
 
   """
-  Position of the segment inside the array
+  Position of the segment inside the array.
   """
   position: BigInt!
 
   """
-  Derived amount resoling to the total amount streamed until the start of the segment
+  Total amount distributed by the stream at `startTime`. This is the sum of all previous segments' amounts.
   """
   startAmount: BigInt!
 
   """
   Unix timestamp indicating the start of the segment.
-  This is also the end time of previous segment or the start time of the stream.
+  This is also the end time of the previous segment or, if this is the first segment, it is the start time of the stream.
   """
   startTime: BigInt!
 
   """
-  Stream upon which the segment is used
+  The stream in which this segment was created.
   """
   stream: Stream!
 }
@@ -80,254 +81,260 @@ type Stream @entity {
   alias: String!
 
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g., 137 for Polygon.
   """
   chainId: BigInt!
 
   """
-  Unique global id as tracked by the subgraph watcher
+  Unique global id as tracked by the `Watcher` entity.
   🚨 This may change if new data sources are added and the chronological order of streams changes.
   """
   subgraphId: BigInt!
 
   """
-  Stream id provided by the Lockup contract; this is the ERC-721 tokenId
+  The id provided by the Lockup contract. This is the ERC-721 tokenId.
   """
   tokenId: BigInt!
 
   # -------------------------------- Transaction ------------------------------- #
   """
-  Hash of the Ethereum transaction that created this stream
+  Hash of the Ethereum transaction that created this stream.
   """
   hash: Bytes!
 
   """
-  Timestamp of the stream creation (used for sorting)
+  Timestamp of the Ethereum transaction that created this stream.
   """
   timestamp: BigInt!
 
   # ---------------------------------- Actions ---------------------------------- #
   """
-  Actions triggered in the context of this stream
+  Actions triggered by this stream.
   """
   actions: [Action!]! @derivedFrom(field: "stream")
 
   """
-  Action in which the stream was
+  Action in which the stream was canceled.
   """
   canceledAction: Action
 
   """
-  Action in which the stream was made non-cancelable
-  Note: this can be the create transaction
+  Action in which the stream was made non-cancelable.
+  Note: if the stream was made non-cancelable from the get-go, this is the same as the Create action.
   """
   renounceAction: Action
 
   # ---------------------------------- Lockup ---------------------------------- #
   """
-  ERC-20 token distributed via this stream
+  ERC-20 token distributed via this stream.
   """
   asset: Asset!
 
   """
-  The batch the stream is part of, only available when created within a batch create transaction
+  The batch the stream may be part of.
+  Note: this is available only when created within a batch create transaction.
   """
   batch: Batch!
 
   """
-  Flag indicating the cancelability of the stream
+  Flag indicating the cancelability of the stream.
   """
   cancelable: Boolean!
 
   """
-  Flag indicating if the stream was canceled
+  Flag indicating if the stream was canceled.
   """
   canceled: Boolean!
 
   """
-  Unix timestamp for the when the stream was canceled
+  Unix timestamp for the when the stream was canceled.
   """
   canceledTime: BigInt
 
   """
-  Category used for sorting
+  Category used for sorting.
   """
   category: StreamCategory!
 
   """
-  The Lockup contract the stream originates from
+  The Lockup contract the stream originates from.
   """
   contract: Bytes!
 
   """
-  Snapshot of the duration in seconds (the difference between end and start time)
+  The amount deposited when the stream was created.
   """
   depositAmount: BigInt!
 
   """
-  Unix timestamp for the end of the stream
+  Snapshot of the duration in seconds (the difference between end and start time).
   """
   duration: BigInt!
 
   """
-  Amount deposited in the stream
+  Unix timestamp for the end of the stream.
   """
   endTime: BigInt!
 
   """
-  The account that funded the stream (which can be different from the sender)
+  The account that funded the stream, which can be different from the sender.
   """
   funder: Bytes!
 
   """
-  Amount resolving to the sum still inside the stream (regardless of it being locked or not).
-  This is the difference between the deposit and withdrawn amounts before the cancel.
+  The amount that is still held by the stream regardless of whether if was fully vested or not.
+  This is the difference between the deposit amount and all withdrawn amounts.
   """
   intactAmount: BigInt!
 
   """
-  True for LL stream streams with an initial unlock
+  Users associated with the stream: recipient, sender, possibly the sender's proxy.
   """
   parties: [Bytes!]!
 
   """
-  Position in the batch, only available when created within a batch create transaction
+  Position in the batch, if available.
   """
   position: BigInt!
 
   """
   Owner of the proxy when the stream is created through a PRBProxy (https://github.com/PaulRBerg/prb-proxy)
-  Note that sender = proxy, and proxender = owner of proxy
+  Note that proxy = stream sender, and proxender = owner of proxy
   """
   proxender: Bytes
 
   """
-  Flag for streams created through a PRBProxy
+  Flag for streams created through a PRBProxy.
   """
   proxied: Boolean!
 
   """
-  Current recipient of the stream, can withdraw the funds (the recipient can change on stream/nft transfer)
+  Current recipient of the stream, with permission to withdraw funds to any third-party address.
+  Note: the recipient can change on NFT transfer.
   """
   recipient: Bytes!
 
   """
-  Unix timestamp when the stream was made non-cancelable
+  Unix timestamp for when the stream was made non-cancelable. This can coincide with the create time.
   """
   renounceTime: BigInt
 
   """
-  Manager of the stream, defined at creation by the funder (usually the same as the funder)
+  Manager of the stream, defined at creation by the funder. This is usually the same as the funder.
   """
   sender: Bytes!
 
   """
-  An optional parameter to specify the shape of the distribution
+  An optional parameter to specify the shape of the distribution.
+  Available since Lockup v2.0.
   """
   shape: String
 
   """
-  Unix timestamp for the start of the stream
+  Unix timestamp for the start of the stream.
   """
   startTime: BigInt!
 
   """
-  Flag indicating the transferability of the stream (decided when the stream is created)
+  Flag indicating the transferability of the stream. This is set when the stream is created, and cannot be changed later.
   """
   transferable: Boolean!
 
   """
-  Version of Lockup contract, e.g. v1.0
+  Version of Lockup contract, e.g., v1.0.
   """
   version: String!
 
   """
-  Amount resolving to the sum of all withdrawals
+  The sum of all withdrawn amounts.
   """
   withdrawnAmount: BigInt!
 
   # ------------------------------- LockupLinear ------------------------------- #
   """
-  Flag for LL streams with a cliff
+  Flag for Linear streams with a cliff.
   """
   cliff: Boolean!
 
   """
-  The amount that will unlock at the cliff time
+  The amount that will unlock at the cliff time.
   """
   cliffAmount: BigInt
 
   """
-  Unix timestamp for the start of the cliff
+  Unix timestamp for the start of the cliff.
   """
   cliffTime: BigInt
 
   """
-  Flag for LL streams with an initial unlock
+  Flag for Linear stream with an initial unlock.
+  Available since Lockup v2.0.
   """
   initial: Boolean!
 
   """
-  The initial unlock amount specifically for lockup linear, zero <V23
+  The initial unlock amount of a Linear stream.
+  Available since Lockup v2.0.
   """
   initialAmount: BigInt
 
   # ------------------------------- LockupDynamic ------------------------------ #
   """
-  Segments of the distribution function, only available on LD streams
+  Segments of a Dynamic stream.
   """
-  segments: [Segment!]! @derivedFrom(field: "stream")
+  segments: [Segment!] @derivedFrom(field: "stream")
 
   # ------------------------------ LockupTranched ------------------------------ #
   """
-  Tranches of the distribution function, only available on LT streams
+  Segments of a Tranched stream.
   """
-  tranches: [Tranche!]! @derivedFrom(field: "stream")
+  tranches: [Tranche!] @derivedFrom(field: "stream")
 }
 
-type Tranche @entity {
+type Tranche @entity(immutable: true) {
   """
   Unique identifier: {streamId}-{position}
   """
   id: String!
 
   """
-  Position of the tranche inside the array
-  """
-  position: BigInt!
-
-  """
-  Stream upon which the tranche is used
-  """
-  stream: Stream!
-
-  """
-  Amount resolving to the value streamed during this tranche
+  Amount distributed by this tranche.
   """
   amount: BigInt!
 
   """
-  Derived amount resoling to the total amount streamed until the end of the timestamp
+  Total amount distributed at `endTime`. This is the sum of this tranche's amount and all previous tranches' amounts.
   """
   endAmount: BigInt!
 
   """
-  Timestamp resolving to the *timestamp* parameter
+  Alias for the `timestamp` field.
   """
   endTime: BigInt!
 
   """
-  Derived amount resoling to the total amount streamed until the start of the timestamp
+  Position of the tranche inside the array.
+  """
+  position: BigInt!
+
+  """
+  Total amount distributed by the stream at `startTime`. This is the sum of all previous tranches' amounts.
   """
   startAmount: BigInt!
 
   """
-  Timestamp resolving to the start moment of the timestamp (the end time of previous timestamp or the startTime of the stream)
+  Unix timestamp indicating the start of the tranche.
+  This is also the end time of the previous tranche or, if this is the first tranche, it is the start time of the stream.
   """
   startTime: BigInt!
 
   """
-  Timestamp resolving to the end moment of the tranche
+  The stream in which this tranche was created.
+  """
+  stream: Stream!
+
+  """
+  Unix timestamp indicating the end of the tranche.
   """
   timestamp: BigInt!
 }

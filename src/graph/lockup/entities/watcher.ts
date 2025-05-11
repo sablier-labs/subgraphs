@@ -3,15 +3,13 @@ import { getChainId } from "../../context";
 import { EntityWatcher } from "../bindings";
 
 export function getOrCreateEntityWatcher(): EntityWatcher {
-  const chainId = getChainId().toString();
-  let watcher = EntityWatcher.load(chainId);
+  const chainId = getChainId();
+  let watcher = EntityWatcher.load(chainId.toString());
 
   if (watcher == null) {
-    watcher = new EntityWatcher(chainId);
+    watcher = new EntityWatcher(chainId.toString());
     watcher.actionIndex = ONE;
-    watcher.chainId = getChainId();
-    watcher.initialized = false;
-    watcher.logs = [];
+    watcher.chainId = chainId;
     watcher.streamIndex = ONE;
   }
 

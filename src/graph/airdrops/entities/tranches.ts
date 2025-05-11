@@ -1,12 +1,12 @@
-import { BigInt as BInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../constants";
 import { EntityCampaign, EntityTranche } from "../bindings";
 import { CreateMerkleLTTranchesWithPercentagesStruct } from "../bindings/types/templates/ContractMerkleFactory/SablierMerkleFactory";
 
 export class TrancheInput {
-  percentage: BInt;
-  duration: BInt;
-  constructor(percentage: BInt, duration: BInt) {
+  percentage: BigInt;
+  duration: BigInt;
+  constructor(percentage: BigInt, duration: BigInt) {
     this.percentage = percentage;
     this.duration = duration;
   }
@@ -38,7 +38,7 @@ export function addTranches(
     const tranche = createEntityTranche(id, last, current);
 
     tranche.campaign = campaign.id;
-    tranche.position = BInt.fromI32(i);
+    tranche.position = BigInt.fromI32(i);
     tranche.save();
 
     last = current;

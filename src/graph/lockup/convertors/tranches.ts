@@ -1,4 +1,4 @@
-import { BigInt as BInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { StructTrancheV1_2, StructTrancheV2_0 } from "../bindings";
 import { Tranche } from "../params";
 
@@ -20,8 +20,8 @@ export function convertTranchesV2_0(tranches: Array<StructTrancheV2_0>): Array<T
 
 function convertTranches<T>(
   segments: Array<T>,
-  getAmount: (segment: T) => BInt,
-  getTimestamp: (segment: T) => BInt,
+  getAmount: (segment: T) => BigInt,
+  getTimestamp: (segment: T) => BigInt,
 ): Array<Tranche> {
   const result: Tranche[] = [];
 

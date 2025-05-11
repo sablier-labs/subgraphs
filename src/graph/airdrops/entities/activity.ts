@@ -1,4 +1,4 @@
-import { BigInt as BInt, ethereum } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../constants";
 import { logError } from "../../logger";
 import { EntityActivity } from "../bindings";
@@ -29,7 +29,7 @@ export function getOrCreateActivity(campaignId: string, event: ethereum.Event): 
   }
 
   entity = new EntityActivity(id);
-  entity.day = BInt.fromI32(day);
+  entity.day = BigInt.fromI32(day);
   entity.campaign = campaign.id;
   entity.timestamp = event.block.timestamp;
 

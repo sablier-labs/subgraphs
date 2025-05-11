@@ -26,16 +26,15 @@ auth:
   bun run graph auth --product hosted-service
 
 # Build the subgraph
-build:
-  @just codegen
+@build: codegen
   bun run graph build manifests/ethereum.yaml
 
 # Clean auto-generated files
 clean:
   rm -rf bindings build schema.graphql
 
-# Generate everything needed for the subgraph
-codegen: codegen-bindings codegen-schema
+# Generate everything needed for building the subgraph: GraphQL schema, YAML manifest, and AssemblyScript bindings
+codegen: codegen-schema codegen-bindings
 
 # Generate subgraph bindings
 @codegen-bindings: (codegen-manifest "ethereum")

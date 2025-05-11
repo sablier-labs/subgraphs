@@ -4,10 +4,11 @@ import * as yaml from "js-yaml";
 
 import { supportedChains } from "@src/chains";
 import { getDataSources, topConfigs } from "@src/manifest";
+import { GRAPH_DIR } from "@src/paths";
 import type { Manifest } from "@src/types";
 import logger from "@src/winston";
-import { AUTOGEN_COMMENT, GRAPH_DIR } from "./constants";
-import { getRelative, validateProtocolArg } from "./helpers";
+import { AUTOGEN_COMMENT } from "../constants";
+import { getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                     CLI                                    */
@@ -17,13 +18,13 @@ import { getRelative, validateProtocolArg } from "./helpers";
  * CLI for generating subgraph manifests
  *
  * @example Generate manifest for Flow:
- * bun run scripts/codegen-manifest.ts flow
+ * bun run scripts/codegen/manifest.ts flow
  *
  * @example Generate manifest for Flow on a specific chain:
- * bun run scripts/codegen-manifest.ts flow polygon
+ * bun run scripts/codegen/manifest.ts flow polygon
  *
  * @example Generate manifests for all protocols:
- * bun run scripts/codegen-manifest.ts all
+ * bun run scripts/codegen/manifest.ts all
  *
  * @param {string} protocol - Required. Either 'flow', 'lockup', or 'all'
  * @param {string} [chainName] - Optional. Chain name to generate manifest for, e.g. 'polygon'
@@ -77,14 +78,7 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Generates a YAML manifest for the specified protocol
- * @param protocol The protocol to generate a manifest for
- * @param chainId The chain ID
- * @param chainName The chain name
- * @returns YAML string representation of the manifest
- */
-function createManifestContent(protocol: "flow" | "lockup", chainId: number, chainName: string): string {
+function createManifestYAML(protocol: "flow" | "lockup", chainId: number, chainName: string): string {
   const topConfig = topConfigs[protocol as keyof typeof topConfigs];
   if (!topConfig) {
     throw new Error(`Top-level config not found for protocol: ${protocol}`);
@@ -104,16 +98,9 @@ function createManifestContent(protocol: "flow" | "lockup", chainId: number, cha
   return `${AUTOGEN_COMMENT}${yamlContent}`;
 }
 
-/**
- * Generates and writes manifests for all supported chains
- * @param protocol The Sablier protocol to use ("flow" or "lockup")
- * @param suppressFinalLog Whether to suppress the final success log message
- * @returns Number of successfully generated manifests
- */
 function generateForAllChains(protocol: "flow" | "lockup", suppressFinalLog = false): number {
   const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
 
-  // Clear and ensure the output directory exists
   if (fs.pathExistsSync(OUTPUT_DIR)) {
     fs.emptyDirSync(OUTPUT_DIR);
     logger.verbose("🗑️  Cleared existing manifests directory");
@@ -143,13 +130,8 @@ function generateForAllChains(protocol: "flow" | "lockup", suppressFinalLog = fa
   return filesGenerated;
 }
 
-/**
- * Handles manifest generation for a specific chain
- * @param protocol The protocol to generate for
- * @param chainName The chain name to generate for
- */
 function generateForSpecificChain(protocol: "flow" | "lockup", chainName: string): void {
-  const chain = findChainByName(chainName);
+  const chain = supportedChains.find((chain) => chain.name.toLowerCase() === chainName.toLowerCase());
   if (!chain) {
     const availableChains = supportedChains.map((chain) => chain.name).join(", ");
     logger.error(`❌ Error: Chain "${chainName}" not found in supported chains.`);
@@ -171,12 +153,6 @@ function generateForSpecificChain(protocol: "flow" | "lockup", chainName: string
   logger.info(`📁 Manifest path: ${result.relativeOutputPath}`);
 }
 
-/**
- * Generates and writes a manifest file for a specific chain
- * @param protocol The protocol to generate a manifest for ('flow' or 'lockup')
- * @param chain The chain configuration
- * @returns Result of the manifest generation
- */
 function writeManifestToFile(
   protocol: "flow" | "lockup",
   chain: (typeof supportedChains)[number],
@@ -184,15 +160,11 @@ function writeManifestToFile(
   const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
 
   try {
-    // Ensure output directory exists
     fs.ensureDirSync(OUTPUT_DIR);
 
-    const yamlString = createManifestContent(protocol, chain.id, chain.name);
+    const manifest = createManifestYAML(protocol, chain.id, chain.name);
     const outputPath = path.join(OUTPUT_DIR, `${chain.name}.yaml`);
-
-    // Write file in a single operation
-    fs.writeFileSync(outputPath, yamlString);
-
+    fs.writeFileSync(outputPath, manifest);
     logger.verbose(`✅ Generated manifest: ${getRelative(outputPath)}`);
 
     return {
@@ -205,13 +177,4 @@ function writeManifestToFile(
       error: `Error generating manifest for chain ${chain.name}: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                   HELPERS                                  */
-/* -------------------------------------------------------------------------- */
-
-/** @internal */
-function findChainByName(chainName: string) {
-  return supportedChains.find((chain) => chain.name.toLowerCase() === chainName.toLowerCase());
 }

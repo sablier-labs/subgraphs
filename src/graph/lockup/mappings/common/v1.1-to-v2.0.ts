@@ -1,3 +1,9 @@
+/**
+ * @file Common event handlers for:
+ * - Lockup v1.1
+ * - Lockup v1.2
+ * - Lockup v2.0
+ */
 import {
   CancelLockupStream as EventCancelV1_1,
   WithdrawFromLockupStream as EventWithdrawV1_1,

@@ -1,11 +1,11 @@
 /**
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#data-source-context
  */
-import { BigInt as BInt, dataSource } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { ZERO } from "./constants";
 import { logAndExit } from "./logger";
 
-export function getChainId(): BInt {
+export function getChainId(): BigInt {
   const context = dataSource.context();
   const chainId = context.get("chainId");
   if (chainId == null) {

@@ -1,4 +1,4 @@
-import { BigInt as BInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { getChainId, getContractAlias } from "./context";
 
 /**
@@ -15,7 +15,7 @@ export function getActionId(event: ethereum.Event): string {
  * @example
  * 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4-137-42
  */
-export function getStreamId(tokenId: BInt): string {
+export function getStreamId(tokenId: BigInt): string {
   const address = dataSource.address().toHexString();
   const chainId = getChainId().toString();
   const streamId = address + "-" + chainId + "-" + tokenId.toString();
@@ -26,7 +26,7 @@ export function getStreamId(tokenId: BInt): string {
  * @example
  * LK-137-42
  */
-export function getStreamAlias(tokenId: BInt): string {
+export function getStreamAlias(tokenId: BigInt): string {
   const chainId = getChainId().toString();
   return getContractAlias() + "-" + chainId + "-" + tokenId.toString();
 }

@@ -2,11 +2,11 @@ import { dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../constants";
 import { getChainId } from "../../context";
 import { getActionId } from "../../ids";
-import { ActionParams } from "../../params";
 import { EntityAction } from "../bindings";
+import { ActionParams } from "../params";
 import { getOrCreateEntityWatcher } from "./watcher";
 
-export function createEntityAction(event: ethereum.Event, category: string, params: ActionParams): EntityAction {
+export function createEntityAction(event: ethereum.Event, params: ActionParams): EntityAction {
   const actionId = getActionId(event);
   const action = new EntityAction(actionId);
 
@@ -21,7 +21,7 @@ export function createEntityAction(event: ethereum.Event, category: string, para
   action.addressB = params.addressB;
   action.amountA = params.amountA;
   action.amountB = params.amountB;
-  action.category = category;
+  action.category = params.category;
   action.stream = params.streamId;
 
   const watcher = getOrCreateEntityWatcher();

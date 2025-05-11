@@ -1,10 +1,10 @@
 import { type Sablier, flowByVersion, getChainName, lockupByVersion, queries } from "@sablier/deployments";
+import type { Config, Manifest } from "@src/types";
+import logger from "@src/winston";
 import _ from "lodash";
-import type { Config, Manifest } from "../../types";
-import logger from "../../winston";
-import ABIs from "../abi-entries";
-import entities from "../entities";
-import eventHandlers from "../event-handlers";
+import ABIs from "./abi-entries";
+import entities from "./entities";
+import eventHandlers from "./event-handlers";
 
 /** Creates an array of data sources from a contract list. */
 export function createSources(
@@ -98,9 +98,9 @@ function createMapping(
   if (protocol === "flow") {
     const flowVersion = version as Sablier.Version.Flow;
     return {
-      abis: ABIs.flow[flowVersion][contractName],
-      entities: entities.flow[flowVersion][contractName],
-      eventHandlers: eventHandlers.flow[flowVersion][contractName],
+      abis: ABIs.flow[contractName][flowVersion],
+      entities: entities.flow[contractName][flowVersion],
+      eventHandlers: eventHandlers.flow[contractName][flowVersion],
       file: `../mappings/${flowVersion}.ts`,
     };
   }
@@ -108,9 +108,9 @@ function createMapping(
   if (protocol === "lockup") {
     const lockupVersion = version as Sablier.Version.Lockup;
     return {
-      abis: ABIs.lockup[lockupVersion][contractName],
-      entities: entities.lockup[lockupVersion][contractName],
-      eventHandlers: eventHandlers.lockup[lockupVersion][contractName],
+      abis: ABIs.lockup[contractName][lockupVersion],
+      entities: entities.lockup[contractName][lockupVersion],
+      eventHandlers: eventHandlers.lockup[contractName][lockupVersion],
       file: `../mappings/${lockupVersion}.ts`,
     };
   }

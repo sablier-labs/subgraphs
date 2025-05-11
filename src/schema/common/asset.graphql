@@ -1,11 +1,14 @@
+"""
+ERC-20 asset
+"""
 type Asset @entity(immutable: true) {
   """
-  Unique identifier resolving to the ERC20 token address
+  Contract address of the ERC20 token
   """
   id: ID!
 
   """
-  Address of the ERC20 token
+  Alias for `id`
   """
   address: Bytes!
 

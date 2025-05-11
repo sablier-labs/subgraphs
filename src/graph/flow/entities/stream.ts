@@ -1,4 +1,4 @@
-import { BigInt as BInt, dataSource } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../constants";
 import { getChainId, getContractVersion } from "../../context";
 import { getStreamAlias, getStreamId } from "../../ids";
@@ -6,10 +6,10 @@ import { getOrCreateEntityBatch } from "./batch";
 
 import { EntityStream, EventCreate } from "../bindings";
 import { getOrCreateEntityAsset } from "./asset";
-import { loadOrCreateEntityWatcher } from "./watcher";
+import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityStreamFlow(event: EventCreate): EntityStream | null {
-  const watcher = loadOrCreateEntityWatcher();
+  const watcher = getOrCreateEntityWatcher();
 
   const tokenId = event.params.streamId;
 
@@ -64,7 +64,7 @@ export function createEntityStreamFlow(event: EventCreate): EntityStream | null 
   return stream;
 }
 
-export function loadEntityStream(tokenId: BInt): EntityStream | null {
+export function loadEntityStream(tokenId: BigInt): EntityStream | null {
   const id = getStreamId(tokenId);
   return EntityStream.load(id);
 }

@@ -1,23 +1,23 @@
-import { Address, BigInt as BInt } from "@graphprotocol/graph-ts";
-
+import { Address, BigInt } from "@graphprotocol/graph-ts";
+export * from "../params";
 export class CreateCommonParams {
   asset: Address;
   cancelable: boolean;
   category: string;
-  depositAmount: BInt;
-  endTime: BInt;
+  depositAmount: BigInt;
+  endTime: BigInt;
   funder: Address;
   recipient: Address;
   sender: Address;
-  startTime: BInt;
-  tokenId: BInt;
+  startTime: BigInt;
+  tokenId: BigInt;
   transferable: boolean;
 }
 
 export class CreateLinearParams {
-  cliffTime: BInt;
-  unlockAmountCliff: BInt | null; // v2.0 and above
-  unlockAmountStart: BInt | null; // v2.0 and above
+  cliffTime: BigInt;
+  unlockAmountCliff: BigInt | null; // v2.0 and above
+  unlockAmountStart: BigInt | null; // v2.0 and above
 }
 
 export class CreateDynamicParams {
@@ -29,11 +29,11 @@ export class CreateTranchedParams {
 }
 
 export class Segment {
-  amount: BInt;
-  exponent: BInt;
-  milestone: BInt;
+  amount: BigInt;
+  exponent: BigInt;
+  milestone: BigInt;
 
-  constructor(amount: BInt, exponent: BInt, milestone: BInt) {
+  constructor(amount: BigInt, exponent: BigInt, milestone: BigInt) {
     this.amount = amount;
     this.exponent = exponent;
     this.milestone = milestone;
@@ -41,10 +41,10 @@ export class Segment {
 }
 
 export class Tranche {
-  amount: BInt;
-  timestamp: BInt;
+  amount: BigInt;
+  timestamp: BigInt;
 
-  constructor(amount: BInt, timestamp: BInt) {
+  constructor(amount: BigInt, timestamp: BigInt) {
     this.amount = amount;
     this.timestamp = timestamp;
   }

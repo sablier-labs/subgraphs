@@ -1,34 +1,8 @@
 import fs from "node:fs";
-import path from "node:path";
 import type { Sablier } from "@sablier/deployments";
-import type { Manifest } from "../types";
-import logger from "../winston";
-
-/** Creates a factory function for generating ABI entries. */
-export function createABIEntryFactory(protocol: Sablier.Protocol) {
-  /**
-   * Creates an ABI entry for a specific version and contract
-   * @param version The version of the protocol
-   * @param contractName The name of the contract
-   * @returns An object with contract name as key and ABI array as value
-   */
-  return function createABIEntry(
-    version: Sablier.Version,
-    contractName: string,
-  ): { [contractName: string]: Manifest.ABI[] } {
-    const entry: Manifest.ABI = {
-      name: contractName,
-      get file() {
-        return path.relative(
-          path.resolve(__dirname, `../graph/${protocol}/manifests`),
-          path.resolve(__dirname, `../abi/${protocol}-${version}/${contractName}.json`),
-        );
-      },
-    };
-
-    return { [contractName]: [entry] };
-  };
-}
+import { getAbiPath } from "@src/paths";
+import type { Manifest } from "@src/types";
+import logger from "@src/winston";
 
 /**
  * Resolves an event handler for a specific contract event
@@ -146,14 +120,4 @@ function findEventInAbi(abiContent: AbiItem[], eventName: string, contractName: 
   }
 
   return event;
-}
-
-/**
- * Constructs the path to the ABI file
- */
-function getAbiPath(contractName: string, protocol?: Sablier.Protocol, version?: Sablier.Version): string {
-  if (protocol && version) {
-    return path.resolve(__dirname, `../abi/${protocol}-${version}/${contractName}.json`);
-  }
-  return path.resolve(__dirname, `../abi/${contractName}.json`);
 }

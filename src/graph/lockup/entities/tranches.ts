@@ -1,4 +1,4 @@
-import { BigInt as BInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../constants";
 import { EntityStream, EntityTranche } from "../bindings";
 import { Tranche } from "../params";
@@ -24,7 +24,7 @@ export function addTranches(stream: EntityStream, tranches: Array<Tranche>): Ent
     tranche.startTime = previous.timestamp;
 
     tranche.stream = stream.id;
-    tranche.position = BInt.fromI32(i);
+    tranche.position = BigInt.fromI32(i);
     tranche.save();
 
     streamedAmount = streamedAmount.plus(tranche.endAmount);

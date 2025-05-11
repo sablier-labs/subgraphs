@@ -1,4 +1,4 @@
-import { BigInt as BInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../constants";
 import { getChainId, getContractVersion } from "../../context";
 import { getStreamAlias, getStreamId } from "../../ids";
@@ -75,7 +75,7 @@ export function createEntityStreamTranched(
   return stream;
 }
 
-export function loadEntityStream(tokenId: BInt): EntityStream | null {
+export function loadEntityStream(tokenId: BigInt): EntityStream | null {
   const id = getStreamId(tokenId);
   return EntityStream.load(id);
 }

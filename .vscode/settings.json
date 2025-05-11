@@ -19,7 +19,7 @@
     "**/deprecated": true,
     "**/manifests/**/*.yaml": true,
     "**/node_modules": true,
-    "**/src/graph/lockup/bindings": true
+    "**/schema.graphql": true
   },
   "typescript.tsdk": "node_modules/typescript/lib"
 }

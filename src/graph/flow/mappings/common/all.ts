@@ -1,6 +1,5 @@
 import { ADDRESS_ZERO, ONE, ZERO } from "../../../constants";
-import { logError } from "../../../logger";
-import { logInfo } from "../../../logger";
+import { logError, logInfo } from "../../../logger";
 import { ActionParams } from "../../../params";
 import {
   EventAdjust,
@@ -26,18 +25,20 @@ export function handleApproval(event: EventApproval): void {
     return;
   }
 
-  createEntityAction(event, "Approval", {
+  createEntityAction(event, {
     addressA: event.params.owner,
     addressB: event.params.approved,
+    category: "Approval",
     streamId: stream.id,
   } as ActionParams);
 }
 
 export function handleApprovalForAll(event: EventApprovalForAll): void {
-  createEntityAction(event, "ApprovalForAll", {
+  createEntityAction(event, {
     addressA: event.params.owner,
     addressB: event.params.operator,
     amountA: event.params.approved ? ONE : ZERO,
+    category: "ApprovalForAll",
   } as ActionParams);
 }
 
@@ -46,10 +47,11 @@ export function handleCreateFlowStream(event: EventCreate): void {
   if (stream == null) {
     return;
   }
-  createEntityAction(event, "Create", {
+  createEntityAction(event, {
     addressA: event.params.sender,
     addressB: event.params.recipient,
-    amountA: event.params.ratePerSecond /** Scaled 18D */,
+    amountA: event.params.ratePerSecond,
+    category: "Create",
     streamId: stream.id,
   } as ActionParams);
 }
@@ -62,9 +64,10 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
     return;
   }
 
-  const action = createEntityAction(event, "Adjust", {
+  const action = createEntityAction(event, {
     amountA: event.params.oldRatePerSecond /** Scaled 18D */,
     amountB: event.params.newRatePerSecond /** Scaled 18D */,
+    category: "Adjust",
     streamId: stream.id,
   } as ActionParams);
   /** --------------- */
@@ -107,9 +110,10 @@ export function handleDepositFlowStream(event: EventDeposit): void {
     return;
   }
 
-  createEntityAction(event, "Deposit", {
+  createEntityAction(event, {
     addressA: event.params.funder,
     amountA: event.params.amount,
+    category: "Deposit",
     streamId: stream.id,
   } as ActionParams);
 
@@ -152,10 +156,11 @@ export function handlePauseFlowStream(event: EventPause): void {
     return;
   }
 
-  const action = createEntityAction(event, "Pause", {
+  const action = createEntityAction(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,
     amountA: event.params.totalDebt,
+    category: "Pause",
     streamId: stream.id,
   } as ActionParams);
 
@@ -190,9 +195,10 @@ export function handleRefundFromFlowStream(event: EventRefund): void {
     return;
   }
 
-  createEntityAction(event, "Refund", {
+  createEntityAction(event, {
     addressA: event.params.sender,
     amountA: event.params.amount,
+    category: "Refund",
     streamId: stream.id,
   } as ActionParams);
 
@@ -233,9 +239,10 @@ export function handleRestartFlowStream(event: EventRestart): void {
     return;
   }
 
-  const action = createEntityAction(event, "Restart", {
+  const action = createEntityAction(event, {
     addressA: event.params.sender,
-    amountA: event.params.ratePerSecond /** Scaled 18D */,
+    amountA: event.params.ratePerSecond,
+    category: "Restart",
     streamId: stream.id,
   } as ActionParams);
 
@@ -284,9 +291,10 @@ export function handleTransfer(event: EventTransfer): void {
     return;
   }
 
-  createEntityAction(event, "Transfer", {
+  createEntityAction(event, {
     addressA: event.params.from,
     addressB: event.params.to,
+    category: "Transfer",
     streamId: stream.id,
   } as ActionParams);
 
@@ -304,11 +312,12 @@ export function handleVoidFlowStream(event: EventVoid): void {
     return;
   }
 
-  const action = createEntityAction(event, "Void", {
+  const action = createEntityAction(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,
     amountA: event.params.newTotalDebt,
     amountB: event.params.writtenOffDebt,
+    category: "Void",
     streamId: stream.id,
   } as ActionParams);
 
@@ -353,10 +362,11 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
     return;
   }
 
-  createEntityAction(event, "Withdraw", {
+  createEntityAction(event, {
     addressA: event.params.caller,
     addressB: event.params.to,
     amountA: event.params.withdrawAmount,
+    category: "Withdraw",
     streamId: stream.id,
   } as ActionParams);
 

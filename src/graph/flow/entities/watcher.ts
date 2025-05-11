@@ -2,18 +2,16 @@ import { ONE } from "../../constants";
 import { getChainId } from "../../context";
 import { EntityWatcher } from "../bindings";
 
-export function loadOrCreateEntityWatcher(): EntityWatcher {
-  const id = getChainId().toString();
-  let entity = EntityWatcher.load(id);
+export function getOrCreateEntityWatcher(): EntityWatcher {
+  const chainId = getChainId();
+  let watcher = EntityWatcher.load(chainId.toString());
 
-  if (entity == null) {
-    entity = new EntityWatcher(id);
-    entity.actionIndex = ONE;
-    entity.chainId = getChainId();
-    entity.initialized = false;
-    entity.logs = [];
-    entity.streamIndex = ONE;
+  if (watcher == null) {
+    watcher = new EntityWatcher(chainId.toString());
+    watcher.actionIndex = ONE;
+    watcher.chainId = chainId;
+    watcher.streamIndex = ONE;
   }
 
-  return entity;
+  return watcher;
 }

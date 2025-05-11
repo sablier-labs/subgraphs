@@ -1,3 +1,24 @@
+export namespace Config {
+  export type ContractList<V extends string> = Array<{
+    contractName: string;
+    versions: V[];
+  }>;
+
+  export namespace Map {
+    interface ComponentMap<T> {
+      [protocol: string]: {
+        [contractName: string]: {
+          [version: string]: T;
+        };
+      };
+    }
+
+    export type ABIEntries = ComponentMap<Manifest.ABI[]>;
+    export type Entities = ComponentMap<string[]>;
+    export type EventHandlers = ComponentMap<Manifest.EventHandler[]>;
+  }
+}
+
 /** @see {@link ./graph/flow/manifests/*.yaml} */
 export namespace Manifest {
   export interface ABI {
@@ -31,7 +52,7 @@ export namespace Manifest {
 
   export interface EventHandler {
     event: string;
-    handler: string;
+    handler: `handle${string}`;
   }
 
   export interface Mapping {
@@ -58,26 +79,5 @@ export namespace Manifest {
       file: string;
     };
     dataSources: DataSource[];
-  }
-}
-
-export namespace Config {
-  export type ContractList<V extends string> = Array<{
-    contractName: string;
-    versions: V[];
-  }>;
-
-  export namespace Map {
-    interface ComponentMap<T> {
-      [protocol: string]: {
-        [version: string]: {
-          [contractName: string]: T;
-        };
-      };
-    }
-
-    export type Entities = ComponentMap<string[]>;
-    export type ABIEntries = ComponentMap<Manifest.ABI[]>;
-    export type EventHandlers = ComponentMap<Manifest.EventHandler[]>;
   }
 }

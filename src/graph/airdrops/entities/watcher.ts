@@ -11,8 +11,6 @@ export function getOrCreateEntityWatcher(): EntityWatcher {
     entity.actionIndex = ONE;
     entity.campaignIndex = ONE;
     entity.chainId = getChainId();
-    entity.initialized = false;
-    entity.logs = [];
   }
 
   return entity;

@@ -3,9 +3,9 @@
  */
 import { ADDRESS_ZERO, ONE, ZERO } from "../../../constants";
 import { logError, logInfo } from "../../../logger";
-import { ActionParams } from "../../../params";
 import { EventApproval, EventApprovalForAll, EventRenounceLockupStream, EventTransfer } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
+import { ActionParams } from "../../params";
 
 /* -------------------------------------------------------------------------- */
 /*                                   ERC721                                   */
@@ -20,18 +20,20 @@ export function handleApproval(event: EventApproval): void {
     return;
   }
 
-  createEntityAction(event, "Approval", {
+  createEntityAction(event, {
     addressA: event.params.owner,
     addressB: event.params.approved,
+    category: "Approval",
     streamId: stream.id,
   } as ActionParams);
 }
 
 export function handleApprovalForAll(event: EventApprovalForAll): void {
-  createEntityAction(event, "ApprovalForAll", {
+  createEntityAction(event, {
     addressA: event.params.owner,
     addressB: event.params.operator,
     amountA: event.params.approved ? ONE : ZERO,
+    category: "ApprovalForAll",
   } as ActionParams);
 }
 
@@ -49,9 +51,10 @@ export function handleTransfer(event: EventTransfer): void {
     return;
   }
 
-  createEntityAction(event, "Transfer", {
+  createEntityAction(event, {
     addressA: event.params.from,
     addressB: event.params.to,
+    category: "Transfer",
     streamId: stream.id,
   } as ActionParams);
 
@@ -81,7 +84,7 @@ export function handleRenounceLockupStream(event: EventRenounceLockupStream): vo
     return;
   }
 
-  const action = createEntityAction(event, "Renounce", { streamId: stream.id } as ActionParams);
+  const action = createEntityAction(event, { category: "Renounce", streamId: stream.id } as ActionParams);
 
   stream.cancelable = false;
   stream.renounceAction = action.id;
