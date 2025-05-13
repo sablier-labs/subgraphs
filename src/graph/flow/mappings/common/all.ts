@@ -1,6 +1,6 @@
-import { ADDRESS_ZERO, ONE, ZERO } from "../../../constants";
-import { logError, logInfo } from "../../../logger";
-import { ActionParams } from "../../../params";
+import { ADDRESS_ZERO, ONE, ZERO } from "../../../common/constants";
+import { logError, logInfo } from "../../../common/logger";
+import { ActionParams } from "../../../common/params";
 import {
   EventAdjust,
   EventApproval,
@@ -14,14 +14,14 @@ import {
   EventVoid,
   EventWithdraw,
 } from "../../bindings";
-import { createEntityAction, createEntityStreamFlow, loadEntityStream, toScaled } from "../../entities";
+import { createEntityAction, createEntityStreamFlow, loadEntityStream } from "../../entities";
+import { scale } from "../../helpers";
 
 export function handleApproval(event: EventApproval): void {
   const id = event.params.tokenId;
   const stream = loadEntityStream(id);
-
   if (stream == null) {
-    logInfo("Stream not saved before this ERC-721 approval event: {}", [id.toHexString()]);
+    logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
     return;
   }
 
@@ -44,9 +44,6 @@ export function handleApprovalForAll(event: EventApprovalForAll): void {
 
 export function handleCreateFlowStream(event: EventCreate): void {
   const stream = createEntityStreamFlow(event);
-  if (stream == null) {
-    return;
-  }
   createEntityAction(event, {
     addressA: event.params.sender,
     addressB: event.params.recipient,
@@ -60,45 +57,36 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
   const id = event.params.streamId;
   const stream = loadEntityStream(id);
   if (stream == null) {
-    logError("Stream not saved before this Adjust event: {}", [id.toHexString()]);
+    logError("Stream not saved before this AdjustFlowStream event: {}", [id.toHexString()]);
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  const now = event.block.timestamp;
+  const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
+  const snapshotAmount = stream.snapshotAmount.plus(stream.ratePerSecond.times(elapsedTime));
+
+  // The depletion time should be recalculated only if depletion is a future event, meaning extra amount in the stream.
+  if (stream.depletionTime.gt(now)) {
+    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+    const notWithdrawn = snapshotAmount.minus(withdrawnAmount);
+    const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+    const extraAmount = availableAmount.minus(notWithdrawn);
+    stream.depletionTime = now.plus(extraAmount.div(event.params.newRatePerSecond));
+  }
+
+  stream.lastAdjustmentTimestamp = now;
+  stream.ratePerSecond = event.params.newRatePerSecond;
+  stream.snapshotAmount = snapshotAmount;
+
+  /* --------------------------------- Action --------------------------------- */
   const action = createEntityAction(event, {
-    amountA: event.params.oldRatePerSecond /** Scaled 18D */,
-    amountB: event.params.newRatePerSecond /** Scaled 18D */,
+    amountA: event.params.oldRatePerSecond,
+    amountB: event.params.newRatePerSecond,
     category: "Adjust",
     streamId: stream.id,
   } as ActionParams);
-  /** --------------- */
-
   stream.lastAdjustmentAction = action.id;
-
-  /** --------------- */
-
-  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
-
-  const snapshotAmountScaled = stream.snapshotAmount.plus(
-    stream.ratePerSecond.times(timeSinceLastSnapshot),
-  ); /** Scaled 18D */
-
-  /** The depletionTime should be recalculated only if depletion is happening in the future (meaning extra amount exists inside the stream) */
-
-  if (stream.depletionTime.gt(event.block.timestamp)) {
-    const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
-
-    const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
-
-    const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
-
-    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
-
-    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(event.params.newRatePerSecond));
-  }
-
-  stream.ratePerSecond = event.params.newRatePerSecond; /** Scaled 18D */
-  stream.lastAdjustmentTimestamp = event.block.timestamp;
-  stream.snapshotAmount = snapshotAmountScaled; /** Scaled 18D */
   stream.save();
 }
 
@@ -106,46 +94,41 @@ export function handleDepositFlowStream(event: EventDeposit): void {
   const id = event.params.streamId;
   const stream = loadEntityStream(id);
   if (stream == null) {
-    logError("Stream not saved before this Deposit event: {}", [id.toHexString()]);
+    logError("Stream not saved before this DepositFlowStream event: {}", [id.toHexString()]);
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+
+  /* --------------------------------- Stream --------------------------------- */
+  stream.depositedAmount = stream.depositedAmount.plus(event.params.amount);
+  stream.availableAmount = stream.availableAmount.plus(event.params.amount);
+
+  const now = event.block.timestamp;
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+
+  const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
+  const snapshotAmount = stream.snapshotAmount.plus(stream.ratePerSecond.times(elapsedTime));
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const notWithdrawnAmount = snapshotAmount.minus(withdrawnAmount);
+
+  // If the stream still has debt, mimic the contract behavior.
+  if (availableAmount.gt(notWithdrawnAmount)) {
+    const extraAmount = availableAmount.minus(notWithdrawnAmount);
+
+    if (stream.ratePerSecond.isZero() === false) {
+      stream.depletionTime = now.plus(extraAmount.div(stream.ratePerSecond));
+    }
+  }
+  stream.save();
+
+  /* --------------------------------- Action --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.funder,
     amountA: event.params.amount,
     category: "Deposit",
     streamId: stream.id,
   } as ActionParams);
-
-  /** --------------- */
-
-  stream.depositedAmount = stream.depositedAmount.plus(event.params.amount);
-
-  const availableAmount = stream.availableAmount.plus(event.params.amount);
-  const availableAmountScaled = toScaled(availableAmount, stream.asset); /** Scaled 18D */
-
-  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
-
-  const snapshotAmountScaled = stream.snapshotAmount.plus(
-    stream.ratePerSecond.times(timeSinceLastSnapshot),
-  ); /** Scaled 18D */
-
-  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
-
-  const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
-
-  /** If the the stream still has debt mimic the contract behavior */
-
-  if (availableAmountScaled.gt(notWithdrawnScaled)) {
-    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
-
-    if (!stream.ratePerSecond.isZero()) {
-      stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
-    }
-  }
-
-  stream.availableAmount = availableAmount;
-  stream.save();
 }
 
 export function handlePauseFlowStream(event: EventPause): void {
@@ -156,6 +139,22 @@ export function handlePauseFlowStream(event: EventPause): void {
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  const now = event.block.timestamp;
+  stream.paused = true;
+  stream.pausedTime = now;
+
+  // Paused is actually an adjustment with the newRate per second equal to ZERO.
+  const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
+  const streamedAmount = stream.ratePerSecond.times(elapsedTime);
+  const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
+
+  stream.lastAdjustmentTimestamp = now;
+  stream.ratePerSecond = ZERO;
+  stream.snapshotAmount = snapshotAmount;
+  stream.save();
+
+  /* --------------------------------- Action --------------------------------- */
   const action = createEntityAction(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,
@@ -163,27 +162,8 @@ export function handlePauseFlowStream(event: EventPause): void {
     category: "Pause",
     streamId: stream.id,
   } as ActionParams);
-
-  stream.paused = true;
-  stream.pausedTime = event.block.timestamp;
-  stream.pausedAction = action.id;
-
-  /** --------------- */
-
-  /* Paused is actually an adjustment with the newRate per second equal to ZERO */
-
-  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
-
-  const snapshotAmountScaled = stream.snapshotAmount.plus(
-    stream.ratePerSecond.times(timeSinceLastSnapshot),
-  ); /** Scaled 18D */
-
   stream.lastAdjustmentAction = action.id;
-  stream.lastAdjustmentTimestamp = event.block.timestamp;
-  stream.snapshotAmount = snapshotAmountScaled; /** Scaled 18D */
-
-  stream.ratePerSecond = ZERO;
-
+  stream.pausedAction = action.id;
   stream.save();
 }
 
@@ -195,40 +175,34 @@ export function handleRefundFromFlowStream(event: EventRefund): void {
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  stream.refundedAmount = stream.refundedAmount.plus(event.params.amount);
+  stream.availableAmount = stream.availableAmount.minus(event.params.amount);
+
+  const now = event.block.timestamp;
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
+  const streamedAmount = stream.ratePerSecond.times(elapsedTime);
+  const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const notWithdrawnAmount = snapshotAmount.minus(withdrawnAmount);
+
+  // If refunded all the available amount the stream, start accruing now.
+  const extraAmount = availableAmount.minus(notWithdrawnAmount);
+  if (extraAmount.equals(ZERO) || stream.ratePerSecond.equals(ZERO)) {
+    stream.depletionTime = now;
+  } else {
+    stream.depletionTime = now.plus(extraAmount.div(stream.ratePerSecond));
+  }
+  stream.save();
+
+  /* --------------------------------- Action --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.sender,
     amountA: event.params.amount,
     category: "Refund",
     streamId: stream.id,
   } as ActionParams);
-
-  /** --------------- */
-
-  stream.refundedAmount = stream.refundedAmount.plus(event.params.amount);
-
-  stream.availableAmount = stream.availableAmount.minus(event.params.amount);
-  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
-
-  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
-
-  const snapshotAmountScaled = stream.snapshotAmount.plus(
-    stream.ratePerSecond.times(timeSinceLastSnapshot),
-  ); /** Scaled 18D */
-
-  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
-
-  const notWithdrawnScaled = snapshotAmountScaled.minus(withdrawnAmountScaled); /** Scaled 18D */
-
-  /** If refunded all the available amount the stream start accruing now  */
-  const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled);
-
-  if (extraAmountScaled.equals(ZERO) || stream.ratePerSecond.equals(ZERO)) {
-    stream.depletionTime = event.block.timestamp;
-  } else {
-    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
-  }
-
-  stream.save();
 }
 
 export function handleRestartFlowStream(event: EventRestart): void {
@@ -239,43 +213,36 @@ export function handleRestartFlowStream(event: EventRestart): void {
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  stream.paused = false;
+  stream.pausedTime = null;
+  stream.pausedAction = null;
+
+  // Restart is actually an adjustment.
+  const now = event.block.timestamp;
+  stream.lastAdjustmentTimestamp = now;
+  stream.ratePerSecond = event.params.ratePerSecond;
+
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const notWithdrawnAmount = stream.snapshotAmount.minus(withdrawnAmount);
+
+  if (availableAmount.gt(notWithdrawnAmount)) {
+    const extraAmount = availableAmount.minus(notWithdrawnAmount);
+    stream.depletionTime = now.plus(extraAmount.div(stream.ratePerSecond));
+  } else {
+    stream.depletionTime = now;
+  }
+
+  /* --------------------------------- Action --------------------------------- */
   const action = createEntityAction(event, {
     addressA: event.params.sender,
     amountA: event.params.ratePerSecond,
     category: "Restart",
     streamId: stream.id,
   } as ActionParams);
-
-  stream.paused = false;
-  stream.pausedTime = null;
-  stream.pausedAction = null;
-  stream.voided = false;
-  stream.voidedTime = null;
-  stream.voidedAction = null;
-
-  /** Restart is actually an adjustment */
-
   stream.lastAdjustmentAction = action.id;
-  stream.lastAdjustmentTimestamp = event.block.timestamp;
-  stream.ratePerSecond = event.params.ratePerSecond; /** Scaled 18D */
-
-  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
-
-  const notWithdrawnScaled = stream.snapshotAmount.minus(withdrawnAmountScaled); /** Scaled 18D */
-
-  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
-
-  if (availableAmountScaled.gt(notWithdrawnScaled)) {
-    const extraAmountScaled = availableAmountScaled.minus(notWithdrawnScaled); /** Scaled 18D */
-
-    stream.depletionTime = event.block.timestamp.plus(extraAmountScaled.div(stream.ratePerSecond));
-  } else {
-    stream.depletionTime = event.block.timestamp;
-  }
-
   stream.save();
-  action.stream = stream.id;
-  action.save();
 }
 
 export function handleTransfer(event: EventTransfer): void {
@@ -291,27 +258,49 @@ export function handleTransfer(event: EventTransfer): void {
     return;
   }
 
+  stream.recipient = event.params.to;
+  stream.save();
+
+  /* --------------------------------- Action --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.from,
     addressB: event.params.to,
     category: "Transfer",
     streamId: stream.id,
   } as ActionParams);
-
-  /** --------------- */
-
-  stream.recipient = event.params.to;
-  stream.save();
 }
 
 export function handleVoidFlowStream(event: EventVoid): void {
   const id = event.params.streamId;
   const stream = loadEntityStream(id);
   if (stream == null) {
-    logError("Stream not saved before this Void event: {}", [id.toHexString()]);
+    logError("Stream not saved before this VoidFlowStream event: {}", [id.toHexString()]);
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  const elapsedTime = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
+  const streamedAmount = stream.ratePerSecond.times(elapsedTime);
+  const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const maxAvailable = withdrawnAmount.plus(availableAmount);
+
+  stream.paused = true;
+  stream.voided = true;
+
+  const now = event.block.timestamp;
+  stream.pausedTime = now;
+  stream.voidedTime = now;
+  stream.lastAdjustmentTimestamp = now;
+
+  // Void is actually an adjustment with the newRate per second equal to ZERO.
+  stream.depletionTime = ZERO;
+  stream.forgivenDebt = event.params.writtenOffDebt;
+  stream.ratePerSecond = ZERO;
+  stream.snapshotAmount = maxAvailable.lt(snapshotAmount) ? maxAvailable : snapshotAmount;
+
+  /* --------------------------------- Action --------------------------------- */
   const action = createEntityAction(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,
@@ -320,37 +309,9 @@ export function handleVoidFlowStream(event: EventVoid): void {
     category: "Void",
     streamId: stream.id,
   } as ActionParams);
-
-  const timeSinceLastSnapshot = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
-
-  const snapshotAmountScaled = stream.snapshotAmount.plus(
-    stream.ratePerSecond.times(timeSinceLastSnapshot),
-  ); /** Scaled 18D */
-
-  const withdrawnAmountScaled = toScaled(stream.withdrawnAmount, stream.asset); /** Scaled 18D */
-
-  const availableAmountScaled = toScaled(stream.availableAmount, stream.asset); /** Scaled 18D */
-
-  const maxAvailableScaled = withdrawnAmountScaled.plus(availableAmountScaled); /** Scaled 18D */
-
-  stream.voided = true;
-  stream.paused = true;
-
-  stream.pausedTime = event.block.timestamp;
-  stream.pausedAction = action.id;
-  stream.voidedTime = event.block.timestamp;
-  stream.voidedAction = action.id;
-  /**Void is actually an adjustment with the newRate per second equal to ZERO */
   stream.lastAdjustmentAction = action.id;
-  stream.lastAdjustmentTimestamp = event.block.timestamp;
-
-  stream.snapshotAmount = maxAvailableScaled.lt(snapshotAmountScaled)
-    ? maxAvailableScaled
-    : snapshotAmountScaled; /** Scaled 18D */
-  stream.forgivenDebt = event.params.writtenOffDebt;
-  stream.ratePerSecond = ZERO;
-  stream.depletionTime = ZERO;
-
+  stream.pausedAction = action.id;
+  stream.voidedAction = action.id;
   stream.save();
 }
 
@@ -358,10 +319,16 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
   const id = event.params.streamId;
   const stream = loadEntityStream(id);
   if (stream == null) {
-    logError("Stream not saved before this Withdraw event: {}", [id.toHexString()]);
+    logError("Stream not saved before this WithdrawFromFlowStream event: {}", [id.toHexString()]);
     return;
   }
 
+  /* --------------------------------- Stream --------------------------------- */
+  stream.availableAmount = stream.availableAmount.minus(event.params.withdrawAmount);
+  stream.withdrawnAmount = stream.withdrawnAmount.plus(event.params.withdrawAmount);
+  stream.save();
+
+  /* --------------------------------- Action --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.caller,
     addressB: event.params.to,
@@ -369,9 +336,4 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
     category: "Withdraw",
     streamId: stream.id,
   } as ActionParams);
-
-  stream.availableAmount = stream.availableAmount.minus(event.params.withdrawAmount);
-  stream.withdrawnAmount = stream.withdrawnAmount.plus(event.params.withdrawAmount);
-
-  stream.save();
 }

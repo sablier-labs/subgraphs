@@ -48,10 +48,14 @@ install-frozen:
 print-log-levels:
   @echo "Available log levels: error, warn, info, http, verbose, debug, silly"
 
+# Print available chain arguments
+# TODO
+print-chain-args:
+
 # Print available protocol arguments
 print-protocol-args:
   @echo "Available protocol arguments: all, flow, lockup, airdrops"
-  @echo "'all' will run the codegen for all protocols"
+  @echo "Note that 'all' will run the codegen script for all protocols"
 
 # Check markdown and YAML files with Prettier
 prettier-check:

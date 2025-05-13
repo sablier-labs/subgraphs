@@ -30,6 +30,10 @@ You will need the following software on your machine:
 - [Bun](https://bun.sh)
 - [Just](https://github.com/casey/just)
 
+For running the tests for The Graph, you will need:
+
+- [PostgreSQL](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#install-postgresql)
+
 ## Set Up
 
 Clone this repository:

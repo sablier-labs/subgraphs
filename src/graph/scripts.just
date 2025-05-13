@@ -18,23 +18,23 @@ scripts_dir := "../../../scripts"
 #                                PUBLIC RECIPES                                #
 # ---------------------------------------------------------------------------- #
 
-foo:
-  @echo {{PROTOCOL}}
-
 # Authenticate with Graph hosted service
 auth:
   bun run graph auth --product hosted-service
 
 # Build the subgraph
 @build: codegen
-  bun run graph build manifests/ethereum.yaml
+  bun run graph build manifests/ethereum.yaml --output-dir build
 
 # Clean auto-generated files
 clean:
-  rm -rf bindings build schema.graphql
+  rm -rf bindings build
 
-# Generate everything needed for building the subgraph: GraphQL schema, YAML manifest, and AssemblyScript bindings
-codegen: codegen-schema codegen-bindings
+# Generate everything needed for building the subgraph (the order matters):
+# 1. GraphQL schema
+# 2. YAML manifest
+# 3. AssemblyScript bindings
+codegen: clean codegen-schema codegen-bindings
 
 # Generate subgraph bindings
 @codegen-bindings: (codegen-manifest "ethereum")
@@ -43,11 +43,11 @@ codegen: codegen-schema codegen-bindings
 # Generate subgraph manifest for a specific chain
 @codegen-manifest chain_name:
   # The path is relative to each protocol's directory
-  bun run {{scripts_dir}}/codegen-manifest.ts {{PROTOCOL}} {{chain_name}}
+  bun run {{scripts_dir}}/codegen/manifest.ts {{PROTOCOL}} {{chain_name}}
 
 # Generate GraphQL schema
 @codegen-schema:
-  bun run {{scripts_dir}}/codegen-schema.ts {{PROTOCOL}}
+	bun run {{scripts_dir}}/codegen/schema.ts "{{PROTOCOL}}";
 
 # Deploy the subgraph
 deploy chain_name:
@@ -64,6 +64,10 @@ deploy_ultra:
 # Deploy to XDC
 deploy_xdc:
   _deploy_custom {{node_xdc}} {{ipfs_url}} {{PROTOCOL}} xdc
+
+# Run tests with Matchstick
+test:
+  bun run graph test
 
 # ---------------------------------------------------------------------------- #
 #                               INTERNAL RECIPES                               #

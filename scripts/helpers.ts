@@ -1,17 +1,21 @@
 import * as path from "node:path";
+import logger from "@src/winston";
+import type { ProtocolArg } from "./types";
 
 export function getRelative(absolutePath: string): string {
   return path.relative(process.cwd(), absolutePath);
 }
 
-export function validateProtocolArg(protocolArg: string | undefined): "flow" | "lockup" | "all" {
+export function validateProtocolArg(protocolArg: string | undefined): ProtocolArg {
   if (!protocolArg) {
-    throw new Error("Protocol argument is required. Use 'flow', 'lockup', or 'all'");
+    logger.error("Protocol argument is required. Use 'airdrops', 'flow', 'lockup', or 'all'");
+    process.exit(1);
   }
 
-  if (!["flow", "lockup", "all"].includes(protocolArg)) {
-    throw new Error("Protocol argument must be either 'flow', 'lockup', or 'all'");
+  if (!["airdrops", "flow", "lockup", "all"].includes(protocolArg)) {
+    logger.error("Protocol argument must be either 'airdrops', 'flow', 'lockup', or 'all'");
+    process.exit(1);
   }
 
-  return protocolArg as "flow" | "lockup" | "all";
+  return protocolArg as ProtocolArg;
 }

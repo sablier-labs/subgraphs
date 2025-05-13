@@ -1,15 +1,15 @@
 import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
-import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../constants";
-import { getChainId, getContractVersion } from "../../context";
-import { getStreamAlias, getStreamId } from "../../ids";
-import { logError } from "../../logger";
+import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../common/constants";
+import { getChainId, getContractVersion } from "../../common/context";
+import { getStreamAlias, getStreamId } from "../../common/ids";
+import { logError } from "../../common/logger";
 import { EntityStream } from "../bindings";
+import { loadProxy } from "../helpers";
 import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../params";
 import { getOrCreateEntityAsset } from "./asset";
 import { getOrCreateEntityBatch } from "./batch";
-import { addProxyOwner } from "./proxy";
-import { addSegments } from "./segments";
-import { addTranches } from "./tranches";
+import { addSegments } from "./segment";
+import { addTranches } from "./tranche";
 import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityStreamDynamic(
@@ -76,7 +76,7 @@ export function createEntityStreamTranched(
 }
 
 export function loadEntityStream(tokenId: BigInt): EntityStream | null {
-  const id = getStreamId(tokenId);
+  const id = getStreamId(dataSource.address(), tokenId);
   return EntityStream.load(id);
 }
 
@@ -134,21 +134,43 @@ function addCliffLL(
 }
 
 function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): EntityStream | null {
+  const id = getStreamId(dataSource.address(), params.tokenId);
+  const stream = new EntityStream(id);
+
+  // Watcher
   const watcher = getOrCreateEntityWatcher();
+  stream.subgraphId = watcher.streamCounter;
+  watcher.streamCounter = watcher.streamCounter.plus(ONE);
+  watcher.save();
 
-  const id = getStreamId(params.tokenId);
-  let stream = new EntityStream(id);
+  // Asset
+  const asset = getOrCreateEntityAsset(params.asset);
+  stream.asset = asset.id;
 
-  // General properties
+  // Batch
+  const batch = getOrCreateEntityBatch(event, params.sender);
+  stream.batch = batch.id;
+  stream.position = batch.size.minus(ONE);
+
+  // Proxy
+  const proxy = loadProxy(params.sender);
+  if (proxy) {
+    stream.parties.push(proxy);
+    stream.proxied = true;
+    stream.proxender = proxy;
+  } else {
+    stream.proxied = false;
+  }
+
+  // Stream: general
   stream.alias = getStreamAlias(params.tokenId);
   stream.chainId = getChainId();
-  stream.contract = dataSource.address();
+  stream.contract = event.address;
   stream.hash = event.transaction.hash;
-  stream.subgraphId = watcher.streamIndex;
   stream.timestamp = event.block.timestamp;
   stream.version = getContractVersion();
 
-  // Stream properties
+  // Streams: params
   stream.canceled = false;
   stream.cancelable = params.cancelable;
   stream.category = params.category;
@@ -163,22 +185,8 @@ function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): En
   stream.tokenId = params.tokenId;
   stream.transferable = params.transferable;
 
-  // Defaults
-  stream.cliff = false;
+  // Stream: defaults
   stream.withdrawnAmount = ZERO;
-
-  // Relationships with other entities
-  const asset = getOrCreateEntityAsset(params.asset);
-  stream.asset = asset.id;
-
-  const batch = getOrCreateEntityBatch(event, params.sender);
-  stream.batch = batch.id;
-  stream.position = batch.size.minus(ONE);
-
-  stream = addProxyOwner(stream);
-
-  watcher.streamIndex = watcher.streamIndex.plus(ONE);
-  watcher.save();
 
   return stream;
 }

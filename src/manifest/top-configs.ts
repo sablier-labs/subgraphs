@@ -1,6 +1,7 @@
+import type { Sablier } from "@sablier/deployments";
 import type { Manifest } from "@src/types";
 
-const topConfigs: Record<string, Omit<Manifest.TopConfig, "dataSources">> = {
+const topConfigs: Record<Exclude<Sablier.Protocol, "legacy">, Manifest.TopConfig> = {
   airdrops: {
     ...get("Airdrops"),
   },

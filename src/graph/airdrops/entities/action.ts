@@ -1,41 +1,40 @@
-import { dataSource, ethereum } from "@graphprotocol/graph-ts";
-import { ONE, ZERO } from "../../constants";
-import { getChainId } from "../../context";
-import { getActionId } from "../../ids";
-import { logError } from "../../logger";
-import { EntityAction } from "../bindings";
-import { generateCampaignId, getCampaignById } from "./campaign";
+import { ethereum } from "@graphprotocol/graph-ts";
+import { AIRDROPS_V1_1, AIRDROPS_V1_2, ONE } from "../../common/constants";
+import { getChainId, getContractVersion } from "../../common/context";
+import { getActionId } from "../../common/ids";
+import { EntityAction, EntityCampaign } from "../bindings";
 import { getOrCreateEntityWatcher } from "./watcher";
 
-export function createEntityAction(event: ethereum.Event, category: string): EntityAction | null {
-  const watcher = getOrCreateEntityWatcher();
+export function createEntityAction(
+  event: ethereum.Event,
+  campaign: EntityCampaign,
+  category: string,
+): EntityAction | null {
   const actionId = getActionId(event);
   const action = new EntityAction(actionId);
 
-  action.category = category;
+  // Watcher
+  const watcher = getOrCreateEntityWatcher();
+  action.subgraphId = watcher.actionCounter;
+  watcher.actionCounter = watcher.actionCounter.plus(ONE);
+  watcher.save();
+
+  // Action
   action.block = event.block.number;
+  action.campaign = campaign.id;
+  action.category = category;
+  action.chainId = getChainId();
   action.from = event.transaction.from;
   action.hash = event.transaction.hash;
   action.timestamp = event.block.timestamp;
-  action.subgraphId = watcher.actionIndex;
-  action.fee = ZERO;
-  action.chainId = getChainId();
 
-  /** --------------- */
-  if (category !== "Create") {
-    const campaignId = generateCampaignId(dataSource.address());
-    const campaign = getCampaignById(campaignId);
-    if (campaign == null) {
-      logError("Campaign not saved before this action event: action={}, campaign={}", [actionId, campaignId]);
-      return null;
-    }
-
-    action.campaign = campaign.id;
+  // Only set the fee if it's not an old version.
+  const version = getContractVersion();
+  const isVersionWithFees = version !== AIRDROPS_V1_1 && version !== AIRDROPS_V1_2;
+  if (isVersionWithFees) {
+    action.fee = event.transaction.value;
   }
 
-  /** --------------- */
-  watcher.actionIndex = watcher.actionIndex.plus(ONE);
-  watcher.save();
-
+  action.save();
   return action;
 }

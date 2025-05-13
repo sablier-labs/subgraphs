@@ -50,6 +50,12 @@ type Action @entity(immutable: true) {
   contract: Bytes!
 
   """
+  The Sablier fee paid in the native token of the chain, e.g., ETH for Ethereum Mainnet.
+  See https://docs.sablier.com/concepts/fees
+  """
+  fee: BigInt
+
+  """
   Stream linked to this action, if any.
   """
   stream: Stream
@@ -75,10 +81,4 @@ type Action @entity(immutable: true) {
   2nd amount. What this is depends upon the action type, e.g. for Withdraw, it is the refund amount.
   """
   amountB: BigInt
-
-  """
-  The Sablier fee paid in the native token of the chain, e.g., ETH for Ethereum Mainnet.
-  See https://docs.sablier.com/concepts/fees
-  """
-  fee: BigInt
 }

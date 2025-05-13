@@ -5,7 +5,7 @@ See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/SablierBatchLockup.so
 The entity can be immutable because a batch is only updated in the same block.
 See https://thegraph.com/docs/en/subgraphs/developing/creating/ql-schema/#defining-entities
 """
-type Batch @entity {
+type Batch @entity(immutable: true) {
   """
   The hash of the parent transaction.
   """
@@ -42,7 +42,7 @@ type Batch @entity {
 """
 Sender address that created batches.
 """
-type Batcher @entity {
+type Batcher @entity(immutable: false) {
   """
   The sender address.
   """
@@ -56,7 +56,7 @@ type Batcher @entity {
   """
   Numerical index.
   """
-  batchIndex: BigInt!
+  batchCounter: BigInt!
 
   """
   Batches started by this sender.

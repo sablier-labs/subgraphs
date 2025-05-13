@@ -1,5 +1,5 @@
 /** Contracts */
-export { SablierFlow } from "./bindings/SablierFlow-v1.0/SablierFlow";
+export { SablierFlow } from "./bindings/SablierFlow_v1_0/SablierFlow";
 
 /** Events */
 export {
@@ -15,7 +15,7 @@ export {
   TransferAdmin as EventTransferAdmin,
   VoidFlowStream as EventVoid,
   WithdrawFromFlowStream as EventWithdraw,
-} from "./bindings/SablierFlow-v1.0/SablierFlow";
+} from "./bindings/SablierFlow_v1_0/SablierFlow";
 
 /** Schema */
 export {

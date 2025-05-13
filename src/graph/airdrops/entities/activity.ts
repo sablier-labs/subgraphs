@@ -1,49 +1,32 @@
 import { BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { ZERO } from "../../constants";
-import { logError } from "../../logger";
-import { EntityActivity } from "../bindings";
-import { getCampaignById } from "./campaign";
+import { ONE, ZERO } from "../../common/constants";
+import { EntityActivity, EntityCampaign } from "../bindings";
 
-export function getActivityById(id: string): EntityActivity | null {
-  return EntityActivity.load(id);
-}
+export function createOrUpdateActivity(
+  event: ethereum.Event,
+  campaign: EntityCampaign,
+  amount: BigInt,
+): EntityActivity {
+  const timestamp = event.block.timestamp.toU32();
+  const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
 
-export function getOrCreateActivity(campaignId: string, event: ethereum.Event): EntityActivity | null {
-  const timestamp = event.block.timestamp.toI32();
-  const day = timestamp / (60 * 60 * 24);
+  const id = "activity" + "-" + campaign.id + "-" + day.toString();
+  let activity = EntityActivity.load(id);
+  if (activity != null) {
+    activity.amount = activity.amount.plus(amount);
+    activity.claims = activity.claims.plus(ONE);
 
-  /** --------------- */
-  const campaign = getCampaignById(campaignId);
-  if (campaign == null) {
-    logError("Campaign not saved before this activity update: {}", [campaignId]);
-    return null;
+    activity.save();
+    return activity;
   }
 
-  /** --------------- */
+  activity = new EntityActivity(id);
+  activity.amount = amount;
+  activity.campaign = campaign.id;
+  activity.claims = ONE;
+  activity.day = BigInt.fromU32(day);
+  activity.timestamp = event.block.timestamp;
 
-  const id = generateActivityId(campaignId, day.toString());
-  let entity = getActivityById(id);
-
-  if (entity != null) {
-    return entity;
-  }
-
-  entity = new EntityActivity(id);
-  entity.day = BigInt.fromI32(day);
-  entity.campaign = campaign.id;
-  entity.timestamp = event.block.timestamp;
-
-  entity.amount = ZERO;
-  entity.claims = ZERO;
-
-  return entity;
-}
-
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-// TODO: add example
-export function generateActivityId(campaignId: string, day: string): string {
-  return "activity-" + campaignId + "-" + day;
+  activity.save();
+  return activity;
 }

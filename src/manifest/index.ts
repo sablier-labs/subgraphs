@@ -1,2 +1,2 @@
-export * from "./data-sources";
+export { getSources } from "./sources";
 export { default as topConfigs } from "./top-configs";

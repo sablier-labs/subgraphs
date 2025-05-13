@@ -1,405 +1,142 @@
-import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ADDRESS_ZERO, ONE, ZERO } from "../../constants";
-import { getChainId } from "../../context";
-import { logError } from "../../logger";
-import { EntityAsset, EntityCampaign } from "../bindings";
-import {
-  CreateMerkleLTTranchesWithPercentagesStruct,
-  CreateMerkleInstant as EventCreateCampaignInstant_V23,
-  CreateMerkleStreamerLL as EventCreateCampaignLL_V21,
-  CreateMerkleLL as EventCreateCampaignLL_V22,
-  CreateMerkleLL1 as EventCreateCampaignLL_V23,
-  CreateMerkleLT as EventCreateCampaignLT_V22,
-  CreateMerkleLT1 as EventCreateCampaignLT_V23,
-} from "../bindings/types/templates/ContractMerkleFactory/SablierMerkleFactory";
-import { StreamVersion_V21, StreamVersion_V22, StreamVersion_V23 } from "../config";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { ONE, ZERO } from "../../common/constants";
+import { getChainId, getContractVersion } from "../../common/context";
+import { getCampaignId } from "../../common/ids";
+import { logError } from "../../common/logger";
+import { EntityCampaign, EntityTranche } from "../bindings";
+import { getNickname } from "../helpers";
+import { CampaignCommonParams, CampaignLLParams, CampaignLTParams } from "../params";
 import { getOrCreateEntityAsset } from "./asset";
-import { getFactoryByAddress } from "./factory";
-import { addTranches } from "./tranches";
+import { getOrCreateEntityFactory } from "./factory";
+import { addTranchesWithPercentages } from "./tranche";
 import { getOrCreateEntityWatcher } from "./watcher";
 
-export function getCampaignById(id: string): EntityCampaign | null {
-  return EntityCampaign.load(id);
+export function createEntityCampaignInstant(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
+  const campaign = createBaseEntity(event, params);
+  campaign.save();
+  return campaign;
 }
 
-function createCampaign(id: string, event: ethereum.Event): EntityCampaign | null {
-  let entity = getCampaignById(id);
-  if (entity != null) {
-    logError("Campaign already registered at this address");
-    return null;
+export function createEntityCampaignLL(
+  event: ethereum.Event,
+  paramsCommon: CampaignCommonParams,
+  paramsLL: CampaignLLParams,
+): EntityCampaign {
+  const campaign = createBaseEntity(event, paramsCommon);
+
+  // Lockup
+  campaign.lockup = paramsLL.lockup;
+  campaign.streamCancelable = paramsLL.cancelable;
+  campaign.streamShape = paramsLL.shape;
+  campaign.streamTotalDuration = paramsLL.totalDuration;
+  campaign.streamTransferable = paramsLL.transferable;
+
+  const startTime = paramsLL.startTime;
+  if (startTime) {
+    campaign.streamStart = startTime.isZero() === false;
+    campaign.streamStartTime = startTime;
   }
 
-  /** --------------- */
+  // LockupLinear
+  campaign.streamCliff = paramsLL.cliffDuration.isZero() === false;
+  campaign.streamCliffDuration = paramsLL.cliffDuration;
+  campaign.streamCliffPercentage = paramsLL.cliffPercentage;
+  const startPercentage = paramsLL.startPercentage;
+  if (startPercentage) {
+    campaign.streamInitial = startPercentage.isZero() === false;
+    campaign.streamInitialPercentage = startPercentage;
+  }
+
+  campaign.save();
+  return campaign;
+}
+
+export function createEntityCampaignLT(
+  event: ethereum.Event,
+  paramsCommon: CampaignCommonParams,
+  paramsLT: CampaignLTParams,
+): EntityCampaign {
+  let campaign = createBaseEntity(event, paramsCommon);
+
+  // Lockup
+  campaign.lockup = paramsLT.lockup;
+  campaign.streamCancelable = paramsLT.cancelable;
+  campaign.streamShape = paramsLT.shape;
+  campaign.streamTransferable = paramsLT.transferable;
+  campaign.streamTotalDuration = paramsLT.totalDuration;
+  const startTime = paramsLT.startTime;
+  if (startTime) {
+    campaign.streamStart = startTime.isZero() === false;
+    campaign.streamStartTime = startTime;
+  }
+
+  // LockupTranched
+  campaign = addTranchesWithPercentages(campaign, paramsLT.tranchesWithPercentages);
+
+  campaign.save();
+  return campaign;
+}
+
+export function getEntityCampaign(address: Address): EntityCampaign | null {
+  const id = getCampaignId(address);
+  const campaign = EntityCampaign.load(id);
+  if (campaign == null) {
+    logError("Campaign entity not saved for address: {}", [address.toHexString()]);
+  }
+  return campaign;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  INTERNAL                                  */
+/* -------------------------------------------------------------------------- */
+
+function createBaseEntity(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
+  const id = getCampaignId(params.campaignAddress);
+  const campaign = new EntityCampaign(id);
+
+  // Watcher
   const watcher = getOrCreateEntityWatcher();
-
-  /** --------------- */
-  entity = new EntityCampaign(id);
-  entity.chainId = getChainId();
-  entity.subgraphId = watcher.campaignIndex;
-  entity.hash = event.transaction.hash;
-  entity.timestamp = event.block.timestamp;
-  entity.name = "";
-  entity.nickname = "";
-
-  entity.lockup = ADDRESS_ZERO;
-
-  entity.clawbackAction = null;
-  entity.clawbackTime = null;
-
-  entity.claimedAmount = ZERO;
-  entity.claimedCount = ZERO;
-
-  entity.streamCliff = false;
-  entity.streamCliffDuration = ZERO;
-  entity.streamCliffPercentage = ZERO;
-
-  entity.streamStart = false;
-  entity.streamStartTime = ZERO;
-
-  entity.streamInitial = false;
-  entity.streamInitialPercentage = ZERO;
-
-  entity.streamTotalDuration = ZERO;
-  entity.streamTransferable = false;
-  entity.streamCancelable = false;
-  entity.streamShape = "";
-
-  entity.fee = ZERO;
-
-  /** --------------- */
-  const factory = getFactoryByAddress(event.address);
-  if (factory == null) {
-    logError("Factory not yet registered at this address");
-    return null;
-  }
-  entity.factory = factory.id;
-  const index = factory.campaignIndex.plus(ONE);
-  factory.campaignIndex = index;
-  factory.save();
-
-  entity.position = index;
-
-  /** --------------- */
-
-  watcher.campaignIndex = watcher.campaignIndex.plus(ONE);
+  campaign.subgraphId = watcher.campaignCounter;
+  watcher.campaignCounter = watcher.campaignCounter.plus(ONE);
   watcher.save();
 
-  return entity;
-}
+  // Asset
+  const asset = getOrCreateEntityAsset(params.asset);
+  campaign.asset = asset.id;
 
-export function createCampaignLinear_V21(event: EventCreateCampaignLL_V21): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleStreamer);
-  const entity = createCampaign(id, event);
+  // Factory
+  const factory = getOrCreateEntityFactory(event.address);
+  campaign.factory = factory.id;
+  const campaignCounter = factory.campaignCounter.plus(ONE);
+  campaign.position = campaignCounter;
+  factory.campaignCounter = campaignCounter;
+  factory.save();
 
-  if (entity == null) {
-    logError("Campaign is missing");
-    return null;
+  // Campaign: general
+  campaign.chainId = getChainId();
+  campaign.hash = event.transaction.hash;
+  campaign.timestamp = event.block.timestamp;
+  campaign.version = getContractVersion();
+
+  // Campaign: params
+  campaign.address = params.campaignAddress;
+  campaign.admin = params.admin;
+  campaign.aggregateAmount = params.aggregateAmount;
+  campaign.category = params.category;
+  campaign.expires = params.expiration.isZero() === false;
+  campaign.expiration = params.expiration;
+  campaign.name = params.name;
+  campaign.nickname = getNickname(params.admin, asset, params.name);
+  campaign.ipfsCID = params.ipfsCID;
+  campaign.root = params.root;
+  campaign.totalRecipients = params.recipientCount;
+  if (params.minimumFee) {
+    campaign.fee = params.minimumFee;
   }
 
-  entity.address = event.params.merkleStreamer;
-  entity.category = "LockupLinear";
-
-  entity.admin = event.params.admin;
-  entity.lockup = event.params.lockupLinear;
-
-  entity.expires = !event.params.expiration.isZero();
-  entity.expiration = event.params.expiration;
-
-  entity.root = event.params.merkleRoot;
-  entity.ipfsCID = event.params.ipfsCID;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientsCount;
-
-  entity.streamCliff = !event.params.streamDurations.cliff.isZero();
-  entity.streamCliffDuration = event.params.streamDurations.cliff;
-  entity.streamTotalDuration = event.params.streamDurations.total;
-  entity.streamCancelable = event.params.cancelable;
-  entity.streamTransferable = event.params.transferable;
-
-  entity.version = StreamVersion_V21;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.asset);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(event.params.admin, asset, "", StreamVersion_V21);
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-export function createCampaignLinear_V22(event: EventCreateCampaignLL_V22): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleLL);
-  const entity = createCampaign(id, event);
-
-  if (entity == null) {
-    logError("Campaign is missing.");
-    return null;
-  }
-
-  entity.address = event.params.merkleLL;
-  entity.category = "LockupLinear";
-
-  entity.lockup = event.params.lockupLinear;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientCount;
-
-  entity.streamCliff = !event.params.streamDurations.cliff.isZero();
-  entity.streamCliffDuration = event.params.streamDurations.cliff;
-  entity.streamTotalDuration = event.params.streamDurations.total;
-
-  entity.name = event.params.baseParams.name;
-  entity.admin = event.params.baseParams.initialAdmin;
-  entity.expires = !event.params.baseParams.expiration.isZero();
-  entity.expiration = event.params.baseParams.expiration;
-  entity.root = event.params.baseParams.merkleRoot;
-  entity.ipfsCID = event.params.baseParams.ipfsCID;
-  entity.streamCancelable = event.params.baseParams.cancelable;
-  entity.streamTransferable = event.params.baseParams.transferable;
-
-  entity.version = StreamVersion_V22;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.baseParams.asset);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(
-    event.params.baseParams.initialAdmin,
-    asset,
-    event.params.baseParams.name,
-    StreamVersion_V22,
-  );
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-export function createCampaignLinear_V23(event: EventCreateCampaignLL_V23): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleLL);
-  const entity = createCampaign(id, event);
-
-  if (entity == null) {
-    logError("Campaign is missing.");
-    return null;
-  }
-
-  entity.address = event.params.merkleLL;
-  entity.category = "LockupLinear";
-
-  entity.lockup = event.params.lockup;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientCount;
-
-  entity.streamCliff = !event.params.schedule.cliffDuration.isZero();
-  entity.streamCliffDuration = event.params.schedule.cliffDuration;
-  entity.streamCliffPercentage = event.params.schedule.cliffPercentage;
-  entity.streamTotalDuration = event.params.schedule.totalDuration;
-
-  entity.streamStart = !event.params.schedule.startTime.isZero();
-  entity.streamStartTime = event.params.schedule.startTime;
-
-  entity.streamInitial = !event.params.schedule.startPercentage.isZero();
-  entity.streamInitialPercentage = event.params.schedule.startPercentage;
-
-  entity.name = event.params.baseParams.campaignName;
-  entity.admin = event.params.baseParams.initialAdmin;
-  entity.expires = !event.params.baseParams.expiration.isZero();
-  entity.expiration = event.params.baseParams.expiration;
-  entity.root = event.params.baseParams.merkleRoot;
-  entity.ipfsCID = event.params.baseParams.ipfsCID;
-  entity.streamCancelable = event.params.cancelable;
-  entity.streamTransferable = event.params.transferable;
-  entity.streamShape = event.params.baseParams.shape;
-
-  entity.fee = event.params.fee;
-  entity.version = StreamVersion_V23;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.baseParams.token);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(
-    event.params.baseParams.initialAdmin,
-    asset,
-    event.params.baseParams.campaignName,
-    StreamVersion_V23,
-  );
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-export function createCampaignTranched_V22(event: EventCreateCampaignLT_V22): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleLT);
-  let entity = createCampaign(id, event);
-
-  if (entity == null) {
-    logError("Campaign is missing.");
-    return null;
-  }
-
-  entity.address = event.params.merkleLT;
-  entity.category = "LockupTranched";
-
-  entity.lockup = event.params.lockupTranched;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientCount;
-
-  entity.name = event.params.baseParams.name;
-  entity.admin = event.params.baseParams.initialAdmin;
-  entity.expires = !event.params.baseParams.expiration.isZero();
-  entity.expiration = event.params.baseParams.expiration;
-  entity.root = event.params.baseParams.merkleRoot;
-  entity.ipfsCID = event.params.baseParams.ipfsCID;
-  entity.streamCancelable = event.params.baseParams.cancelable;
-  entity.streamTransferable = event.params.baseParams.transferable;
-  entity.streamTotalDuration = event.params.totalDuration;
-
-  entity.version = StreamVersion_V22;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.baseParams.asset);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  entity = addTranches(entity, event.params.tranchesWithPercentages);
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(
-    event.params.baseParams.initialAdmin,
-    asset,
-    event.params.baseParams.name,
-    StreamVersion_V22,
-  );
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-export function createCampaignTranched_V23(event: EventCreateCampaignLT_V23): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleLT);
-  let entity = createCampaign(id, event);
-
-  if (entity == null) {
-    logError("Campaign is missing.", []);
-    return null;
-  }
-
-  entity.address = event.params.merkleLT;
-  entity.category = "LockupTranched";
-
-  entity.lockup = event.params.lockup;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientCount;
-  entity.streamTotalDuration = event.params.totalDuration;
-
-  entity.streamStart = !event.params.streamStartTime.isZero();
-  entity.streamStartTime = event.params.streamStartTime;
-
-  entity.name = event.params.baseParams.campaignName;
-  entity.admin = event.params.baseParams.initialAdmin;
-  entity.expires = !event.params.baseParams.expiration.isZero();
-  entity.expiration = event.params.baseParams.expiration;
-  entity.root = event.params.baseParams.merkleRoot;
-  entity.ipfsCID = event.params.baseParams.ipfsCID;
-  entity.streamCancelable = event.params.cancelable;
-  entity.streamTransferable = event.params.transferable;
-  entity.streamShape = event.params.baseParams.shape;
-
-  entity.fee = event.params.fee;
-  entity.version = StreamVersion_V23;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.baseParams.token);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  entity = addTranches(
-    entity,
-    changetype<Array<CreateMerkleLTTranchesWithPercentagesStruct>>(event.params.tranchesWithPercentages),
-  );
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(
-    event.params.baseParams.initialAdmin,
-    asset,
-    event.params.baseParams.campaignName,
-    StreamVersion_V23,
-  );
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-export function createCampaignInstant_V23(event: EventCreateCampaignInstant_V23): EntityCampaign | null {
-  const id = generateCampaignId(event.params.merkleInstant);
-  const entity = createCampaign(id, event);
-
-  if (entity == null) {
-    logError("Campaign is missing.", []);
-    return null;
-  }
-
-  entity.address = event.params.merkleInstant;
-  entity.category = "Instant";
-
-  entity.lockup = ADDRESS_ZERO;
-  entity.aggregateAmount = event.params.aggregateAmount;
-  entity.totalRecipients = event.params.recipientCount;
-
-  entity.name = event.params.baseParams.campaignName;
-  entity.admin = event.params.baseParams.initialAdmin;
-  entity.expires = !event.params.baseParams.expiration.isZero();
-  entity.expiration = event.params.baseParams.expiration;
-  entity.root = event.params.baseParams.merkleRoot;
-  entity.ipfsCID = event.params.baseParams.ipfsCID;
-  entity.streamShape = event.params.baseParams.shape;
-
-  entity.fee = event.params.fee;
-  entity.version = StreamVersion_V23;
-
-  /** --------------- */
-  const asset = getOrCreateEntityAsset(event.params.baseParams.token);
-  entity.asset = asset.id;
-
-  /** --------------- */
-  const nickname = generateCampaignNickname(
-    event.params.baseParams.initialAdmin,
-    asset,
-    event.params.baseParams.campaignName,
-    StreamVersion_V23,
-  );
-  entity.nickname = nickname;
-
-  /** --------------- */
-  return entity;
-}
-
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-export function generateCampaignNickname(admin: Address, asset: EntityAsset, name: string, version: string): string {
-  if (version === StreamVersion_V21) {
-    const prefix = admin.toHexString().slice(0, 6);
-    const suffix = admin.toHexString().slice(-4);
-
-    return asset.symbol + " by " + prefix + ".." + suffix;
-  }
-  return asset.symbol + " in " + name;
-}
-
-// TODO: add example
-export function generateCampaignId(address: Address): string {
-  const addr = address.toHexString();
-  const chainId = getChainId().toString();
-  return addr + "-" + chainId;
+  // Campaign: defaults
+  campaign.claimedAmount = ZERO;
+  campaign.claimedCount = ZERO;
+
+  return campaign;
 }

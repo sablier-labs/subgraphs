@@ -1,0 +1,16 @@
+# Show available commands
+default:
+  @just --list
+
+# Generate all bindings
+codegen: codegen-erc20 codegen-prb-proxy
+
+# Generate the ERC-20 bindings
+codegen-erc20:
+  rm -rf erc20
+  bun run graph codegen manifest-erc20.yaml --output-dir erc20
+
+# Generate the PRBProxy bindings
+codegen-prb-proxy:
+  rm -rf prb-proxy
+  bun run graph codegen manifest-prb-proxy.yaml --output-dir prb-proxy

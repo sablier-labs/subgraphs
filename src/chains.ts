@@ -7,10 +7,10 @@ type SupportedChain = {
   name: string;
 };
 
-export const supportedChains: SupportedChain[] = [
-  // ────────────────────────────────────────────────────────────────────────────────
-  // Mainnets
-  // ────────────────────────────────────────────────────────────────────────────────
+const supportedChains: SupportedChain[] = [
+  /* -------------------------------------------------------------------------- */
+  /*                                  Mainnets                                  */
+  /* -------------------------------------------------------------------------- */
   {
     id: ChainId.ABSTRACT,
     name: "abstract",
@@ -115,9 +115,9 @@ export const supportedChains: SupportedChain[] = [
     id: ChainId.ZK_SYNC_ERA,
     name: "zksync",
   },
-  // ────────────────────────────────────────────────────────────────────────────────
-  // Testnets
-  // ────────────────────────────────────────────────────────────────────────────────
+  /* -------------------------------------------------------------------------- */
+  /*                                  Testnets                                  */
+  /* -------------------------------------------------------------------------- */
   {
     id: ChainId.ARBITRUM_SEPOLIA,
     name: "arbitrum-sepolia",
@@ -139,3 +139,5 @@ export const supportedChains: SupportedChain[] = [
     name: "zksync-sepolia",
   },
 ];
+
+export default supportedChains;

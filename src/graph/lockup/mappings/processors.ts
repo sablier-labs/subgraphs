@@ -2,7 +2,7 @@
  * @file Processors are bits of reusable logic that is used by multiple event handlers.
  */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { logError } from "../../logger";
+import { logError } from "../../common/logger";
 import { EntityStream } from "../bindings";
 import {
   createEntityAction,

@@ -7,7 +7,7 @@
 import {
   CancelLockupStream as EventCancelV1_1,
   WithdrawFromLockupStream as EventWithdrawV1_1,
-} from "../../bindings/SablierV2LockupLinear-v1.1/SablierV2LockupLinear";
+} from "../../bindings/SablierV2LockupLinear_v1_1/SablierV2LockupLinear";
 import { processCancel, processWithdraw } from "../processors";
 
 /**

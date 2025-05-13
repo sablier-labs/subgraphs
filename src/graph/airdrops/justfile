@@ -1,14 +1,8 @@
 import "../scripts.just"
 
+# Set protocol name
+export PROTOCOL := "airdrops"
+
 # Show available commands
 default:
   @just --list
-
-# Generate bindings
-codegen-bindings: clean
-  @just generate_manifest airdrops ethereum
-  bun run graph codegen manifests/ethereum.yaml --output-dir bindings
-
-# Deploy the subgraph
-deploy chain_name:
-  bun run graph deploy sablier-airdrops-{{chain_name}}

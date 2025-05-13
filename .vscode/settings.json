@@ -17,9 +17,7 @@
     "**/_generated": true,
     "**/bindings": true,
     "**/deprecated": true,
-    "**/manifests/**/*.yaml": true,
-    "**/node_modules": true,
-    "**/schema.graphql": true
+    "**/node_modules": true
   },
   "typescript.tsdk": "node_modules/typescript/lib"
 }

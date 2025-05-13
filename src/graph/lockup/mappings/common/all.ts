@@ -1,8 +1,8 @@
 /**
  * @file Common event handlers between all Lockup contracts.
  */
-import { ADDRESS_ZERO, ONE, ZERO } from "../../../constants";
-import { logError, logInfo } from "../../../logger";
+import { ADDRESS_ZERO, ONE, ZERO } from "../../../common/constants";
+import { logError, logInfo } from "../../../common/logger";
 import { EventApproval, EventApprovalForAll, EventRenounceLockupStream, EventTransfer } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
 import { ActionParams } from "../../params";
@@ -14,9 +14,8 @@ import { ActionParams } from "../../params";
 export function handleApproval(event: EventApproval): void {
   const id = event.params.tokenId;
   const stream = loadEntityStream(id);
-
   if (stream == null) {
-    logInfo("Stream not saved before this ERC-721 approval event: {}", [id.toHexString()]);
+    logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
     return;
   }
 
@@ -69,7 +68,6 @@ export function handleTransfer(event: EventTransfer): void {
     }
   }
   stream.parties = parties;
-
   stream.save();
 }
 

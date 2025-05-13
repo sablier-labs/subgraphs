@@ -1,5 +1,5 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ONE, ZERO } from "../../constants";
+import { ONE, ZERO } from "../../common/constants";
 import { EntityBatch, EntityBatcher } from "../bindings";
 
 /**
@@ -29,7 +29,7 @@ export function getOrCreateEntityBatch(event: ethereum.Event, sender: Address): 
     batch.size = ONE;
     batch.timestamp = event.block.timestamp;
 
-    batcher.batchIndex = batcher.batchIndex.plus(ONE);
+    batcher.batchCounter = batcher.batchCounter.plus(ONE);
     batcher.save();
   } else {
     batch.size = batch.size.plus(ONE);
@@ -46,7 +46,7 @@ function getOrCreateEntityBatcher(sender: Address): EntityBatcher {
   if (batcher == null) {
     batcher = new EntityBatcher(id);
     batcher.address = sender;
-    batcher.batchIndex = ZERO;
+    batcher.batchCounter = ZERO;
     batcher.save();
   }
 

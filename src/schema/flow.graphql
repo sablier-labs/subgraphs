@@ -1,22 +1,4 @@
-enum ActionCategory {
-  Approval
-  ApprovalForAll
-  Adjust
-  Create
-  Deposit
-  Pause
-  Refund
-  Restart
-  Transfer
-  Void
-  Withdraw
-}
-
-enum StreamCategory {
-  Flow
-}
-
-type Stream @entity {
+type Stream @entity(immutable: false) {
   # ------------------------------------ IDs ----------------------------------- #
   """
   Unique identifier: {contractAddress}-{chainId}-{tokenId}
@@ -81,6 +63,11 @@ type Stream @entity {
   ERC-20 token distributed via this stream.
   """
   asset: Asset!
+
+  """
+  ERC-20 token decimals. Stored here to avoid loading the asset entity on each stream.
+  """
+  assetDecimals: BigInt!
 
   """
   This is equivalent to the value returned by ERC20.balanceOf, and it changes after deposit and withdrawal.

@@ -1,14 +1,15 @@
 import * as path from "node:path";
-import * as fs from "fs-extra";
-import * as yaml from "js-yaml";
-
-import { supportedChains } from "@src/chains";
-import { getDataSources, topConfigs } from "@src/manifest";
+import type { Sablier } from "@sablier/deployments";
+import supportedChains from "@src/chains";
+import { getSources, topConfigs } from "@src/manifest";
 import { GRAPH_DIR } from "@src/paths";
 import type { Manifest } from "@src/types";
 import logger from "@src/winston";
+import * as fs from "fs-extra";
+import * as yaml from "js-yaml";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
+import type { ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                     CLI                                    */
@@ -17,17 +18,17 @@ import { getRelative, validateProtocolArg } from "../helpers";
 /**
  * CLI for generating subgraph manifests
  *
- * @example Generate manifest for Flow:
+ * @example Generate for Flow:
  * bun run scripts/codegen/manifest.ts flow
  *
- * @example Generate manifest for Flow on a specific chain:
+ * @example Generate for Flow on a specific chain:
  * bun run scripts/codegen/manifest.ts flow polygon
  *
- * @example Generate manifests for all protocols:
+ * @example Generate for all protocols:
  * bun run scripts/codegen/manifest.ts all
  *
- * @param {string} protocol - Required. Either 'flow', 'lockup', or 'all'
- * @param {string} [chainName] - Optional. Chain name to generate manifest for, e.g. 'polygon'
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} [chainName] - Optional: Chain name to generate manifest for, e.g. 'polygon'
  */
 if (require.main === module) {
   const args = process.argv.slice(2);
@@ -36,24 +37,22 @@ if (require.main === module) {
   const chainNameArg = args[1];
 
   function handleAllProtocols() {
-    const protocols: Array<"flow" | "lockup"> = ["flow", "lockup"];
+    const protocols: ProtocolArg[] = ["airdrops", "flow", "lockup"];
     let totalManifests = 0;
 
-    for (const protocol of protocols) {
+    for (const p of protocols) {
       if (!chainNameArg) {
-        const filesGenerated = generateForAllChains(protocol, true);
+        const filesGenerated = generateForAllChains(p, true);
         totalManifests += filesGenerated;
-        logger.info(
-          `✅ Generated ${filesGenerated} manifest${filesGenerated !== 1 ? "s" : ""} for ${protocol} protocol`,
-        );
+        logger.info(`✅ Generated ${filesGenerated} manifest${filesGenerated !== 1 ? "s" : ""} for ${p} protocol`);
       } else {
-        generateForSpecificChain(protocol, chainNameArg);
+        generateForSpecificChain(p, chainNameArg);
       }
     }
 
     if (!chainNameArg) {
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      logger.info(`🎉 Successfully generated ${totalManifests} total subgraph manifests across all protocols!`);
+      logger.info(`🎉 Successfully generated ${totalManifests} total subgraph manifests!`);
     }
   }
 
@@ -61,11 +60,10 @@ if (require.main === module) {
     if (protocolArg === "all") {
       handleAllProtocols();
     } else {
-      const protocol = protocolArg as "flow" | "lockup";
       if (!chainNameArg) {
-        generateForAllChains(protocol);
+        generateForAllChains(protocolArg);
       } else {
-        generateForSpecificChain(protocol, chainNameArg);
+        generateForSpecificChain(protocolArg, chainNameArg);
       }
     }
   } catch (error) {
@@ -78,17 +76,23 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function createManifestYAML(protocol: "flow" | "lockup", chainId: number, chainName: string): string {
+function createManifestYAML(protocol: ProtocolArg, chainId: number, chainName: string): string {
   const topConfig = topConfigs[protocol as keyof typeof topConfigs];
   if (!topConfig) {
-    throw new Error(`Top-level config not found for protocol: ${protocol}`);
+    logger.error(`Top-level config not found for protocol: ${protocol}`);
+    process.exit(1);
   }
 
-  const dataSources = getDataSources(protocol, chainId, chainName);
+  const sources = getSources(protocol as Sablier.Protocol, chainId, chainName);
+
+  // Filter sources by type but also strip the type field from each object
+  const dataSources = sources.filter((source) => source.type === "data-source").map(({ type, ...rest }) => rest);
+  const templates = sources.filter((source) => source.type === "template").map(({ type, ...rest }) => rest);
 
   const config = {
     ...topConfig,
-    dataSources,
+    dataSources: dataSources.length > 0 ? dataSources : undefined,
+    templates: templates.length > 0 ? templates : undefined,
   } as Manifest.TopConfig;
 
   const yamlContent = yaml.dump(config, {
@@ -98,7 +102,7 @@ function createManifestYAML(protocol: "flow" | "lockup", chainId: number, chainN
   return `${AUTOGEN_COMMENT}${yamlContent}`;
 }
 
-function generateForAllChains(protocol: "flow" | "lockup", suppressFinalLog = false): number {
+function generateForAllChains(protocol: ProtocolArg, suppressFinalLog = false): number {
   const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
 
   if (fs.pathExistsSync(OUTPUT_DIR)) {
@@ -114,9 +118,15 @@ function generateForAllChains(protocol: "flow" | "lockup", suppressFinalLog = fa
   for (const chain of supportedChains) {
     const result = writeManifestToFile(protocol, chain);
 
+    logger.debug(`🔍 Result: ${JSON.stringify(result)}`);
     if (result.success) {
       filesGenerated++;
     }
+  }
+
+  if (filesGenerated === 0) {
+    logger.error(`No manifests were generated for ${protocol} protocol. This might indicate a configuration issue.`);
+    process.exit(1);
   }
 
   if (!suppressFinalLog) {
@@ -130,7 +140,7 @@ function generateForAllChains(protocol: "flow" | "lockup", suppressFinalLog = fa
   return filesGenerated;
 }
 
-function generateForSpecificChain(protocol: "flow" | "lockup", chainName: string): void {
+function generateForSpecificChain(protocol: ProtocolArg, chainName: string): void {
   const chain = supportedChains.find((chain) => chain.name.toLowerCase() === chainName.toLowerCase());
   if (!chain) {
     const availableChains = supportedChains.map((chain) => chain.name).join(", ");
@@ -154,7 +164,7 @@ function generateForSpecificChain(protocol: "flow" | "lockup", chainName: string
 }
 
 function writeManifestToFile(
-  protocol: "flow" | "lockup",
+  protocol: ProtocolArg,
   chain: (typeof supportedChains)[number],
 ): { success: boolean; error?: string; relativeOutputPath?: string } {
   const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
@@ -165,6 +175,7 @@ function writeManifestToFile(
     const manifest = createManifestYAML(protocol, chain.id, chain.name);
     const outputPath = path.join(OUTPUT_DIR, `${chain.name}.yaml`);
     fs.writeFileSync(outputPath, manifest);
+
     logger.verbose(`✅ Generated manifest: ${getRelative(outputPath)}`);
 
     return {

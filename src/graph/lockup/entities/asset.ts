@@ -1,6 +1,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { getChainId } from "../../context";
-import { ERC20, getAssetName, getAssetSymbol } from "../../erc20";
+import { ERC20 } from "../../common/bindings";
+import { getAssetName, getAssetSymbol } from "../../common/bindings/getters";
+import { getChainId } from "../../common/context";
 import { EntityAsset } from "../bindings";
 
 export function getOrCreateEntityAsset(address: Address): EntityAsset {

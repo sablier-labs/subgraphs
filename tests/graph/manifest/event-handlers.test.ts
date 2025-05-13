@@ -1,6 +1,6 @@
 import type { Sablier } from "@sablier/deployments";
-import eventHandlers from "@src/manifest/data-sources/event-handlers";
-import { resolveEventHandler as resolve } from "@src/manifest/data-sources/event-handlers/helpers";
+import eventHandlers from "@src/manifest/sources/event-handlers";
+import { resolveEventHandler as resolve } from "@src/manifest/sources/event-handlers/resolver";
 import type { Manifest } from "@src/types";
 import _ from "lodash";
 
@@ -85,13 +85,13 @@ describe("Event handlers", () => {
     });
   });
 
-  const protocols = ["flow", "lockup"] as const;
+  const protocols = ["airdrops", "flow", "lockup"] as const;
   for (const protocol of protocols) {
     testProtocol(protocol);
   }
 });
 
-function testProtocol(protocol: "flow" | "lockup"): void {
+function testProtocol(protocol: Sablier.Protocol): void {
   describe(`${protocol} contracts`, () => {
     const handlersByContract = eventHandlers[protocol];
 
@@ -108,14 +108,14 @@ function testProtocol(protocol: "flow" | "lockup"): void {
 }
 
 function testEventHandler(
-  protocol: "flow" | "lockup",
+  protocol: Sablier.Protocol,
   contractName: string,
   version: Sablier.Version,
   actual: Manifest.EventHandler,
 ): void {
-  const eventName = getEventName(actual.handler);
+  const eventName = getEventName(actual.event);
 
-  // We need this test because some handlers are reused between different versions, e.g., Flow v1.0 and v1.1
+  // We test this because some handlers are reused between releases, e.g., Flow v1.0 and v1.1
   it(`should resolve the handler for event ${eventName}`, () => {
     const expected = resolve({
       protocol,
@@ -123,10 +123,13 @@ function testEventHandler(
       contractName,
       eventName,
     });
-    expect(actual).toStrictEqual(expected);
+    expect(actual.event).toBe(expected.event);
+
+    // Some handlers have a suffix, which we don't want to test
+    expect(actual.handler.startsWith(`handle${eventName}`)).toBeTruthy();
   });
 }
 
-function getEventName(handler: `handle${string}`): string {
-  return handler.substring(6);
+function getEventName(eventSignature: string): string {
+  return eventSignature.substring(0, eventSignature.indexOf("("));
 }

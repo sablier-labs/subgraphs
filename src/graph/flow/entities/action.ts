@@ -1,36 +1,38 @@
 import { dataSource, ethereum } from "@graphprotocol/graph-ts";
-import { ONE } from "../../constants";
-import { getChainId } from "../../context";
-import { getActionId } from "../../ids";
-import { ActionParams } from "../../params";
+import { ONE } from "../../common/constants";
+import { getChainId } from "../../common/context";
+import { getActionId } from "../../common/ids";
+import { ActionParams } from "../../common/params";
 import { EntityAction } from "../bindings";
 import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityAction(event: ethereum.Event, params: ActionParams): EntityAction {
-  const actionId = getActionId(event);
-  const action = new EntityAction(actionId);
+  const id = getActionId(event);
+  const action = new EntityAction(id);
 
+  // Watcher
+  const watcher = getOrCreateEntityWatcher();
+  action.subgraphId = watcher.actionCounter;
+  watcher.actionCounter = watcher.actionCounter.plus(ONE);
+  watcher.save();
+
+  // Action: general fields
   action.block = event.block.number;
+  action.chainId = getChainId();
+  action.contract = event.address;
   action.fee = event.transaction.value;
   action.from = event.transaction.from;
   action.hash = event.transaction.hash;
   action.timestamp = event.block.timestamp;
-  action.chainId = getChainId();
 
-  action.category = params.category;
+  // Action: specific fields
   action.addressA = params.addressA;
   action.addressB = params.addressB;
   action.amountA = params.amountA;
   action.amountB = params.amountB;
+  action.category = params.category;
   action.stream = params.streamId;
 
-  const watcher = getOrCreateEntityWatcher();
-  action.subgraphId = watcher.actionIndex;
-
-  watcher.actionIndex = watcher.actionIndex.plus(ONE);
-  watcher.save();
-
-  action.contract = dataSource.address();
   action.save();
   return action;
 }

@@ -1,5 +1,5 @@
-import { ONE } from "../../constants";
-import { getChainId } from "../../context";
+import { ONE } from "../../common/constants";
+import { getChainId } from "../../common/context";
 import { EntityWatcher } from "../bindings";
 
 export function getOrCreateEntityWatcher(): EntityWatcher {
@@ -8,9 +8,9 @@ export function getOrCreateEntityWatcher(): EntityWatcher {
 
   if (watcher == null) {
     watcher = new EntityWatcher(chainId.toString());
-    watcher.actionIndex = ONE;
+    watcher.actionCounter = ONE;
     watcher.chainId = chainId;
-    watcher.streamIndex = ONE;
+    watcher.streamCounter = ONE;
   }
 
   return watcher;

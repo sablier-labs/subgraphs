@@ -1,17 +1,17 @@
-import { ONE } from "../../constants";
-import { getChainId } from "../../context";
+import { ONE } from "../../common/constants";
+import { getChainId } from "../../common/context";
 import { EntityWatcher } from "../bindings";
 
 export function getOrCreateEntityWatcher(): EntityWatcher {
-  const id = "1";
-  let entity = EntityWatcher.load(id);
+  const chainId = getChainId();
+  let watcher = EntityWatcher.load(chainId.toString());
 
-  if (entity == null) {
-    entity = new EntityWatcher(id);
-    entity.actionIndex = ONE;
-    entity.campaignIndex = ONE;
-    entity.chainId = getChainId();
+  if (watcher == null) {
+    watcher = new EntityWatcher(chainId.toString());
+    watcher.actionCounter = ONE;
+    watcher.campaignCounter = ONE;
+    watcher.chainId = chainId;
   }
 
-  return entity;
+  return watcher;
 }

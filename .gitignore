@@ -4,13 +4,14 @@ node_modules
 **/bindings
 **/build
 **/generated
-!src/graph/erc20/bindings
-!src/graph/prb-proxy/bindings
+**/.bin
+!src/graph/common/bindings
 
 # Files
 *.log
 *.tsbuildinfo
 .env*
+.latest.json
 !.env.example
 config.yaml
 pnpm-lock.yaml

@@ -1,5 +1,6 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-export * from "../params";
+export * from "../common/params";
+
 export class CreateCommonParams {
   asset: Address;
   cancelable: boolean;
@@ -21,11 +22,11 @@ export class CreateLinearParams {
 }
 
 export class CreateDynamicParams {
-  segments: Array<Segment>;
+  segments: Segment[];
 }
 
 export class CreateTranchedParams {
-  tranches: Array<Tranche>;
+  tranches: Tranche[];
 }
 
 export class Segment {
