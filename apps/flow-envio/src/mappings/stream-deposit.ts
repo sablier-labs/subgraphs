@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, DepositHandler, DepositLoader } from "../types";
 
 import {
@@ -115,6 +115,11 @@ async function handler(input: DepositHandler<typeof loader>) {
 }
 
 FlowV10.DepositFlowStream.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.DepositFlowStream.handlerWithLoader({
   loader,
   handler,
 });

@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, VoidHandler, VoidLoader } from "../types";
 
 import {
@@ -113,6 +113,11 @@ async function handler(input: VoidHandler<typeof loader>) {
 }
 
 FlowV10.VoidFlowStream.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.VoidFlowStream.handlerWithLoader({
   loader,
   handler,
 });

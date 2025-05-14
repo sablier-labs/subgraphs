@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, RefundHandler, RefundLoader } from "../types";
 
 import {
@@ -113,6 +113,11 @@ async function handler(input: RefundHandler<typeof loader>) {
 }
 
 FlowV10.RefundFromFlowStream.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.RefundFromFlowStream.handlerWithLoader({
   loader,
   handler,
 });

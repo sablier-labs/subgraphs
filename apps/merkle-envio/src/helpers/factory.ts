@@ -53,17 +53,20 @@ export function generateFactoryIdFromEvent(event: Event) {
 export function _initialize(event: Event): Factory[] {
   const versions = [StreamVersion.V21, StreamVersion.V22, StreamVersion.V23];
 
-  return chains
-    .map((chain) => {
-      return versions
-        .map((version) => {
-          const MSF = chain[version].factory.map((f) =>
-            createFactory(event, f.address, f.alias, version),
-          );
+  const chainId = event.chainId;
+  const chain = chains.find((chain) => chain.id === chainId);
 
-          return [MSF].flat();
-        })
-        .flat();
+  if (!chain) {
+    throw new Error("Missing chain from configuration - failed to initialize.");
+  }
+
+  return versions
+    .map((version) => {
+      const MSF = chain[version].factory.map((f) =>
+        createFactory(event, f.address, f.alias, version),
+      );
+
+      return [MSF].flat();
     })
     .flat();
 }

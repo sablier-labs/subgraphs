@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, AdjustHandler, AdjustLoader } from "../types";
 
 import {
@@ -114,6 +114,11 @@ async function handler(input: AdjustHandler<typeof loader>) {
 }
 
 FlowV10.AdjustFlowStream.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.AdjustFlowStream.handlerWithLoader({
   loader,
   handler,
 });

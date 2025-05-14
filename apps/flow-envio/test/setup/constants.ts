@@ -24,7 +24,7 @@ export const _configurations = (
         ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
         : "http://localhost:8080/v1/graphql",
       TheGraph:
-        "https://api.studio.thegraph.com/query/57079/sablier-flow-experimental/version/latest",
+        "https://api.studio.thegraph.com/query/57079/sablier-flow-sepolia/version/latest",
     },
     token: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
     recipient: "0x8468cD99Cea5EB7279Adf189fAe632FFb06b2F6F",
@@ -44,7 +44,7 @@ export const _configurations = (
 
 /** SPECIALIZED CONFIGURATION */
 
-export const REMOTE = true;
+export const REMOTE = false;
 export const SKIP_CLEANUP = false;
 export const POWER_SKIP_SUBGRAPH_ID_ASC = 0;
 

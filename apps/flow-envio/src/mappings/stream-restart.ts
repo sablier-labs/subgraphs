@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, RestartHandler, RestartLoader } from "../types";
 
 import {
@@ -107,6 +107,11 @@ async function handler(input: RestartHandler<typeof loader>) {
 }
 
 FlowV10.RestartFlowStream.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.RestartFlowStream.handlerWithLoader({
   loader,
   handler,
 });

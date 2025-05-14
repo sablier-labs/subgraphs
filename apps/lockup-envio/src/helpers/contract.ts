@@ -54,55 +54,63 @@ export function generateContractIdFromEvent(event: Event) {
 }
 
 export function _initialize(event: Event): Contract[] {
-  const versions = [StreamVersion.V20, StreamVersion.V21, StreamVersion.V22, StreamVersion.V23];
+  const versions = [
+    StreamVersion.V20,
+    StreamVersion.V21,
+    StreamVersion.V22,
+    StreamVersion.V23,
+  ];
 
-  return chains
-    .map((chain) => {
-      return versions
-        .map((version) => {
-          const LL = chain[version].linear.map((linear) =>
-            createContract(
-              event,
-              linear.address,
-              linear.alias,
-              version,
-              ContractCategory.LockupLinear,
-            ),
-          );
+  const chainId = event.chainId;
+  const chain = chains.find((chain) => chain.id === chainId);
 
-          const LD = chain[version].dynamic.map((dynamic) =>
-            createContract(
-              event,
-              dynamic.address,
-              dynamic.alias,
-              version,
-              ContractCategory.LockupDynamic,
-            ),
-          );
+  if (!chain) {
+    throw new Error("Missing chain from configuration - failed to initialize.");
+  }
 
-          const LT = chain[version].tranched.map((tranched) =>
-            createContract(
-              event,
-              tranched.address,
-              tranched.alias,
-              version,
-              ContractCategory.LockupTranched,
-            ),
-          );
+  return versions
+    .map((version) => {
+      const LL = chain[version].linear.map((linear) =>
+        createContract(
+          event,
+          linear.address,
+          linear.alias,
+          version,
+          ContractCategory.LockupLinear,
+        ),
+      );
 
-          const LK = chain[version].merged.map((merged) =>
-            createContract(
-              event,
-              merged.address,
-              merged.alias,
-              version,
-              ContractCategory.LockupMerged,
-            ),
-          );
+      const LD = chain[version].dynamic.map((dynamic) =>
+        createContract(
+          event,
+          dynamic.address,
+          dynamic.alias,
+          version,
+          ContractCategory.LockupDynamic,
+        ),
+      );
 
-          return [LL, LD, LT, LK].flat();
-        })
-        .flat();
+      const LT = chain[version].tranched.map((tranched) =>
+        createContract(
+          event,
+          tranched.address,
+          tranched.alias,
+          version,
+          ContractCategory.LockupTranched,
+        ),
+      );
+
+      const LK = chain[version].merged.map((merged) =>
+        createContract(
+          event,
+          merged.address,
+          merged.alias,
+          version,
+          ContractCategory.LockupMerged,
+        ),
+      );
+
+      return [LL, LD, LT, LK].flat();
     })
     .flat();
 }

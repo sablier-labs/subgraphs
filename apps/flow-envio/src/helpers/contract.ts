@@ -54,17 +54,20 @@ export function generateContractIdFromEvent(event: Event) {
 export function _initialize(event: Event): Contract[] {
   const versions = [StreamVersion.V10, StreamVersion.V11];
 
-  return chains
-    .map((chain) => {
-      return versions
-        .map((version) => {
-          const FL = chain[version].flow.map((flow) =>
-            createContract(event, flow.address, flow.alias, version),
-          );
+  const chainId = event.chainId;
+  const chain = chains.find((chain) => chain.id === chainId);
 
-          return [FL].flat();
-        })
-        .flat();
+  if (!chain) {
+    throw new Error("Missing chain from configuration - failed to initialize.");
+  }
+
+  return versions
+    .map((version) => {
+      const FL = chain[version].flow.map((flow) =>
+        createContract(event, flow.address, flow.alias, version),
+      );
+
+      return [FL].flat();
     })
     .flat();
 }

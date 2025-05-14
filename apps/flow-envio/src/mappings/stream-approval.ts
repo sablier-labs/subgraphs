@@ -1,4 +1,4 @@
-import { FlowV10 } from "../../generated";
+import { FlowV10, FlowV11 } from "../../generated";
 import type { Action, ApprovalHandler, ApprovalLoader } from "../types";
 
 import {
@@ -60,6 +60,11 @@ async function handler(input: ApprovalHandler<typeof loader>) {
 }
 
 FlowV10.Approval.handlerWithLoader({
+  loader,
+  handler,
+});
+
+FlowV11.Approval.handlerWithLoader({
   loader,
   handler,
 });
