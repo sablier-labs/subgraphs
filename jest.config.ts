@@ -5,9 +5,10 @@ import { compilerOptions } from "./tsconfig.json";
 const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   testEnvironment: "node",
-  testMatch: ["**/tests/**/*.test.ts?(x)"],
+  testMatch: ["<rootDir>/tests/**/*.test.ts"],
+  testPathIgnorePatterns: ["node_modules/"],
   transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
+    "^.+.ts$": ["ts-jest", {}],
   },
 };
 

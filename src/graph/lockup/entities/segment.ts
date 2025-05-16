@@ -6,27 +6,30 @@ import { Segment } from "../params";
 export function addSegments(stream: EntityStream, segments: Segment[]): EntityStream {
   let streamed = ZERO;
 
-  for (let i = 1; i < segments.length; i++) {
+  // The start time of the stream is the first segment's start time
+  let previous = new Segment(ZERO, ZERO, stream.startTime);
+
+  for (let i = 0; i < segments.length; i++) {
     const current = segments[i];
-    const last = segments[i - 1];
 
     const id = stream.id + "-" + i.toString();
     const segment = new EntitySegment(id);
+    segment.position = BigInt.fromI32(i);
+    segment.stream = stream.id;
 
     segment.amount = current.amount;
     segment.exponent = current.exponent;
     segment.milestone = current.milestone;
 
     segment.startAmount = streamed;
-    segment.startTime = last.milestone;
+    segment.startTime = previous.milestone;
     segment.endAmount = streamed.plus(current.amount);
     segment.endTime = current.milestone;
 
-    segment.stream = stream.id;
-    segment.position = BigInt.fromI32(i - 1);
     segment.save();
 
     streamed = streamed.plus(current.amount);
+    previous = current;
   }
 
   return stream;

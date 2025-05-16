@@ -1,1 +1,1 @@
-export * from "../common/all";
+export * from "../common";

@@ -1,9 +1,9 @@
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
 import { getChainId, getContractVersion } from "../../common/context";
 import { getCampaignId } from "../../common/ids";
 import { logError } from "../../common/logger";
-import { EntityCampaign, EntityTranche } from "../bindings";
+import { EntityCampaign } from "../bindings";
 import { getNickname } from "../helpers";
 import { CampaignCommonParams, CampaignLLParams, CampaignLTParams } from "../params";
 import { getOrCreateEntityAsset } from "./asset";

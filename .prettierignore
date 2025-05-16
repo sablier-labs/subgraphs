@@ -1,8 +1,7 @@
 # Directories
 **/bindings
 **/build
-**/_generated
-**/_generated
+**/deprecated
 
 # Files
 **/config.yaml

@@ -3,14 +3,14 @@ import * as path from "node:path";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { GRAPH_DIR, SCHEMA_DIR } from "@src/paths";
+import { SCHEMA_DIR, paths } from "@src/paths";
 import * as enums from "@src/schema/enums";
-import logger from "@src/winston";
-import { type EnumTypeDefinitionNode, parse, print, printSchema } from "graphql";
+import type { IndexedProtocol } from "@src/types";
+import logger, { logAndThrow } from "@src/winston";
+import { print } from "graphql";
 import _ from "lodash";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
-import type { ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                     CLI                                    */
@@ -37,12 +37,11 @@ if (require.main === module) {
      * Handles generation of schema files for all supported protocols
      */
     function handleAllProtocols(): void {
-      const protocols: ProtocolArg[] = ["airdrops", "flow", "lockup"];
+      const protocols: IndexedProtocol[] = ["airdrops", "flow", "lockup"];
 
       for (const p of protocols) {
-        const outputPath = generateSchema(p);
+        generateSchema(p);
         logger.info(`✅ Successfully generated schema for ${p} protocol`);
-        logger.info(`📁 Schema path: ${outputPath}`);
       }
 
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -52,13 +51,11 @@ if (require.main === module) {
     if (protocolArg === "all") {
       handleAllProtocols();
     } else {
-      const outputPath = generateSchema(protocolArg);
+      generateSchema(protocolArg);
       logger.info(`✅ Successfully generated schema for ${protocolArg} protocol`);
-      logger.info(`📁 Schema path: ${outputPath}`);
     }
   } catch (error) {
-    logger.error(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
-    process.exit(1);
+    logAndThrow(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -71,9 +68,7 @@ if (require.main === module) {
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function generateSchema(protocol: ProtocolArg): string {
-  const outputPath = path.join(GRAPH_DIR, protocol, "schema.graphql");
-
+function generateSchema(protocol: IndexedProtocol): void {
   const enumDefs = getEnumDefs(protocol);
 
   const typeDefsPaths = getTypeDefsPaths(protocol);
@@ -83,9 +78,14 @@ function generateSchema(protocol: ProtocolArg): string {
   const printedSchema = print(mergedSchema);
   const schema = `${AUTOGEN_COMMENT}${printedSchema}`;
 
-  fs.writeFileSync(outputPath, schema);
-  logger.verbose(`✅ Generated schema: ${getRelative(outputPath)}`);
-  return getRelative(outputPath);
+  const outputPaths = {
+    envio: paths.envioSchema(protocol),
+    graph: paths.graphSchema(protocol),
+  };
+  fs.writeFileSync(outputPaths.graph, schema);
+  fs.writeFileSync(outputPaths.envio, schema);
+  logger.verbose(`📁 GraphQL schema path: ${getRelative(outputPaths.graph)}`);
+  logger.verbose(`📁 Envio schema path: ${getRelative(outputPaths.envio)}`);
 }
 
 function getEnum<T extends Record<string, string>>(enumObj: T, name: string): string {
@@ -96,7 +96,7 @@ function getEnum<T extends Record<string, string>>(enumObj: T, name: string): st
   return `enum ${name} {\n${enumValues}\n}`;
 }
 
-function getEnumDefs(protocol: ProtocolArg) {
+function getEnumDefs(protocol: IndexedProtocol) {
   const enumDefs: string[] = [];
   switch (protocol) {
     case "airdrops":
@@ -118,13 +118,12 @@ function getEnumDefs(protocol: ProtocolArg) {
       );
       break;
     default:
-      logger.error(`getEnumDefs: unknown protocol: ${protocol}`);
-      process.exit(1);
+      logAndThrow(`getEnumDefs: unknown protocol: ${protocol}`);
   }
   return makeExecutableSchema({ typeDefs: enumDefs });
 }
 
-function getTypeDefsPaths(protocol: ProtocolArg): string[] {
+function getTypeDefsPaths(protocol: IndexedProtocol): string[] {
   const protocolPath = path.join(SCHEMA_DIR, `${protocol}.graphql`);
 
   const actionPath = path.join(SCHEMA_DIR, "common/action.graphql");
@@ -139,7 +138,6 @@ function getTypeDefsPaths(protocol: ProtocolArg): string[] {
     case "lockup":
       return [actionPath, assetPath, batchPath, watcherPath, protocolPath];
     default:
-      logger.error(`getTypeDefs: unknown protocol: ${protocol}`);
-      process.exit(1);
+      logAndThrow(`getTypeDefs: unknown protocol: ${protocol}`);
   }
 }

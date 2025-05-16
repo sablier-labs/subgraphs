@@ -1,4 +1,4 @@
-import { dataSource, ethereum } from "@graphprotocol/graph-ts";
+import { ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../common/constants";
 import { getChainId } from "../../common/context";
 import { getActionId } from "../../common/ids";

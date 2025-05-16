@@ -1,7 +1,5 @@
-import { BigInt } from "@graphprotocol/graph-ts";
 import { Address } from "@graphprotocol/graph-ts";
 import { getLockups } from "../../common/context";
-import { getChainId } from "../../common/context";
 import { EntityAsset } from "../bindings";
 
 /**

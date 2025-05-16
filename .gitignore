@@ -3,6 +3,7 @@ logs
 node_modules
 **/bindings
 **/build
+**/_generated
 **/generated
 **/.bin
 !src/graph/common/bindings

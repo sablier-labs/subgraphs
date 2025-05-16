@@ -28,7 +28,11 @@ codegen protocol="all" chain_name="":
   @just codegen-manifest {{protocol}} {{chain_name}}
   @just codegen-schema {{protocol}}
 
-# Generate the subgraph manifest
+# Generate the Envio config
+codegen-envio-config protocol="all":
+  bun run scripts/codegen/envio-config.ts {{protocol}}
+
+# Generate the The Graph manifest
 codegen-manifest protocol="all" chain_name="":
   bun run scripts/codegen/manifest.ts {{protocol}} {{chain_name}}
 

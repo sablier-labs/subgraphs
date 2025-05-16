@@ -15,6 +15,7 @@
   },
   "search.exclude": {
     "**/_generated": true,
+    "**/generated": true,
     "**/bindings": true,
     "**/deprecated": true,
     "**/node_modules": true

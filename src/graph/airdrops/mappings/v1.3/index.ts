@@ -1,3 +1,3 @@
-export * from "../common/all";
+export * from "../common";
 export * from "./campaign";
 export * from "./factory";

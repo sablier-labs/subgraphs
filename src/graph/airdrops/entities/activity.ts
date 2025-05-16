@@ -1,5 +1,5 @@
 import { BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { ONE, ZERO } from "../../common/constants";
+import { ONE } from "../../common/constants";
 import { EntityActivity, EntityCampaign } from "../bindings";
 
 export function createOrUpdateActivity(

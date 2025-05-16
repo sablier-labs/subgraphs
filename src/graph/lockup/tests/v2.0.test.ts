@@ -1,5 +1,4 @@
-import { assert, afterAll, clearStore, describe, newMockEvent, test } from "matchstick-as/assembly/index";
-import { handleCreateLockupLinearStream } from "../mappings/v2.0";
+import { assert, afterAll, clearStore, describe, test } from "matchstick-as/assembly/index";
 import { createDefaultLinearStream } from "./helpers";
 describe("Lockup v2.0", () => {
   afterAll(() => {

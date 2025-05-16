@@ -1,90 +1,45 @@
-export namespace Config {
-  export type Contracts<V extends string> = Array<{
-    contractName: string;
-    isTemplate: boolean;
-    versions: V[];
-  }>;
+/**
+ * Types needed for all indexers: Envio and The Graph.
+ */
+import type { Sablier } from "@sablier/deployments";
 
-  interface ComponentMap<T> {
-    [protocol: string]: {
-      [contractName: string]: {
-        [version: string]: T;
-      };
-    };
-  }
-
-  export type ABIEntries = ComponentMap<Manifest.ABI[]>;
-  export type Entities = ComponentMap<string[]>;
-  export type EventHandlers = ComponentMap<Manifest.EventHandler[]>;
+export interface ComponentMap<T> {
+  [contractName: string]: {
+    [version: string]: T;
+  };
 }
 
-export namespace Manifest {
-  export interface ABI {
-    name: string;
-    file: string;
-  }
+export type IndexedContractList<V extends Sablier.Version> = Array<{
+  name: string;
+  isTemplate: boolean;
+  versions: V[];
+}>;
 
-  /** @see https://thegraph.com/docs/en/subgraphs/developing/creating/graph-ts/api/#datasourcecontext-in-manifest */
-  export namespace ContextItem {
-    export interface BigInt {
-      data: number;
-      type: "BigInt";
-    }
-    export interface List<T> {
-      data: T[];
-      type: "List";
-    }
-    export type ListString = List<String>;
-
-    export interface String {
-      data: string;
-      type: "String";
-    }
-  }
-  export interface Context {
-    alias: ContextItem.String;
-    chainId: ContextItem.BigInt;
-    version: ContextItem.String;
-    lockups?: ContextItem.ListString;
-  }
-
-  export interface Source {
-    kind: string;
-    name: string;
-    network: string;
-    context?: Context; // Undefined when it's a template
-    source: {
-      abi: string;
-      address?: string; // Undefined when it's a template
-      startBlock?: number; // Undefined when it's a template
-    };
-    mapping: Mapping;
-    type: "data-source" | "template";
-  }
-
-  export interface EventHandler {
-    event: string;
-    handler: `handle${string}`;
-  }
-
-  export interface Mapping {
-    apiVersion: string;
-    file: string;
-    kind: string;
-    language: string;
-    abis: ABI[];
-    entities: string[];
-    eventHandlers: EventHandler[];
-  }
-
-  export interface TopConfig {
-    specVersion: string;
-    description: string;
-    repository: string;
-    schema: {
-      file: string;
-    };
-    dataSources?: Source[];
-    templates?: Source[];
-  }
+/**
+ * Represents an event emitted by a Sablier contract that is tracked and processed by our indexers.
+ * This interface defines the metadata needed to identify and handle specific contract events
+ * across different versions and protocols.
+ */
+export interface IndexedEvent {
+  /** Name of contract whose ABI contains the event, e.g., SablierLockup. */
+  contractName: string;
+  /** Needed to differentiate between multiple handlers for the same event. */
+  handlerSuffix?: string;
+  /** Event name, e.g., Approval. */
+  eventName: string;
+  /** Protocol of contract, e.g., flow. */
+  protocol?: IndexedProtocol;
+  /** Version of contract, e.g., v1.0. */
+  version?: Sablier.Version;
 }
+
+export type IndexedEventMap = ComponentMap<IndexedEvent[]>;
+
+/**
+ * The Legacy protocol is not indexed.
+ */
+export type IndexedProtocol = Exclude<Sablier.Protocol, "legacy">;
+
+export type ProtocolMap<T> = {
+  [protocol in IndexedProtocol]: T;
+};

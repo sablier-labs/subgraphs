@@ -1,22 +1,44 @@
+import fs from "node:fs";
 import path from "node:path";
 import type { Sablier } from "@sablier/deployments";
+import type { IndexedProtocol } from "./types";
 
 export const SRC_DIR = path.resolve(__dirname);
 export const ABI_DIR = path.join(SRC_DIR, "abi");
+export const ENVIO_DIR = path.join(SRC_DIR, "envio");
 export const GRAPH_DIR = path.join(SRC_DIR, "graph");
 export const SCHEMA_DIR = path.join(SRC_DIR, "schema");
 
-export function getAbiPath(contractName: string, protocol?: Sablier.Protocol, version?: Sablier.Version): string {
-  if (protocol && version) {
-    return path.join(ABI_DIR, `${protocol}-${version}`, `${contractName}.json`);
-  }
-  return path.join(ABI_DIR, `${contractName}.json`);
-}
+export const paths = {
+  abi: (contractName: string, protocol?: IndexedProtocol, version?: Sablier.Version): string => {
+    if (protocol && version) {
+      return path.join(ABI_DIR, `${protocol}-${version}`, `${contractName}.json`);
+    }
+    return path.join(ABI_DIR, `${contractName}.json`);
+  },
+  envioConfig: (protocol: IndexedProtocol): string => path.join(ENVIO_DIR, protocol, "config.yaml"),
+  envioSchema: (protocol: IndexedProtocol): string => path.join(ENVIO_DIR, protocol, "schema.graphql"),
+  graphManifests: (protocol: IndexedProtocol): string => path.join(GRAPH_DIR, protocol, "manifests"),
+  graphSchema: (protocol: IndexedProtocol): string => path.join(GRAPH_DIR, protocol, "schema.graphql"),
+};
 
-export function getGraphManifestPath(protocol: string): string {
-  return path.join(GRAPH_DIR, protocol, "manifests");
-}
-
+/**
+ * Returns the relative path from the directory of the start path to the end path.
+ * @param from The path to the directory to start from
+ * @param to The path to the directory or file to end at
+ * @returns The relative path from the start path to the end path
+ */
 export function getRelativePath(from: string, to: string): string {
-  return path.relative(from, to);
+  if (!fs.existsSync(from)) {
+    throw new Error(`From path '${from}' does not exist`);
+  }
+  if (!fs.existsSync(to)) {
+    throw new Error(`To path '${to}' does not exist`);
+  }
+  // Use the directory of the `from` path if it's a file.
+  let fromDir = from;
+  if (fs.lstatSync(from).isFile()) {
+    fromDir = path.dirname(from);
+  }
+  return path.relative(fromDir, to);
 }

@@ -15,7 +15,7 @@ node_xdc := "https://graph.xinfin.network"
 scripts_dir := "../../../scripts"
 
 # ---------------------------------------------------------------------------- #
-#                                PUBLIC RECIPES                                #
+#                                    RECIPES                                   #
 # ---------------------------------------------------------------------------- #
 
 # Authenticate with Graph hosted service
@@ -70,7 +70,7 @@ test:
   bun run graph test
 
 # ---------------------------------------------------------------------------- #
-#                               INTERNAL RECIPES                               #
+#                                   INTERNAL                                   #
 # ---------------------------------------------------------------------------- #
 
 # Deploy to a custom The Graph endpoint

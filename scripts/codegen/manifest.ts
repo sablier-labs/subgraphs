@@ -1,15 +1,13 @@
 import * as path from "node:path";
-import type { Sablier } from "@sablier/deployments";
 import supportedChains from "@src/chains";
-import { getSources, topConfigs } from "@src/manifest";
-import { GRAPH_DIR } from "@src/paths";
-import type { Manifest } from "@src/types";
-import logger from "@src/winston";
+import { createGraphManifest } from "@src/graph-manifest";
+import { paths } from "@src/paths";
+import type { IndexedProtocol } from "@src/types";
+import logger, { logAndThrow } from "@src/winston";
 import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
-import type { ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                     CLI                                    */
@@ -27,8 +25,8 @@ import type { ProtocolArg } from "../types";
  * @example Generate for all protocols:
  * bun run scripts/codegen/manifest.ts all
  *
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} [chainName] - Optional: Chain name to generate manifest for, e.g. 'polygon'
+ * @param {string} [protocol='all'] - 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} [chainName] - If not provided, the manifest will be generated for all chains.
  */
 if (require.main === module) {
   const args = process.argv.slice(2);
@@ -37,7 +35,7 @@ if (require.main === module) {
   const chainNameArg = args[1];
 
   function handleAllProtocols() {
-    const protocols: ProtocolArg[] = ["airdrops", "flow", "lockup"];
+    const protocols: IndexedProtocol[] = ["airdrops", "flow", "lockup"];
     let totalManifests = 0;
 
     for (const p of protocols) {
@@ -67,8 +65,7 @@ if (require.main === module) {
       }
     }
   } catch (error) {
-    logger.error(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
-    process.exit(1);
+    logAndThrow(`❌ Unhandled error: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -76,47 +73,35 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function createManifestYAML(protocol: ProtocolArg, chainId: number, chainName: string): string {
-  const topConfig = topConfigs[protocol as keyof typeof topConfigs];
-  if (!topConfig) {
-    logger.error(`Top-level config not found for protocol: ${protocol}`);
-    process.exit(1);
-  }
-
-  const sources = getSources(protocol as Sablier.Protocol, chainId, chainName);
-
-  // Filter sources by type but also strip the type field from each object
-  const dataSources = sources.filter((source) => source.type === "data-source").map(({ type, ...rest }) => rest);
-  const templates = sources.filter((source) => source.type === "template").map(({ type, ...rest }) => rest);
-
-  const config = {
-    ...topConfig,
-    dataSources: dataSources.length > 0 ? dataSources : undefined,
-    templates: templates.length > 0 ? templates : undefined,
-  } as Manifest.TopConfig;
-
-  const yamlContent = yaml.dump(config, {
+function createManifestYAML(protocol: IndexedProtocol, chainId: number): string {
+  const manifest = createGraphManifest(protocol, chainId);
+  const yamlContent = yaml.dump(manifest, {
     lineWidth: -1, // Prevent line wrapping
     quotingType: '"', // Use double quotes for strings
   });
   return `${AUTOGEN_COMMENT}${yamlContent}`;
 }
 
-function generateForAllChains(protocol: ProtocolArg, suppressFinalLog = false): number {
-  const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
+function generateForAllChains(protocol: IndexedProtocol, suppressFinalLog = false): number {
+  const manifestsDir = paths.graphManifests(protocol);
 
-  if (fs.pathExistsSync(OUTPUT_DIR)) {
-    fs.emptyDirSync(OUTPUT_DIR);
-    logger.verbose("🗑️  Cleared existing manifests directory");
+  if (fs.pathExistsSync(manifestsDir)) {
+    fs.emptyDirSync(manifestsDir);
+    logger.verbose("🗑️ Cleared existing manifests directory");
   } else {
-    fs.ensureDirSync(OUTPUT_DIR);
-    logger.verbose(`📁 Created directory:      ${getRelative(OUTPUT_DIR)}`);
+    fs.ensureDirSync(manifestsDir);
+    logger.verbose(`📁 Created directory:      ${getRelative(manifestsDir)}`);
   }
 
   let filesGenerated = 0;
 
   for (const chain of supportedChains) {
-    const result = writeManifestToFile(protocol, chain);
+    if (!chain.graph.isEnabled) {
+      logger.debug(`Skipping chain with ID ${chain.id} chain because it is not enabled on The Graph.`);
+      continue;
+    }
+
+    const result = writeManifestToFile(protocol, chain.id, chain.graph.name);
 
     logger.debug(`🔍 Result: ${JSON.stringify(result)}`);
     if (result.success) {
@@ -125,8 +110,7 @@ function generateForAllChains(protocol: ProtocolArg, suppressFinalLog = false): 
   }
 
   if (filesGenerated === 0) {
-    logger.error(`No manifests were generated for ${protocol} protocol. This might indicate a configuration issue.`);
-    process.exit(1);
+    logAndThrow(`No manifests were generated for ${protocol} protocol. This might indicate a configuration issue.`);
   }
 
   if (!suppressFinalLog) {
@@ -134,58 +118,56 @@ function generateForAllChains(protocol: ProtocolArg, suppressFinalLog = false): 
     logger.info(
       `🎉 Successfully generated ${filesGenerated} subgraph manifest${filesGenerated !== 1 ? "s" : ""} for ${protocol} protocol!`,
     );
-    logger.info(`📁 Output directory: ${getRelative(OUTPUT_DIR)}`);
+    logger.info(`📁 Output directory: ${getRelative(manifestsDir)}`);
   }
 
   return filesGenerated;
 }
 
-function generateForSpecificChain(protocol: ProtocolArg, chainName: string): void {
-  const chain = supportedChains.find((chain) => chain.name.toLowerCase() === chainName.toLowerCase());
-  if (!chain) {
-    const availableChains = supportedChains.map((chain) => chain.name).join(", ");
-    logger.error(`❌ Error: Chain "${chainName}" not found in supported chains.`);
-    logger.error(`Available chains: ${availableChains}`);
-    process.exit(1);
+function generateForSpecificChain(protocol: IndexedProtocol, chainName: string): void {
+  const chain = supportedChains.find(
+    (chain) => chain.graph.isEnabled && chain.graph.name.toLowerCase() === chainName.toLowerCase(),
+  );
+  if (!chain || !chain.graph.isEnabled) {
+    const availableChains = supportedChains.map((chain) => chain.graph.isEnabled && chain.graph.name).join(", ");
+    const message = `❌ Error: Chain "${chainName}" not found in supported chains.\nAvailable chains: ${availableChains}`;
+    logAndThrow(message);
   }
 
-  // Ensure the output directory exists
-  const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
-  fs.ensureDirSync(OUTPUT_DIR);
+  const manifestsDir = paths.graphManifests(protocol);
+  fs.ensureDirSync(manifestsDir);
 
-  const result = writeManifestToFile(protocol, chain);
+  const result = writeManifestToFile(protocol, chain.id, chain.graph.name);
   if (!result.success) {
-    logger.error(`❌ Error: ${result.error}`);
-    process.exit(1);
+    logAndThrow(`❌ Error: ${result.error}`);
   }
 
-  logger.info(`🎉 Successfully generated the subgraph manifest for ${chain.name}`);
+  logger.info(`🎉 Successfully generated the subgraph manifest for ${chainName}`);
   logger.info(`📁 Manifest path: ${result.relativeOutputPath}`);
 }
 
 function writeManifestToFile(
-  protocol: ProtocolArg,
-  chain: (typeof supportedChains)[number],
+  protocol: IndexedProtocol,
+  chainId: number,
+  chainName: string,
 ): { success: boolean; error?: string; relativeOutputPath?: string } {
-  const OUTPUT_DIR = path.join(GRAPH_DIR, `${protocol}/manifests`);
+  const manifestsDir = paths.graphManifests(protocol);
 
   try {
-    fs.ensureDirSync(OUTPUT_DIR);
+    const manifest = createManifestYAML(protocol, chainId);
+    const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
+    fs.writeFileSync(manifestPath, manifest);
 
-    const manifest = createManifestYAML(protocol, chain.id, chain.name);
-    const outputPath = path.join(OUTPUT_DIR, `${chain.name}.yaml`);
-    fs.writeFileSync(outputPath, manifest);
-
-    logger.verbose(`✅ Generated manifest: ${getRelative(outputPath)}`);
+    logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
 
     return {
       success: true,
-      relativeOutputPath: getRelative(outputPath),
+      relativeOutputPath: getRelative(manifestPath),
     };
   } catch (error) {
     return {
       success: false,
-      error: `Error generating manifest for chain ${chain.name}: ${error instanceof Error ? error.message : String(error)}`,
+      error: `Error generating manifest for chain ${chainName}: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
 }

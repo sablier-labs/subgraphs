@@ -1,4 +1,4 @@
-import { Address, BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { getChainId, getContractAlias } from "./context";
 
 /**

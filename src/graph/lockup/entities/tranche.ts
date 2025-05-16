@@ -14,6 +14,8 @@ export function addTranches(stream: EntityStream, tranches: Tranche[]): EntitySt
 
     const id = stream.id + "-" + i.toString();
     const tranche = new EntityTranche(id);
+    tranche.stream = stream.id;
+    tranche.position = BigInt.fromU32(i);
 
     tranche.amount = current.amount;
     tranche.timestamp = current.timestamp;
@@ -23,12 +25,10 @@ export function addTranches(stream: EntityStream, tranches: Tranche[]): EntitySt
     tranche.startAmount = streamedAmount;
     tranche.startTime = previous.timestamp;
 
-    tranche.stream = stream.id;
-    tranche.position = BigInt.fromU32(i);
     tranche.save();
 
     streamedAmount = streamedAmount.plus(tranche.endAmount);
-    previous = tranches[i];
+    previous = current;
   }
 
   return stream;

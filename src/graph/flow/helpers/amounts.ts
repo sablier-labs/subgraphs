@@ -1,4 +1,4 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import { DECIMALS_18, ONE, TEN } from "../../common/constants";
 
 /**
