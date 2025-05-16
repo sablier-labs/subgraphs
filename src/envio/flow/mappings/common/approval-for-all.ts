@@ -1,7 +1,7 @@
 import { Flow as enums } from "../../../../schema/enums";
 import type { Action, ApprovalForAllHandler, ApprovalForAllLoader } from "../../bindings";
+import { createAction, getOrCreateWatcher } from "../../entities";
 import { FlowV10 } from "../../generated";
-import { createAction, getOrCreateWatcher } from "../../helpers";
 
 async function loader(input: ApprovalForAllLoader) {
   const { context, event } = input;

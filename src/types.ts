@@ -16,7 +16,7 @@ export type IndexedContractList<V extends Sablier.Version> = Array<{
 }>;
 
 /**
- * Represents an event emitted by a Sablier contract that is tracked and processed by our indexers.
+ * Event emitted by a Sablier contract that is tracked and processed by our indexers.
  * This interface defines the metadata needed to identify and handle specific contract events
  * across different versions and protocols.
  */

@@ -22,7 +22,7 @@ export function createAirdropsSources(chainId: number): Manifest.Source[] {
  * So users can provide any address when deploying an airdrop contract, but we only index official deployments.
  */
 function getLockups(context: Manifest.Context): Manifest.ContextItem.ListAddress {
-  const contracts = queries.contracts.getAllByProtocolAndChain("lockup", context.chainId.data);
+  const contracts = queries.contracts.getAll({ protocol: "lockup", chainId: context.chainId.data });
   if (!contracts) {
     logAndThrow(`No Lockup contracts found on chain ${context.chainId.data}`);
   }

@@ -12,7 +12,8 @@ export function createStream(
     watcher: Watcher;
   },
 ) {
-  let { asset, batch, batcher, watcher } = entities;
+  event.params.
+  let asset, batch, batcher, watcher = entities;
   const tokenId = event.params.streamId;
 
   const id = generateStreamId(event, event.srcAddress, tokenId);

@@ -17,7 +17,7 @@ export function create(protocol: IndexedProtocol, chainId: number): Manifest.Sou
   const sources: Manifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
-      const release = queries.releases.getByProtocolAndVersion(protocol, version);
+      const release = queries.releases.get({ protocol, version });
       if (!release) {
         thrower.releaseNotFound(protocol, version);
       }
@@ -140,9 +140,8 @@ export function extractContract(params: {
     };
   }
 
-  // Look up actual contract deployment for this chain
-  // Skip if not deployed on this specific chain
-  const contract = queries.contracts.getByReleaseAndChainAndName(release, chainId, contractName);
+  // Look up actual contract deployment for this chain. Skip if not deployed.
+  const contract = queries.contracts.get({ release, chainId, contractName });
   if (!contract) {
     logger.debug(messages.contractNotFound(release, chainId, contractName));
     return undefined;

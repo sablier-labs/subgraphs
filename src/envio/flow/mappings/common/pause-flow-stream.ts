@@ -1,7 +1,7 @@
 import { Flow as enums } from "../../../../schema/enums";
 import type { Action, PauseHandler, PauseLoader } from "../../bindings";
+import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../../entities";
 import { FlowV10 } from "../../generated";
-import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../../helpers";
 
 async function loader(input: PauseLoader) {
   const { context, event } = input;

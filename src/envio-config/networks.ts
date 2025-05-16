@@ -47,7 +47,7 @@ function extractContracts(protocol: IndexedProtocol, chainId: number): ExtractCo
   let startBlock = 0;
 
   for (const release of releasesByProtocol[protocol]) {
-    const deployment = queries.deployments.getByReleaseAndChain(release, chainId);
+    const deployment = queries.deployments.get({ release, chainId });
 
     // Some contracts are not deployed on all chains, so we skip them.
     if (!deployment) {
@@ -62,7 +62,7 @@ function extractContracts(protocol: IndexedProtocol, chainId: number): ExtractCo
 
     const possibleStartBlocks: number[] = [];
     for (const contractName of contractNames) {
-      const contract = queries.contracts.getByDeploymentAndName(deployment, contractName);
+      const contract = queries.contracts.get({ contractName, deployment });
 
       // If it's a deployment that exists, the contract from the contract map must exist.
       if (!contract) {

@@ -40,6 +40,7 @@ export namespace EnvioConfig {
    */
   export interface TopSection {
     name: string;
+    ecosystem: "evm";
     unordered_multichain_mode: boolean;
     rollback_on_reorg: boolean;
     field_selection: FieldSelection;
