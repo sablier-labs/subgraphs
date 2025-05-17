@@ -32,6 +32,12 @@ jobs:
       - name: "Check the code"
         run: "just check"
 
+      - name: "Codegen everything"
+        run: "just codegen"
+
+      - name: "Build all subgraphs"
+        run: "just build-graph"
+
       - name: "Run the tests"
         run: "just test"
 

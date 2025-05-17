@@ -29,21 +29,25 @@ clean:
 # Fix all issues
 fix: biome-write prettier-write
 
-# Generate the GraphQL schema and subgraph manifest
-codegen protocol="all" chain_name="":
-  @just codegen-manifest {{protocol}} {{chain_name}}
+# Generate:
+# - The GraphQL schema
+# - The subgraph manifest
+# - The Envio config
+@codegen protocol="all" chain_name="":
   @just codegen-schema {{protocol}}
+  @just codegen-manifest {{protocol}} {{chain_name}}
+  @just codegen-config {{protocol}}
 
 # Generate the Envio config
-codegen-config protocol="all":
+@codegen-config protocol="all":
   bun run scripts/codegen/envio-config.ts {{protocol}}
 
-# Generate the The Graph manifest
-codegen-manifest protocol="all" chain_name="":
+# Generate the subgraph manifest
+@codegen-manifest protocol="all" chain_name="":
   bun run scripts/codegen/graph-manifest.ts {{protocol}} {{chain_name}}
 
 # Generate the GraphQL schema
-codegen-schema protocol="all":
+@codegen-schema protocol="all":
   bun run scripts/codegen/schema.ts {{protocol}}
 
 # Install the Node.js dependencies

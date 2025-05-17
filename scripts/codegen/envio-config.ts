@@ -22,11 +22,12 @@ import { getRelative, validateProtocolArg } from "../helpers";
 if (require.main === module) {
   const args = process.argv.slice(2);
 
-  const protocolArg = validateProtocolArg(args[0]);
+  let protocolArg = validateProtocolArg(args[0]);
 
   // Currently only supporting flow protocol
   if (protocolArg !== "flow") {
-    logAndThrow(`Only 'flow' protocol is currently supported for Envio config generation`);
+    logger.warn("Only 'flow' protocol is currently supported for Envio config generation");
+    protocolArg = "flow";
   }
 
   try {

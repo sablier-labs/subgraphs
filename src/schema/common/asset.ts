@@ -1,8 +1,9 @@
+import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
-export function getAssetSchema(relation: "campaigns" | "streams") {
-  const relationField =
-    relation === "streams"
+export function getAssetDefs(protocol: Indexed.Protocol) {
+  const protocolField =
+    protocol !== "airdrops"
       ? `"""
        Streams that rely on this token
        """
@@ -41,7 +42,7 @@ export function getAssetSchema(relation: "campaigns" | "streams") {
       Symbol of the ERC20 token
       """
       symbol: String!
-      ${relationField}
+      ${protocolField}
     }
   `;
 }

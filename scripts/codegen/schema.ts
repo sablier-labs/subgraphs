@@ -4,7 +4,7 @@ import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { SCHEMA_DIR, paths } from "@src/paths";
-import { enums, getAssetSchema } from "@src/schema";
+import { enums, getAssetDefs, getWatcherDefs } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
 import { print } from "graphql";
@@ -67,12 +67,8 @@ if (require.main === module) {
  * @returns Result of the schema generation
  */
 function generateSchema(protocol: Indexed.Protocol): void {
-  const enumDefs = getEnumDefs(protocol);
-  const assetDefs = getAssetSchema(protocol === "airdrops" ? "campaigns" : "streams");
   const typeDefs = loadTypeDefs(protocol);
-  const allDefs = [enumDefs, assetDefs, typeDefs];
-
-  const mergedSchema = mergeTypeDefs(allDefs, { throwOnConflict: true });
+  const mergedSchema = mergeTypeDefs(typeDefs, { throwOnConflict: true });
   const printedSchema = print(mergedSchema);
   const schema = `${AUTOGEN_COMMENT}${printedSchema}`;
 
@@ -82,6 +78,7 @@ function generateSchema(protocol: Indexed.Protocol): void {
   };
   fs.writeFileSync(outputPaths.graph, schema);
   fs.writeFileSync(outputPaths.envio, schema);
+
   logger.info(`✅ Successfully generated GraphQL schema for ${protocol} protocol`);
   logger.info(`📁 GraphQL schema path: ${getRelative(outputPaths.graph)}`);
   logger.info(`📁 Envio schema path: ${getRelative(outputPaths.envio)}`);
@@ -124,25 +121,27 @@ function getEnumDefs(protocol: Indexed.Protocol) {
 }
 
 function loadTypeDefs(protocol: Indexed.Protocol): string[] {
-  const paths = [];
+  const enumDefs = getEnumDefs(protocol);
+  const assetDefs = getAssetDefs(protocol);
+  const watcherDefs = getWatcherDefs(protocol);
+
+  const schemaPaths = [];
   const protocolPath = path.join(SCHEMA_DIR, `${protocol}.graphql`);
 
   switch (protocol) {
     case "airdrops":
-      paths.push(protocolPath);
+      schemaPaths.push(protocolPath);
       break;
     case "flow":
     case "lockup":
-      paths.push(
+      schemaPaths.push(
         protocolPath,
         path.join(SCHEMA_DIR, "common/action.graphql"),
-        path.join(SCHEMA_DIR, "common/asset.graphql"),
         path.join(SCHEMA_DIR, "common/batch.graphql"),
-        path.join(SCHEMA_DIR, "common/watcher.graphql"),
       );
       break;
-    default:
-      logAndThrow(`Unknown protocol: ${protocol}`);
   }
-  return loadFilesSync(paths);
+
+  const otherTypeDefs = loadFilesSync(schemaPaths);
+  return [enumDefs, assetDefs, watcherDefs, ...otherTypeDefs];
 }

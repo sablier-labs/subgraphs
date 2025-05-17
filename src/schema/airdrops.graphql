@@ -126,46 +126,6 @@ type Activity @entity(immutable: true) {
   timestamp: BigInt!
 }
 
-"""
-ERC-20 asset
-"""
-type Asset @entity(immutable: true) {
-  """
-  Contract address of the ERC20 token
-  """
-  id: ID!
-
-  """
-  Alias for `id`
-  """
-  address: Bytes!
-
-  """
-  Campaigns that rely on this asset.
-  """
-  campaigns: [Campaign!]! @derivedFrom(field: "asset")
-
-  """
-  The id of the chain, e.g. 137 for Polygon
-  """
-  chainId: BigInt!
-
-  """
-  Decimals of the ERC20 token
-  """
-  decimals: BigInt!
-
-  """
-  Name of the ERC20 token
-  """
-  name: String!
-
-  """
-  Symbol of the ERC20 token
-  """
-  symbol: String!
-}
-
 type Campaign @entity(immutable: false) {
   # ------------------------------------ IDs ----------------------------------- #
 
@@ -432,31 +392,4 @@ type Tranche @entity(immutable: true) {
   Total percentage unlocked at the start of the tranche. This is the sum of all previous tranches' percentages.
   """
   startPercentage: BigInt!
-}
-
-type Watcher @entity(immutable: false) {
-  """
-  The chain ID. There is one watcher per subgraph.
-  """
-  id: String!
-
-  """
-  Global counter for actions.
-  """
-  actionCounter: BigInt!
-
-  """
-  Global counter for campaigns.
-  """
-  campaignCounter: BigInt!
-
-  """
-  Used for debugging purposes. They are normally empty.
-  """
-  logs: [String!]
-
-  """
-  Alias for `id`.
-  """
-  chainId: BigInt!
 }
