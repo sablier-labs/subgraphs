@@ -4,7 +4,7 @@ import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { SCHEMA_DIR, paths } from "@src/paths";
-import * as enums from "@src/schema/enums";
+import { enums, getAssetSchema } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
 import { print } from "graphql";
@@ -41,7 +41,6 @@ if (require.main === module) {
 
       for (const p of protocols) {
         generateSchema(p);
-        logger.info(`✅ Successfully generated schema for ${p} protocol`);
       }
 
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -52,7 +51,6 @@ if (require.main === module) {
       handleAllProtocols();
     } else {
       generateSchema(protocolArg);
-      logger.info(`✅ Successfully generated schema for ${protocolArg} protocol`);
     }
   } catch (error) {
     logAndThrow(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
@@ -70,11 +68,11 @@ if (require.main === module) {
  */
 function generateSchema(protocol: Indexed.Protocol): void {
   const enumDefs = getEnumDefs(protocol);
+  const assetDefs = getAssetSchema(protocol === "airdrops" ? "campaigns" : "streams");
+  const typeDefs = loadTypeDefs(protocol);
+  const allDefs = [enumDefs, assetDefs, typeDefs];
 
-  const typeDefsPaths = getTypeDefsPaths(protocol);
-  const typeDefs = loadFilesSync(typeDefsPaths);
-
-  const mergedSchema = mergeTypeDefs([enumDefs, typeDefs], { throwOnConflict: true });
+  const mergedSchema = mergeTypeDefs(allDefs, { throwOnConflict: true });
   const printedSchema = print(mergedSchema);
   const schema = `${AUTOGEN_COMMENT}${printedSchema}`;
 
@@ -84,8 +82,10 @@ function generateSchema(protocol: Indexed.Protocol): void {
   };
   fs.writeFileSync(outputPaths.graph, schema);
   fs.writeFileSync(outputPaths.envio, schema);
-  logger.verbose(`📁 GraphQL schema path: ${getRelative(outputPaths.graph)}`);
-  logger.verbose(`📁 Envio schema path: ${getRelative(outputPaths.envio)}`);
+  logger.info(`✅ Successfully generated GraphQL schema for ${protocol} protocol`);
+  logger.info(`📁 GraphQL schema path: ${getRelative(outputPaths.graph)}`);
+  logger.info(`📁 Envio schema path: ${getRelative(outputPaths.envio)}`);
+  console.log();
 }
 
 function getEnum<T extends Record<string, string>>(enumObj: T, name: string): string {
@@ -123,21 +123,26 @@ function getEnumDefs(protocol: Indexed.Protocol) {
   return makeExecutableSchema({ typeDefs: enumDefs });
 }
 
-function getTypeDefsPaths(protocol: Indexed.Protocol): string[] {
+function loadTypeDefs(protocol: Indexed.Protocol): string[] {
+  const paths = [];
   const protocolPath = path.join(SCHEMA_DIR, `${protocol}.graphql`);
-
-  const actionPath = path.join(SCHEMA_DIR, "common/action.graphql");
-  const assetPath = path.join(SCHEMA_DIR, "common/asset.graphql");
-  const batchPath = path.join(SCHEMA_DIR, "common/batch.graphql");
-  const watcherPath = path.join(SCHEMA_DIR, "common/watcher.graphql");
 
   switch (protocol) {
     case "airdrops":
-      return [protocolPath]; // Airdrops uses variations of the type defs above
+      paths.push(protocolPath);
+      break;
     case "flow":
     case "lockup":
-      return [actionPath, assetPath, batchPath, watcherPath, protocolPath];
+      paths.push(
+        protocolPath,
+        path.join(SCHEMA_DIR, "common/action.graphql"),
+        path.join(SCHEMA_DIR, "common/asset.graphql"),
+        path.join(SCHEMA_DIR, "common/batch.graphql"),
+        path.join(SCHEMA_DIR, "common/watcher.graphql"),
+      );
+      break;
     default:
-      logAndThrow(`getTypeDefs: unknown protocol: ${protocol}`);
+      logAndThrow(`Unknown protocol: ${protocol}`);
   }
+  return loadFilesSync(paths);
 }

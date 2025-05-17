@@ -135,7 +135,7 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
     logAndThrow(`❌ Error: ${result.error}`);
   }
 
-  logger.info(`🎉 Successfully generated the subgraph manifest for ${chainName}`);
+  logger.info(`🎉 Successfully generated subgraph manifest for ${chainName}`);
   logger.info(`📁 Manifest path: ${result.relativeOutputPath}`);
 }
 
