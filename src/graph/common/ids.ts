@@ -3,12 +3,12 @@ import { getChainId, getContractAlias } from "./context";
 
 /**
  * @example
- * 0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35-1
+ * 0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35-3
  */
 export function getActionId(event: ethereum.Event): string {
   const hash = event.transaction.hash.toHexString();
   const index = event.logIndex.toString();
-  return hash + "-" + index;
+  return `${hash}-${index}`;
 }
 
 /**
@@ -18,7 +18,7 @@ export function getActionId(event: ethereum.Event): string {
 export function getCampaignId(campaignAddress: Address): string {
   const address = campaignAddress.toHexString();
   const chainId = getChainId().toString();
-  return address + "-" + chainId;
+  return `${address}-${chainId}`;
 }
 
 /**
@@ -28,7 +28,7 @@ export function getCampaignId(campaignAddress: Address): string {
 export function getStreamId(contractAddress: Address, tokenId: BigInt): string {
   const address = contractAddress.toHexString();
   const chainId = getChainId().toString();
-  const streamId = address + "-" + chainId + "-" + tokenId.toString();
+  const streamId = `${address}-${chainId}-${tokenId.toString()}`;
   return streamId;
 }
 
@@ -37,6 +37,7 @@ export function getStreamId(contractAddress: Address, tokenId: BigInt): string {
  * LK-137-42
  */
 export function getStreamAlias(tokenId: BigInt): string {
+  const alias = getContractAlias();
   const chainId = getChainId().toString();
-  return getContractAlias() + "-" + chainId + "-" + tokenId.toString();
+  return `${alias}-${chainId}-${tokenId.toString()}`;
 }

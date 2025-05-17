@@ -1,67 +1,42 @@
 import { Flow as enums } from "../../../../schema/enums";
 import { ADDRESS_ZERO } from "../../../common/constants";
-import type { Action, TransferHandler, TransferLoader } from "../../bindings";
-import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../../entities";
-import { FlowV10 } from "../../generated";
+import { SablierFlow_v1_0 } from "../../bindings";
+import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "../../entities";
 
-async function loader(input: TransferLoader) {
-  const { context, event } = input;
+SablierFlow_v1_0.Transfer.handlerWithLoader({
+  loader: async ({ context, event }) => {
+    const stream = await getStreamOrThrow(context, event, event.params.tokenId);
+    const watcher = await getWatcherOrThrow(context, event);
 
-  const streamId = generateStreamId(event, event.srcAddress, event.params.tokenId);
-  const watcherId = event.chainId.toString();
+    return {
+      stream,
+      watcher,
+    };
+  },
+  handler: async ({ context, event, loaderReturn: loaded }) => {
+    const { watcher } = loaded;
+    let { stream } = loaded;
 
-  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
+    // We exclude `Transfer` events emitted by the initial mint transaction.
+    // See https://github.com/sablier-labs/indexers/issues/18
+    if (event.params.from === ADDRESS_ZERO) {
+      return;
+    }
 
-  return {
-    stream,
-    watcher,
-  };
-}
+    /* --------------------------------- STREAM --------------------------------- */
 
-async function handler(input: TransferHandler<typeof loader>) {
-  const { context, event, loaderReturn: loaded } = input;
+    stream = {
+      ...stream,
+      recipient: event.params.to.toLowerCase(),
+    };
+    context.Stream.set(stream);
 
-  /**
-   * As described in issue #18, we will first filter out
-   * any `Transfer` events emitted by the initial mint transaction
-   */
-
-  if (event.params.from.toLowerCase() === ADDRESS_ZERO.toLowerCase()) {
-    return;
-  }
-
-  /** ------- Fetch -------- */
-
-  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  let stream = loaded.stream ?? (await getStream(event, event.params.tokenId, context.Stream.get));
-
-  /** ------- Process -------- */
-
-  const post_action = createAction(event, watcher);
-
-  const action: Action = {
-    ...post_action.entity,
-    category: enums.ActionCategory.Transfer,
-    stream_id: stream.id,
-
-    /** --------------- */
-    addressA: event.params.from.toLowerCase(),
-    addressB: event.params.to.toLowerCase(),
-  };
-
-  watcher = post_action.watcher;
-
-  stream = {
-    ...stream,
-    recipient: event.params.to.toLowerCase(),
-  };
-
-  context.Action.set(action);
-  context.Stream.set(stream);
-  context.Watcher.set(watcher);
-}
-
-FlowV10.Transfer.handlerWithLoader({
-  loader,
-  handler,
+    /* --------------------------------- ACTION --------------------------------- */
+    await createEntityAction(context, watcher, event, {
+      category: enums.ActionCategory.Transfer,
+      streamId: stream.id,
+      addressA: event.params.from,
+      addressB: event.params.to,
+    });
+  },
 });

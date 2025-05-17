@@ -1,7 +1,8 @@
-import { type Sablier, Version } from "@sablier/deployments";
-import type { IndexedContractList, IndexedProtocol } from "./types";
+import type { Sablier } from "@sablier/deployments";
+import { Version } from "@sablier/deployments";
+import type { Indexed } from "./types";
 
-const airdrops: IndexedContractList<Sablier.Version.Airdrops> = [
+const airdrops: Indexed.ContractSource<Sablier.Version.Airdrops>[] = [
   {
     name: "SablierV2MerkleStreamerFactory",
     isTemplate: false,
@@ -49,7 +50,7 @@ const airdrops: IndexedContractList<Sablier.Version.Airdrops> = [
   },
 ];
 
-const flow: IndexedContractList<Sablier.Version.Flow> = [
+const flow: Indexed.ContractSource<Sablier.Version.Flow>[] = [
   {
     name: "SablierFlow",
     isTemplate: false,
@@ -57,7 +58,7 @@ const flow: IndexedContractList<Sablier.Version.Flow> = [
   },
 ];
 
-const lockup: IndexedContractList<Sablier.Version.Lockup> = [
+const lockup: Indexed.ContractSource<Sablier.Version.Lockup>[] = [
   {
     name: "SablierV2LockupDynamic",
     isTemplate: false,
@@ -80,10 +81,21 @@ const lockup: IndexedContractList<Sablier.Version.Lockup> = [
   },
 ];
 
-const indexedContracts: Record<IndexedProtocol, IndexedContractList<Sablier.Version>> = {
+const indexedContracts: Record<Indexed.Protocol, Indexed.ContractSource<Indexed.Version>[]> = {
   airdrops,
   flow,
   lockup,
 };
+
+export function getIndexedContract(contract: Sablier.Contract): Indexed.Contract {
+  return {
+    address: contract.address.toLowerCase(),
+    alias: contract.alias ?? "",
+    block: contract.block ?? 0,
+    name: contract.name,
+    protocol: contract.protocol as Indexed.Protocol,
+    version: contract.version as Indexed.Version,
+  };
+}
 
 export default indexedContracts;

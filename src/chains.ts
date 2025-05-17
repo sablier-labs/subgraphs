@@ -1,29 +1,33 @@
 import { ChainId } from "@sablier/deployments";
 import { logAndThrow } from "./winston";
 
-/** Chains supported by Sablier Indexers. */
-type SupportedChain = {
-  id: number;
-  envio: {
-    /** The HyperSync endpoint for the chain. */
-    hypersync?: string;
-    /** Indicates whether the chain is available on Envio. */
-    isEnabled: boolean;
-  };
-  graph:
-    | {
-        /** Indicates that the chain is available on The Graph. */
-        isEnabled: true;
-        /** The name of the chain on The Graph, which may not be the same as Sablier's name. */
-        name: string;
-      }
-    | {
-        /** Indicates that the chain is not available on The Graph. */
-        isEnabled: false;
-      };
+type EnvioConfig = {
+  isEnabled: boolean;
+  hypersync?: string;
 };
 
-const supportedChains: SupportedChain[] = [
+type GraphConfig = {
+  isEnabled: boolean;
+  name: string;
+};
+
+type SupportedChain = {
+  id: number;
+  envio?: EnvioConfig;
+  graph?: GraphConfig;
+};
+
+type EnvioChain = SupportedChain & {
+  envio: EnvioConfig;
+  graph: never;
+};
+
+type GraphChain = SupportedChain & {
+  envio: never;
+  graph: GraphConfig;
+};
+
+export const supportedChains: SupportedChain[] = [
   /* -------------------------------------------------------------------------- */
   /*                                  Mainnets                                  */
   /* -------------------------------------------------------------------------- */
@@ -347,23 +351,15 @@ const supportedChains: SupportedChain[] = [
   },
 ];
 
-/**
- * Envio HyperSync endpoints.
- */
-export const hypersync: Record<number, string> = {
-  [ChainId.CHILIZ]: "https://chiliz.hypersync.xyz",
-  [ChainId.MODE]: "https://mode.hypersync.xyz",
-  [ChainId.MORPH]: "https://morph.hypersync.xyz/",
-  [ChainId.SUPERSEED]: "https://extrabud.hypersync.xyz",
-  [ChainId.TANGLE]: "https://tangle.hypersync.xyz",
-};
+export const envioChains: EnvioChain[] = supportedChains.filter((chain) => chain.envio?.isEnabled) as EnvioChain[];
+
+export const graphChains: GraphChain[] = supportedChains.filter((chain) => chain.graph?.isEnabled) as GraphChain[];
 
 export function getChainName(chainId: number): string {
   const chain = supportedChains.find((chain) => chain.id === chainId);
-  if (!chain || !chain.graph.isEnabled) {
+  const chainName = chain?.graph?.name;
+  if (!chainName) {
     logAndThrow(`Chain with ID ${chainId} not supported`);
   }
-  return chain.graph.name;
+  return chainName;
 }
-
-export default supportedChains;

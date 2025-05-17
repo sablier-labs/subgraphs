@@ -1,146 +1,27 @@
-import { CacheCategory, fromHex, getClient, getERC20BytesContract, getERC20Contract, initCache } from "../../common";
-import type { Address, Event } from "../../common/types";
-import type { Asset } from "../bindings";
+import { ids, queryERC20Metadata } from "../../common";
+import type { Address, Event } from "../../common/bindings";
+import type { Entity, HandlerContext, LoaderContext } from "../bindings";
 
-export async function getAsset(event: Event, address: Address, loader: (id: string) => Promise<Asset | undefined>) {
-  const id = generateAssetId(event, address.toLowerCase());
-  const loaded = await loader(id);
-
-  if (!loaded) {
-    throw new Error("Missing asset instance");
-  }
-
-  return loaded;
-}
-
-export async function getOrCreateAsset(
-  event: Event,
-  address: Address,
-  loader: (id: string) => Promise<Asset | undefined>,
-) {
-  const id = generateAssetId(event, address);
-  const loaded = await loader(id);
-
-  if (!loaded) {
-    return createAsset(event, address.toLowerCase());
-  }
-
-  return loaded;
-}
-
-async function createAsset(event: Event, address: Address) {
-  const { decimals, name, symbol } = await details(address, event.chainId);
-
-  const entity: Asset = {
-    id: generateAssetId(event, address),
-    address: address.toLowerCase(),
-    decimals: BigInt(decimals),
+export async function createEntityAsset(context: HandlerContext, event: Event, assetAddress: Address) {
+  const metadata = await queryERC20Metadata(event.chainId, assetAddress);
+  const asset: Entity.Asset = {
+    id: ids.asset(assetAddress, event.chainId),
+    address: assetAddress.toLowerCase(),
     chainId: BigInt(event.chainId),
-    name,
-    symbol,
+    decimals: BigInt(metadata.decimals),
+    name: metadata.name,
+    symbol: metadata.symbol,
   };
+  await context.Asset.set(asset);
 
-  return entity;
+  return asset;
 }
 
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-export function generateAssetId(event: Event, address: Address) {
-  return "".concat(address).concat("-").concat(event.chainId.toString());
-}
-
-async function details(address: Address, chainId: number) {
-  const cache = initCache(CacheCategory.Token, chainId);
-  const token = cache.read(address.toLowerCase());
-
-  if (token) {
-    return {
-      address,
-      decimals: BigInt(token.decimals),
-      name: token.name,
-      symbol: token.symbol,
-    };
+export async function getAssetOrThrow(context: LoaderContext, chainId: number, address: Address) {
+  const id = ids.asset(address, chainId);
+  const loaded = await context.Asset.get(id);
+  if (!loaded) {
+    throw new Error(`Asset not loaded from the database: ${id}`);
   }
-
-  const client = getClient(chainId);
-
-  try {
-    const erc20 = getERC20Contract(address);
-    const results = await client.multicall({
-      allowFailure: false,
-      contracts: [
-        {
-          ...erc20,
-          functionName: "decimals",
-        },
-        {
-          ...erc20,
-          functionName: "name",
-        },
-        {
-          ...erc20,
-          functionName: "symbol",
-        },
-      ],
-    });
-
-    const entry = {
-      decimals: results[0].toString() || "",
-      name: results[1].toString() || "",
-      symbol: results[2].toString() || "",
-    } as const;
-
-    cache.add({ [address.toLowerCase()]: entry });
-
-    return {
-      decimals: BigInt(entry.decimals || 0),
-      name: entry.name,
-      symbol: entry.symbol,
-    };
-  } catch (_error) {
-    /** Some tokens store their parameters as bytes not strings */
-    try {
-      const erc20Bytes = getERC20BytesContract(address);
-      const results = await client.multicall({
-        allowFailure: false,
-        contracts: [
-          {
-            ...erc20Bytes,
-            functionName: "decimals",
-          },
-          {
-            ...erc20Bytes,
-            functionName: "name",
-          },
-          {
-            ...erc20Bytes,
-            functionName: "symbol",
-          },
-        ],
-      });
-
-      const entry = {
-        decimals: results[0].toString() || "",
-        name: fromHex(results[1].toString() || ""),
-        symbol: fromHex(results[2].toString() || ""),
-      } as const;
-
-      cache.add({ [address.toLowerCase()]: entry });
-
-      return {
-        decimals: BigInt(entry.decimals || 0),
-        name: entry.name,
-        symbol: entry.symbol,
-      };
-    } catch (__error) {
-      console.error(_error, __error);
-      return {
-        decimals: 18,
-        symbol: address,
-        name: address,
-      };
-    }
-  }
+  return loaded;
 }

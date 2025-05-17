@@ -1,5 +1,5 @@
-import fs from "node:fs";
-import path from "node:path";
+import * as path from "node:path";
+import * as fs from "fs-extra";
 import winston, { format } from "winston";
 import { LOG_FILE_PATH } from "./constants";
 
@@ -16,21 +16,18 @@ const transports: winston.transport[] = [
 
 if (LOG_FILE_PATH) {
   const logDir = path.dirname(LOG_FILE_PATH);
-  if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir, { recursive: true });
-  }
+  fs.ensureDirSync(logDir);
 
-  transports.push(
-    new winston.transports.File({
-      filename: LOG_FILE_PATH,
-      format: format.combine(
-        format.timestamp(),
-        format.printf(({ timestamp, level, message }) => {
-          return `${timestamp} ${level}: ${message}`;
-        }),
-      ),
-    }),
-  );
+  const fileTransport = new winston.transports.File({
+    filename: LOG_FILE_PATH,
+    format: format.combine(
+      format.timestamp(),
+      format.printf(({ timestamp, level, message }) => {
+        return `${timestamp} ${level}: ${message}`;
+      }),
+    ),
+  });
+  transports.push(fileTransport);
 }
 
 export default transports;

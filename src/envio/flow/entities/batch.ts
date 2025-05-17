@@ -1,67 +1,67 @@
-import type { Address, Event } from "../../common/types";
-import type { Batch, Batcher } from "../bindings";
+import { ids } from "@src/envio/common/ids";
+import type { Address, Event } from "../../common/bindings";
+import type { Entity, HandlerContext } from "../bindings";
 
-export async function getOrCreateBatch(
-  event: Event,
-  batcher: Batcher,
-  loader: (id: string) => Promise<Batch | undefined>,
-) {
-  const id = generateBatchId(event);
-  const loaded = await loader(id);
+export async function createEntityBatch(context: HandlerContext, event: Event, sender: Address): Promise<Entity.Batch> {
+  const id = ids.batch(event);
+  const batch: Entity.Batch = {
+    id,
+    batcher_id: ids.batcher(event, sender),
+    hash: event.transaction.hash.toLowerCase(),
+    label: undefined,
+    size: 1n,
+    timestamp: BigInt(event.block.timestamp),
+  };
 
-  if (!loaded) {
-    return createBatch(event, batcher);
-  }
-
-  return loaded;
+  await context.Batch.set(batch);
+  return batch;
 }
 
-export async function getOrCreateBatcher(
+export async function createEntityBatcher(
+  context: HandlerContext,
   event: Event,
   sender: Address,
-  loader: (id: string) => Promise<Batcher | undefined>,
-) {
-  const id = generateBatcherId(event, sender);
-  const loaded = await loader(id);
+): Promise<Entity.Batcher> {
+  const id = ids.batcher(event, sender);
+  const batcher: Entity.Batcher = {
+    id,
+    address: sender.toLowerCase(),
+    batchCounter: 0n,
+  };
 
-  if (!loaded) {
-    return createBatcher(event, sender);
+  await context.Batcher.set(batcher);
+  return batcher;
+}
+
+export async function updateEntityBatchAndBatcher(
+  context: HandlerContext,
+  batch: Entity.Batch,
+  batcher: Entity.Batcher,
+): Promise<void> {
+  let label: string | undefined;
+  const newBatchSize = batch.size + 1n;
+
+  // Set the label for batches of 2+ streams.
+  if (newBatchSize === 2n) {
+    if (batch.label !== null) {
+      throw new Error(`Batch label is already set when batch size is 2: ${batch.id} ${batcher.id}`);
+    }
+    const newCounter: bigint = batcher.batchCounter + 1n;
+    label = newCounter.toString();
+
+    // Update Batcher
+    const updatedBatcher = {
+      ...batcher,
+      batchCounter: newCounter,
+    };
+    await context.Batcher.set(updatedBatcher);
   }
 
-  return loaded;
-}
-
-export function createBatcher(event: Event, sender: Address) {
-  const entity: Batcher = {
-    id: generateBatcherId(event, sender),
-    address: sender.toLowerCase(),
-    batchIndex: 0n,
+  // Update Batch
+  const updatedBatch = {
+    ...batch,
+    label,
+    size: newBatchSize,
   };
-
-  return entity;
-}
-
-export function createBatch(event: Event, batcher: Batcher) {
-  const entity: Batch = {
-    id: generateBatchId(event),
-    batcher_id: batcher.id,
-    hash: event.transaction.hash.toLowerCase(),
-    timestamp: BigInt(event.block.timestamp),
-    label: undefined,
-    size: 0n,
-  };
-
-  return entity;
-}
-
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-export function generateBatchId(event: Event): string {
-  return "".concat(event.transaction.hash.toLowerCase()).concat("-").concat(event.chainId.toString());
-}
-
-export function generateBatcherId(event: Event, sender: Address): string {
-  return "".concat(sender.toLowerCase()).concat("-").concat(event.chainId.toString());
+  await context.Batch.set(updatedBatch);
 }

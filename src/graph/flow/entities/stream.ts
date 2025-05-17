@@ -8,16 +8,14 @@ import { EntityStream, EventCreate } from "../bindings";
 import { getOrCreateEntityAsset } from "./asset";
 import { getOrCreateEntityWatcher } from "./watcher";
 
-export function createEntityStreamFlow(event: EventCreate): EntityStream {
+export function createEntityStream(event: EventCreate): EntityStream {
+  // Setup
   const tokenId = event.params.streamId;
   const streamId = getStreamId(dataSource.address(), tokenId);
   const stream = new EntityStream(streamId);
-
-  // Watcher
   const watcher = getOrCreateEntityWatcher();
   stream.subgraphId = watcher.streamCounter;
-  watcher.streamCounter = watcher.streamCounter.plus(ONE);
-  watcher.save();
+  stream.tokenId = tokenId;
 
   // Asset
   const asset = getOrCreateEntityAsset(event.params.token);
@@ -29,7 +27,7 @@ export function createEntityStreamFlow(event: EventCreate): EntityStream {
   stream.batch = batch.id;
   stream.position = batch.size.minus(ONE);
 
-  // Stream: fields
+  // Stream fields
   stream.chainId = getChainId();
   stream.alias = getStreamAlias(tokenId);
   stream.category = "Flow";
@@ -38,16 +36,15 @@ export function createEntityStreamFlow(event: EventCreate): EntityStream {
   stream.depletionTime = event.block.timestamp;
   stream.hash = event.transaction.hash;
   stream.lastAdjustmentTimestamp = event.block.timestamp;
-  stream.ratePerSecond = event.params.ratePerSecond; /** Scaled 18D */
+  stream.ratePerSecond = event.params.ratePerSecond;
   stream.recipient = event.params.recipient;
   stream.startTime = event.block.timestamp;
   stream.sender = event.params.sender;
   stream.timestamp = event.block.timestamp;
-  stream.tokenId = tokenId;
   stream.transferable = event.params.transferable;
   stream.version = getContractVersion();
 
-  // Stream: defaults
+  // Stream defaults
   stream.availableAmount = ZERO;
   stream.depositedAmount = ZERO;
   stream.forgivenDebt = ZERO;
@@ -56,8 +53,13 @@ export function createEntityStreamFlow(event: EventCreate): EntityStream {
   stream.snapshotAmount = ZERO;
   stream.voided = false;
   stream.withdrawnAmount = ZERO;
-
   stream.save();
+
+  // Watcher
+  stream.subgraphId = watcher.streamCounter;
+  watcher.streamCounter = watcher.streamCounter.plus(ONE);
+  watcher.save();
+
   return stream;
 }
 

@@ -11,7 +11,7 @@ node_xdc := "https://graph.xinfin.network"
 #                                   VARIABLES                                  #
 # ---------------------------------------------------------------------------- #
 
-# The directory containing the scripts
+# The directory containing the scripts, relative to the root of each protocol's directory
 scripts_dir := "../../../scripts"
 
 # ---------------------------------------------------------------------------- #

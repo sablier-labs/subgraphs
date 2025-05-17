@@ -18,7 +18,7 @@
     "@graphql-tools/merge": "^9.0",
     "@graphql-tools/schema": "^10.0",
     "@rescript/react": "^0.13",
-    "@sablier/deployments": "1.0.0-alpha.39",
+    "@sablier/deployments": "1.0.0-alpha.40",
     "@types/fs-extra": "^11.0",
     "@types/jest": "^29.5",
     "@types/js-yaml": "^4.0",

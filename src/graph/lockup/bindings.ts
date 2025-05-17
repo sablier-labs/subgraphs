@@ -1,7 +1,7 @@
-/** Contracts */
+// Contracts
 export { SablierLockup } from "./bindings/SablierLockup_v2_0/SablierLockup";
 
-/** Events */
+// Events
 export {
   Approval as EventApproval,
   ApprovalForAll as EventApprovalForAll,
@@ -10,7 +10,7 @@ export {
   TransferAdmin as EventTransferAdmin,
 } from "./bindings/SablierLockup_v2_0/SablierLockup";
 
-/** Schema */
+// Schema
 export {
   Action as EntityAction,
   Asset as EntityAsset,
@@ -22,7 +22,7 @@ export {
   Watcher as EntityWatcher,
 } from "./bindings/schema";
 
-/** Structs */
+// Structs
 export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_0 } from "./bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
 export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_1 } from "./bindings/SablierV2LockupDynamic_v1_1/SablierV2LockupDynamic";
 export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_2 } from "./bindings/SablierV2LockupDynamic_v1_2/SablierV2LockupDynamic";

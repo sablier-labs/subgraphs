@@ -1,15 +1,15 @@
 import type { Manifest } from "@src/graph-manifest/types";
 import { paths } from "@src/paths";
-import type { IndexedEvent } from "@src/types";
+import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 
 /**
  * Resolves an event handler for The Graph manifest.
- * @param event The event object; @see IndexedEvent
+ * @param event The event object; @see Indexed.Event
  * @returns A Manifest.EventHandler object
  */
-export function resolveEventHandler(event: IndexedEvent): Manifest.EventHandler {
+export function resolveEventHandler(event: Indexed.Event): Manifest.EventHandler {
   const { contractName, eventName, handlerSuffix, protocol, version } = event;
   const abiPath = paths.abi(contractName, protocol, version);
 
@@ -32,17 +32,17 @@ export function resolveEventHandler(event: IndexedEvent): Manifest.EventHandler 
 /*                                  INTERNAL                                  */
 /* -------------------------------------------------------------------------- */
 
-interface AbiInput {
+type AbiInput = {
   indexed?: boolean;
   type: string;
   components?: AbiInput[];
-}
+};
 
-interface AbiItem {
+type AbiItem = {
   type: string;
   name: string;
   inputs?: AbiInput[];
-}
+};
 
 /**
  * Builds the event signature string from the event definition. Note that this will not include parameter names.

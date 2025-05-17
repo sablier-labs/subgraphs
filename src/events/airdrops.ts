@@ -1,12 +1,12 @@
 import type { Sablier } from "@sablier/deployments";
-import type { IndexedEvent, IndexedEventMap } from "@src/types";
+import type { Indexed } from "@src/types";
 
 function get(
   version: Sablier.Version.Airdrops,
   contractName: string,
   eventName: string,
   handlerSuffix?: string,
-): IndexedEvent {
+): Indexed.Event {
   return {
     contractName,
     handlerSuffix,
@@ -17,7 +17,7 @@ function get(
 }
 
 // It doesn't matter what contract/version we're using because the events have the same signatures across all contracts.
-const campaignEvents: IndexedEvent[] = [
+const campaignEvents: Indexed.Event[] = [
   {
     contractName: "Adminable",
     eventName: "TransferAdmin",
@@ -26,7 +26,7 @@ const campaignEvents: IndexedEvent[] = [
   get("v1.1", "SablierV2MerkleStreamerLL", "Clawback"),
 ];
 
-const airdropHandlers: IndexedEventMap = {
+const airdropHandlers: Indexed.EventMap = {
   SablierV2MerkleStreamerFactory: {
     "v1.1": [get("v1.1", "SablierV2MerkleStreamerFactory", "CreateMerkleStreamerLL")],
   },

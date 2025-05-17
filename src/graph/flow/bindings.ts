@@ -1,7 +1,7 @@
-/** Contracts */
+// Contracts
 export { SablierFlow } from "./bindings/SablierFlow_v1_0/SablierFlow";
 
-/** Events */
+// Events
 export {
   AdjustFlowStream as EventAdjust,
   Approval as EventApproval,
@@ -17,7 +17,7 @@ export {
   WithdrawFromFlowStream as EventWithdraw,
 } from "./bindings/SablierFlow_v1_0/SablierFlow";
 
-/** Schema */
+// Schema
 export {
   Action as EntityAction,
   Asset as EntityAsset,

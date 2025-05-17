@@ -1,12 +1,13 @@
 # Directories
 logs
 node_modules
-**/bindings
+**/airdrops/bindings
+**/flow/bindings
+**/lockup/bindings
 **/build
 **/_generated
 **/generated
 **/.bin
-!src/graph/common/bindings
 
 # Files
 *.log

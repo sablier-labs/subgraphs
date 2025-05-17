@@ -1,4 +1,4 @@
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import { thrower } from "@src/winston";
 import _ from "lodash";
 import { createSources } from "./sources";
@@ -9,7 +9,7 @@ import type { Manifest } from "./types";
  * Creates a Graph manifest for a given protocol and chain.
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest
  */
-export function createGraphManifest(protocol: IndexedProtocol, chainId: number): Manifest.TopSection {
+export function createGraphManifest(protocol: Indexed.Protocol, chainId: number): Manifest.TopSection {
   const topSection = topSections[protocol];
   const sources = createSources(protocol, chainId);
 

@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import supportedChains from "@src/chains";
+import { graphChains } from "@src/chains";
 import { createGraphManifest } from "@src/graph-manifest";
 import { paths } from "@src/paths";
 import type { IndexedProtocol } from "@src/types";
@@ -95,12 +95,7 @@ function generateForAllChains(protocol: IndexedProtocol, suppressFinalLog = fals
 
   let filesGenerated = 0;
 
-  for (const chain of supportedChains) {
-    if (!chain.graph.isEnabled) {
-      logger.debug(`Skipping chain with ID ${chain.id} chain because it is not enabled on The Graph.`);
-      continue;
-    }
-
+  for (const chain of graphChains) {
     const result = writeManifestToFile(protocol, chain.id, chain.graph.name);
 
     logger.debug(`🔍 Result: ${JSON.stringify(result)}`);
@@ -125,11 +120,9 @@ function generateForAllChains(protocol: IndexedProtocol, suppressFinalLog = fals
 }
 
 function generateForSpecificChain(protocol: IndexedProtocol, chainName: string): void {
-  const chain = supportedChains.find(
-    (chain) => chain.graph.isEnabled && chain.graph.name.toLowerCase() === chainName.toLowerCase(),
-  );
-  if (!chain || !chain.graph.isEnabled) {
-    const availableChains = supportedChains.map((chain) => chain.graph.isEnabled && chain.graph.name).join(", ");
+  const chain = graphChains.find((chain) => chain.graph.name.toLowerCase() === chainName.toLowerCase());
+  if (!chain) {
+    const availableChains = graphChains.map((c) => c.graph.name).join(", ");
     const message = `❌ Error: Chain "${chainName}" not found in supported chains.\nAvailable chains: ${availableChains}`;
     logAndThrow(message);
   }

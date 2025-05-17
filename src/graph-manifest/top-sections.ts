@@ -1,7 +1,7 @@
 import type { Manifest } from "@src/graph-manifest/types";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 
-const topSections: Record<IndexedProtocol, Manifest.TopSection> = {
+const topSections: Record<Indexed.Protocol, Manifest.TopSection> = {
   airdrops: get("Airdrops"),
   flow: get("Flow"),
   lockup: get("Lockup"),

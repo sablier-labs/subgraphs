@@ -1,49 +1,26 @@
-import type { Event } from "../../common/types";
-import type { Watcher } from "../bindings";
+import type { Event } from "../../common/bindings";
+import type { Entity, HandlerContext, LoaderContext } from "../bindings";
 
-export async function initialize(
-  event: Event,
-  loaderWatcher: (id: string) => Promise<Watcher | undefined>,
-  loaded?: { watcher?: Watcher },
-) {
-  const watcher = loaded?.watcher ?? (await getOrCreateWatcher(event, loaderWatcher));
-
-  if (watcher.initialized) {
-    try {
-      return {
-        watcher,
-      };
-    } catch (_error) {
-      console.log("Initializing");
-    }
-  }
-
-  return {
-    watcher: {
-      ...watcher,
-    },
-  };
-}
-
-function createWatcher(event: Event): Watcher {
-  const entity: Watcher = {
+export function createEntityWatcher(event: Event): Entity.Watcher {
+  const watcher: Entity.Watcher = {
     id: event.chainId.toString(),
+    actionCounter: 1n,
     chainId: BigInt(event.chainId),
-    actionIndex: 1n,
-    streamIndex: 1n,
-    initialized: false,
     logs: [],
+    streamCounter: 1n,
   };
 
-  return entity;
+  return watcher;
 }
 
-export async function getOrCreateWatcher(event: Event, loader: (id: string) => Promise<Watcher | undefined>) {
-  const watcher = await loader(event.chainId.toString());
-
-  if (watcher === undefined) {
-    return createWatcher(event);
+export async function getWatcherOrThrow(
+  context: LoaderContext | HandlerContext,
+  event: Event,
+): Promise<Entity.Watcher> {
+  const id = event.chainId.toString();
+  const watcher = await context.Watcher.get(id);
+  if (!watcher) {
+    throw new Error(`Watcher not found in the database: ${id}`);
   }
-
   return watcher;
 }

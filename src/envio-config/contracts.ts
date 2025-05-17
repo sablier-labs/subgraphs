@@ -1,13 +1,12 @@
-import type { Sablier } from "@sablier/deployments";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import indexedEvents from "@src/events";
 import { sanitizeName } from "@src/helpers";
 import { paths } from "@src/paths";
 import { getRelativePath } from "@src/paths";
-import type { IndexedEvent, IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 
-export function createContracts(protocol: IndexedProtocol): EnvioConfig.Contract[] {
+export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contract[] {
   const contracts: EnvioConfig.Contract[] = [];
   for (const contract of indexedContracts[protocol]) {
     for (const version of contract.versions) {
@@ -23,7 +22,7 @@ export function createContracts(protocol: IndexedProtocol): EnvioConfig.Contract
   return contracts;
 }
 
-function getRelativeAbiFilePath(protocol: IndexedProtocol, contractName: string, version: Sablier.Version): string {
+function getRelativeAbiFilePath(protocol: Indexed.Protocol, contractName: string, version: Indexed.Version): string {
   const envioConfigDir = paths.envioConfig(protocol);
   const abiPath = paths.abi(contractName, protocol, version);
   return getRelativePath(envioConfigDir, abiPath);
@@ -32,7 +31,7 @@ function getRelativeAbiFilePath(protocol: IndexedProtocol, contractName: string,
 /**
  * Resolves the event names from the indexed events.
  */
-function resolveEvents(indexedEvents: IndexedEvent[]): EnvioConfig.Event[] {
+function resolveEvents(indexedEvents: Indexed.Event[]): EnvioConfig.Event[] {
   const events: EnvioConfig.Event[] = [];
   for (const indexedEvent of indexedEvents) {
     const event = {

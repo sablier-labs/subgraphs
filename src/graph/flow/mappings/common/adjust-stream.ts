@@ -12,12 +12,13 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
     return;
   }
 
-  /* --------------------------------- Stream --------------------------------- */
+  /* --------------------------------- STREAM --------------------------------- */
   const now = event.block.timestamp;
   const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
-  const snapshotAmount = stream.snapshotAmount.plus(stream.ratePerSecond.times(elapsedTime));
+  const streamedAmount = stream.ratePerSecond.times(elapsedTime);
+  const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
 
-  // The depletion time should be recalculated only if depletion is a future event, meaning extra amount in the stream.
+  // The depletion time is recalculated only if the current depletion time is in the future.
   if (stream.depletionTime.gt(now)) {
     const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
     const notWithdrawn = snapshotAmount.minus(withdrawnAmount);
@@ -30,7 +31,7 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
   stream.ratePerSecond = event.params.newRatePerSecond;
   stream.snapshotAmount = snapshotAmount;
 
-  /* --------------------------------- Action --------------------------------- */
+  /* --------------------------------- ACTION --------------------------------- */
   const action = createEntityAction(event, {
     amountA: event.params.oldRatePerSecond,
     amountB: event.params.newRatePerSecond,

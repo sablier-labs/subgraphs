@@ -1,9 +1,9 @@
 import { type Sablier, queries } from "@sablier/deployments";
 import { getChainName } from "@src/chains";
-import indexedContracts from "@src/contracts";
+import indexedContracts, { getIndexedContract } from "@src/contracts";
 import type { Manifest } from "@src/graph-manifest/types";
 import { sanitizeName } from "@src/helpers";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import logger, { messages, thrower } from "@src/winston";
 import _ from "lodash";
 import ABIs from "./abi-entries";
@@ -13,7 +13,7 @@ import eventHandlers from "./event-handlers";
 /**
  * Creates an array of data sources/templates for a subgraph manifest.
  */
-export function create(protocol: IndexedProtocol, chainId: number): Manifest.Source[] {
+export function create(protocol: Indexed.Protocol, chainId: number): Manifest.Source[] {
   const sources: Manifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
@@ -40,13 +40,13 @@ export function create(protocol: IndexedProtocol, chainId: number): Manifest.Sou
 /*                                  INTERNAL                                  */
 /* -------------------------------------------------------------------------- */
 
-interface CreateSourcesParams {
-  protocol: IndexedProtocol;
+type CreateSourcesParams = {
+  protocol: Indexed.Protocol;
   chainId: number;
-  version: Sablier.Version;
-  contract: Sablier.Contract;
+  version: Indexed.Version;
+  contract: Indexed.Contract;
   isTemplate: boolean;
-}
+};
 
 function createCommon(params: CreateSourcesParams) {
   const { protocol, chainId, version, contract, isTemplate } = params;
@@ -100,8 +100,8 @@ function createContext(params: CreateSourcesParams): Manifest.Context | undefine
  * Helper for accessing mapping configuration based on protocol and version.
  */
 function createMapping(params: {
-  protocol: IndexedProtocol;
-  version: Sablier.Version;
+  protocol: Indexed.Protocol;
+  version: Indexed.Version;
   contractName: string;
 }) {
   const { protocol, version, contractName } = params;
@@ -126,17 +126,19 @@ export function extractContract(params: {
   chainId: number;
   contractName: string;
   isTemplate: boolean;
-}): Sablier.Contract | undefined {
+}): Indexed.Contract | undefined {
   const { release, chainId, contractName, isTemplate } = params;
 
   // Templates are contract definitions without deployment details
   // Used for contracts created at runtime through factory patterns
   if (isTemplate) {
     return {
-      alias: "",
       address: "0x",
+      alias: "",
       block: 0,
       name: contractName,
+      protocol: release.protocol as Indexed.Protocol,
+      version: release.version as Indexed.Version,
     };
   }
 
@@ -150,11 +152,11 @@ export function extractContract(params: {
   // Validate required indexing fields
   // Both alias and block number are necessary for proper subgraph indexing
   if (!contract.alias) {
-    thrower.aliasNotFound(release, chainId, contract);
+    thrower.aliasNotFound(release, chainId, contractName);
   }
   if (!contract.block) {
-    thrower.blockNotFound(release, chainId, contract);
+    thrower.blockNotFound(release, chainId, contractName);
   }
 
-  return contract;
+  return getIndexedContract(contract);
 }

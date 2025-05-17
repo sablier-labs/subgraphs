@@ -18,6 +18,12 @@ type Batch @entity(immutable: true) {
   hash: Bytes!
 
   """
+  An index of the batch representing a conditional counter of 2+ stream batches, filtered by sender.
+  The label is null for batches containing a single stream, for filtering.
+  """
+  label: String
+
+  """
   Timestamp of the transaction that created this batch.
   """
   timestamp: BigInt!

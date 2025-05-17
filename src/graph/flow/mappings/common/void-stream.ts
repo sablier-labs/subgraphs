@@ -13,29 +13,29 @@ export function handleVoidFlowStream(event: EventVoid): void {
     return;
   }
 
-  /* --------------------------------- Stream --------------------------------- */
-  const elapsedTime = event.block.timestamp.minus(stream.lastAdjustmentTimestamp);
+  /* --------------------------------- STREAM --------------------------------- */
+
+  // Void is actually an adjustment with the new rate set to zero.
+  const now = event.block.timestamp;
+  const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
   const streamedAmount = stream.ratePerSecond.times(elapsedTime);
   const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
+
   const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
   const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
   const maxAvailable = withdrawnAmount.plus(availableAmount);
 
-  stream.paused = true;
-  stream.voided = true;
-
-  const now = event.block.timestamp;
-  stream.pausedTime = now;
-  stream.voidedTime = now;
-  stream.lastAdjustmentTimestamp = now;
-
-  // Void is actually an adjustment with the newRate per second equal to ZERO.
   stream.depletionTime = ZERO;
   stream.forgivenDebt = event.params.writtenOffDebt;
+  stream.lastAdjustmentTimestamp = now;
+  stream.paused = true;
+  stream.pausedTime = now;
   stream.ratePerSecond = ZERO;
   stream.snapshotAmount = maxAvailable.lt(snapshotAmount) ? maxAvailable : snapshotAmount;
+  stream.voidedTime = now;
+  stream.voided = true;
 
-  /* --------------------------------- Action --------------------------------- */
+  /* --------------------------------- ACTION --------------------------------- */
   const action = createEntityAction(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,

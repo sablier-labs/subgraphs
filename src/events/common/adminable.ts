@@ -1,9 +1,9 @@
 /**
  * @see {@link file://./../../abi/Adminable.json} for the ABI implementation
  */
-import type { IndexedEvent } from "@src/types";
+import type { Indexed } from "@src/types";
 
-const adminableEvents: IndexedEvent[] = [
+const adminableEvents: Indexed.Event[] = [
   {
     contractName: "Adminable",
     eventName: "TransferAdmin",

@@ -1,7 +1,7 @@
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import type { EnvioConfig } from "./types";
 
-const topSections: Record<IndexedProtocol, EnvioConfig.TopSection> = {
+const topSections: Record<Indexed.Protocol, EnvioConfig.TopSection> = {
   airdrops: get("airdrops"),
   flow: get("flow"),
   lockup: get("lockup"),

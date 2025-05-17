@@ -13,19 +13,18 @@ export function handlePauseFlowStream(event: EventPause): void {
   }
 
   /* --------------------------------- Stream --------------------------------- */
-  const now = event.block.timestamp;
-  stream.paused = true;
-  stream.pausedTime = now;
 
-  // Paused is actually an adjustment with the newRate per second equal to ZERO.
+  // Paused is actually an adjustment with the new rate set to zero.
+  const now = event.block.timestamp;
   const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
   const streamedAmount = stream.ratePerSecond.times(elapsedTime);
   const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
 
   stream.lastAdjustmentTimestamp = now;
+  stream.paused = true;
+  stream.pausedTime = now;
   stream.ratePerSecond = ZERO;
   stream.snapshotAmount = snapshotAmount;
-  stream.save();
 
   /* --------------------------------- Action --------------------------------- */
   const action = createEntityAction(event, {

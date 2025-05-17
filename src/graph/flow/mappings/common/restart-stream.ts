@@ -12,28 +12,27 @@ export function handleRestartFlowStream(event: EventRestart): void {
     return;
   }
 
-  /* --------------------------------- Stream --------------------------------- */
-  stream.paused = false;
-  stream.pausedTime = null;
-  stream.pausedAction = null;
+  /* --------------------------------- STREAM --------------------------------- */
 
   // Restart is actually an adjustment.
-  const now = event.block.timestamp;
-  stream.lastAdjustmentTimestamp = now;
-  stream.ratePerSecond = event.params.ratePerSecond;
-
   const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
   const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
   const notWithdrawnAmount = stream.snapshotAmount.minus(withdrawnAmount);
 
+  const now = event.block.timestamp;
+  let depletionTime = now;
   if (availableAmount.gt(notWithdrawnAmount)) {
     const extraAmount = availableAmount.minus(notWithdrawnAmount);
-    stream.depletionTime = now.plus(extraAmount.div(stream.ratePerSecond));
-  } else {
-    stream.depletionTime = now;
+    depletionTime = now.plus(extraAmount.div(stream.ratePerSecond));
   }
+  stream.depletionTime = depletionTime;
+  stream.lastAdjustmentTimestamp = now;
+  stream.paused = false;
+  stream.pausedTime = null;
+  stream.pausedAction = null;
+  stream.ratePerSecond = event.params.ratePerSecond;
 
-  /* --------------------------------- Action --------------------------------- */
+  /* --------------------------------- ACTION --------------------------------- */
   const action = createEntityAction(event, {
     addressA: event.params.sender,
     amountA: event.params.ratePerSecond,

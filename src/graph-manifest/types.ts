@@ -9,46 +9,46 @@ export type EventHandlersMap = ComponentMap<Manifest.EventHandler[]>;
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/
  */
 export namespace Manifest {
-  export interface ABI {
+  export type ABI = {
     name: string;
     file: string;
-  }
+  };
 
   export namespace ContextItem {
-    export interface Address {
+    export type Address = {
       data: Sablier.Address;
       type: "String";
-    }
+    };
 
-    export interface BigInt {
+    export type BigInt = {
       data: number;
       type: "BigInt";
-    }
-    export interface List<T> {
+    };
+    export type List<T> = {
       data: T[];
       type: "List";
-    }
+    };
     export type ListAddress = List<Address>;
 
-    export interface String {
+    export type String = {
       data: string;
       type: "String";
-    }
+    };
   }
-  export interface Context {
+  export type Context = {
     alias: ContextItem.String;
     chainId: ContextItem.BigInt;
     version: ContextItem.String;
     lockups?: ContextItem.ListAddress;
-  }
+  };
 
-  export interface EventHandler {
+  export type EventHandler = {
     /** Event signature without parameter names. */
     event: string;
     handler: `handle${string}`;
-  }
+  };
 
-  export interface Source {
+  export type Source = {
     kind: string;
     name: string;
     network: string;
@@ -64,9 +64,9 @@ export namespace Manifest {
     mapping: Mapping;
     /** Will not be included in the manifest. */
     _type?: "data-source" | "template";
-  }
+  };
 
-  export interface Mapping {
+  export type Mapping = {
     apiVersion: string;
     file: string;
     kind: string;
@@ -74,12 +74,12 @@ export namespace Manifest {
     abis: ABI[];
     entities: string[];
     eventHandlers: EventHandler[];
-  }
+  };
 
   /**
    * This will be inlined. There will not be a `topSection` key in the manifest.
    */
-  export interface TopSection {
+  export type TopSection = {
     specVersion: string;
     description: string;
     repository: string;
@@ -88,5 +88,5 @@ export namespace Manifest {
     };
     dataSources: Source[];
     templates?: Source[];
-  }
+  };
 }

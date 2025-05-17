@@ -12,7 +12,7 @@
         "@graphql-tools/merge": "^9.0",
         "@graphql-tools/schema": "^10.0",
         "@rescript/react": "^0.13",
-        "@sablier/deployments": "1.0.0-alpha.38",
+        "@sablier/deployments": "1.0.0-alpha.40",
         "@types/fs-extra": "^11.0",
         "@types/jest": "^29.5",
         "@types/js-yaml": "^4.0",
@@ -294,7 +294,7 @@
 
     "@rescript/std": ["@rescript/std@9.0.0", "", {}, "sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ=="],
 
-    "@sablier/deployments": ["@sablier/deployments@1.0.0-alpha.38", "", { "dependencies": { "lodash": "^4.17" } }, "sha512-1bpKlyPJmiAjYaNoCGPlEoNblaU7ZABn/8Yt/CTSdLnlojTFxboAFGoLYvOCabFccRC2s2KAZ7gJqFiFayMoGw=="],
+    "@sablier/deployments": ["@sablier/deployments@1.0.0-alpha.40", "", { "dependencies": { "lodash": "^4.17" } }, "sha512-47kH9XZudDw+9vGqsDCn/4mCknwhzX2aOPsGGErEMbde0CUOahJcxQheeMv8Ubqv5AId9JEmcIIlRTPwb/xDZQ=="],
 
     "@scure/base": ["@scure/base@1.1.9", "", {}, "sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg=="],
 

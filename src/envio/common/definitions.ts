@@ -1,6 +1,7 @@
-// @ts-ignore This is not a proper package since it messes up with imports and package managers. Viem will be implicitly installed.
+/**
+ * @todo: move this to @sablier/deployments
+ */
 import type { Chain } from "viem";
-// @ts-ignore
 import { defineChain } from "viem";
 import {
   arbitrum,
@@ -18,7 +19,7 @@ import {
   polygon,
   scroll,
   sepolia,
-  zksync, // @ts-ignore
+  zksync,
 } from "viem/chains";
 
 const definitions: Record<string, [Chain, string[]]> = {

@@ -1,168 +1,97 @@
 import { Flow as enums } from "../../../schema/enums";
-import type { Address, Event } from "../../common/types";
-import type { Asset, Batch, Batcher, CreateArgs, Stream, Watcher } from "../bindings";
-import { configuration } from "../config";
+import type { Event } from "../../common/bindings";
+import { getContract } from "../../common/contract";
+import { ids } from "../../common/ids";
+import type { Args, Entity, HandlerContext, LoaderContext } from "../bindings";
+import { updateEntityBatchAndBatcher } from "./batch";
 
-export function createStream(
-  event: Event<CreateArgs>,
+export async function createEntityStream(
+  context: HandlerContext,
   entities: {
-    asset: Asset;
-    batch: Batch;
-    batcher: Batcher;
-    watcher: Watcher;
+    asset: Entity.Asset;
+    batch: Entity.Batch;
+    batcher: Entity.Batcher;
+    watcher: Entity.Watcher;
   },
-) {
-  event.params.
-  let asset, batch, batcher, watcher = entities;
+  event: Event<Args.Create>,
+): Promise<Entity.Stream> {
+  const { asset, batch, batcher, watcher } = entities;
+
+  // Setup
+  const now = BigInt(event.block.timestamp);
   const tokenId = event.params.streamId;
+  const streamId = ids.stream(event.srcAddress, event.chainId, tokenId);
+  const contract = getContract("flow", event.chainId, event.srcAddress);
 
-  const id = generateStreamId(event, event.srcAddress, tokenId);
-  const alias = generateStreamAlias(event, event.srcAddress, tokenId);
-
-  /** --------------- */
-
-  const stream: Stream = {
-    id,
+  // Stream
+  const stream: Entity.Stream = {
+    id: streamId,
+    subgraphId: BigInt(watcher.streamCounter),
     tokenId,
-    alias,
-    asset_id: asset.id,
-    category: enums.StreamCategory.Flow,
-    version: contract.version, // TODO
-    subgraphId: BigInt(watcher.streamIndex),
-    hash: event.transaction.hash.toLowerCase(),
-    timestamp: BigInt(event.block.timestamp),
-    chainId: BigInt(event.chainId),
-    startTime: BigInt(event.block.timestamp),
-    depletionTime: BigInt(event.block.timestamp),
-    transferable: event.params.transferable,
-    creator: event.transaction.from?.toLowerCase() || "",
-    sender: event.params.sender.toLowerCase(),
-    recipient: event.params.recipient.toLowerCase(),
-    ratePerSecond: event.params.ratePerSecond /** [Scaled 18D] */,
 
-    /** --------------- */
-    refundedAmount: 0n,
-    withdrawnAmount: 0n,
+    // Asset
+    asset_id: asset.id,
+    assetDecimals: asset.decimals,
+
+    // Batch
+    batch_id: batch.id,
+    position: batch.size - 1n,
+
+    // Stream fields
+    alias: ids.streamAlias(contract.alias, event.chainId, tokenId),
+    category: enums.StreamCategory.Flow,
+    chainId: BigInt(event.chainId),
+    contract: event.srcAddress,
+    creator: event.transaction.from?.toLowerCase() || "",
+    depletionTime: now,
+    hash: event.transaction.hash.toLowerCase(),
+    lastAdjustmentTimestamp: now,
+    ratePerSecond: event.params.ratePerSecond /** [Scaled 18D] */,
+    recipient: event.params.recipient.toLowerCase(),
+    sender: event.params.sender.toLowerCase(),
+    startTime: now,
+    timestamp: now,
+    transferable: event.params.transferable,
+    version: contract.version,
+
+    // Stream defaults
     availableAmount: 0n,
     depositedAmount: 0n,
-    snapshotAmount: 0n /** [Scaled 18D] */,
-    protocolFeeAmount: 0n,
     forgivenDebt: 0n,
-
-    /** --------------- */
+    lastAdjustmentAction_id: undefined,
     paused: false,
     pausedAction_id: undefined,
     pausedTime: undefined,
-
+    refundedAmount: 0n,
     voided: false,
     voidedAction_id: undefined,
     voidedTime: undefined,
-
-    lastAdjustmentAction_id: undefined,
-    lastAdjustmentTimestamp: BigInt(event.block.timestamp),
-
-    /** --------------- */
-    batch_id: batch.id,
-    position: BigInt(batch.size),
+    snapshotAmount: 0n,
+    withdrawnAmount: 0n,
   };
 
-  /** --------------- */
+  // Batch and Batcher
+  await updateEntityBatchAndBatcher(context, batch, batcher);
 
-  watcher = {
+  // Watcher
+  const updatedWatcher = {
     ...watcher,
-    streamIndex: BigInt(watcher.streamIndex) + 1n,
+    streamCounter: watcher.streamCounter + 1n,
   };
-
-  /** --------------- */
-
-  const post_batch = (() => {
-    const size = BigInt(batch.size) + 1n;
-
-    if (batch.size === 1n && !batch.label) {
-      /**
-       * If the batch already has its first element (now adding the second),
-       * assign it a label and bump the batcher's index
-       */
-      const index = BigInt(batcher.batchIndex) + 1n;
-      const label = index.toString();
-
-      return {
-        batch: {
-          ...batch,
-          label,
-          size,
-        },
-        batcher: {
-          ...batcher,
-          batchIndex: index,
-        },
-      };
-    }
-
-    return {
-      batch: {
-        ...batch,
-        size,
-      },
-      batcher,
-    };
-  })();
-
-  batch = post_batch.batch;
-  batcher = post_batch.batcher;
-
-  return {
-    batch,
-    batcher,
-    stream,
-    watcher,
-  };
-}
-
-export async function getStream(
-  event: Event,
-  tokenId: bigint | string,
-  loader: (id: string) => Promise<Stream | undefined>,
-) {
-  const id = generateStreamId(event, event.srcAddress, tokenId);
-  const stream = await loader(id);
-
-  if (!stream) {
-    throw new Error("Missing stream instance");
-  }
+  await context.Watcher.set(updatedWatcher);
 
   return stream;
 }
 
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-export function generateStreamId(event: Event, address: Address, tokenId: bigint | string) {
-  const id = ""
-    .concat(address.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString())
-    .concat("-")
-    .concat(tokenId.toString());
-
-  return id;
-}
-
-export function generateStreamAlias(event: Event, address: Address, tokenId: bigint) {
-  const chain = configuration(event.chainId);
-  const contract = chain.contracts.find((c) => c.address === address.toLowerCase());
-
-  if (!contract) {
-    throw new Error("Missing or mismatched contract in configuration");
+export async function getStreamOrThrow(
+  context: LoaderContext,
+  event: Event,
+  tokenId: bigint | string,
+): Promise<Entity.Stream> {
+  const id = ids.stream(event.srcAddress, event.chainId, tokenId);
+  const stream = await context.Stream.get(id);
+  if (!stream) {
+    throw new Error(`Stream not loaded from the database: ${id}`);
   }
-
-  const id = ""
-    .concat(contract.alias.toLowerCase())
-    .concat("-")
-    .concat(event.chainId.toString())
-    .concat("-")
-    .concat(tokenId.toString());
-
-  return id;
+  return stream;
 }

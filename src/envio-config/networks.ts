@@ -1,32 +1,31 @@
 import { queries, releasesByProtocol } from "@sablier/deployments";
-import supportedChains, { getChainName } from "@src/chains";
+import { envioChains, getChainName } from "@src/chains";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import { sanitizeName } from "@src/helpers";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import logger, { logAndThrow, thrower } from "@src/winston";
 
-export function createNetworks(protocol: IndexedProtocol): EnvioConfig.Network[] {
+export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
-  for (const chain of supportedChains) {
-    if (!chain.envio.isEnabled) {
-      continue;
-    }
-
+  for (const chain of envioChains) {
     const { contracts, startBlock } = extractContracts(protocol, chain.id);
-    networks.push({
+    const hypersyncConfig = chain.envio.hypersync ? { url: chain.envio.hypersync } : undefined;
+    const network: EnvioConfig.Network = {
       id: chain.id,
+      hypersync_config: hypersyncConfig,
       start_block: startBlock,
       contracts,
-    });
+    };
+    networks.push(network);
   }
   return networks;
 }
 
-interface ExtractContractsReturn {
+type ExtractContractsReturn = {
   contracts: EnvioConfig.NetworkContract[];
   startBlock: number;
-}
+};
 
 /**
  * Extracts contracts for a specific protocol and chain.
@@ -41,7 +40,7 @@ interface ExtractContractsReturn {
  * 6. Determines the earliest block number to start indexing from
  * 7. Throws errors if required contracts are missing or no contracts found
  */
-function extractContracts(protocol: IndexedProtocol, chainId: number): ExtractContractsReturn {
+function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractContractsReturn {
   const networkContracts: EnvioConfig.NetworkContract[] = [];
   const chainName = getChainName(chainId);
   let startBlock = 0;
@@ -71,10 +70,10 @@ function extractContracts(protocol: IndexedProtocol, chainId: number): ExtractCo
 
       // If a contract is found, it must have an alias and a start block. These are required for indexing.
       if (!contract.alias) {
-        thrower.aliasNotFound(release, chainId, contract);
+        thrower.aliasNotFound(release, chainId, contractName);
       }
       if (!contract.block) {
-        thrower.blockNotFound(release, chainId, contract);
+        thrower.blockNotFound(release, chainId, contractName);
       }
 
       networkContracts.push({

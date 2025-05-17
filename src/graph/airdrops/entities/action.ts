@@ -12,12 +12,7 @@ export function createEntityAction(
 ): EntityAction | null {
   const actionId = getActionId(event);
   const action = new EntityAction(actionId);
-
-  // Watcher
   const watcher = getOrCreateEntityWatcher();
-  action.subgraphId = watcher.actionCounter;
-  watcher.actionCounter = watcher.actionCounter.plus(ONE);
-  watcher.save();
 
   // Action
   action.block = event.block.number;
@@ -26,6 +21,7 @@ export function createEntityAction(
   action.chainId = getChainId();
   action.from = event.transaction.from;
   action.hash = event.transaction.hash;
+  action.subgraphId = watcher.actionCounter;
   action.timestamp = event.block.timestamp;
 
   // Only set the fee if it's not an old version.
@@ -34,7 +30,11 @@ export function createEntityAction(
   if (isVersionWithFees) {
     action.fee = event.transaction.value;
   }
-
   action.save();
+
+  // Watcher
+  watcher.actionCounter = watcher.actionCounter.plus(ONE);
+  watcher.save();
+
   return action;
 }

@@ -1,49 +1,32 @@
 import { Flow as enums } from "../../../../schema/enums";
-import type { Action, ApprovalHandler, ApprovalLoader } from "../../bindings";
-import { createAction, generateStreamId, getOrCreateWatcher, getStream } from "../../entities";
-import { FlowV10 } from "../../generated";
+import type { Entity } from "../../bindings";
+import { SablierFlow_v1_0 } from "../../bindings";
+import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "../../entities";
 
-async function loader(input: ApprovalLoader) {
-  const { context, event } = input;
-  const streamId = generateStreamId(event, event.srcAddress, event.params.tokenId);
-  const watcherId = event.chainId.toString();
+SablierFlow_v1_0.Approval.handlerWithLoader({
+  /* -------------------------------------------------------------------------- */
+  /*                                   LOADER                                   */
+  /* -------------------------------------------------------------------------- */
+  loader: async ({ context, event }) => {
+    const stream = await getStreamOrThrow(context, event, event.params.tokenId);
+    const watcher = await getWatcherOrThrow(context, event);
 
-  const [stream, watcher] = await Promise.all([context.Stream.get(streamId), context.Watcher.get(watcherId)]);
+    return {
+      stream,
+      watcher,
+    };
+  },
+  /* -------------------------------------------------------------------------- */
+  /*                                   HANDLER                                  */
+  /* -------------------------------------------------------------------------- */
+  handler: async ({ context, event, loaderReturn: loaded }) => {
+    const { stream, watcher } = loaded;
 
-  return {
-    stream,
-    watcher,
-  };
-}
-
-async function handler(input: ApprovalHandler<typeof loader>) {
-  const { context, event, loaderReturn: loaded } = input;
-
-  /** ------- Fetch -------- */
-
-  let watcher = loaded.watcher ?? (await getOrCreateWatcher(event, context.Watcher.get));
-  const stream = loaded.stream ?? (await getStream(event, event.params.tokenId, context.Stream.get));
-
-  const post_action = createAction(event, watcher);
-
-  const action: Action = {
-    ...post_action.entity,
-    category: enums.ActionCategory.Approval,
-    stream_id: stream.id,
-
-    /** --------------- */
-    addressA: event.params.owner.toLowerCase(),
-    addressB: event.params.approved.toLowerCase(),
-  };
-
-  watcher = post_action.watcher;
-
-  context.Action.set(action);
-  context.Stream.set(stream);
-  context.Watcher.set(watcher);
-}
-
-FlowV10.Approval.handlerWithLoader({
-  loader,
-  handler,
+    await createEntityAction(context, watcher, event, {
+      category: enums.ActionCategory.Approval,
+      addressA: event.params.owner,
+      addressB: event.params.approved,
+      streamId: stream.id,
+    });
+  },
 });

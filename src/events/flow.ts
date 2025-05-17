@@ -1,7 +1,7 @@
-import type { IndexedEvent, IndexedEventMap } from "@src/types";
+import type { Indexed } from "@src/types";
 import erc721 from "./common/erc721";
 
-function get(contractName: string, eventName: string): IndexedEvent {
+function get(contractName: string, eventName: string): Indexed.Event {
   return {
     contractName,
     eventName,
@@ -10,7 +10,7 @@ function get(contractName: string, eventName: string): IndexedEvent {
   };
 }
 
-const baseEvents: IndexedEvent[] = [
+const baseEvents: Indexed.Event[] = [
   ...erc721,
   get("SablierFlow", "AdjustFlowStream"),
   get("SablierFlow", "CreateFlowStream"),
@@ -26,7 +26,7 @@ const baseEvents: IndexedEvent[] = [
 const v1_0Events = baseEvents;
 const v1_1Events = baseEvents;
 
-const flowEvents: IndexedEventMap = {
+const flowEvents: Indexed.EventMap = {
   SablierFlow: {
     "v1.0": v1_0Events,
     "v1.1": v1_1Events,

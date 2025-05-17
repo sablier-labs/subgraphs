@@ -5,7 +5,8 @@ import { EventTransfer } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
 
 export function handleTransfer(event: EventTransfer): void {
-  // As explained in issue #18, we filter out `Transfer` events emitted by the initial mint transaction.
+  // We exclude `Transfer` events emitted by the initial mint transaction.
+  // See https://github.com/sablier-labs/indexers/issues/18
   if (event.params.from.equals(ADDRESS_ZERO)) {
     return;
   }
@@ -20,7 +21,7 @@ export function handleTransfer(event: EventTransfer): void {
   stream.recipient = event.params.to;
   stream.save();
 
-  /* --------------------------------- Action --------------------------------- */
+  /* --------------------------------- ACTION --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.from,
     addressB: event.params.to,

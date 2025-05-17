@@ -1,10 +1,49 @@
-import type { Event, Mutable } from "../../common/types";
-import type { Action, Watcher } from "../bindings";
+import { ids } from "../../common";
+import type { ActionParams, Event } from "../../common";
+import type { Entity, HandlerContext } from "../bindings";
+import type { ActionCategory_t } from "../bindings/src/db/Enums.gen";
 
-type Entity = Partial<Mutable<Action>>;
+export async function createEntityAction(
+  context: HandlerContext,
+  watcher: Entity.Watcher,
+  event: Event,
+  params: ActionParams,
+): Promise<Entity.Action> {
+  const id = ids.action(event);
 
-export async function getAction(event: Event, loader: (id: string) => Promise<Action | undefined>) {
-  const id = generateActionId(event);
+  const action: Entity.Action = {
+    // Transaction
+    id,
+    block: BigInt(event.block.number),
+    chainId: BigInt(event.chainId),
+    contract: event.srcAddress,
+    fee: event.transaction.value,
+    from: event.transaction.from?.toLowerCase() || "",
+    hash: event.transaction.hash,
+    timestamp: BigInt(event.block.timestamp),
+    subgraphId: watcher.actionCounter,
+    // Params
+    addressA: params.addressA?.toLowerCase(),
+    addressB: params.addressB?.toLowerCase(),
+    amountA: params.amountA,
+    amountB: params.amountB,
+    category: params.category as ActionCategory_t,
+    stream_id: params.streamId,
+  };
+  await context.Action.set(action);
+
+  // Watcher
+  const updatedWatcher: Entity.Watcher = {
+    ...watcher,
+    actionCounter: watcher.actionCounter + 1n,
+  };
+  await context.Watcher.set(updatedWatcher);
+
+  return action;
+}
+
+export async function getAction(event: Event, loader: (id: string) => Promise<Entity.Action | undefined>) {
+  const id = ids.action(event);
   const loaded = await loader(id);
 
   if (!loaded) {
@@ -12,48 +51,4 @@ export async function getAction(event: Event, loader: (id: string) => Promise<Ac
   }
 
   return loaded;
-}
-
-export function createAction(event: Event, watcher_: Watcher) {
-  const id = generateActionId(event);
-
-  const entity = {
-    id,
-    block: BigInt(event.block.number),
-    from: event.transaction.from?.toLowerCase() || "",
-    hash: event.transaction.hash,
-    timestamp: BigInt(event.block.timestamp),
-    subgraphId: BigInt(watcher_.actionIndex),
-    chainId: BigInt(event.chainId),
-    /** --------------- */
-    addressA: undefined,
-    addressB: undefined,
-    amountA: undefined,
-    amountB: undefined,
-    /** --------------- */
-    fee: event.transaction.value,
-  } satisfies Entity;
-
-  const watcher: Watcher = {
-    ...watcher_,
-    actionIndex: BigInt(watcher_.actionIndex) + 1n,
-  };
-
-  return {
-    entity,
-    watcher,
-  };
-}
-
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-/** --------------------------------------------------------------------------------------------------------- */
-
-export function generateActionId(event: Event) {
-  return ""
-    .concat(event.transaction.hash)
-    .concat("-")
-    .concat(event.logIndex.toString())
-    .concat("-")
-    .concat(event.chainId.toString());
 }

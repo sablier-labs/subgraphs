@@ -11,12 +11,12 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
     return;
   }
 
-  /* --------------------------------- Stream --------------------------------- */
+  /* --------------------------------- STREAM --------------------------------- */
   stream.availableAmount = stream.availableAmount.minus(event.params.withdrawAmount);
   stream.withdrawnAmount = stream.withdrawnAmount.plus(event.params.withdrawAmount);
   stream.save();
 
-  /* --------------------------------- Action --------------------------------- */
+  /* --------------------------------- ACTION --------------------------------- */
   createEntityAction(event, {
     addressA: event.params.caller,
     addressB: event.params.to,
