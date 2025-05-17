@@ -17,13 +17,12 @@ export async function createEntityStream(
 ): Promise<Entity.Stream> {
   const { asset, batch, batcher, watcher } = entities;
 
-  // Setup
   const now = BigInt(event.block.timestamp);
   const tokenId = event.params.streamId;
   const streamId = ids.stream(event.srcAddress, event.chainId, tokenId);
   const contract = getContract("flow", event.chainId, event.srcAddress);
 
-  // Stream
+  /* --------------------------------- STREAM --------------------------------- */
   const stream: Entity.Stream = {
     id: streamId,
     subgraphId: BigInt(watcher.streamCounter),
@@ -37,7 +36,7 @@ export async function createEntityStream(
     batch_id: batch.id,
     position: batch.size - 1n,
 
-    // Stream fields
+    // Stream: params
     alias: ids.streamAlias(contract.alias, event.chainId, tokenId),
     category: enums.StreamCategory.Flow,
     chainId: BigInt(event.chainId),
@@ -46,7 +45,7 @@ export async function createEntityStream(
     depletionTime: now,
     hash: event.transaction.hash.toLowerCase(),
     lastAdjustmentTimestamp: now,
-    ratePerSecond: event.params.ratePerSecond /** [Scaled 18D] */,
+    ratePerSecond: event.params.ratePerSecond,
     recipient: event.params.recipient.toLowerCase(),
     sender: event.params.sender.toLowerCase(),
     startTime: now,
@@ -54,7 +53,7 @@ export async function createEntityStream(
     transferable: event.params.transferable,
     version: contract.version,
 
-    // Stream defaults
+    // Stream: defaults
     availableAmount: 0n,
     depositedAmount: 0n,
     forgivenDebt: 0n,
@@ -70,10 +69,10 @@ export async function createEntityStream(
     withdrawnAmount: 0n,
   };
 
-  // Batch and Batcher
+  /* ---------------------------------- BATCH --------------------------------- */
   await updateEntityBatchAndBatcher(context, batch, batcher);
 
-  // Watcher
+  /* --------------------------------- WATCHER -------------------------------- */
   const updatedWatcher = {
     ...watcher,
     streamCounter: watcher.streamCounter + 1n,

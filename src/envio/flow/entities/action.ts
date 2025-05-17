@@ -1,7 +1,7 @@
-import { ids } from "../../common";
-import type { ActionParams, Event } from "../../common";
-import type { Entity, HandlerContext } from "../bindings";
-import type { ActionCategory_t } from "../bindings/src/db/Enums.gen";
+import type { Event } from "@envio/common/bindings";
+import { ids } from "@envio/common/ids";
+import type { ActionParams } from "@envio/common/params";
+import type { Entity, Enum, HandlerContext } from "@envio/flow/bindings";
 
 export async function createEntityAction(
   context: HandlerContext,
@@ -27,7 +27,7 @@ export async function createEntityAction(
     addressB: params.addressB?.toLowerCase(),
     amountA: params.amountA,
     amountB: params.amountB,
-    category: params.category as ActionCategory_t,
+    category: params.category as Enum.ActionCategory,
     stream_id: params.streamId,
   };
   await context.Action.set(action);

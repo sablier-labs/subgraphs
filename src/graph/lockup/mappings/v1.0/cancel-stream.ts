@@ -3,15 +3,16 @@ import { processCancel } from "../processors";
 
 /**
  * Handles events emitted by:
- * - SablierV2LockupLinear
- * - SablierV2LockupDynamic
+ * - SablierV2LockupLinear_v1_0
+ * - SablierV2LockupDynamic_v1_0
  */
 export function handleCancelLockupStream(event: EventCancelV1_0): void {
+  const params = event.params;
   processCancel(event, {
-    recipient: event.params.recipient,
-    recipientAmount: event.params.recipientAmount,
-    sender: event.params.sender,
-    senderAmount: event.params.senderAmount,
-    streamId: event.params.streamId,
+    recipient: params.recipient,
+    recipientAmount: params.recipientAmount,
+    sender: params.sender,
+    senderAmount: params.senderAmount,
+    streamId: params.streamId,
   });
 }

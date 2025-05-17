@@ -2,28 +2,25 @@ import { CreateLockupDynamicStream as EventCreateDynamicV1_1 } from "../../bindi
 import { convertSegmentsV1_1 } from "../../helpers";
 import { processCreateDynamic } from "../processors";
 
-/**
- * Handles events emitted by:
- * - SablierV2LockupDynamic
- */
 export function handleCreateLockupDynamicStream(event: EventCreateDynamicV1_1): void {
+  const params = event.params;
   processCreateDynamic(
     event,
     {
-      asset: event.params.asset,
-      cancelable: event.params.cancelable,
+      asset: params.asset,
+      cancelable: params.cancelable,
       category: "LockupDynamic",
-      depositAmount: event.params.amounts.deposit,
-      endTime: event.params.range.end,
-      funder: event.params.funder,
-      recipient: event.params.recipient,
-      sender: event.params.sender,
-      startTime: event.params.range.start,
-      tokenId: event.params.streamId,
-      transferable: event.params.transferable,
+      depositAmount: params.amounts.deposit,
+      endTime: params.range.end,
+      funder: params.funder,
+      recipient: params.recipient,
+      sender: params.sender,
+      startTime: params.range.start,
+      tokenId: params.streamId,
+      transferable: params.transferable,
     },
     {
-      segments: convertSegmentsV1_1(event.params.segments),
+      segments: convertSegmentsV1_1(params.segments),
     },
   );
 }

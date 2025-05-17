@@ -1,5 +1,5 @@
 import type { Indexed } from "@src/types";
-import { thrower } from "@src/winston";
+import { WinstonError } from "@src/winston";
 import _ from "lodash";
 import { createSources } from "./sources";
 import { default as topSections } from "./top-sections";
@@ -14,7 +14,7 @@ export function createGraphManifest(protocol: Indexed.Protocol, chainId: number)
   const sources = createSources(protocol, chainId);
 
   if (sources.length === 0) {
-    thrower.contractsNotFound(protocol, chainId);
+    throw new WinstonError.ContractsNotFound(protocol, chainId);
   }
 
   const sourcesByType = _.groupBy(sources, "_type");

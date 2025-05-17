@@ -1,5 +1,6 @@
-import { ids, queryERC20Metadata } from "../../common";
 import type { Address, Event } from "../../common/bindings";
+import { queryERC20Metadata } from "../../common/erc20";
+import { ids } from "../../common/ids";
 import type { Entity, HandlerContext, LoaderContext } from "../bindings";
 
 export async function createEntityAsset(context: HandlerContext, event: Event, assetAddress: Address) {

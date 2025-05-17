@@ -1,6 +1,6 @@
 import { createEnvioConfig } from "@src/envio-config";
 import { paths } from "@src/paths";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
 import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
@@ -40,7 +40,7 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function createConfigYAML(protocol: IndexedProtocol): string {
+function createConfigYAML(protocol: Indexed.Protocol): string {
   const config = createEnvioConfig(protocol);
 
   const yamlContent = yaml.dump(config, {
@@ -51,7 +51,7 @@ function createConfigYAML(protocol: IndexedProtocol): string {
   return `${AUTOGEN_COMMENT}${ENVIO_SCHEMA_COMMENT}${yamlContent}`;
 }
 
-function generateConfig(protocol: IndexedProtocol): void {
+function generateConfig(protocol: Indexed.Protocol): void {
   try {
     const config = createConfigYAML(protocol);
     const outputPath = paths.envioConfig(protocol);

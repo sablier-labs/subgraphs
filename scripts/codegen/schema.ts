@@ -5,7 +5,7 @@ import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { SCHEMA_DIR, paths } from "@src/paths";
 import * as enums from "@src/schema/enums";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
 import { print } from "graphql";
 import _ from "lodash";
@@ -20,10 +20,10 @@ import { getRelative, validateProtocolArg } from "../helpers";
  * CLI for generating GraphQL schema files
  *
  * @example Generate for Flow:
- * bun run scripts/codegen/schema.ts flow
+ * just codegen-schema flow
  *
  * @example Generate for all protocols:
- * bun run scripts/codegen/schema.ts all
+ * just codegen-schema all
  *
  * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
@@ -37,7 +37,7 @@ if (require.main === module) {
      * Handles generation of schema files for all supported protocols
      */
     function handleAllProtocols(): void {
-      const protocols: IndexedProtocol[] = ["airdrops", "flow", "lockup"];
+      const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
 
       for (const p of protocols) {
         generateSchema(p);
@@ -68,7 +68,7 @@ if (require.main === module) {
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function generateSchema(protocol: IndexedProtocol): void {
+function generateSchema(protocol: Indexed.Protocol): void {
   const enumDefs = getEnumDefs(protocol);
 
   const typeDefsPaths = getTypeDefsPaths(protocol);
@@ -96,7 +96,7 @@ function getEnum<T extends Record<string, string>>(enumObj: T, name: string): st
   return `enum ${name} {\n${enumValues}\n}`;
 }
 
-function getEnumDefs(protocol: IndexedProtocol) {
+function getEnumDefs(protocol: Indexed.Protocol) {
   const enumDefs: string[] = [];
   switch (protocol) {
     case "airdrops":
@@ -123,7 +123,7 @@ function getEnumDefs(protocol: IndexedProtocol) {
   return makeExecutableSchema({ typeDefs: enumDefs });
 }
 
-function getTypeDefsPaths(protocol: IndexedProtocol): string[] {
+function getTypeDefsPaths(protocol: Indexed.Protocol): string[] {
   const protocolPath = path.join(SCHEMA_DIR, `${protocol}.graphql`);
 
   const actionPath = path.join(SCHEMA_DIR, "common/action.graphql");

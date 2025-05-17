@@ -11,6 +11,8 @@
     "noEmit": true,
     "noImplicitAny": true,
     "paths": {
+      "@envio": ["src/envio"],
+      "@envio/*": ["src/envio/*"],
       "@src": ["src"],
       "@src/*": ["src/*"]
     },
@@ -20,6 +22,6 @@
     "strict": true,
     "target": "ESNext"
   },
-  "exclude": ["deprecated/**/*.ts", "src/graph/**/*.ts"],
+  "exclude": ["deprecated/**/*.ts", "src/envio/**/bindings.ts", "src/graph/**/*.ts"],
   "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
 }

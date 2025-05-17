@@ -4,7 +4,7 @@ import indexedContracts, { getIndexedContract } from "@src/contracts";
 import type { Manifest } from "@src/graph-manifest/types";
 import { sanitizeName } from "@src/helpers";
 import type { Indexed } from "@src/types";
-import logger, { messages, thrower } from "@src/winston";
+import logger, { messages, WinstonError } from "@src/winston";
 import _ from "lodash";
 import ABIs from "./abi-entries";
 import entities from "./entities";
@@ -19,7 +19,7 @@ export function create(protocol: Indexed.Protocol, chainId: number): Manifest.So
     for (const version of indexedContract.versions) {
       const release = queries.releases.get({ protocol, version });
       if (!release) {
-        thrower.releaseNotFound(protocol, version);
+        throw new WinstonError.ReleaseNotFound(protocol, version);
       }
 
       const { name: contractName, isTemplate } = indexedContract;
@@ -152,10 +152,10 @@ export function extractContract(params: {
   // Validate required indexing fields
   // Both alias and block number are necessary for proper subgraph indexing
   if (!contract.alias) {
-    thrower.aliasNotFound(release, chainId, contractName);
+    throw new WinstonError.AliasNotFound(release, chainId, contractName);
   }
   if (!contract.block) {
-    thrower.blockNotFound(release, chainId, contractName);
+    throw new WinstonError.BlockNotFound(release, chainId, contractName);
   }
 
   return getIndexedContract(contract);

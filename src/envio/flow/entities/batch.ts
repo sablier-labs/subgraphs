@@ -1,6 +1,6 @@
-import { ids } from "@src/envio/common/ids";
-import type { Address, Event } from "../../common/bindings";
-import type { Entity, HandlerContext } from "../bindings";
+import type { Address, Event } from "@envio/common/bindings";
+import { ids } from "@envio/common/ids";
+import type { Entity, HandlerContext } from "@envio/flow/bindings";
 
 export async function createEntityBatch(context: HandlerContext, event: Event, sender: Address): Promise<Entity.Batch> {
   const id = ids.batch(event);

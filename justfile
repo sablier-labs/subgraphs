@@ -13,6 +13,12 @@ biome-check:
 biome-write:
   bun run biome check --write .
 
+# Build all The Graph subgraphs
+build-graph:
+  just -f src/graph/airdrops/justfile build
+  just -f src/graph/flow/justfile build
+  just -f src/graph/lockup/justfile build
+
 # Run all checks
 check: biome-check prettier-check tsc-check
 
@@ -29,12 +35,12 @@ codegen protocol="all" chain_name="":
   @just codegen-schema {{protocol}}
 
 # Generate the Envio config
-codegen-envio-config protocol="all":
+codegen-config protocol="all":
   bun run scripts/codegen/envio-config.ts {{protocol}}
 
 # Generate the The Graph manifest
 codegen-manifest protocol="all" chain_name="":
-  bun run scripts/codegen/manifest.ts {{protocol}} {{chain_name}}
+  bun run scripts/codegen/graph-manifest.ts {{protocol}} {{chain_name}}
 
 # Generate the GraphQL schema
 codegen-schema protocol="all":

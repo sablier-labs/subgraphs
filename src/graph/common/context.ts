@@ -25,20 +25,6 @@ export function getLockups(): string[] {
   return getStringArray("lockups");
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
-/* -------------------------------------------------------------------------- */
-
-export function getArray(key: string): string[] {
-  const context = dataSource.context();
-  const value = context.get(key);
-  if (value == null) {
-    shutDown("{} not found in data source context: {}", [key, dataSource.address().toHexString()]);
-    return [];
-  }
-  return value.toStringArray();
-}
-
 function getBigInt(key: string): BigInt {
   const context = dataSource.context();
   const value = context.getBigInt(key);
@@ -51,7 +37,7 @@ function getString(key: string): string {
   return value;
 }
 
-export function getStringArray(key: string): string[] {
+function getStringArray(key: string): string[] {
   const context = dataSource.context();
   const value = context.get(key);
   if (value == null) {

@@ -1,5 +1,5 @@
 /**
- * @file Processors are bits of reusable logic that is used by multiple event handlers.
+ * @file Processors are reusable logic that is used in multiple event handlers.
  */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { logError } from "../../common/logger";

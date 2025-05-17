@@ -1,8 +1,8 @@
 import type { Sablier } from "@sablier/deployments";
-import { resolveEventHandler as resolve } from "@src/events/resolvers";
+import { resolveEventHandler as resolve } from "@src/events/resolver";
 import eventHandlers from "@src/graph-manifest/sources/event-handlers";
 import type { Manifest } from "@src/graph-manifest/types";
-import type { IndexedProtocol } from "@src/types";
+import type { Indexed } from "@src/types";
 import _ from "lodash";
 
 describe("Event handlers", () => {
@@ -93,7 +93,7 @@ describe("Event handlers", () => {
   }
 });
 
-function testProtocol(protocol: IndexedProtocol): void {
+function testProtocol(protocol: Indexed.Protocol): void {
   describe(`${protocol} contracts`, () => {
     const handlersByContract = eventHandlers[protocol];
 
@@ -110,7 +110,7 @@ function testProtocol(protocol: IndexedProtocol): void {
 }
 
 function testEventHandler(
-  protocol: IndexedProtocol,
+  protocol: Indexed.Protocol,
   version: Sablier.Version,
   contractName: string,
   actual: Manifest.EventHandler,

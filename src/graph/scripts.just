@@ -27,7 +27,7 @@ auth:
   bun run graph build manifests/ethereum.yaml --output-dir build
 
 # Clean auto-generated files
-clean:
+@clean:
   rm -rf bindings build
 
 # Generate everything needed for building the subgraph (the order matters):
@@ -43,7 +43,7 @@ codegen: clean codegen-schema codegen-bindings
 # Generate subgraph manifest for a specific chain
 @codegen-manifest chain_name:
   # The path is relative to each protocol's directory
-  bun run {{scripts_dir}}/codegen/manifest.ts {{PROTOCOL}} {{chain_name}}
+  bun run {{scripts_dir}}/codegen/graph-manifest.ts {{PROTOCOL}} {{chain_name}}
 
 # Generate GraphQL schema
 @codegen-schema:

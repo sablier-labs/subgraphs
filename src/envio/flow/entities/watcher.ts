@@ -1,5 +1,5 @@
-import type { Event } from "../../common/bindings";
-import type { Entity, HandlerContext, LoaderContext } from "../bindings";
+import type { Event } from "@envio/common/bindings";
+import type { Entity, HandlerContext, LoaderContext } from "@envio/flow/bindings";
 
 export function createEntityWatcher(event: Event): Entity.Watcher {
   const watcher: Entity.Watcher = {

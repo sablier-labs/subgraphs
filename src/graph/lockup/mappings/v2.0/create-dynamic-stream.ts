@@ -3,20 +3,22 @@ import { convertSegmentsV2_0 } from "../../helpers";
 import { processCreateDynamic } from "../processors";
 
 export function handleCreateLockupDynamicStream(event: EventCreateDynamicV2_0): void {
+  const allParams = event.params;
+  const commonParams = allParams.commonParams;
   processCreateDynamic(
     event,
     {
-      asset: event.params.commonParams.token,
-      cancelable: event.params.commonParams.cancelable,
+      asset: commonParams.token,
+      cancelable: commonParams.cancelable,
       category: "LockupDynamic",
-      depositAmount: event.params.commonParams.amounts.deposit,
-      endTime: event.params.commonParams.timestamps.end,
-      funder: event.params.commonParams.funder,
-      recipient: event.params.commonParams.recipient,
-      sender: event.params.commonParams.sender,
-      startTime: event.params.commonParams.timestamps.start,
-      tokenId: event.params.streamId,
-      transferable: event.params.commonParams.transferable,
+      depositAmount: commonParams.amounts.deposit,
+      endTime: commonParams.timestamps.end,
+      funder: commonParams.funder,
+      recipient: commonParams.recipient,
+      sender: commonParams.sender,
+      startTime: commonParams.timestamps.start,
+      tokenId: allParams.streamId,
+      transferable: commonParams.transferable,
     },
     {
       segments: convertSegmentsV2_0(event.params.segments),

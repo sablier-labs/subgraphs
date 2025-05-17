@@ -8,7 +8,7 @@ export function getOrCreateEntityAsset(address: Address): EntityAsset {
   const id = address.toHexString();
   let asset = EntityAsset.load(id);
 
-  if (asset == null) {
+  if (asset === null) {
     asset = new EntityAsset(id);
 
     const contract = ERC20.bind(address);

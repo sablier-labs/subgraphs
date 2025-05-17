@@ -1,5 +1,5 @@
 import indexedEvents from "@src/events";
-import { resolveEventHandler } from "@src/events/resolvers";
+import { resolveEventHandler } from "@src/events/resolver";
 import type { EventHandlersMap } from "@src/graph-manifest/types";
 import type { Indexed, ProtocolMap } from "@src/types";
 import _ from "lodash";

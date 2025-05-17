@@ -1,2 +1,2 @@
-export * from "../common";
+export * from "../all";
 export * from "./factory";

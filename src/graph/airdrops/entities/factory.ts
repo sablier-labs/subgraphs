@@ -6,7 +6,7 @@ import { EntityFactory } from "../bindings";
 export function getOrCreateEntityFactory(address: Address): EntityFactory {
   let factory = EntityFactory.load(address.toHexString());
 
-  if (factory == null) {
+  if (factory === null) {
     factory = new EntityFactory(address.toHexString());
     factory.address = address;
     factory.alias = getContractAlias();

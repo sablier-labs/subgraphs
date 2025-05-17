@@ -6,7 +6,7 @@ export function getOrCreateEntityWatcher(): EntityWatcher {
   const chainId = getChainId();
   let watcher = EntityWatcher.load(chainId.toString());
 
-  if (watcher == null) {
+  if (watcher === null) {
     watcher = new EntityWatcher(chainId.toString());
     watcher.actionCounter = ONE;
     watcher.campaignCounter = ONE;

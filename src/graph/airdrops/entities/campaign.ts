@@ -80,15 +80,11 @@ export function createEntityCampaignLT(
 export function getEntityCampaign(address: Address): EntityCampaign | null {
   const id = getCampaignId(address);
   const campaign = EntityCampaign.load(id);
-  if (campaign == null) {
+  if (campaign === null) {
     logError("Campaign entity not saved for address: {}", [address.toHexString()]);
   }
   return campaign;
 }
-
-/* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
-/* -------------------------------------------------------------------------- */
 
 function createBaseEntity(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
   const id = getCampaignId(params.campaignAddress);

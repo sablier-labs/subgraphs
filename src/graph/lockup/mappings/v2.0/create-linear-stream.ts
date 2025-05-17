@@ -2,25 +2,27 @@ import { CreateLockupLinearStream as EventCreateLinearV2_0 } from "../../binding
 import { processCreateLinear } from "../processors";
 
 export function handleCreateLockupLinearStream(event: EventCreateLinearV2_0): void {
+  const allParams = event.params;
+  const commonParams = allParams.commonParams;
   processCreateLinear(
     event,
     {
-      asset: event.params.commonParams.token,
-      cancelable: event.params.commonParams.cancelable,
+      asset: commonParams.token,
+      cancelable: commonParams.cancelable,
       category: "LockupLinear",
-      depositAmount: event.params.commonParams.amounts.deposit,
-      endTime: event.params.commonParams.timestamps.end,
-      funder: event.params.commonParams.funder,
-      recipient: event.params.commonParams.recipient,
-      sender: event.params.commonParams.sender,
-      startTime: event.params.commonParams.timestamps.start,
-      tokenId: event.params.streamId,
-      transferable: event.params.commonParams.transferable,
+      depositAmount: commonParams.amounts.deposit,
+      endTime: commonParams.timestamps.end,
+      funder: commonParams.funder,
+      recipient: commonParams.recipient,
+      sender: commonParams.sender,
+      startTime: commonParams.timestamps.start,
+      tokenId: allParams.streamId,
+      transferable: commonParams.transferable,
     },
     {
-      cliffTime: event.params.cliffTime,
-      unlockAmountCliff: event.params.unlockAmounts.cliff,
-      unlockAmountStart: event.params.unlockAmounts.start,
+      cliffTime: allParams.cliffTime,
+      unlockAmountCliff: allParams.unlockAmounts.cliff,
+      unlockAmountStart: allParams.unlockAmounts.start,
     },
   );
 }

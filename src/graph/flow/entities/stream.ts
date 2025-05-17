@@ -27,7 +27,7 @@ export function createEntityStream(event: EventCreate): EntityStream {
   stream.batch = batch.id;
   stream.position = batch.size.minus(ONE);
 
-  // Stream fields
+  // Stream: params
   stream.chainId = getChainId();
   stream.alias = getStreamAlias(tokenId);
   stream.category = "Flow";
@@ -44,7 +44,7 @@ export function createEntityStream(event: EventCreate): EntityStream {
   stream.transferable = event.params.transferable;
   stream.version = getContractVersion();
 
-  // Stream defaults
+  // Stream: defaults
   stream.availableAmount = ZERO;
   stream.depositedAmount = ZERO;
   stream.forgivenDebt = ZERO;

@@ -80,10 +80,6 @@ export function loadEntityStream(tokenId: BigInt): EntityStream | null {
   return EntityStream.load(id);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
-/* -------------------------------------------------------------------------- */
-
 function addCliffLL(
   stream: EntityStream,
   commonParams: CreateCommonParams,
@@ -162,28 +158,26 @@ function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): En
     stream.proxied = false;
   }
 
-  // Stream: general
+  // Stream: params
   stream.alias = getStreamAlias(params.tokenId);
-  stream.chainId = getChainId();
-  stream.contract = event.address;
-  stream.hash = event.transaction.hash;
-  stream.timestamp = event.block.timestamp;
-  stream.version = getContractVersion();
-
-  // Streams: params
   stream.canceled = false;
   stream.cancelable = params.cancelable;
   stream.category = params.category;
+  stream.chainId = getChainId();
+  stream.contract = event.address;
   stream.depositAmount = params.depositAmount;
   stream.duration = params.endTime.minus(params.startTime);
   stream.endTime = params.endTime;
+  stream.hash = event.transaction.hash;
   stream.intactAmount = params.depositAmount;
   stream.parties = [params.recipient, params.sender];
   stream.recipient = params.recipient;
   stream.sender = params.sender;
   stream.startTime = params.startTime;
+  stream.timestamp = event.block.timestamp;
   stream.tokenId = params.tokenId;
   stream.transferable = params.transferable;
+  stream.version = getContractVersion();
 
   // Stream: defaults
   stream.withdrawnAmount = ZERO;
