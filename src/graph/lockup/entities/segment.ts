@@ -12,7 +12,7 @@ export function addSegments(stream: EntityStream, segments: Segment[]): EntitySt
   for (let i = 0; i < segments.length; i++) {
     const current = segments[i];
 
-    const id = stream.id + "-" + i.toString();
+    const id = `${stream.id}-${i.toString()}`;
     const segment = new EntitySegment(id);
     segment.position = BigInt.fromI32(i);
     segment.stream = stream.id;

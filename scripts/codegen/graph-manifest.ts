@@ -73,7 +73,7 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function createManifestYAML(protocol: Indexed.Protocol, chainId: number): string {
+function dumpYAML(protocol: Indexed.Protocol, chainId: number): string {
   const manifest = createGraphManifest(protocol, chainId);
   const yamlContent = yaml.dump(manifest, {
     lineWidth: -1, // Prevent line wrapping
@@ -147,7 +147,7 @@ function writeManifestToFile(
   const manifestsDir = paths.graphManifests(protocol);
 
   try {
-    const manifest = createManifestYAML(protocol, chainId);
+    const manifest = dumpYAML(protocol, chainId);
     const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
     fs.writeFileSync(manifestPath, manifest);
 

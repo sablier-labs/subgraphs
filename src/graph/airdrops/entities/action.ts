@@ -1,7 +1,7 @@
 import { ethereum } from "@graphprotocol/graph-ts";
 import { AIRDROPS_V1_1, AIRDROPS_V1_2, ONE } from "../../common/constants";
-import { getChainId, getContractVersion } from "../../common/context";
-import { getActionId } from "../../common/ids";
+import { readChainId, readContractVersion } from "../../common/context";
+import { Id } from "../../common/id";
 import { EntityAction, EntityCampaign } from "../bindings";
 import { getOrCreateEntityWatcher } from "./watcher";
 
@@ -10,7 +10,7 @@ export function createEntityAction(
   campaign: EntityCampaign,
   category: string,
 ): EntityAction | null {
-  const actionId = getActionId(event);
+  const actionId = Id.action(event);
   const action = new EntityAction(actionId);
   const watcher = getOrCreateEntityWatcher();
 
@@ -18,14 +18,14 @@ export function createEntityAction(
   action.block = event.block.number;
   action.campaign = campaign.id;
   action.category = category;
-  action.chainId = getChainId();
+  action.chainId = readChainId();
   action.from = event.transaction.from;
   action.hash = event.transaction.hash;
   action.subgraphId = watcher.actionCounter;
   action.timestamp = event.block.timestamp;
 
   // Only set the fee if it's not an old version.
-  const version = getContractVersion();
+  const version = readContractVersion();
   const isVersionWithFees = version !== AIRDROPS_V1_1 && version !== AIRDROPS_V1_2;
   if (isVersionWithFees) {
     action.fee = event.transaction.value;

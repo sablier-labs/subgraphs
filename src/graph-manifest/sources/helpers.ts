@@ -66,7 +66,7 @@ function createCommon(params: CreateSourcesParams) {
       startBlock: isTemplate ? undefined : contract.block,
     },
     mapping: {
-      apiVersion: "0.0.7",
+      apiVersion: "0.0.9",
       kind: "ethereum/events",
       language: "wasm/assemblyscript",
     },

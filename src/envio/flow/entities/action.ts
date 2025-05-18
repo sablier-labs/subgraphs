@@ -1,5 +1,5 @@
 import type { Event } from "@envio/common/bindings";
-import { ids } from "@envio/common/ids";
+import { ids } from "@envio/common/id";
 import type { ActionParams } from "@envio/common/params";
 import type { Entity, Enum, HandlerContext } from "@envio/flow/bindings";
 

@@ -1,15 +1,14 @@
 import type { Address, Event } from "@envio/common/bindings";
-import { ids } from "@envio/common/ids";
+import { Id } from "@envio/common/id";
 import type { Entity, HandlerContext } from "@envio/flow/bindings";
 
 export async function createEntityBatch(context: HandlerContext, event: Event, sender: Address): Promise<Entity.Batch> {
-  const id = ids.batch(event);
+  const id = Id.batch(event, sender);
   const batch: Entity.Batch = {
     id,
-    batcher_id: ids.batcher(event, sender),
+    batcher_id: Id.batcher(event, sender),
     hash: event.transaction.hash.toLowerCase(),
-    label: undefined,
-    size: 1n,
+    size: 0n,
     timestamp: BigInt(event.block.timestamp),
   };
 
@@ -22,10 +21,9 @@ export async function createEntityBatcher(
   event: Event,
   sender: Address,
 ): Promise<Entity.Batcher> {
-  const id = ids.batcher(event, sender);
+  const id = Id.batcher(event, sender);
   const batcher: Entity.Batcher = {
     id,
-    address: sender.toLowerCase(),
     batchCounter: 0n,
   };
 
@@ -33,21 +31,30 @@ export async function createEntityBatcher(
   return batcher;
 }
 
+/**
+ * This function may be run multiple times within the same transaction:
+ *
+ * 1. For the 1st stream, the Batch entity is created but all other fields are left null.
+ * 2. For the 2nd stream, all fields are set.
+ * 3. For the 3rd stream and later, only the size is updated.
+ *
+ * The rationale is that creating the batch entity makes sense only if there are at least 2 streams.
+ */
 export async function updateEntityBatchAndBatcher(
   context: HandlerContext,
   batch: Entity.Batch,
   batcher: Entity.Batcher,
 ): Promise<void> {
-  let label: string | undefined;
+  // Update Batch
   const newBatchSize = batch.size + 1n;
+  const updatedBatch = {
+    ...batch,
+    size: newBatchSize,
+  };
+  await context.Batch.set(updatedBatch);
 
-  // Set the label for batches of 2+ streams.
   if (newBatchSize === 2n) {
-    if (batch.label !== null) {
-      throw new Error(`Batch label is already set when batch size is 2: ${batch.id} ${batcher.id}`);
-    }
     const newCounter: bigint = batcher.batchCounter + 1n;
-    label = newCounter.toString();
 
     // Update Batcher
     const updatedBatcher = {
@@ -56,12 +63,4 @@ export async function updateEntityBatchAndBatcher(
     };
     await context.Batcher.set(updatedBatcher);
   }
-
-  // Update Batch
-  const updatedBatch = {
-    ...batch,
-    label,
-    size: newBatchSize,
-  };
-  await context.Batch.set(updatedBatch);
 }

@@ -1,5 +1,5 @@
 import { Address } from "@graphprotocol/graph-ts";
-import { getLockups } from "../../common/context";
+import { readLockups } from "../../common/context";
 import { EntityAsset } from "../bindings";
 
 /**
@@ -11,9 +11,9 @@ export function getNickname(admin: Address, asset: EntityAsset, name: string | n
   if (name === null) {
     const prefix = admin.toHexString().slice(0, 6);
     const suffix = admin.toHexString().slice(-4);
-    return asset.symbol + " by " + prefix + ".." + suffix;
+    return `${asset.symbol} by ${prefix}..${suffix}`;
   }
-  return asset.symbol + " in " + name;
+  return `${asset.symbol} in ${name}`;
 }
 
 /**
@@ -23,7 +23,7 @@ export function getNickname(admin: Address, asset: EntityAsset, name: string | n
  * @returns `true` if the address is a known lockup contract, `false` otherwise.
  */
 export function isKnownLockup(address: string): boolean {
-  const lockups = getLockups();
+  const lockups = readLockups();
   for (let i = 0; i < lockups.length; i++) {
     if (lockups[i] === address) {
       return true;

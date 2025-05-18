@@ -41,7 +41,7 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function createConfigYAML(protocol: Indexed.Protocol): string {
+function dumpYAML(protocol: Indexed.Protocol): string {
   const config = createEnvioConfig(protocol);
 
   const yamlContent = yaml.dump(config, {
@@ -54,7 +54,7 @@ function createConfigYAML(protocol: Indexed.Protocol): string {
 
 function generateConfig(protocol: Indexed.Protocol): void {
   try {
-    const config = createConfigYAML(protocol);
+    const config = dumpYAML(protocol);
     const outputPath = paths.envioConfig(protocol);
     fs.writeFileSync(outputPath, config);
 

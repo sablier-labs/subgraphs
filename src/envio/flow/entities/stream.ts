@@ -1,7 +1,7 @@
 import { Flow as enums } from "../../../schema/enums";
 import type { Event } from "../../common/bindings";
 import { getContract } from "../../common/contract";
-import { ids } from "../../common/ids";
+import { Id } from "../../common/id";
 import type { Args, Entity, HandlerContext, LoaderContext } from "../bindings";
 import { updateEntityBatchAndBatcher } from "./batch";
 
@@ -19,7 +19,7 @@ export async function createEntityStream(
 
   const now = BigInt(event.block.timestamp);
   const tokenId = event.params.streamId;
-  const streamId = ids.stream(event.srcAddress, event.chainId, tokenId);
+  const streamId = Id.stream(event.srcAddress, event.chainId, tokenId);
   const contract = getContract("flow", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
@@ -34,10 +34,10 @@ export async function createEntityStream(
 
     // Batch
     batch_id: batch.id,
-    position: batch.size - 1n,
+    position: batch.size,
 
     // Stream: params
-    alias: ids.streamAlias(contract.alias, event.chainId, tokenId),
+    alias: Id.streamAlias(contract.alias, event.chainId, tokenId),
     category: enums.StreamCategory.Flow,
     chainId: BigInt(event.chainId),
     contract: event.srcAddress,
@@ -87,7 +87,7 @@ export async function getStreamOrThrow(
   event: Event,
   tokenId: bigint | string,
 ): Promise<Entity.Stream> {
-  const id = ids.stream(event.srcAddress, event.chainId, tokenId);
+  const id = Id.stream(event.srcAddress, event.chainId, tokenId);
   const stream = await context.Stream.get(id);
   if (!stream) {
     throw new Error(`Stream not loaded from the database: ${id}`);

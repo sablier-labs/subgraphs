@@ -13,7 +13,7 @@ export function addTranchesWithPercentages(
   for (let i = 0; i < tranches.length; i++) {
     const current = tranches[i];
 
-    const id = campaign.id + "-" + i.toString();
+    const id = `${campaign.id}-${i.toString()}`;
     const tranche = new EntityTranche(id);
 
     tranche.percentage = current.unlockPercentage;

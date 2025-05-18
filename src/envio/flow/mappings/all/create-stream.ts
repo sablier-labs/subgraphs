@@ -1,4 +1,4 @@
-import { ids } from "@envio/common/ids";
+import { ids } from "@envio/common/id";
 import { SablierFlow_v1_0 } from "@envio/flow/bindings";
 import {
   createEntityAction,

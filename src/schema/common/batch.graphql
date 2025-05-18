@@ -7,7 +7,7 @@ See https://thegraph.com/docs/en/subgraphs/developing/creating/ql-schema/#defini
 """
 type Batch @entity(immutable: true) {
   """
-  The hash of the parent transaction.
+  Unique identifier: {chainId}-{txHash}-{batcher}
   """
   id: String!
 
@@ -16,12 +16,6 @@ type Batch @entity(immutable: true) {
   Hash of the Ethereum transaction that created this batch.
   """
   hash: Bytes!
-
-  """
-  An index of the batch representing a conditional counter of 2+ stream batches, filtered by sender.
-  The label is null for batches containing a single stream, for filtering.
-  """
-  label: String
 
   """
   Timestamp of the transaction that created this batch.
@@ -50,14 +44,9 @@ Sender address that created batches.
 """
 type Batcher @entity(immutable: false) {
   """
-  The sender address.
+  Unique identifier: {chainId}-{sender}
   """
   id: String!
-
-  """
-  Alias for `id`.
-  """
-  address: Bytes!
 
   """
   Numerical index.

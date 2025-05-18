@@ -1,6 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../common/constants";
-import { getChainId, getContractAlias } from "../../common/context";
+import { readChainId, readContractAlias } from "../../common/context";
 import { EntityFactory } from "../bindings";
 
 export function getOrCreateEntityFactory(address: Address): EntityFactory {
@@ -9,9 +9,9 @@ export function getOrCreateEntityFactory(address: Address): EntityFactory {
   if (factory === null) {
     factory = new EntityFactory(address.toHexString());
     factory.address = address;
-    factory.alias = getContractAlias();
+    factory.alias = readContractAlias();
     factory.campaignCounter = ZERO;
-    factory.chainId = getChainId();
+    factory.chainId = readChainId();
   }
 
   return factory;

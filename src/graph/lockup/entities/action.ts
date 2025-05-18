@@ -1,19 +1,19 @@
 import { ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../common/constants";
-import { getChainId } from "../../common/context";
-import { getActionId } from "../../common/ids";
+import { readChainId } from "../../common/context";
+import { Id } from "../../common/id";
 import { EntityAction } from "../bindings";
 import { ActionParams } from "../params";
 import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityAction(event: ethereum.Event, params: ActionParams): EntityAction {
-  const id = getActionId(event);
+  const id = Id.action(event);
   const action = new EntityAction(id);
   const watcher = getOrCreateEntityWatcher();
 
   // Action: transaction
   action.block = event.block.number;
-  action.chainId = getChainId();
+  action.chainId = readChainId();
   action.contract = event.address;
   action.fee = event.transaction.value;
   action.from = event.transaction.from;

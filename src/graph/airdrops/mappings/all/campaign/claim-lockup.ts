@@ -1,6 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { ONE } from "../../../../common/constants";
-import { getStreamId } from "../../../../common/ids";
+import { Id } from "../../../../common/id";
 import { logError } from "../../../../common/logger";
 import { Claim as EventClaimLockup } from "../../../bindings/templates/SablierV2MerkleStreamerLL_v1_1/SablierV2MerkleStreamerLL";
 import { createEntityAction, createOrUpdateActivity, getEntityCampaign } from "../../../entities";
@@ -29,7 +29,7 @@ export function handleClaimLockup(event: EventClaimLockup): void {
 
   /* --------------------------------- ACTION --------------------------------- */
   const tokenId = event.params.streamId;
-  const streamId = getStreamId(Address.fromBytes(lockup), tokenId);
+  const streamId = Id.stream(Address.fromBytes(lockup), tokenId);
 
   action.claimIndex = event.params.index;
   action.claimAmount = event.params.amount;

@@ -1,12 +1,12 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { PRBProxy, PRBProxyRegistry } from "../../common/bindings";
 import { LOCKUP_V1_0, PRB_PROXY_REGISTRY } from "../../common/constants";
-import { getContractVersion } from "../../common/context";
+import { readContractVersion } from "../../common/context";
 import { logError } from "../../common/logger";
 
 export function loadProxy(sender: Address): Address | null {
   // PRBProxy was only used in Lockup v1.0
-  if (getContractVersion() !== LOCKUP_V1_0) {
+  if (readContractVersion() !== LOCKUP_V1_0) {
     return null;
   }
 

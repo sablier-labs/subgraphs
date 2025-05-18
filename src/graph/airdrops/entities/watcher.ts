@@ -1,9 +1,9 @@
 import { ONE } from "../../common/constants";
-import { getChainId } from "../../common/context";
+import { readChainId } from "../../common/context";
 import { EntityWatcher } from "../bindings";
 
 export function getOrCreateEntityWatcher(): EntityWatcher {
-  const chainId = getChainId();
+  const chainId = readChainId();
   let watcher = EntityWatcher.load(chainId.toString());
 
   if (watcher === null) {

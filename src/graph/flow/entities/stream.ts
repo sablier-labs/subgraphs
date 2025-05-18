@@ -1,7 +1,7 @@
 import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
-import { getChainId, getContractVersion } from "../../common/context";
-import { getStreamAlias, getStreamId } from "../../common/ids";
+import { readChainId, readContractVersion } from "../../common/context";
+import { Id } from "../../common/id";
 import { getOrCreateEntityBatch } from "./batch";
 
 import { EntityStream, EventCreate } from "../bindings";
@@ -11,7 +11,7 @@ import { getOrCreateEntityWatcher } from "./watcher";
 export function createEntityStream(event: EventCreate): EntityStream {
   // Setup
   const tokenId = event.params.streamId;
-  const streamId = getStreamId(dataSource.address(), tokenId);
+  const streamId = Id.stream(dataSource.address(), tokenId);
   const stream = new EntityStream(streamId);
   const watcher = getOrCreateEntityWatcher();
   stream.subgraphId = watcher.streamCounter;
@@ -28,8 +28,8 @@ export function createEntityStream(event: EventCreate): EntityStream {
   stream.position = batch.size.minus(ONE);
 
   // Stream: params
-  stream.chainId = getChainId();
-  stream.alias = getStreamAlias(tokenId);
+  stream.chainId = readChainId();
+  stream.alias = Id.streamAlias(tokenId);
   stream.category = "Flow";
   stream.contract = event.address;
   stream.creator = event.transaction.from;
@@ -42,7 +42,7 @@ export function createEntityStream(event: EventCreate): EntityStream {
   stream.sender = event.params.sender;
   stream.timestamp = event.block.timestamp;
   stream.transferable = event.params.transferable;
-  stream.version = getContractVersion();
+  stream.version = readContractVersion();
 
   // Stream: defaults
   stream.availableAmount = ZERO;
@@ -65,6 +65,6 @@ export function createEntityStream(event: EventCreate): EntityStream {
 
 export function loadEntityStream(tokenId: BigInt): EntityStream | null {
   const flowAddress = dataSource.address();
-  const id = getStreamId(flowAddress, tokenId);
+  const id = Id.stream(flowAddress, tokenId);
   return EntityStream.load(id);
 }

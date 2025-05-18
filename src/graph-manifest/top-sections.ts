@@ -9,9 +9,9 @@ const topSections: Record<Indexed.Protocol, Manifest.TopSection> = {
 
 export default topSections;
 
-function get(name: string) {
+function get(name: string): Manifest.TopSection {
   return {
-    specVersion: "0.0.5",
+    specVersion: "1.3.0",
     description: `The Graph indexer for Sablier ${name}`,
     repository: "https://github.com/sablier-labs/indexers",
     schema: {

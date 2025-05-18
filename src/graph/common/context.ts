@@ -5,39 +5,39 @@
 import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { shutDown } from "./logger";
 
-export function getChainId(): BigInt {
-  return getBigInt("chainId");
+export function readChainId(): BigInt {
+  return readBigInt("chainId");
 }
 
-export function getContractAlias(): string {
-  return getString("alias");
+export function readContractAlias(): string {
+  return readString("alias");
 }
 
-export function getContractVersion(): string {
-  return getString("version");
+export function readContractVersion(): string {
+  return readString("version");
 }
 
 /**
  * @todo check if this is the correct way of loading a List type
  * @see https://github.com/graphprotocol/graph-tooling/discussions/2025
  */
-export function getLockups(): string[] {
-  return getStringArray("lockups");
+export function readLockups(): string[] {
+  return readStringArray("lockups");
 }
 
-function getBigInt(key: string): BigInt {
+function readBigInt(key: string): BigInt {
   const context = dataSource.context();
   const value = context.getBigInt(key);
   return value;
 }
 
-function getString(key: string): string {
+function readString(key: string): string {
   const context = dataSource.context();
   const value = context.getString(key);
   return value;
 }
 
-function getStringArray(key: string): string[] {
+function readStringArray(key: string): string[] {
   const context = dataSource.context();
   const value = context.get(key);
   if (value == null) {

@@ -1,7 +1,7 @@
 import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../common/constants";
-import { getChainId, getContractVersion } from "../../common/context";
-import { getStreamAlias, getStreamId } from "../../common/ids";
+import { readChainId, readContractVersion } from "../../common/context";
+import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { EntityStream } from "../bindings";
 import { loadProxy } from "../helpers";
@@ -76,7 +76,7 @@ export function createEntityStreamTranched(
 }
 
 export function loadEntityStream(tokenId: BigInt): EntityStream | null {
-  const id = getStreamId(dataSource.address(), tokenId);
+  const id = Id.stream(dataSource.address(), tokenId);
   return EntityStream.load(id);
 }
 
@@ -130,7 +130,7 @@ function addCliffLL(
 }
 
 function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): EntityStream | null {
-  const id = getStreamId(dataSource.address(), params.tokenId);
+  const id = Id.stream(dataSource.address(), params.tokenId);
   const stream = new EntityStream(id);
 
   // Watcher
@@ -159,11 +159,11 @@ function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): En
   }
 
   // Stream: params
-  stream.alias = getStreamAlias(params.tokenId);
+  stream.alias = Id.streamAlias(params.tokenId);
   stream.canceled = false;
   stream.cancelable = params.cancelable;
   stream.category = params.category;
-  stream.chainId = getChainId();
+  stream.chainId = readChainId();
   stream.contract = event.address;
   stream.depositAmount = params.depositAmount;
   stream.duration = params.endTime.minus(params.startTime);
@@ -177,7 +177,7 @@ function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): En
   stream.timestamp = event.block.timestamp;
   stream.tokenId = params.tokenId;
   stream.transferable = params.transferable;
-  stream.version = getContractVersion();
+  stream.version = readContractVersion();
 
   // Stream: defaults
   stream.withdrawnAmount = ZERO;

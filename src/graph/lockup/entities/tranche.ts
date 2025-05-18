@@ -12,7 +12,7 @@ export function addTranches(stream: EntityStream, tranches: Tranche[]): EntitySt
   for (let i = 0; i < tranches.length; i++) {
     const current = tranches[i];
 
-    const id = stream.id + "-" + i.toString();
+    const id = `${stream.id}-${i.toString()}`;
     const tranche = new EntityTranche(id);
     tranche.stream = stream.id;
     tranche.position = BigInt.fromU32(i);

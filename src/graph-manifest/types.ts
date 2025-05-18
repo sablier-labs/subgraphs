@@ -67,7 +67,8 @@ export namespace Manifest {
   };
 
   export type Mapping = {
-    apiVersion: string;
+    /** @see https://thegraph.com/docs/en/subgraphs/developing/creating/graph-ts/api/#versions */
+    apiVersion: "0.0.9";
     file: string;
     kind: string;
     language: string;
@@ -80,7 +81,8 @@ export namespace Manifest {
    * This will be inlined. There will not be a `topSection` key in the manifest.
    */
   export type TopSection = {
-    specVersion: string;
+    /** @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#specversion-releases */
+    specVersion: "1.3.0";
     description: string;
     repository: string;
     schema: {

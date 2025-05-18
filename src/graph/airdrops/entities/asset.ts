@@ -1,7 +1,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { ERC20 } from "../../common/bindings";
 import { getAssetName, getAssetSymbol } from "../../common/bindings/getters";
-import { getChainId } from "../../common/context";
+import { readChainId } from "../../common/context";
 import { EntityAsset } from "../bindings";
 
 export function getOrCreateEntityAsset(address: Address): EntityAsset {
@@ -17,7 +17,7 @@ export function getOrCreateEntityAsset(address: Address): EntityAsset {
     const symbol = getAssetSymbol(address);
 
     asset.address = address;
-    asset.chainId = getChainId();
+    asset.chainId = readChainId();
     asset.decimals = BigInt.fromI32(decimals);
     asset.name = name;
     asset.symbol = symbol;

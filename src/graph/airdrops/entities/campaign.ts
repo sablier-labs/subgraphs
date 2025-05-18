@@ -1,7 +1,7 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
-import { getChainId, getContractVersion } from "../../common/context";
-import { getCampaignId } from "../../common/ids";
+import { readChainId, readContractVersion } from "../../common/context";
+import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { EntityCampaign } from "../bindings";
 import { getNickname } from "../helpers";
@@ -78,7 +78,7 @@ export function createEntityCampaignLT(
 }
 
 export function getEntityCampaign(address: Address): EntityCampaign | null {
-  const id = getCampaignId(address);
+  const id = Id.campaign(address);
   const campaign = EntityCampaign.load(id);
   if (campaign === null) {
     logError("Campaign entity not saved for address: {}", [address.toHexString()]);
@@ -87,7 +87,7 @@ export function getEntityCampaign(address: Address): EntityCampaign | null {
 }
 
 function createBaseEntity(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
-  const id = getCampaignId(params.campaignAddress);
+  const id = Id.campaign(params.campaignAddress);
   const campaign = new EntityCampaign(id);
 
   // Watcher
@@ -109,10 +109,10 @@ function createBaseEntity(event: ethereum.Event, params: CampaignCommonParams): 
   factory.save();
 
   // Campaign: general
-  campaign.chainId = getChainId();
+  campaign.chainId = readChainId();
   campaign.hash = event.transaction.hash;
   campaign.timestamp = event.block.timestamp;
-  campaign.version = getContractVersion();
+  campaign.version = readContractVersion();
 
   // Campaign: params
   campaign.address = params.campaignAddress;

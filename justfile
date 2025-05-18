@@ -58,13 +58,14 @@ install:
 install-frozen:
   bun install --frozen-lockfile
 
+# Print available chain arguments
+# TODO
+@print-chains:
+  bun run scripts/print-chains.ts
+
 # Print available log levels
 print-log-levels:
   @echo "Available log levels: error, warn, info, http, verbose, debug, silly"
-
-# Print available chain arguments
-# TODO
-print-chain-args:
 
 # Print available protocol arguments
 print-protocol-args:
