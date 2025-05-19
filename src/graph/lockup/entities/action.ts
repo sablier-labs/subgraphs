@@ -2,8 +2,8 @@ import { ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../common/constants";
 import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
+import { ActionParams } from "../../common/params";
 import { EntityAction } from "../bindings";
-import { ActionParams } from "../params";
 import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityAction(event: ethereum.Event, params: ActionParams): EntityAction {

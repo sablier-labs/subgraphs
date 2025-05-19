@@ -28,15 +28,9 @@ export const paths = {
  * @returns The relative path from the start path to the end path
  */
 export function getRelativePath(from: string, to: string): string {
-  if (!fs.existsSync(from)) {
-    throw new Error(`From path '${from}' does not exist`);
-  }
-  if (!fs.existsSync(to)) {
-    throw new Error(`To path '${to}' does not exist`);
-  }
   // Use the directory of the `from` path if it's a file.
   let fromDir = from;
-  if (fs.lstatSync(from).isFile()) {
+  if (fs.existsSync(from) && fs.lstatSync(from).isFile()) {
     fromDir = path.dirname(from);
   }
   return path.relative(fromDir, to);

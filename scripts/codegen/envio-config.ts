@@ -40,7 +40,7 @@ main().catch((error) => {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function dumpYAML(protocol: Indexed.Protocol): string {
+function getYAMLContent(protocol: Indexed.Protocol): string {
   const config = createEnvioConfig(protocol);
 
   const yamlContent = yaml.dump(config, {
@@ -52,10 +52,10 @@ function dumpYAML(protocol: Indexed.Protocol): string {
 }
 
 function generateConfig(protocol: Indexed.Protocol): void {
-  const config = dumpYAML(protocol);
-  const outputPath = paths.envioConfig(protocol);
-  fs.writeFileSync(outputPath, config);
+  const content = getYAMLContent(protocol);
+  const configPath = paths.envioConfig(protocol);
+  fs.writeFileSync(configPath, content);
 
   logger.info(`🎉 Successfully generated the Envio config for ${protocol} protocol`);
-  logger.info(`📁 Config path: ${getRelative(outputPath)}`);
+  logger.info(`📁 Config path: ${getRelative(configPath)}`);
 }

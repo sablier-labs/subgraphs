@@ -5,14 +5,11 @@ export namespace Context {
   export type Loader = LoaderContext;
 }
 
-// Contracts
-// Note: all Flow contracts have the same ABI now. The export name may have to be updated in the future.
-export { SablierFlow_v1_0 as SablierFlow } from "./bindings/src/Handlers.gen";
-
 // Enums
-import type { ActionCategory_t } from "./bindings/src/db/Enums.gen";
+import type { ActionCategory_t, StreamCategory_t } from "./bindings/src/db/Enums.gen";
 export namespace EnvioEnum {
   export type ActionCategory = ActionCategory_t;
+  export type StreamCategory = StreamCategory_t;
 }
 
 // Entities
@@ -32,10 +29,4 @@ export namespace Entity {
   export type Batcher = EntityBatcher;
   export type Stream = EntityStream;
   export type Watcher = EntityWatcher;
-}
-
-// Events
-import type { SablierFlow_v1_0_CreateFlowStream_eventArgs as ArgsCreate } from "./bindings/src/Types.gen";
-export namespace Args {
-  export type Create = ArgsCreate;
 }

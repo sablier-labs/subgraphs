@@ -5,7 +5,7 @@ import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { EntityStream } from "../bindings";
 import { loadProxy } from "../helpers";
-import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../params";
+import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../helpers/params";
 import { getOrCreateEntityAsset } from "./asset";
 import { getOrCreateEntityBatch } from "./batch";
 import { addSegments } from "./segment";
@@ -17,7 +17,7 @@ export function createEntityStreamDynamic(
   commonParams: CreateCommonParams,
   dynamicParams: CreateDynamicParams,
 ): EntityStream | null {
-  let stream = createBaseEntity(event, commonParams);
+  let stream = createEntity(event, commonParams);
   if (stream == null) {
     return null;
   }
@@ -34,7 +34,7 @@ export function createEntityStreamLinear(
   commonParams: CreateCommonParams,
   linearParams: CreateLinearParams,
 ): EntityStream | null {
-  let stream = createBaseEntity(event, commonParams);
+  let stream = createEntity(event, commonParams);
   if (stream == null) {
     return null;
   }
@@ -63,7 +63,7 @@ export function createEntityStreamTranched(
   commonParams: CreateCommonParams,
   tranchedParams: CreateTranchedParams,
 ): EntityStream | null {
-  let stream = createBaseEntity(event, commonParams);
+  let stream = createEntity(event, commonParams);
   if (stream == null) {
     return null;
   }
@@ -79,6 +79,10 @@ export function loadEntityStream(tokenId: BigInt): EntityStream | null {
   const id = Id.stream(dataSource.address(), tokenId);
   return EntityStream.load(id);
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                  INTERNAL                                  */
+/* -------------------------------------------------------------------------- */
 
 function addCliffLL(
   stream: EntityStream,
@@ -129,7 +133,7 @@ function addCliffLL(
   return stream;
 }
 
-function createBaseEntity(event: ethereum.Event, params: CreateCommonParams): EntityStream | null {
+function createEntity(event: ethereum.Event, params: CreateCommonParams): EntityStream | null {
   const id = Id.stream(dataSource.address(), params.tokenId);
   const stream = new EntityStream(id);
 

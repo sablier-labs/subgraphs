@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { StructSegmentV1_0, StructSegmentV1_1, StructSegmentV1_2, StructSegmentV2_0 } from "../bindings";
-import { Segment } from "../params";
+import { Segment } from "./params";
 
 export function convertSegmentsV1_0(segments: StructSegmentV1_0[]): Segment[] {
   return convertSegments<StructSegmentV1_0>(

@@ -47,7 +47,7 @@ codegen: clean codegen-schema codegen-bindings
 
 # Generate GraphQL schema
 @codegen-schema:
-	bun run {{scripts_dir}}/codegen/schema.ts "{{PROTOCOL}}";
+	bun run {{scripts_dir}}/codegen/schema.ts "{{PROTOCOL}}"
 
 # Deploy the subgraph
 deploy chain_name:

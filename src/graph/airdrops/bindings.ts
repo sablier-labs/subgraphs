@@ -1,10 +1,10 @@
 // Events
 
-export type { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_3 } from "./bindings/SablierMerkleFactory_v1_3/SablierMerkleFactory";
+export { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_3 } from "./bindings/SablierMerkleFactory_v1_3/SablierMerkleFactory";
 // Structs
-export type { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_2 } from "./bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
+export { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_2 } from "./bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
 // Entities
-export type {
+export {
   Action as EntityAction,
   Activity as EntityActivity,
   Asset as EntityAsset,
@@ -13,7 +13,7 @@ export type {
   Tranche as EntityTranche,
   Watcher as EntityWatcher,
 } from "./bindings/schema"; // Events
-export type {
+export {
   Claim as EventClaimLockup,
   Clawback as EventClawback,
   TransferAdmin as EventTransferAdmin,

@@ -266,13 +266,13 @@ type Stream @entity(immutable: false) {
   """
   Segments of a Dynamic stream.
   """
-  segments: [Segment!] @derivedFrom(field: "stream")
+  segments: [Segment!]! @derivedFrom(field: "stream")
 
   # ------------------------------ LockupTranched ------------------------------ #
   """
   Segments of a Tranched stream.
   """
-  tranches: [Tranche!] @derivedFrom(field: "stream")
+  tranches: [Tranche!]! @derivedFrom(field: "stream")
 }
 
 type Tranche @entity(immutable: true) {

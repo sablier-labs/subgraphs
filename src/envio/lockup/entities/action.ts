@@ -1,7 +1,7 @@
 import type { Event } from "@envio/common/bindings";
 import { Id } from "@envio/common/id";
 import type { ActionParams } from "@envio/common/params";
-import type { Context, Entity, EnvioEnum } from "@envio/flow/bindings";
+import type { Context, Entity, Enum } from "@envio/lockup/bindings";
 
 export async function createEntityAction(
   context: Context.Handler,
@@ -17,7 +17,7 @@ export async function createEntityAction(
     amountA: params.amountA,
     amountB: params.amountB,
     block: BigInt(event.block.number),
-    category: params.category as EnvioEnum.ActionCategory,
+    category: params.category as Enum.ActionCategory,
     chainId: BigInt(event.chainId),
     contract: event.srcAddress,
     fee: event.transaction.value,

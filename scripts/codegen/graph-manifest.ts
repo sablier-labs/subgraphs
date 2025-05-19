@@ -72,7 +72,7 @@ main().catch((error) => {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function dumpYAML(protocol: Indexed.Protocol, chainId: number): string {
+function getYAMLContent(protocol: Indexed.Protocol, chainId: number): string {
   const manifest = createGraphManifest(protocol, chainId);
   const yamlContent = yaml.dump(manifest, {
     lineWidth: -1, // Prevent line wrapping
@@ -134,9 +134,9 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
  */
 function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graphManifests(protocol);
-  const manifest = dumpYAML(protocol, chainId);
+  const content = getYAMLContent(protocol, chainId);
   const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
-  fs.writeFileSync(manifestPath, manifest);
+  fs.writeFileSync(manifestPath, content);
 
   logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
   return getRelative(manifestPath);

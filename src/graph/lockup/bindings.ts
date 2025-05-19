@@ -1,5 +1,5 @@
 // Events
-export type {
+export {
   Approval as EventApproval,
   ApprovalForAll as EventApprovalForAll,
   CreateLockupDynamicStreamSegmentsStruct as StructSegmentV2_0,
@@ -8,13 +8,13 @@ export type {
   Transfer as EventTransfer,
   TransferAdmin as EventTransferAdmin,
 } from "./bindings/SablierLockup_v2_0/SablierLockup";
-export type { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_0 } from "./bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
+export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_0 } from "./bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
 // Structs
-export type { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_1 } from "./bindings/SablierV2LockupDynamic_v1_1/SablierV2LockupDynamic";
-export type { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_2 } from "./bindings/SablierV2LockupDynamic_v1_2/SablierV2LockupDynamic";
-export type { CreateLockupTranchedStreamTranchesStruct as StructTrancheV1_2 } from "./bindings/SablierV2LockupTranched_v1_2/SablierV2LockupTranched";
+export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_1 } from "./bindings/SablierV2LockupDynamic_v1_1/SablierV2LockupDynamic";
+export { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_2 } from "./bindings/SablierV2LockupDynamic_v1_2/SablierV2LockupDynamic";
+export { CreateLockupTranchedStreamTranchesStruct as StructTrancheV1_2 } from "./bindings/SablierV2LockupTranched_v1_2/SablierV2LockupTranched";
 // Entities
-export type {
+export {
   Action as EntityAction,
   Asset as EntityAsset,
   Batch as EntityBatch,

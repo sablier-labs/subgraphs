@@ -1,8 +1,8 @@
 import { ADDRESS_ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
+import { ActionParams } from "../../../common/params";
 import { EventTransfer } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
-import { ActionParams } from "../../params";
 
 export function handleTransfer(event: EventTransfer): void {
   // Filter out `Transfer` events emitted by the initial mint transaction.

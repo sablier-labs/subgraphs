@@ -2,9 +2,9 @@
  * @file Common event handlers between all Lockup contracts.
  */
 import { ONE, ZERO } from "../../../common/constants";
+import { ActionParams } from "../../../common/params";
 import { EventApprovalForAll } from "../../bindings";
 import { createEntityAction } from "../../entities";
-import { ActionParams } from "../../params";
 
 export function handleApprovalForAll(event: EventApprovalForAll): void {
   createEntityAction(event, {

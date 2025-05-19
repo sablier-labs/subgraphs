@@ -1,8 +1,8 @@
-import { Flow as enums } from "../../../schema/enums";
-import type { Event } from "../../common/bindings";
-import { getContract } from "../../common/contract";
-import { Id } from "../../common/id";
-import type { Args, Context, Entity } from "../bindings";
+import type { Event } from "@envio/common/bindings";
+import { getContract } from "@envio/common/contract";
+import { Id } from "@envio/common/id";
+import type { Args, Context, Entity } from "@envio/flow/bindings";
+import { Flow as enums } from "@src/schema/enums";
 import { updateEntityBatchAndBatcher } from "./batch";
 
 export async function createEntityStream(

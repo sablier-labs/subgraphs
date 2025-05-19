@@ -3,6 +3,7 @@
  */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { logError } from "../../common/logger";
+import { ActionParams } from "../../common/params";
 import { EntityStream } from "../bindings";
 import {
   createEntityAction,
@@ -11,13 +12,7 @@ import {
   createEntityStreamTranched,
   loadEntityStream,
 } from "../entities";
-import {
-  ActionParams,
-  CreateCommonParams,
-  CreateDynamicParams,
-  CreateLinearParams,
-  CreateTranchedParams,
-} from "../params";
+import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../helpers/params";
 
 /* -------------------------------------------------------------------------- */
 /*                                   CANCEL                                   */

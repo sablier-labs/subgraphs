@@ -1,7 +1,7 @@
 import type { Address, Event } from "@envio/common/bindings";
 import { queryERC20Metadata } from "@envio/common/erc20";
 import { Id } from "@envio/common/id";
-import type { Context, Entity } from "@envio/flow/bindings";
+import type { Context, Entity } from "@envio/lockup/bindings";
 
 export async function createEntityAsset(context: Context.Handler, event: Event, assetAddress: Address) {
   const metadata = await queryERC20Metadata(event.chainId, assetAddress);

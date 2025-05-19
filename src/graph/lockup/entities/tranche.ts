@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../common/constants";
 import { EntityStream, EntityTranche } from "../bindings";
-import { Tranche } from "../params";
+import { Tranche } from "../helpers/params";
 
 export function addTranches(stream: EntityStream, tranches: Tranche[]): EntityStream {
   let streamedAmount = ZERO;

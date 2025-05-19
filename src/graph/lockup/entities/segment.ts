@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../common/constants";
 import { EntitySegment, EntityStream } from "../bindings";
-import { Segment } from "../params";
+import { Segment } from "../helpers/params";
 
 export function addSegments(stream: EntityStream, segments: Segment[]): EntityStream {
   let streamed = ZERO;

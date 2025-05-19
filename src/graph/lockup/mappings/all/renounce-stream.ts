@@ -1,6 +1,6 @@
+import { ActionParams } from "../../../common/params";
 import { EventRenounceLockupStream } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
-import { ActionParams } from "../../params";
 
 export function handleRenounceLockupStream(event: EventRenounceLockupStream): void {
   const id = event.params.streamId;

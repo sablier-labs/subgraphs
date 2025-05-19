@@ -15,8 +15,13 @@ clean:
 
 # Generate everything needed for building the indexer (the order matters!):
 # 1. GraphQL schema
-# 2. Envio bindings
-codegen: clean codegen-schema codegen-envio
+# 2. Envio config YAML
+# 3. Envio bindings
+codegen: clean codegen-schema codegen-config codegen-envio
+
+# Generate Envio config
+@codegen-config:
+  bun run {{scripts_dir}}/codegen/envio-config.ts "{{PROTOCOL}}"
 
 # Generate Envio bindings
 @codegen-envio:
@@ -24,4 +29,4 @@ codegen: clean codegen-schema codegen-envio
 
 # Generate GraphQL schema
 @codegen-schema:
-	bun run {{scripts_dir}}/codegen/schema.ts "{{PROTOCOL}}";
+	bun run {{scripts_dir}}/codegen/schema.ts "{{PROTOCOL}}"

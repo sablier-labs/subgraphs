@@ -1,7 +1,7 @@
 import { logInfo } from "../../../common/logger";
+import { ActionParams } from "../../../common/params";
 import { EventApproval } from "../../bindings";
 import { createEntityAction, loadEntityStream } from "../../entities";
-import { ActionParams } from "../../params";
 
 export function handleApproval(event: EventApproval): void {
   const id = event.params.tokenId;
