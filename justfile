@@ -10,8 +10,10 @@ biome-check:
   bun run biome check .
 
 # Fix code with Biome
+# See https://github.com/biomejs/biome-vscode/discussions/576
 biome-write:
   bun run biome check --write .
+  bun run biome lint --write --only correctness/noUnusedImports .
 
 # Build all The Graph subgraphs
 build-graph:
@@ -59,18 +61,16 @@ install-frozen:
   bun install --frozen-lockfile
 
 # Print available chain arguments
-# TODO
 @print-chains:
   bun run scripts/print-chains.ts
 
-# Print available log levels
-print-log-levels:
-  @echo "Available log levels: error, warn, info, http, verbose, debug, silly"
+# Print available log levels available in Winston
+@print-log-levels:
+  echo "Available log levels: error, warn, info, http, verbose, debug, silly"
 
 # Print available protocol arguments
-print-protocol-args:
-  @echo "Available protocol arguments: all, flow, lockup, airdrops"
-  @echo "Note that 'all' will run the codegen script for all protocols"
+@print-protocol-args:
+  echo "Available protocol arguments: all, flow, lockup, airdrops"
 
 # Check markdown and YAML files with Prettier
 prettier-check:

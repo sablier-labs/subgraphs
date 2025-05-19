@@ -1,5 +1,5 @@
-import { ids } from "@envio/common/id";
-import { SablierFlow_v1_0 } from "@envio/flow/bindings";
+import { Id } from "@envio/common/id";
+import { SablierFlow } from "@envio/flow/bindings";
 import {
   createEntityAction,
   createEntityAsset,
@@ -10,18 +10,18 @@ import {
 } from "@envio/flow/entities";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow_v1_0.CreateFlowStream.handlerWithLoader({
+SablierFlow.CreateFlowStream.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   LOADER                                   */
   /* -------------------------------------------------------------------------- */
   loader: async ({ context, event }) => {
-    const assetId = ids.asset(event.srcAddress, event.chainId);
+    const assetId = Id.asset(event.srcAddress, event.chainId);
     const asset = await context.Asset.get(assetId);
 
-    const batchId = ids.batch(event);
+    const batchId = Id.batch(event, event.params.sender);
     const batch = await context.Batch.get(batchId);
 
-    const batcherId = ids.batcher(event, event.params.sender);
+    const batcherId = Id.batcher(event, event.params.sender);
     const batcher = await context.Batcher.get(batcherId);
 
     const watcherId = event.chainId.toString();

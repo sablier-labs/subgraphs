@@ -24,6 +24,14 @@ export namespace WinstonError {
     }
   }
 
+  export class ChainNotFound extends Error {
+    constructor(chainId: number) {
+      const message = `Chain with ID ${chainId} not found`;
+      super(message);
+      this.name = "ChainNotFound";
+      logAndThrow(message);
+    }
+  }
   export class ContractsNotFound extends Error {
     constructor(protocol: Indexed.Protocol, chainId: number) {
       const chainName = getChainName(chainId);

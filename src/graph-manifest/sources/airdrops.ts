@@ -1,6 +1,7 @@
-import { type Sablier, Version, lockup as lockupReleases, queries } from "@sablier/deployments";
+import { lockup as lockupReleases, queries, type Sablier, Version } from "@sablier/deployments";
 import type { Manifest } from "@src/graph-manifest/types";
 import { logAndThrow } from "@src/winston";
+import _ from "lodash";
 import { create } from "./helpers";
 
 export function createAirdropsSources(chainId: number): Manifest.Source[] {
@@ -22,9 +23,9 @@ export function createAirdropsSources(chainId: number): Manifest.Source[] {
  * So users can provide any address when deploying an airdrop contract, but we only index official deployments.
  */
 function getLockups(context: Manifest.Context): Manifest.ContextItem.ListAddress {
-  const contracts = queries.contracts.getAll({ protocol: "lockup", chainId: context.chainId.data });
-  if (!contracts) {
-    logAndThrow(`No Lockup contracts found on chain ${context.chainId.data}`);
+  const contracts = queries.contracts.getAll({ chainId: context.chainId.data, protocol: "lockup" });
+  if (_.isEmpty(contracts)) {
+    logAndThrow(`No Lockup contracts found on chain with ID ${context.chainId.data}`);
   }
 
   const data: Manifest.ContextItem.Address[] = [];

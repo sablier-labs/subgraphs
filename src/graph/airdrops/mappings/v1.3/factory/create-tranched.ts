@@ -24,9 +24,9 @@ export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
       lockup: event.params.lockup,
       shape: event.params.baseParams.shape,
       startTime: event.params.streamStartTime,
-      transferable: event.params.transferable,
       totalDuration: event.params.totalDuration,
       tranchesWithPercentages: convertTranchesV1_3(event.params.tranchesWithPercentages),
+      transferable: event.params.transferable,
     },
   );
 

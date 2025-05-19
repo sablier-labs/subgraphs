@@ -100,11 +100,11 @@ function findEventInAbi(abiContent: AbiItem[], eventName: string, contractName: 
   const event = abiContent.find((item) => item.type === "event" && item.name === eventName);
 
   if (!event) {
-    logAndThrow(`Event ${eventName} not found in ABI for ${contractName}`);
+    logAndThrow(`Event ${eventName} not found in ABI for contract ${contractName}`);
   }
 
   if (!event.inputs) {
-    logAndThrow(`Event ${eventName} has no inputs in ABI for ${contractName}`);
+    logAndThrow(`Event ${eventName} has no inputs in ABI for contract ${contractName}`);
   }
 
   return event;

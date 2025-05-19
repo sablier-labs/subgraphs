@@ -1,4 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
+
 export * from "../common/params";
 
 export class CreateCommonParams {

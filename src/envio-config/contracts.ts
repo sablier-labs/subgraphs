@@ -2,19 +2,18 @@ import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import indexedEvents from "@src/events";
 import { sanitizeName } from "@src/helpers";
-import { paths } from "@src/paths";
-import { getRelativePath } from "@src/paths";
+import { getRelativePath, paths } from "@src/paths";
 import type { Indexed } from "@src/types";
 
 export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contract[] {
   const contracts: EnvioConfig.Contract[] = [];
-  for (const contract of indexedContracts[protocol]) {
-    for (const version of contract.versions) {
+  for (const indexedContract of indexedContracts[protocol]) {
+    for (const version of indexedContract.versions) {
       contracts.push({
-        name: sanitizeName(contract.name, version),
-        abi_file_path: getRelativeAbiFilePath(protocol, contract.name, version),
+        abi_file_path: getRelativeAbiFilePath(protocol, indexedContract.name, version),
+        events: resolveEvents(indexedEvents[protocol][indexedContract.name][version]),
         handler: `mappings/${version}/index.ts`,
-        events: resolveEvents(indexedEvents[protocol][contract.name][version]),
+        name: sanitizeName(indexedContract.name, version),
       });
     }
   }

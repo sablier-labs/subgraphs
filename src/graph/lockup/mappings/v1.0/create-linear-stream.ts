@@ -1,4 +1,5 @@
 export * from "../all";
+
 import { CreateLockupLinearStream as EventCreateLinearV1_0 } from "../../bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
 import { processCreateLinear } from "../processors";
 

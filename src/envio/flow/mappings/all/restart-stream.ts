@@ -1,9 +1,9 @@
-import { SablierFlow_v1_0 } from "@envio/flow/bindings";
+import { SablierFlow } from "@envio/flow/bindings";
 import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
 import { scale } from "@envio/flow/helpers";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow_v1_0.RestartFlowStream.handlerWithLoader({
+SablierFlow.RestartFlowStream.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   HANDLER                                  */
   /* -------------------------------------------------------------------------- */

@@ -11,8 +11,13 @@ import {
   createEntityStreamTranched,
   loadEntityStream,
 } from "../entities";
-import { ActionParams } from "../params";
-import { CreateCommonParams, CreateDynamicParams, CreateLinearParams, CreateTranchedParams } from "../params";
+import {
+  ActionParams,
+  CreateCommonParams,
+  CreateDynamicParams,
+  CreateLinearParams,
+  CreateTranchedParams,
+} from "../params";
 
 /* -------------------------------------------------------------------------- */
 /*                                   CANCEL                                   */

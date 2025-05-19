@@ -3,7 +3,7 @@ import * as path from "node:path";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { SCHEMA_DIR, paths } from "@src/paths";
+import { paths, SCHEMA_DIR } from "@src/paths";
 import { enums, getAssetDefs, getWatcherDefs } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
@@ -13,7 +13,7 @@ import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
-/*                                     CLI                                    */
+/*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -27,35 +27,34 @@ import { getRelative, validateProtocolArg } from "../helpers";
  *
  * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
-if (require.main === module) {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
+  const protocolArg = validateProtocolArg(args[0]);
 
-  try {
-    const protocolArg = validateProtocolArg(args[0]);
+  /**
+   * Handles generation of schema files for all supported protocols
+   */
+  function handleAllProtocols(): void {
+    const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
 
-    /**
-     * Handles generation of schema files for all supported protocols
-     */
-    function handleAllProtocols(): void {
-      const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
-
-      for (const p of protocols) {
-        generateSchema(p);
-      }
-
-      logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      logger.info("🎉 Successfully generated all GraphQL schemas!");
+    for (const p of protocols) {
+      generateSchema(p);
     }
 
-    if (protocolArg === "all") {
-      handleAllProtocols();
-    } else {
-      generateSchema(protocolArg);
-    }
-  } catch (error) {
-    logAndThrow(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
+    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    logger.info("🎉 Successfully generated all GraphQL schemas!");
+  }
+
+  if (protocolArg === "all") {
+    handleAllProtocols();
+  } else {
+    generateSchema(protocolArg);
   }
 }
+
+main().catch((error) => {
+  logAndThrow(`❌ Error generating GraphQL schema: ${error.message}`);
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
@@ -114,8 +113,6 @@ function getEnumDefs(protocol: Indexed.Protocol) {
         getEnum(enums.Lockup.StreamCategory, "StreamCategory"),
       );
       break;
-    default:
-      logAndThrow(`getEnumDefs: unknown protocol: ${protocol}`);
   }
   return makeExecutableSchema({ typeDefs: enumDefs });
 }

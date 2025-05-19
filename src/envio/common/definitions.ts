@@ -23,16 +23,6 @@ import {
 } from "viem/chains";
 
 const definitions: Record<string, [Chain, string[]]> = {
-  mainnet: [
-    mainnet,
-    [
-      "https://rpc.ankr.com/eth",
-      "https://eth.llamarpc.com",
-      "https://ethereum.publicnode.com",
-      "https://eth-mainnet.public.blastapi.io",
-      "https://rpc.tornadoeth.cash/eth",
-    ],
-  ],
   arbitrum: [
     arbitrum,
     [
@@ -113,6 +103,48 @@ const definitions: Record<string, [Chain, string[]]> = {
     ],
   ],
   linea: [linea, ["https://linea.blockpi.network/v1/rpc/public", "https://rpc.linea.build", "https://1rpc.io/linea"]],
+  mainnet: [
+    mainnet,
+    [
+      "https://rpc.ankr.com/eth",
+      "https://eth.llamarpc.com",
+      "https://ethereum.publicnode.com",
+      "https://eth-mainnet.public.blastapi.io",
+      "https://rpc.tornadoeth.cash/eth",
+    ],
+  ],
+  mode: [mode, ["https://mainnet.mode.network", "https://mode.gateway.tenderly.co", "https://1rpc.io/mode"]],
+  morph: [
+    defineChain({
+      blockExplorers: {
+        default: {
+          name: "Morph Explorer",
+          url: "https://explorer.morphl2.io",
+        },
+      },
+      contracts: {
+        multicall3: {
+          address: "0x33A213b1049D5AD2eeE6e61dAe040955e60383D4",
+          blockCreated: 2790914,
+        },
+      },
+      id: 2818,
+      name: "Morph",
+      nativeCurrency: {
+        decimals: 18,
+        name: "Ether",
+        symbol: "ETH",
+      },
+      rpcUrls: {
+        default: {
+          http: ["https://rpc.morphl2.io"],
+          webSocket: ["wss://rpc.morphl2.io:8443"],
+        },
+      },
+      testnet: false,
+    }),
+    [],
+  ],
   optimism: [
     optimism,
     [
@@ -153,74 +185,20 @@ const definitions: Record<string, [Chain, string[]]> = {
       "https://rpc2.sepolia.org",
     ],
   ],
-  zksync: [
-    zksync,
-    [
-      "https://mainnet.era.zksync.io",
-      "https://1rpc.io/zksync2-era",
-      "https://endpoints.omniatech.io/v1/zksync-era/mainnet/public",
-    ],
-  ],
-  mode: [mode, ["https://mainnet.mode.network", "https://mode.gateway.tenderly.co", "https://1rpc.io/mode"]],
-  morph: [
-    defineChain({
-      id: 2818,
-      name: "Morph",
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-      rpcUrls: {
-        default: {
-          http: ["https://rpc.morphl2.io"],
-          webSocket: ["wss://rpc.morphl2.io:8443"],
-        },
-      },
-      blockExplorers: {
-        default: {
-          name: "Morph Explorer",
-          url: "https://explorer.morphl2.io",
-        },
-      },
-      testnet: false,
-      contracts: {
-        multicall3: {
-          address: "0x33A213b1049D5AD2eeE6e61dAe040955e60383D4",
-          blockCreated: 2790914,
-        },
-      },
-    }),
-    [],
-  ],
-  tangle: [
-    defineChain({
-      id: 5845,
-      name: "Tangle",
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-      rpcUrls: {
-        default: {
-          http: ["https://rpc.tangle.tools"],
-        },
-      },
-      blockExplorers: {
-        default: { name: "Explorer", url: "https://explorer.tangle.tools" },
-      },
-      contracts: {
-        multicall3: {
-          address: "0xd595D34ed96b253E7c7a934a7624F330a8411953",
-          blockCreated: 2790914,
-        },
-      },
-    }),
-    [],
-  ],
   superseed: [
     defineChain({
+      blockExplorers: {
+        default: {
+          name: "Superseed Explorer",
+          url: "https://explorer.superseed.xyz",
+        },
+      },
+      contracts: {
+        multicall3: {
+          address: "0x84c4a8984d61ef37ea16c8df8c53ae0cb037d71a",
+          blockCreated: 1108523,
+        },
+      },
       id: 5330,
       name: "Superseed",
       nativeCurrency: {
@@ -234,21 +212,43 @@ const definitions: Record<string, [Chain, string[]]> = {
           webSocket: ["wss://mainnet.superseed.xyz"],
         },
       },
-      blockExplorers: {
-        default: {
-          name: "Superseed Explorer",
-          url: "https://explorer.superseed.xyz",
-        },
-      },
       testnet: false,
+    }),
+    [],
+  ],
+  tangle: [
+    defineChain({
+      blockExplorers: {
+        default: { name: "Explorer", url: "https://explorer.tangle.tools" },
+      },
       contracts: {
         multicall3: {
-          address: "0x84c4a8984d61ef37ea16c8df8c53ae0cb037d71a",
-          blockCreated: 1108523,
+          address: "0xd595D34ed96b253E7c7a934a7624F330a8411953",
+          blockCreated: 2790914,
+        },
+      },
+      id: 5845,
+      name: "Tangle",
+      nativeCurrency: {
+        decimals: 18,
+        name: "Ether",
+        symbol: "ETH",
+      },
+      rpcUrls: {
+        default: {
+          http: ["https://rpc.tangle.tools"],
         },
       },
     }),
     [],
+  ],
+  zksync: [
+    zksync,
+    [
+      "https://mainnet.era.zksync.io",
+      "https://1rpc.io/zksync2-era",
+      "https://endpoints.omniatech.io/v1/zksync-era/mainnet/public",
+    ],
   ],
 } as const;
 

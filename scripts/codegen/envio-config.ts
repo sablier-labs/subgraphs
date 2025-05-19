@@ -8,7 +8,7 @@ import { AUTOGEN_COMMENT, ENVIO_SCHEMA_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
-/*                                     CLI                                    */
+/*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -17,25 +17,24 @@ import { getRelative, validateProtocolArg } from "../helpers";
  * @example Generate for Flow:
  * bun run scripts/codegen/envio-config.ts flow
  *
- * @param {string} protocol - Required: currently only 'flow' is supported
+ * @param {string} [protocol='all'] - 'flow' or 'lockup'
  */
-if (require.main === module) {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
-  let protocolArg = validateProtocolArg(args[0]);
+  const protocolArg = validateProtocolArg(args[0]);
 
   // Currently only supporting flow protocol
-  if (protocolArg !== "flow") {
-    logger.warn("Only 'flow' protocol is currently supported for Envio config generation");
-    protocolArg = "flow";
+  if (protocolArg !== "flow" && protocolArg !== "lockup") {
+    logAndThrow("Only 'flow' and 'lockup' protocols are currently supported for Envio config generation");
   }
 
-  try {
-    generateConfig(protocolArg);
-  } catch (error) {
-    logAndThrow(`❌ Unhandled error: ${error instanceof Error ? error.message : String(error)}`);
-  }
+  generateConfig(protocolArg);
 }
+
+main().catch((error) => {
+  logAndThrow(`❌ Error generating Envio config: ${error.message}`);
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
@@ -53,16 +52,10 @@ function dumpYAML(protocol: Indexed.Protocol): string {
 }
 
 function generateConfig(protocol: Indexed.Protocol): void {
-  try {
-    const config = dumpYAML(protocol);
-    const outputPath = paths.envioConfig(protocol);
-    fs.writeFileSync(outputPath, config);
+  const config = dumpYAML(protocol);
+  const outputPath = paths.envioConfig(protocol);
+  fs.writeFileSync(outputPath, config);
 
-    logger.info(`🎉 Successfully generated the Envio config for ${protocol} protocol`);
-    logger.info(`📁 Config path: ${getRelative(outputPath)}`);
-  } catch (error) {
-    logAndThrow(
-      `❌ Error generating config for ${protocol} protocol: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
+  logger.info(`🎉 Successfully generated the Envio config for ${protocol} protocol`);
+  logger.info(`📁 Config path: ${getRelative(outputPath)}`);
 }

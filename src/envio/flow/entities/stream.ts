@@ -2,11 +2,11 @@ import { Flow as enums } from "../../../schema/enums";
 import type { Event } from "../../common/bindings";
 import { getContract } from "../../common/contract";
 import { Id } from "../../common/id";
-import type { Args, Entity, HandlerContext, LoaderContext } from "../bindings";
+import type { Args, Context, Entity } from "../bindings";
 import { updateEntityBatchAndBatcher } from "./batch";
 
 export async function createEntityStream(
-  context: HandlerContext,
+  context: Context.Handler,
   entities: {
     asset: Entity.Asset;
     batch: Entity.Batch;
@@ -24,48 +24,40 @@ export async function createEntityStream(
 
   /* --------------------------------- STREAM --------------------------------- */
   const stream: Entity.Stream = {
-    id: streamId,
-    subgraphId: BigInt(watcher.streamCounter),
-    tokenId,
-
-    // Asset
+    alias: Id.streamAlias(contract.alias, event.chainId, tokenId),
     asset_id: asset.id,
     assetDecimals: asset.decimals,
-
-    // Batch
+    availableAmount: 0n,
     batch_id: batch.id,
-    position: batch.size,
-
-    // Stream: params
-    alias: Id.streamAlias(contract.alias, event.chainId, tokenId),
     category: enums.StreamCategory.Flow,
     chainId: BigInt(event.chainId),
     contract: event.srcAddress,
     creator: event.transaction.from?.toLowerCase() || "",
     depletionTime: now,
-    hash: event.transaction.hash.toLowerCase(),
-    lastAdjustmentTimestamp: now,
-    ratePerSecond: event.params.ratePerSecond,
-    recipient: event.params.recipient.toLowerCase(),
-    sender: event.params.sender.toLowerCase(),
-    startTime: now,
-    timestamp: now,
-    transferable: event.params.transferable,
-    version: contract.version,
-
-    // Stream: defaults
-    availableAmount: 0n,
     depositedAmount: 0n,
     forgivenDebt: 0n,
+    hash: event.transaction.hash.toLowerCase(),
+    id: streamId,
     lastAdjustmentAction_id: undefined,
+    lastAdjustmentTimestamp: now,
     paused: false,
     pausedAction_id: undefined,
     pausedTime: undefined,
+    position: batch.size,
+    ratePerSecond: event.params.ratePerSecond,
+    recipient: event.params.recipient.toLowerCase(),
     refundedAmount: 0n,
+    sender: event.params.sender.toLowerCase(),
+    snapshotAmount: 0n,
+    startTime: now,
+    subgraphId: BigInt(watcher.streamCounter),
+    timestamp: now,
+    tokenId,
+    transferable: event.params.transferable,
+    version: contract.version,
     voided: false,
     voidedAction_id: undefined,
     voidedTime: undefined,
-    snapshotAmount: 0n,
     withdrawnAmount: 0n,
   };
 
@@ -83,7 +75,7 @@ export async function createEntityStream(
 }
 
 export async function getStreamOrThrow(
-  context: LoaderContext,
+  context: Context.Loader,
   event: Event,
   tokenId: bigint | string,
 ): Promise<Entity.Stream> {

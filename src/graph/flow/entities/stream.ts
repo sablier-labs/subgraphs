@@ -2,10 +2,9 @@ import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
-import { getOrCreateEntityBatch } from "./batch";
-
 import { EntityStream, EventCreate } from "../bindings";
 import { getOrCreateEntityAsset } from "./asset";
+import { getOrCreateEntityBatch } from "./batch";
 import { getOrCreateEntityWatcher } from "./watcher";
 
 export function createEntityStream(event: EventCreate): EntityStream {

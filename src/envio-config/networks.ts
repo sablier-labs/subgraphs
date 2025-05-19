@@ -4,7 +4,7 @@ import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import { sanitizeName } from "@src/helpers";
 import type { Indexed } from "@src/types";
-import logger, { logAndThrow, WinstonError } from "@src/winston";
+import logger, { messages, WinstonError } from "@src/winston";
 
 export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
@@ -12,10 +12,10 @@ export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[
     const { contracts, startBlock } = extractContracts(protocol, chain.id);
     const hypersyncConfig = chain.envio.hypersync ? { url: chain.envio.hypersync } : undefined;
     const network: EnvioConfig.Network = {
-      id: chain.id,
-      hypersync_config: hypersyncConfig,
-      start_block: startBlock,
       contracts,
+      hypersync_config: hypersyncConfig,
+      id: chain.id,
+      start_block: startBlock,
     };
     networks.push(network);
   }
@@ -46,7 +46,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
   let startBlock = 0;
 
   for (const release of releasesByProtocol[protocol]) {
-    const deployment = queries.deployments.get({ release, chainId });
+    const deployment = queries.deployments.get({ chainId, release });
 
     // Some contracts are not deployed on all chains, so we skip them.
     if (!deployment) {
@@ -65,7 +65,8 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
       // If it's a deployment that exists, the contract from the contract map must exist.
       if (!contract) {
-        logAndThrow(`Contract ${contractName} not found for ${protocol} ${release.version} on ${chainName}`);
+        logger.debug(messages.contractNotFound(release, chainId, contractName));
+        continue;
       }
 
       // If a contract is found, it must have an alias and a start block. These are required for indexing.
@@ -77,8 +78,8 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
       }
 
       networkContracts.push({
-        name: sanitizeName(contract.name, release.version),
         address: contract.address.toLowerCase() as `0x${string}`,
+        name: sanitizeName(contract.name, release.version),
       });
       if (startBlock === 0) {
         possibleStartBlocks.push(contract.block);

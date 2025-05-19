@@ -1,34 +1,32 @@
 import type { Event } from "@envio/common/bindings";
-import { ids } from "@envio/common/id";
+import { Id } from "@envio/common/id";
 import type { ActionParams } from "@envio/common/params";
-import type { Entity, Enum, HandlerContext } from "@envio/flow/bindings";
+import type { Context, Entity, Enum } from "@envio/flow/bindings";
 
 export async function createEntityAction(
-  context: HandlerContext,
+  context: Context.Handler,
   watcher: Entity.Watcher,
   event: Event,
   params: ActionParams,
 ): Promise<Entity.Action> {
-  const id = ids.action(event);
+  const id = Id.action(event);
 
   const action: Entity.Action = {
-    // Transaction
-    id,
+    addressA: params.addressA?.toLowerCase(),
+    addressB: params.addressB?.toLowerCase(),
+    amountA: params.amountA,
+    amountB: params.amountB,
     block: BigInt(event.block.number),
+    category: params.category as Enum.ActionCategory,
     chainId: BigInt(event.chainId),
     contract: event.srcAddress,
     fee: event.transaction.value,
     from: event.transaction.from?.toLowerCase() || "",
     hash: event.transaction.hash,
-    timestamp: BigInt(event.block.timestamp),
-    subgraphId: watcher.actionCounter,
-    // Params
-    addressA: params.addressA?.toLowerCase(),
-    addressB: params.addressB?.toLowerCase(),
-    amountA: params.amountA,
-    amountB: params.amountB,
-    category: params.category as Enum.ActionCategory,
+    id,
     stream_id: params.streamId,
+    subgraphId: watcher.actionCounter,
+    timestamp: BigInt(event.block.timestamp),
   };
   await context.Action.set(action);
 
@@ -43,7 +41,7 @@ export async function createEntityAction(
 }
 
 export async function getAction(event: Event, loader: (id: string) => Promise<Entity.Action | undefined>) {
-  const id = ids.action(event);
+  const id = Id.action(event);
   const loaded = await loader(id);
 
   if (!loaded) {

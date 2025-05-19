@@ -1,8 +1,8 @@
 {
   "biome.enabled": true,
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "always",
-    "source.organizeImports.biome": "always"
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
   "[graphql][javascript][json][jsonc][typescript]": {
     "editor.defaultFormatter": "biomejs.biome"

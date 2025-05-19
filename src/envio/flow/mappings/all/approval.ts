@@ -1,8 +1,8 @@
-import { SablierFlow_v1_0 } from "@envio/flow/bindings";
+import { SablierFlow } from "@envio/flow/bindings";
 import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow_v1_0.Approval.handlerWithLoader({
+SablierFlow.Approval.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   LOADER                                   */
   /* -------------------------------------------------------------------------- */

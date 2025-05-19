@@ -1,13 +1,17 @@
 import type { Address, Event } from "@envio/common/bindings";
 import { Id } from "@envio/common/id";
-import type { Entity, HandlerContext } from "@envio/flow/bindings";
+import type { Context, Entity } from "@envio/flow/bindings";
 
-export async function createEntityBatch(context: HandlerContext, event: Event, sender: Address): Promise<Entity.Batch> {
+export async function createEntityBatch(
+  context: Context.Handler,
+  event: Event,
+  sender: Address,
+): Promise<Entity.Batch> {
   const id = Id.batch(event, sender);
   const batch: Entity.Batch = {
-    id,
     batcher_id: Id.batcher(event, sender),
     hash: event.transaction.hash.toLowerCase(),
+    id,
     size: 0n,
     timestamp: BigInt(event.block.timestamp),
   };
@@ -17,14 +21,14 @@ export async function createEntityBatch(context: HandlerContext, event: Event, s
 }
 
 export async function createEntityBatcher(
-  context: HandlerContext,
+  context: Context.Handler,
   event: Event,
   sender: Address,
 ): Promise<Entity.Batcher> {
   const id = Id.batcher(event, sender);
   const batcher: Entity.Batcher = {
-    id,
     batchCounter: 0n,
+    id,
   };
 
   await context.Batcher.set(batcher);
@@ -41,7 +45,7 @@ export async function createEntityBatcher(
  * The rationale is that creating the batch entity makes sense only if there are at least 2 streams.
  */
 export async function updateEntityBatchAndBatcher(
-  context: HandlerContext,
+  context: Context.Handler,
   batch: Entity.Batch,
   batcher: Entity.Batcher,
 ): Promise<void> {

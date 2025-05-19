@@ -24,10 +24,10 @@ export function handleCreateMerkleStreamerLL(event: EventCreateMerkleStreamerLL)
       cliffPercentage: null,
       lockup: event.params.lockupLinear,
       shape: null,
-      startTime: null, // all v1.1 streams use the claim time as the start time
-      startPercentage: null,
-      transferable: event.params.transferable,
+      startPercentage: null, // all v1.1 streams use the claim time as the start time
+      startTime: null,
       totalDuration: event.params.streamDurations.total,
+      transferable: event.params.transferable,
     },
   );
 

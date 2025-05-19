@@ -1,9 +1,9 @@
 import { ADDRESS_ZERO } from "@envio/common/constants";
-import { SablierFlow_v1_0 } from "@envio/flow/bindings";
+import { SablierFlow } from "@envio/flow/bindings";
 import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow_v1_0.Transfer.handlerWithLoader({
+SablierFlow.Transfer.handlerWithLoader({
   loader: async ({ context, event }) => {
     const stream = await getStreamOrThrow(context, event, event.params.tokenId);
     const watcher = await getWatcherOrThrow(context, event);

@@ -1,0 +1,8 @@
+import "../scripts.just"
+
+# Set protocol name
+export PROTOCOL := "lockup"
+
+# Show available commands
+default:
+  @just --list

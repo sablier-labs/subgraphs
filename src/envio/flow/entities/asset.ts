@@ -1,15 +1,15 @@
 import type { Address, Event } from "../../common/bindings";
 import { queryERC20Metadata } from "../../common/erc20";
 import { Id } from "../../common/id";
-import type { Entity, HandlerContext, LoaderContext } from "../bindings";
+import type { Context, Entity } from "../bindings";
 
-export async function createEntityAsset(context: HandlerContext, event: Event, assetAddress: Address) {
+export async function createEntityAsset(context: Context.Handler, event: Event, assetAddress: Address) {
   const metadata = await queryERC20Metadata(event.chainId, assetAddress);
   const asset: Entity.Asset = {
-    id: Id.asset(assetAddress, event.chainId),
     address: assetAddress.toLowerCase(),
     chainId: BigInt(event.chainId),
     decimals: BigInt(metadata.decimals),
+    id: Id.asset(assetAddress, event.chainId),
     name: metadata.name,
     symbol: metadata.symbol,
   };
@@ -18,7 +18,7 @@ export async function createEntityAsset(context: HandlerContext, event: Event, a
   return asset;
 }
 
-export async function getAssetOrThrow(context: LoaderContext, chainId: number, address: Address) {
+export async function getAssetOrThrow(context: Context.Loader, chainId: number, address: Address) {
   const id = Id.asset(address, chainId);
   const loaded = await context.Asset.get(id);
   if (!loaded) {

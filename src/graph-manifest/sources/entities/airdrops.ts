@@ -10,11 +10,11 @@ const airdropsEntities: EntitiesMap = {
   SablierV2MerkleStreamerLL: {
     "v1.1": baseEntities,
   },
-  SablierV2MerkleLockupFactory: {
-    "v1.2": factoryEntities,
-  },
   SablierV2MerkleLL: {
     "v1.2": baseEntities,
+  },
+  SablierV2MerkleLockupFactory: {
+    "v1.2": factoryEntities,
   },
   SablierV2MerkleLT: {
     "v1.2": baseEntities,

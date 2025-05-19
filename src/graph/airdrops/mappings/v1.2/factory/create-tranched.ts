@@ -24,9 +24,9 @@ export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
       lockup: event.params.lockupTranched,
       shape: null,
       startTime: null, // all v1.2 streams use the claim time as the start time
-      transferable: event.params.baseParams.transferable,
       totalDuration: event.params.totalDuration,
       tranchesWithPercentages: convertTranchesV1_2(event.params.tranchesWithPercentages),
+      transferable: event.params.baseParams.transferable,
     },
   );
 

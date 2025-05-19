@@ -9,10 +9,10 @@ describe("Event handlers", () => {
   describe("Resolver function", () => {
     it("should resolve simple event without indexed params", () => {
       const actual = resolve({
-        protocol: "flow",
-        version: "v1.0",
         contractName: "SablierFlow",
         eventName: "MetadataUpdate",
+        protocol: "flow",
+        version: "v1.0",
       });
 
       const expectedEvent = "MetadataUpdate(uint256)";
@@ -36,10 +36,10 @@ describe("Event handlers", () => {
 
     it("should resolve event handler for event with tuple", () => {
       const actual = resolve({
-        protocol: "lockup",
-        version: "v1.0",
         contractName: "SablierV2LockupLinear",
         eventName: "CreateLockupLinearStream",
+        protocol: "lockup",
+        version: "v1.0",
       });
 
       const expectedEvent =
@@ -53,10 +53,10 @@ describe("Event handlers", () => {
 
     it("should resolve event handler for event with arrays of tuples", () => {
       const actual = resolve({
-        protocol: "lockup",
-        version: "v1.0",
         contractName: "SablierV2LockupDynamic",
         eventName: "CreateLockupDynamicStream",
+        protocol: "lockup",
+        version: "v1.0",
       });
 
       const expectedEvent =
@@ -70,10 +70,10 @@ describe("Event handlers", () => {
 
     it("should resolve event handler for event with tuple nested within tuple", () => {
       const actual = resolve({
-        protocol: "lockup",
-        version: "v2.0",
         contractName: "SablierLockup",
         eventName: "CreateLockupLinearStream",
+        protocol: "lockup",
+        version: "v2.0",
       });
 
       const expectedEvent =
@@ -120,10 +120,10 @@ function testEventHandler(
   // We test this because some handlers are reused between releases, e.g., Flow v1.0 and v1.1
   it(`should resolve the handler for event ${eventName}`, () => {
     const expected = resolve({
-      protocol,
-      version,
       contractName,
       eventName,
+      protocol,
+      version,
     });
     expect(actual.event).toBe(expected.event);
 

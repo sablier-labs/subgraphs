@@ -10,7 +10,7 @@ import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
-/*                                     CLI                                    */
+/*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -28,9 +28,8 @@ import { getRelative, validateProtocolArg } from "../helpers";
  * @param {string} [protocol='all'] - 'airdrops', 'flow', 'lockup', or 'all'
  * @param {string} [chainName] - If not provided, the manifest will be generated for all chains.
  */
-if (require.main === module) {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
-
   const protocolArg = validateProtocolArg(args[0]);
   const chainNameArg = args[1];
 
@@ -54,20 +53,20 @@ if (require.main === module) {
     }
   }
 
-  try {
-    if (protocolArg === "all") {
-      handleAllProtocols();
+  if (protocolArg === "all") {
+    handleAllProtocols();
+  } else {
+    if (!chainNameArg) {
+      generateForAllChains(protocolArg);
     } else {
-      if (!chainNameArg) {
-        generateForAllChains(protocolArg);
-      } else {
-        generateForSpecificChain(protocolArg, chainNameArg);
-      }
+      generateForSpecificChain(protocolArg, chainNameArg);
     }
-  } catch (error) {
-    logAndThrow(`❌ Unhandled error: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
+
+main().catch((error) => {
+  logAndThrow(`❌ Error generating Graph manifest: ${error.message}`);
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
@@ -94,18 +93,13 @@ function generateForAllChains(protocol: Indexed.Protocol, suppressFinalLog = fal
   }
 
   let filesGenerated = 0;
-
   for (const chain of graphChains) {
-    const result = writeManifestToFile(protocol, chain.id, chain.graph.name);
-
-    logger.debug(`🔍 Result: ${JSON.stringify(result)}`);
-    if (result.success) {
-      filesGenerated++;
-    }
+    writeManifestToFile(protocol, chain.id, chain.graph.name);
+    filesGenerated++;
   }
 
   if (filesGenerated === 0) {
-    logAndThrow(`No manifests were generated for ${protocol} protocol. This might indicate a configuration issue.`);
+    logAndThrow(`No manifests generated for ${protocol} protocol. This might indicate a configuration issue.`);
   }
 
   if (!suppressFinalLog) {
@@ -123,44 +117,27 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
   const chain = graphChains.find((chain) => chain.graph.name.toLowerCase() === chainName.toLowerCase());
   if (!chain) {
     const availableChains = graphChains.map((c) => c.graph.name).join(", ");
-    const message = `❌ Error: Chain "${chainName}" not found in supported chains.\nAvailable chains: ${availableChains}`;
+    const message = `❌ Error: Chain "${chainName}" is not supported.\nAvailable chains: ${availableChains}`;
     logAndThrow(message);
   }
 
   const manifestsDir = paths.graphManifests(protocol);
   fs.ensureDirSync(manifestsDir);
 
-  const result = writeManifestToFile(protocol, chain.id, chain.graph.name);
-  if (!result.success) {
-    logAndThrow(`❌ Error: ${result.error}`);
-  }
-
+  const manifestPath = writeManifestToFile(protocol, chain.id, chain.graph.name);
   logger.info(`🎉 Successfully generated subgraph manifest for ${chainName}`);
-  logger.info(`📁 Manifest path: ${result.relativeOutputPath}`);
+  logger.info(`📁 Manifest path: ${manifestPath}`);
 }
 
-function writeManifestToFile(
-  protocol: Indexed.Protocol,
-  chainId: number,
-  chainName: string,
-): { success: boolean; error?: string; relativeOutputPath?: string } {
+/**
+ * @returns The relative path to the manifest file.
+ */
+function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graphManifests(protocol);
+  const manifest = dumpYAML(protocol, chainId);
+  const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
+  fs.writeFileSync(manifestPath, manifest);
 
-  try {
-    const manifest = dumpYAML(protocol, chainId);
-    const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
-    fs.writeFileSync(manifestPath, manifest);
-
-    logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
-
-    return {
-      success: true,
-      relativeOutputPath: getRelative(manifestPath),
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: `Error generating manifest for chain ${chainName}: ${error instanceof Error ? error.message : String(error)}`,
-    };
-  }
+  logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
+  return getRelative(manifestPath);
 }

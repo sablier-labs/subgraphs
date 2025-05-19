@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { erc20Abi, erc20Abi_bytes32, hexToString, trim } from "viem";
 import type { Address } from "./bindings";
-import { DECIMALS_18 } from "./constants";
 import { DataCategory, initDataEntry } from "./data";
 import { getClient } from "./rpc-clients";
 import type { ERC20Metadata } from "./types";
@@ -34,8 +33,8 @@ export async function queryERC20Metadata(chainId: number, address: Address): Pro
       console.error("Failed to fetch ERC20 metadata", err1, err2);
       return {
         decimals: 0,
-        symbol: "Unknown",
         name: "Unknown",
+        symbol: "Unknown",
       };
     }
   }
@@ -43,7 +42,7 @@ export async function queryERC20Metadata(chainId: number, address: Address): Pro
 
 async function fetchStandard(address: Address, chainId: number): Promise<ERC20Metadata> {
   const client = getClient(chainId);
-  const contract = { address: address as `0x${string}`, abi: erc20Abi };
+  const contract = { abi: erc20Abi, address: address as `0x${string}` };
 
   const results = await client.multicall({
     allowFailure: false,
@@ -72,7 +71,7 @@ async function fetchStandard(address: Address, chainId: number): Promise<ERC20Me
 
 async function fetchBytes32(address: Address, chainId: number): Promise<ERC20Metadata> {
   const client = getClient(chainId);
-  const contract = { address: address as `0x${string}`, abi: erc20Abi_bytes32 };
+  const contract = { abi: erc20Abi_bytes32, address: address as `0x${string}` };
 
   const results = await client.multicall({
     allowFailure: false,

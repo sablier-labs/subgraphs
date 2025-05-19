@@ -2,14 +2,14 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { ERC20 } from "../../common/bindings";
 import { getAssetName, getAssetSymbol } from "../../common/bindings/getters";
 import { readChainId } from "../../common/context";
-import { Entity } from "../bindings";
+import { EntityAsset } from "../bindings";
 
-export function getOrCreateEntityAsset(address: Address): Entity.Asset {
+export function getOrCreateEntityAsset(address: Address): EntityAsset {
   const id = address.toHexString();
-  let asset = Entity.Asset.load(id);
+  let asset = EntityAsset.load(id);
 
   if (asset == null) {
-    asset = new Entity.Asset(id);
+    asset = new EntityAsset(id);
 
     const erc20 = ERC20.bind(address);
     const decimals = erc20.decimals();

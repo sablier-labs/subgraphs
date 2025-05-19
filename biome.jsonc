@@ -1,57 +1,35 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@sablier/configs/biome"],
   "files": {
-    "ignoreUnknown": false,
-    "ignore": ["deprecated/**/*", "src/graph/common/bindings"],
-    "include": ["*.graphql", "*.js", "*.json", "*.jsonc", "*.ts"],
-    "maxSize": 5242880 // 5MB
+    "includes": [
+      "**/*.graphql",
+      "**/*.js",
+      "**/*.json",
+      "**/*.jsonc",
+      "**/*.ts",
+      "!**/deprecated/**/*",
+      "!**/src/graph/common/bindings"
+    ]
   },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "lineWidth": 120
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "correctness": {
-        "noUnusedImports": "off",
-        "noUnusedVariables": "error"
-      },
-      "recommended": true
-    }
-  },
-  "organizeImports": {
-    "enabled": true
-  },
-  // These are AssemblyScript files, not TypeScript.
   "overrides": [
     {
-      "include": ["src/graph/*"],
+      "includes": [
+        "src/envio-config/**/*.ts",
+        "src/envio/**/mappings/**/*.ts", // handler/loader order matters
+        "src/events/**/*.ts",
+        "src/graph-manifest/**/*.ts"
+      ],
+      "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
+    },
+    {
+      "includes": ["**/src/graph/**/*.ts"], // AssemblyScript
       "linter": {
         "rules": {
-          "complexity": {
-            "useOptionalChain": "off"
-          },
-          "style": {
-            "useImportType": "off",
-            "useTemplate": "off"
-          },
-          "suspicious": {
-            "noShadowRestrictedNames": "off"
-          }
+          "style": { "useImportType": "off" },
+          "suspicious": { "noShadowRestrictedNames": "off" }
         }
       }
     }
-  ],
-  "vcs": {
-    "clientKind": "git",
-    "enabled": true,
-    "useIgnoreFile": true
-  }
+  ]
 }

@@ -29,10 +29,9 @@ type GraphChain = SupportedChain & {
 
 export const supportedChains: SupportedChain[] = [
   /* -------------------------------------------------------------------------- */
-  /*                                  Mainnets                                  */
+  /*                                  MAINNETS                                  */
   /* -------------------------------------------------------------------------- */
   {
-    id: ChainId.ABSTRACT,
     envio: {
       isEnabled: false,
     },
@@ -40,9 +39,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "abstract",
     },
+    id: ChainId.ABSTRACT,
   },
   {
-    id: ChainId.ARBITRUM_ONE,
     envio: {
       isEnabled: true,
     },
@@ -50,9 +49,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "arbitrum-one",
     },
+    id: ChainId.ARBITRUM_ONE,
   },
   {
-    id: ChainId.AVALANCHE,
     envio: {
       isEnabled: true,
     },
@@ -60,9 +59,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "avalanche",
     },
+    id: ChainId.AVALANCHE,
   },
   {
-    id: ChainId.BASE,
     envio: {
       isEnabled: true,
     },
@@ -70,9 +69,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "base",
     },
+    id: ChainId.BASE,
   },
   {
-    id: ChainId.BERACHAIN,
     envio: {
       isEnabled: false,
     },
@@ -80,9 +79,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "berachain",
     },
+    id: ChainId.BERACHAIN,
   },
   {
-    id: ChainId.BLAST,
     envio: {
       isEnabled: false,
     },
@@ -90,9 +89,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "blast",
     },
+    id: ChainId.BLAST,
   },
   {
-    id: ChainId.BSC,
     envio: {
       isEnabled: true,
     },
@@ -100,9 +99,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "bsc",
     },
+    id: ChainId.BSC,
   },
   {
-    id: ChainId.CHILIZ,
     envio: {
       hypersync: "https://chiliz.hypersync.xyz",
       isEnabled: true,
@@ -111,9 +110,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "chiliz",
     },
+    id: ChainId.CHILIZ,
   },
   {
-    id: ChainId.ETHEREUM,
     envio: {
       isEnabled: true,
     },
@@ -121,9 +120,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "ethereum",
     },
+    id: ChainId.ETHEREUM,
   },
   {
-    id: ChainId.FORM,
     envio: {
       isEnabled: false,
     },
@@ -131,9 +130,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "form",
     },
+    id: ChainId.FORM,
   },
   {
-    id: ChainId.GNOSIS,
     envio: {
       isEnabled: true,
     },
@@ -141,9 +140,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "gnosis",
     },
+    id: ChainId.GNOSIS,
   },
   {
-    id: ChainId.IOTEX,
     envio: {
       isEnabled: false,
     },
@@ -151,9 +150,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "iotex",
     },
+    id: ChainId.IOTEX,
   },
   {
-    id: ChainId.LIGHTLINK,
     envio: {
       isEnabled: false,
     },
@@ -161,9 +160,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "lightlink",
     },
+    id: ChainId.LIGHTLINK,
   },
   {
-    id: ChainId.LINEA,
     envio: {
       isEnabled: true,
     },
@@ -171,9 +170,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "linea",
     },
+    id: ChainId.LINEA,
   },
   {
-    id: ChainId.MODE,
     envio: {
       hypersync: "https://mode.hypersync.xyz",
       isEnabled: true,
@@ -182,9 +181,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "mode",
     },
+    id: ChainId.MODE,
   },
   {
-    id: ChainId.MORPH,
     envio: {
       hypersync: "https://morph.hypersync.xyz/",
       isEnabled: true,
@@ -193,9 +192,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "morph",
     },
+    id: ChainId.MORPH,
   },
   {
-    id: ChainId.OP_MAINNET,
     envio: {
       isEnabled: true,
     },
@@ -203,9 +202,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "optimism",
     },
+    id: ChainId.OP_MAINNET,
   },
   {
-    id: ChainId.POLYGON,
     envio: {
       isEnabled: true,
     },
@@ -213,9 +212,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "polygon",
     },
+    id: ChainId.POLYGON,
   },
   {
-    id: ChainId.SCROLL,
     envio: {
       isEnabled: true,
     },
@@ -223,9 +222,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "scroll",
     },
+    id: ChainId.SCROLL,
   },
   {
-    id: ChainId.SEI,
     envio: {
       isEnabled: false,
     },
@@ -233,9 +232,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "sei",
     },
+    id: ChainId.SEI,
   },
   {
-    id: ChainId.SUPERSEED,
     envio: {
       hypersync: "https://extrabud.hypersync.xyz",
       isEnabled: true,
@@ -244,9 +243,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "superseed",
     },
+    id: ChainId.SUPERSEED,
   },
   {
-    id: ChainId.TANGLE,
     envio: {
       hypersync: "https://tangle.hypersync.xyz",
       isEnabled: true,
@@ -255,9 +254,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "tangle",
     },
+    id: ChainId.TANGLE,
   },
   {
-    id: ChainId.ULTRA,
     envio: {
       isEnabled: false,
     },
@@ -265,9 +264,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "ultra",
     },
+    id: ChainId.ULTRA,
   },
   {
-    id: ChainId.UNICHAIN,
     envio: {
       isEnabled: false,
     },
@@ -275,9 +274,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "unichain",
     },
+    id: ChainId.UNICHAIN,
   },
   {
-    id: ChainId.XDC,
     envio: {
       isEnabled: false,
     },
@@ -285,9 +284,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "xdc",
     },
+    id: ChainId.XDC,
   },
   {
-    id: ChainId.ZK_SYNC_ERA,
     envio: {
       isEnabled: true,
     },
@@ -295,12 +294,12 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "zksync",
     },
+    id: ChainId.ZK_SYNC_ERA,
   },
   /* -------------------------------------------------------------------------- */
-  /*                                  Testnets                                  */
+  /*                                  TESTNETS                                  */
   /* -------------------------------------------------------------------------- */
   {
-    id: ChainId.ARBITRUM_SEPOLIA,
     envio: {
       isEnabled: true,
     },
@@ -308,9 +307,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "arbitrum-sepolia",
     },
+    id: ChainId.ARBITRUM_SEPOLIA,
   },
   {
-    id: ChainId.BASE_SEPOLIA,
     envio: {
       isEnabled: true,
     },
@@ -318,9 +317,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "base-sepolia",
     },
+    id: ChainId.BASE_SEPOLIA,
   },
   {
-    id: ChainId.ETHEREUM_SEPOLIA,
     envio: {
       isEnabled: true,
     },
@@ -328,9 +327,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "sepolia",
     },
+    id: ChainId.ETHEREUM_SEPOLIA,
   },
   {
-    id: ChainId.OP_SEPOLIA,
     envio: {
       isEnabled: true,
     },
@@ -338,9 +337,9 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "optimism-sepolia",
     },
+    id: ChainId.OP_SEPOLIA,
   },
   {
-    id: ChainId.ZK_SYNC_SEPOLIA,
     envio: {
       isEnabled: false,
     },
@@ -348,6 +347,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "zksync-sepolia",
     },
+    id: ChainId.ZK_SYNC_SEPOLIA,
   },
 ];
 

@@ -1,4 +1,4 @@
-import { type Sablier, queries } from "@sablier/deployments";
+import { queries, type Sablier } from "@sablier/deployments";
 import { getChainName } from "@src/chains";
 import indexedContracts, { getIndexedContract } from "@src/contracts";
 import type { Manifest } from "@src/graph-manifest/types";
@@ -37,7 +37,7 @@ export function create(protocol: Indexed.Protocol, chainId: number): Manifest.So
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
+/*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
 type CreateSourcesParams = {
@@ -99,11 +99,7 @@ function createContext(params: CreateSourcesParams): Manifest.Context | undefine
 /**
  * Helper for accessing mapping configuration based on protocol and version.
  */
-function createMapping(params: {
-  protocol: Indexed.Protocol;
-  version: Indexed.Version;
-  contractName: string;
-}) {
+function createMapping(params: { protocol: Indexed.Protocol; version: Indexed.Version; contractName: string }) {
   const { protocol, version, contractName } = params;
 
   return {
@@ -121,7 +117,7 @@ function createMapping(params: {
  * For templates: Returns a stub contract with just the name (templates don't need addresses)
  * For regular contracts: Validates that required fields (alias, block) exist before returning
  */
-export function extractContract(params: {
+function extractContract(params: {
   release: Sablier.Release;
   chainId: number;
   contractName: string;
@@ -142,7 +138,8 @@ export function extractContract(params: {
     };
   }
 
-  // Look up actual contract deployment for this chain. Skip if not deployed.
+  // Query contract deployment for this release and chain, skipping if not deployed because not all
+  // chains are available for a particular release.
   const contract = queries.contracts.get({ release, chainId, contractName });
   if (!contract) {
     logger.debug(messages.contractNotFound(release, chainId, contractName));

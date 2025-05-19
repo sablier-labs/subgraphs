@@ -1,4 +1,5 @@
 export * from "../all";
+
 import { WithdrawFromLockupStream as EventWithdrawV1_0 } from "../../bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
 import { processWithdraw } from "../processors";
 

@@ -1,8 +1,7 @@
-import { contracts } from "@sablier/deployments";
 import type { Sablier } from "@sablier/deployments";
+import { contracts } from "@sablier/deployments";
 import { getIndexedContract } from "@src/contracts";
 import type { Indexed } from "@src/types";
-import _ from "lodash";
 import type { Address } from "./bindings";
 import { IndexingError } from "./error";
 

@@ -14,7 +14,7 @@ export function handleWithdrawFromLockupStream(event: EventWithdrawV1_1): void {
   // Purposefully ignoring `event.params.token`
   processWithdraw(event, {
     amount: event.params.amount,
-    to: event.params.to,
     streamId: event.params.streamId,
+    to: event.params.to,
   });
 }
