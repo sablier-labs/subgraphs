@@ -1,3 +1,5 @@
+// biome-ignore-all assist/source/organizeImports: grouped exports
+
 // Context
 import type { HandlerContext, LoaderContext } from "./bindings/src/Types";
 export namespace Context {
@@ -7,7 +9,7 @@ export namespace Context {
 
 // Contracts
 // Note: all Flow contracts have the same ABI now. The export name may have to be updated in the future.
-export { SablierFlow_v1_0 as SablierFlow } from "./bindings/src/Handlers.gen";
+export { SablierFlow_v1_0 as FlowCommon } from "./bindings/src/Handlers.gen";
 
 // Enums
 import type { ActionCategory_t } from "./bindings/src/db/Enums.gen";
@@ -32,10 +34,4 @@ export namespace Entity {
   export type Batcher = EntityBatcher;
   export type Stream = EntityStream;
   export type Watcher = EntityWatcher;
-}
-
-// Events
-import type { SablierFlow_v1_0_CreateFlowStream_eventArgs as ArgsCreate } from "./bindings/src/Types.gen";
-export namespace Args {
-  export type Create = ArgsCreate;
 }

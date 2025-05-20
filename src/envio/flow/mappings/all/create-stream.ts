@@ -1,16 +1,9 @@
 import { Id } from "@envio/common/id";
-import { SablierFlow } from "@envio/flow/bindings";
-import {
-  createEntityAction,
-  createEntityAsset,
-  createEntityBatch,
-  createEntityBatcher,
-  createEntityStream,
-  createEntityWatcher,
-} from "@envio/flow/entities";
+import { FlowCommon } from "@envio-flow/bindings";
+import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow.CreateFlowStream.handlerWithLoader({
+FlowCommon.CreateFlowStream.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   LOADER                                   */
   /* -------------------------------------------------------------------------- */
@@ -37,17 +30,23 @@ SablierFlow.CreateFlowStream.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   HANDLER                                  */
   /* -------------------------------------------------------------------------- */
-  handler: async ({ context, event, loaderReturn: loaded }) => {
+  handler: async ({ context, event, loaderReturn }) => {
     const entities = {
-      asset: loaded.asset ?? (await createEntityAsset(context, event, event.params.token)),
-      batch: loaded.batch ?? (await createEntityBatch(context, event, event.params.sender)),
-      batcher: loaded.batcher ?? (await createEntityBatcher(context, event, event.params.sender)),
-      watcher: loaded.watcher ?? (await createEntityWatcher(event)),
+      asset: loaderReturn.asset ?? (await Store.Asset.create(context, event, event.params.token)),
+      batch: loaderReturn.batch ?? (await Store.Batch.create(context, event, event.params.sender)),
+      batcher: loaderReturn.batcher ?? (await Store.Batcher.create(context, event, event.params.sender)),
+      watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event)),
     };
 
-    const stream = await createEntityStream(context, entities, event);
+    const stream = await Store.Stream.create(context, event, entities, {
+      recipient: event.params.recipient,
+      ratePerSecond: event.params.ratePerSecond,
+      sender: event.params.sender,
+      tokenId: event.params.streamId,
+      transferable: event.params.transferable,
+    });
 
-    await createEntityAction(context, entities.watcher, event, {
+    await Store.Action.create(context, event, entities.watcher, {
       category: enums.ActionCategory.Create,
       addressA: event.params.sender,
       addressB: event.params.recipient,

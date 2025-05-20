@@ -1,12 +1,12 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventDeposit } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
 import { scale } from "../../helpers";
+import { Store } from "../../store";
 
 export function handleDepositFlowStream(event: EventDeposit): void {
   const id = event.params.streamId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this DepositFlowStream event: {}", [id.toHexString()]);
     return;
@@ -34,7 +34,7 @@ export function handleDepositFlowStream(event: EventDeposit): void {
   stream.save();
 
   /* --------------------------------- ACTION --------------------------------- */
-  createEntityAction(event, {
+  Store.Action.create(event, {
     addressA: event.params.funder,
     amountA: event.params.amount,
     category: "Deposit",

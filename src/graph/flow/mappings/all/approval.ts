@@ -1,17 +1,17 @@
 import { logInfo } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventApproval } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
+import { Store } from "../../store";
 
 export function handleApproval(event: EventApproval): void {
   const id = event.params.tokenId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
     return;
   }
 
-  createEntityAction(event, {
+  Store.Action.create(event, {
     addressA: event.params.owner,
     addressB: event.params.approved,
     category: "Approval",

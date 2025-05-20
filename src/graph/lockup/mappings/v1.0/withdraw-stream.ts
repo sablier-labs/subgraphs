@@ -1,7 +1,5 @@
-export * from "../all";
-
 import { WithdrawFromLockupStream as EventWithdrawV1_0 } from "../../bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
-import { processWithdraw } from "../processors";
+import { Processor } from "../processor";
 
 /**
  * Handles events emitted by:
@@ -10,7 +8,7 @@ import { processWithdraw } from "../processors";
  */
 export function handleWithdrawFromLockupStream(event: EventWithdrawV1_0): void {
   const params = event.params;
-  processWithdraw(event, {
+  Processor.withdraw(event, {
     amount: params.amount,
     streamId: params.streamId,
     to: params.to,

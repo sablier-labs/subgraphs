@@ -1,5 +1,5 @@
 import { WithdrawFromLockupStream as EventWithdrawV1_1 } from "../../bindings/SablierV2LockupLinear_v1_1/SablierV2LockupLinear";
-import { processWithdraw } from "../processors";
+import { Processor } from "../processor";
 
 /**
  * Handles events emitted by all contracts with the same ABI for the `WithdrawFromLockupStream` event.
@@ -11,8 +11,7 @@ import { processWithdraw } from "../processors";
  * - SablierLockup_v2_0
  */
 export function handleWithdrawFromLockupStream(event: EventWithdrawV1_1): void {
-  // Purposefully ignoring `event.params.token`
-  processWithdraw(event, {
+  Processor.withdraw(event, {
     amount: event.params.amount,
     streamId: event.params.streamId,
     to: event.params.to,

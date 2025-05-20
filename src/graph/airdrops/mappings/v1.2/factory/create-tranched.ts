@@ -1,10 +1,10 @@
 import { CreateMerkleLT as EventCreateMerkleLT } from "../../../bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
 import { SablierV2MerkleLT_v1_2 as TemplateLT } from "../../../bindings/templates";
 import { convertTranchesV1_2 } from "../../../helpers";
-import { processCreateMerkleLT } from "../../processors";
+import { Processor } from "../../processor";
 
 export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
-  processCreateMerkleLT(
+  Processor.Create.merkleLT(
     event,
     {
       admin: event.params.baseParams.initialAdmin,

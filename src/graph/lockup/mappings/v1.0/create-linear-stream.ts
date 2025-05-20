@@ -1,11 +1,9 @@
-export * from "../all";
-
 import { CreateLockupLinearStream as EventCreateLinearV1_0 } from "../../bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
-import { processCreateLinear } from "../processors";
+import { Processor } from "../processor";
 
 export function handleCreateLockupLinearStream(event: EventCreateLinearV1_0): void {
   const params = event.params;
-  processCreateLinear(
+  Processor.Create.linear(
     event,
     {
       asset: params.asset,
@@ -16,6 +14,7 @@ export function handleCreateLockupLinearStream(event: EventCreateLinearV1_0): vo
       funder: params.funder,
       recipient: params.recipient,
       sender: params.sender,
+      shape: null,
       startTime: params.range.start,
       tokenId: params.streamId,
       transferable: true,

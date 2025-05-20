@@ -113,6 +113,10 @@ type Stream @entity(immutable: false) {
   ERC-20 token distributed via this stream.
   """
   asset: Asset!
+  """
+  ERC-20 token decimals. Stored here to avoid loading the asset entity on each stream.
+  """
+  assetDecimals: BigInt!
 
   """
   The batch the stream may be part of.

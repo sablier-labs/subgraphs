@@ -1,5 +1,5 @@
 import { CancelLockupStream as EventCancelV1_0 } from "../../bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
-import { processCancel } from "../processors";
+import { Processor } from "../processor";
 
 /**
  * Handles events emitted by:
@@ -8,7 +8,7 @@ import { processCancel } from "../processors";
  */
 export function handleCancelLockupStream(event: EventCancelV1_0): void {
   const params = event.params;
-  processCancel(event, {
+  Processor.cancel(event, {
     recipient: params.recipient,
     recipientAmount: params.recipientAmount,
     sender: params.sender,

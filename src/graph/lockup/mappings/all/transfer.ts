@@ -1,8 +1,8 @@
 import { ADDRESS_ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventTransfer } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
+import { Store } from "../../store";
 
 export function handleTransfer(event: EventTransfer): void {
   // Filter out `Transfer` events emitted by the initial mint transaction.
@@ -12,13 +12,13 @@ export function handleTransfer(event: EventTransfer): void {
   }
 
   const id = event.params.tokenId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this Transfer event: {}", [id.toHexString()]);
     return;
   }
 
-  createEntityAction(event, {
+  Store.Action.create(event, {
     addressA: event.params.from,
     addressB: event.params.to,
     category: "Transfer",

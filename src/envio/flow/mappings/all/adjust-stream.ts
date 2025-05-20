@@ -1,29 +1,14 @@
-import { SablierFlow } from "@envio/flow/bindings";
-import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
-import { scale } from "@envio/flow/helpers";
+import { FlowCommon } from "@envio-flow/bindings";
+import { scale } from "@envio-flow/helpers";
+import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
+import { Loader } from "../loader";
 
-SablierFlow.AdjustFlowStream.handlerWithLoader({
-  /* -------------------------------------------------------------------------- */
-  /*                                   LOADER                                   */
-  /* -------------------------------------------------------------------------- */
-  loader: async ({ context, event }) => {
-    const tokenId: bigint = event.params.streamId;
-
-    const stream = await getStreamOrThrow(context, event, tokenId);
-    const watcher = await getWatcherOrThrow(context, event);
-
-    return {
-      stream,
-      watcher,
-    };
-  },
-  /* -------------------------------------------------------------------------- */
-  /*                                   HANDLER                                  */
-  /* -------------------------------------------------------------------------- */
-  handler: async ({ context, event, loaderReturn: loaded }) => {
-    const { watcher } = loaded;
-    let { stream } = loaded;
+FlowCommon.AdjustFlowStream.handlerWithLoader({
+  loader: Loader.base,
+  handler: async ({ context, event, loaderReturn }) => {
+    const watcher = loaderReturn.watcher;
+    let stream = loaderReturn.stream;
 
     /* --------------------------------- STREAM --------------------------------- */
     const now = BigInt(event.block.timestamp);
@@ -51,7 +36,7 @@ SablierFlow.AdjustFlowStream.handlerWithLoader({
     };
 
     /* --------------------------------- ACTION --------------------------------- */
-    const action = await createEntityAction(context, watcher, event, {
+    const action = await Store.Action.create(context, event, watcher, {
       category: enums.ActionCategory.Adjust,
       amountA: event.params.oldRatePerSecond,
       amountB: event.params.newRatePerSecond,

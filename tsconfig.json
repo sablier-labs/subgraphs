@@ -11,8 +11,10 @@
     "noEmit": true,
     "noImplicitAny": true,
     "paths": {
-      "@envio": ["src/envio"],
       "@envio/*": ["src/envio/*"],
+      "@envio-airdrops/*": ["src/envio/airdrops/*"],
+      "@envio-flow/*": ["src/envio/flow/*"],
+      "@envio-lockup/*": ["src/envio/lockup/*"],
       "@src": ["src"],
       "@src/*": ["src/*"]
     },

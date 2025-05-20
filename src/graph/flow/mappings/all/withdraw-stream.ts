@@ -1,11 +1,11 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventWithdraw } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
+import { Store } from "../../store";
 
 export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
   const id = event.params.streamId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this WithdrawFromFlowStream event: {}", [id.toHexString()]);
     return;
@@ -17,7 +17,7 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
   stream.save();
 
   /* --------------------------------- ACTION --------------------------------- */
-  createEntityAction(event, {
+  Store.Action.create(event, {
     addressA: event.params.caller,
     addressB: event.params.to,
     amountA: event.params.withdrawAmount,

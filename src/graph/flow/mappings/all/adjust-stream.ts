@@ -1,12 +1,12 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventAdjust } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
 import { scale } from "../../helpers";
+import { Store } from "../../store";
 
 export function handleAdjustFlowStream(event: EventAdjust): void {
   const id = event.params.streamId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this AdjustFlowStream event: {}", [id.toHexString()]);
     return;
@@ -32,7 +32,7 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
   stream.snapshotAmount = snapshotAmount;
 
   /* --------------------------------- ACTION --------------------------------- */
-  const action = createEntityAction(event, {
+  const action = Store.Action.create(event, {
     amountA: event.params.oldRatePerSecond,
     amountB: event.params.newRatePerSecond,
     category: "Adjust",

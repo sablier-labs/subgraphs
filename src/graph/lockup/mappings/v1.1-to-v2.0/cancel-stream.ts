@@ -1,5 +1,5 @@
 import { CancelLockupStream as EventCancelV1_1 } from "../../bindings/SablierV2LockupLinear_v1_1/SablierV2LockupLinear";
-import { processCancel } from "../processors";
+import { Processor } from "../processor";
 
 /**
  * Handles events emitted by all contracts with the same ABI for the `CancelLockupStream` event.
@@ -11,8 +11,7 @@ import { processCancel } from "../processors";
  * - SablierLockup_v2_0
  */
 export function handleCancelLockupStream(event: EventCancelV1_1): void {
-  // Purposefully ignoring `event.params.token`
-  processCancel(event, {
+  Processor.cancel(event, {
     recipient: event.params.recipient,
     recipientAmount: event.params.recipientAmount,
     sender: event.params.sender,

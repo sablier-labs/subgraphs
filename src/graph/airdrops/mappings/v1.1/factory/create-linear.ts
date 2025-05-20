@@ -1,9 +1,9 @@
 import { CreateMerkleStreamerLL as EventCreateMerkleStreamerLL } from "../../../bindings/SablierV2MerkleStreamerFactory_v1_1/SablierV2MerkleStreamerFactory";
 import { SablierV2MerkleStreamerLL_v1_1 as TemplateLL } from "../../../bindings/templates";
-import { processCreateMerkleLL } from "../../processors";
+import { Processor } from "../../processor";
 
 export function handleCreateMerkleStreamerLL(event: EventCreateMerkleStreamerLL): void {
-  processCreateMerkleLL(
+  Processor.Create.merkleLL(
     event,
     {
       admin: event.params.admin,

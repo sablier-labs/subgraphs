@@ -1,21 +1,14 @@
 import { ADDRESS_ZERO } from "@envio/common/constants";
-import { SablierFlow } from "@envio/flow/bindings";
-import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
+import { FlowCommon } from "@envio-flow/bindings";
+import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
+import { Loader } from "../loader";
 
-SablierFlow.Transfer.handlerWithLoader({
-  loader: async ({ context, event }) => {
-    const stream = await getStreamOrThrow(context, event, event.params.tokenId);
-    const watcher = await getWatcherOrThrow(context, event);
-
-    return {
-      stream,
-      watcher,
-    };
-  },
-  handler: async ({ context, event, loaderReturn: loaded }) => {
-    const { watcher } = loaded;
-    let { stream } = loaded;
+FlowCommon.Transfer.handlerWithLoader({
+  loader: Loader.base,
+  handler: async ({ context, event, loaderReturn }) => {
+    const watcher = loaderReturn.watcher;
+    let stream = loaderReturn.stream;
 
     // We exclude `Transfer` events emitted by the initial mint transaction.
     // See https://github.com/sablier-labs/indexers/issues/18
@@ -24,7 +17,6 @@ SablierFlow.Transfer.handlerWithLoader({
     }
 
     /* --------------------------------- STREAM --------------------------------- */
-
     stream = {
       ...stream,
       recipient: event.params.to.toLowerCase(),
@@ -32,7 +24,7 @@ SablierFlow.Transfer.handlerWithLoader({
     context.Stream.set(stream);
 
     /* --------------------------------- ACTION --------------------------------- */
-    await createEntityAction(context, watcher, event, {
+    await Store.Action.create(context, event, watcher, {
       category: enums.ActionCategory.Transfer,
       streamId: stream.id,
       addressA: event.params.from,

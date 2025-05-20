@@ -2,11 +2,11 @@ export * from "../all";
 
 import { CreateLockupDynamicStream as EventCreateDynamicV1_0 } from "../../bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
 import { convertSegmentsV1_0 } from "../../helpers";
-import { processCreateDynamic } from "../processors";
+import { Processor } from "../processor";
 
 export function handleCreateLockupDynamicStream(event: EventCreateDynamicV1_0): void {
   const params = event.params;
-  processCreateDynamic(
+  Processor.Create.dynamic(
     event,
     {
       asset: params.asset,
@@ -17,6 +17,7 @@ export function handleCreateLockupDynamicStream(event: EventCreateDynamicV1_0): 
       funder: params.funder,
       recipient: params.recipient,
       sender: params.sender,
+      shape: null,
       startTime: params.range.start,
       tokenId: params.streamId,
       transferable: true,

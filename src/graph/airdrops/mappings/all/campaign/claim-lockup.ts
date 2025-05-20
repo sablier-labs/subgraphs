@@ -3,10 +3,10 @@ import { ONE } from "../../../../common/constants";
 import { Id } from "../../../../common/id";
 import { logError } from "../../../../common/logger";
 import { Claim as EventClaimLockup } from "../../../bindings/templates/SablierV2MerkleStreamerLL_v1_1/SablierV2MerkleStreamerLL";
-import { createEntityAction, createOrUpdateActivity, getEntityCampaign } from "../../../entities";
+import { Store } from "../../../store";
 
 export function handleClaimLockup(event: EventClaimLockup): void {
-  const campaign = getEntityCampaign(event.address);
+  const campaign = Store.Campaign.get(event.address);
   if (campaign === null) {
     return;
   }
@@ -16,7 +16,7 @@ export function handleClaimLockup(event: EventClaimLockup): void {
     return;
   }
 
-  const action = createEntityAction(event, campaign, "Claim");
+  const action = Store.Action.create(event, campaign, "Claim");
   if (action === null) {
     logError("Could not handle the Lockup claim: {}", [event.transaction.hash.toString()]);
     return;
@@ -39,5 +39,5 @@ export function handleClaimLockup(event: EventClaimLockup): void {
   action.save();
 
   /* -------------------------------- ACTIVITY -------------------------------- */
-  createOrUpdateActivity(event, campaign, event.params.amount);
+  Store.Activity.createOrUpdate(event, campaign, event.params.amount);
 }

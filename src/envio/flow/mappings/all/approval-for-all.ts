@@ -1,13 +1,13 @@
-import { SablierFlow } from "@envio/flow/bindings";
-import { createEntityAction, getWatcherOrThrow } from "@envio/flow/entities";
+import { FlowCommon } from "@envio-flow/bindings";
+import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
 
-SablierFlow.ApprovalForAll.handlerWithLoader({
+FlowCommon.ApprovalForAll.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   LOADER                                   */
   /* -------------------------------------------------------------------------- */
   loader: async ({ context, event }) => {
-    const watcher = await getWatcherOrThrow(context, event);
+    const watcher = await Store.Watcher.getOrThrow(context, event);
     return {
       watcher,
     };
@@ -15,10 +15,10 @@ SablierFlow.ApprovalForAll.handlerWithLoader({
   /* -------------------------------------------------------------------------- */
   /*                                   HANDLER                                  */
   /* -------------------------------------------------------------------------- */
-  handler: async ({ context, event, loaderReturn: loaded }) => {
-    const { watcher } = loaded;
+  handler: async ({ context, event, loaderReturn }) => {
+    const { watcher } = loaderReturn;
 
-    await createEntityAction(context, watcher, event, {
+    await Store.Action.create(context, event, watcher, {
       category: enums.ActionCategory.Approval,
       addressA: event.params.owner,
       addressB: event.params.operator,

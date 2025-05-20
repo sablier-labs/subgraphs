@@ -1,27 +1,14 @@
-import { SablierFlow } from "@envio/flow/bindings";
-import { createEntityAction, getStreamOrThrow, getWatcherOrThrow } from "@envio/flow/entities";
-import { scale } from "@envio/flow/helpers";
+import { FlowCommon } from "@envio-flow/bindings";
+import { scale } from "@envio-flow/helpers";
+import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
+import { Loader } from "../loader";
 
-SablierFlow.DepositFlowStream.handlerWithLoader({
-  /* -------------------------------------------------------------------------- */
-  /*                                   LOADER                                   */
-  /* -------------------------------------------------------------------------- */
-  loader: async ({ context, event }) => {
-    const stream = await getStreamOrThrow(context, event, event.params.streamId);
-    const watcher = await getWatcherOrThrow(context, event);
-
-    return {
-      stream,
-      watcher,
-    };
-  },
-  /* -------------------------------------------------------------------------- */
-  /*                                   HANDLER                                  */
-  /* -------------------------------------------------------------------------- */
-  handler: async ({ context, event, loaderReturn: loaded }) => {
-    const { watcher } = loaded;
-    let { stream } = loaded;
+FlowCommon.DepositFlowStream.handlerWithLoader({
+  loader: Loader.base,
+  handler: async ({ context, event, loaderReturn }) => {
+    const watcher = loaderReturn.watcher;
+    let stream = loaderReturn.stream;
 
     /* --------------------------------- STREAM --------------------------------- */
     const depositedAmount = stream.depositedAmount + event.params.amount;
@@ -53,7 +40,7 @@ SablierFlow.DepositFlowStream.handlerWithLoader({
     context.Stream.set(stream);
 
     /* --------------------------------- ACTION --------------------------------- */
-    await createEntityAction(context, watcher, event, {
+    await Store.Action.create(context, event, watcher, {
       category: enums.ActionCategory.Deposit,
       addressA: event.params.funder,
       amountA: event.params.amount,

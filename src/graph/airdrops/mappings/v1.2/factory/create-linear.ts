@@ -1,9 +1,9 @@
 import { CreateMerkleLL as EventCreateMerkleLL } from "../../../bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
 import { SablierV2MerkleLT_v1_2 as TemplateLL } from "../../../bindings/templates";
-import { processCreateMerkleLL } from "../../processors";
+import { Processor } from "../../processor";
 
 export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
-  processCreateMerkleLL(
+  Processor.Create.merkleLL(
     event,
     {
       admin: event.params.baseParams.initialAdmin,

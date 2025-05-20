@@ -1,12 +1,12 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventRestart } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
 import { scale } from "../../helpers";
+import { Store } from "../../store";
 
 export function handleRestartFlowStream(event: EventRestart): void {
   const id = event.params.streamId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this Restart event: {}", [id.toHexString()]);
     return;
@@ -33,7 +33,7 @@ export function handleRestartFlowStream(event: EventRestart): void {
   stream.ratePerSecond = event.params.ratePerSecond;
 
   /* --------------------------------- ACTION --------------------------------- */
-  const action = createEntityAction(event, {
+  const action = Store.Action.create(event, {
     addressA: event.params.sender,
     amountA: event.params.ratePerSecond,
     category: "Restart",

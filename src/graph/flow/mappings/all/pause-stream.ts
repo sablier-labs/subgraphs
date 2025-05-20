@@ -1,12 +1,12 @@
 import { ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventPause } from "../../bindings";
-import { createEntityAction, loadEntityStream } from "../../entities";
+import { Store } from "../../store";
 
 export function handlePauseFlowStream(event: EventPause): void {
   const id = event.params.streamId;
-  const stream = loadEntityStream(id);
+  const stream = Store.Stream.get(id);
   if (stream == null) {
     logError("Stream not saved before this Pause event: {}", [id.toHexString()]);
     return;
@@ -27,7 +27,7 @@ export function handlePauseFlowStream(event: EventPause): void {
   stream.snapshotAmount = snapshotAmount;
 
   /* --------------------------------- ACTION --------------------------------- */
-  const action = createEntityAction(event, {
+  const action = Store.Action.create(event, {
     addressA: event.params.recipient,
     addressB: event.params.sender,
     amountA: event.params.totalDebt,

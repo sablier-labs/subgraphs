@@ -1,10 +1,10 @@
-import { ActionParams } from "../../../common/params";
+import { ActionParams } from "../../../common/types";
 import { EventCreate } from "../../bindings";
-import { createEntityAction, createEntityStream } from "../../entities";
+import { Store } from "../../store";
 
 export function handleCreateFlowStream(event: EventCreate): void {
-  const stream = createEntityStream(event);
-  createEntityAction(event, {
+  const stream = Store.Stream.create(event);
+  Store.Action.create(event, {
     addressA: event.params.sender,
     addressB: event.params.recipient,
     amountA: event.params.ratePerSecond,

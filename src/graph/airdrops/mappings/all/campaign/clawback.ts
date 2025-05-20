@@ -1,14 +1,14 @@
 import { logError } from "../../../../common/logger";
 import { EventClawback } from "../../../bindings";
-import { createEntityAction, getEntityCampaign } from "../../../entities";
+import { Store } from "../../../store";
 
 export function handleClawback(event: EventClawback): void {
-  const campaign = getEntityCampaign(event.address);
+  const campaign = Store.Campaign.get(event.address);
   if (campaign === null) {
     return;
   }
 
-  const action = createEntityAction(event, campaign, "Clawback");
+  const action = Store.Action.create(event, campaign, "Clawback");
   if (action === null) {
     logError("Could not handle clawback: {}", [event.transaction.hash.toString()]);
     return;

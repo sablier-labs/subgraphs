@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { StructTrancheV1_2, StructTrancheV1_3 } from "../bindings";
-import { TrancheWithPercentage } from "../params";
+import { TrancheWithPercentage } from "./types";
 
 export function convertTranchesV1_2(tranches: StructTrancheV1_2[]): TrancheWithPercentage[] {
   return convertTranches<StructTrancheV1_2>(
