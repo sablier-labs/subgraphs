@@ -299,7 +299,7 @@
 
     "@rescript/std": ["@rescript/std@9.0.0", "", {}, "sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ=="],
 
-    "@sablier/configs": ["@sablier/configs@github:sablier-labs/configs#e086b68", {}, "sablier-labs-configs-e086b68"],
+    "@sablier/configs": ["@sablier/configs@github:sablier-labs/configs#0ad1cd0", {}, "sablier-labs-configs-0ad1cd0"],
 
     "@sablier/deployments": ["@sablier/deployments@1.0.0-alpha.40", "", { "dependencies": { "lodash": "^4.17" } }, "sha512-47kH9XZudDw+9vGqsDCn/4mCknwhzX2aOPsGGErEMbde0CUOahJcxQheeMv8Ubqv5AId9JEmcIIlRTPwb/xDZQ=="],
 

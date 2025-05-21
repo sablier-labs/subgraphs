@@ -31,10 +31,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const protocolArg = validateProtocolArg(args[0]);
 
-  /**
-   * Handles generation of schema files for all supported protocols
-   */
-  function handleAllProtocols(): void {
+  function handleAll(): void {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
 
     for (const p of protocols) {
@@ -46,7 +43,7 @@ async function main(): Promise<void> {
   }
 
   if (protocolArg === "all") {
-    handleAllProtocols();
+    handleAll();
   } else {
     generateSchema(protocolArg);
   }

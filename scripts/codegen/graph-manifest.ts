@@ -33,7 +33,7 @@ async function main(): Promise<void> {
   const protocolArg = validateProtocolArg(args[0]);
   const chainNameArg = args[1];
 
-  function handleAllProtocols() {
+  function handleAll() {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
     let totalManifests = 0;
 
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
   }
 
   if (protocolArg === "all") {
-    handleAllProtocols();
+    handleAll();
   } else {
     if (!chainNameArg) {
       generateForAllChains(protocolArg);

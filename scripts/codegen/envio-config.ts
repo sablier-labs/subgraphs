@@ -21,15 +21,24 @@ import { getRelative, validateProtocolArg } from "../helpers";
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-
   const protocolArg = validateProtocolArg(args[0]);
 
-  // Currently only supporting flow protocol
-  if (protocolArg !== "flow" && protocolArg !== "lockup") {
-    logAndThrow("Only 'flow' and 'lockup' protocols are currently supported for Envio config generation");
+  function handleAll(): void {
+    const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
+
+    for (const p of protocols) {
+      generateConfig(p);
+    }
+
+    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    logger.info("🎉 Successfully generated all Envio configs!");
   }
 
-  generateConfig(protocolArg);
+  if (protocolArg === "all") {
+    handleAll();
+  } else {
+    generateConfig(protocolArg);
+  }
 }
 
 main().catch((error) => {

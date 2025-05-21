@@ -15,7 +15,6 @@
     "@graphql-tools/merge": "^9.0",
     "@graphql-tools/schema": "^10.0",
     "@rescript/react": "^0.13",
-    "@sablier/configs": "github:sablier-labs/configs",
     "@sablier/deployments": "1.0.0-alpha.40",
     "@types/fs-extra": "^11.0",
     "@types/jest": "^29.5",
@@ -45,5 +44,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
+  },
+  "devDependencies": {
+    "@sablier/configs": "github:sablier-labs/configs"
   }
 }
