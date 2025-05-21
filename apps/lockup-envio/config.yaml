@@ -350,6 +350,14 @@ networks:
       - name: LockupV23
         address:
           - 0xd116c275541cdbe7594a202bd6ae4dbca4578462
+  - id: 50104
+    start_block: 1
+    hypersync_config:
+      url: https://sophon.hypersync.xyz
+    contracts:
+      - name: LockupV23
+        address:
+          - 0x6386da73545ae4e2b2e0393688fa8b65bb9a7169
   - id: 5330
     start_block: 2896100
     hypersync_config:
