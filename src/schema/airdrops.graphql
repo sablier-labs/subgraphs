@@ -308,7 +308,7 @@ type Campaign @entity(immutable: false) {
   """
   Tranches of the claimed stream.
   """
-  streamTranches: [Tranche!] @derivedFrom(field: "campaign")
+  streamTranches: [Tranche!]! @derivedFrom(field: "campaign")
   """
   Flag indicating whether the claimed streams will be transferable.
   """

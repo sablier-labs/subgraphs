@@ -30,7 +30,7 @@ export const paths = {
 export function getRelativePath(from: string, to: string): string {
   // Use the directory of the `from` path if it's a file.
   let fromDir = from;
-  if (fs.existsSync(from) && fs.lstatSync(from).isFile()) {
+  if (fs.lstatSync(from).isFile()) {
     fromDir = path.dirname(from);
   }
   return path.relative(fromDir, to);

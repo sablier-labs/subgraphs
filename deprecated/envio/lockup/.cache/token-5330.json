@@ -1,7 +1,0 @@
-{
-  "0x6d64fc0bb0291c6a4f416ec1c379815c06967eaf": {
-    "decimals": "18",
-    "name": "MockERC20",
-    "symbol": "MOCK"
-  }
-}
