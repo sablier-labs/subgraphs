@@ -2,17 +2,19 @@
 
 ## Priority 1
 
-- [ ] Envio Airdrops
+- [x] Envio Airdrops
 - [x] Envio Lockup
-- [ ] Reuse `Action_t` type and `Asset_t` type between Flow and Lockup
 - [x] Test to ensure the same mappings directory structure between indexers
 - [x] Params for create in Flow
+- [ ] Use contract manifests for contract names
+- [x] Write `isOfficialLockup`
+- [x] Update `config.yaml` with proper YAML for templates
 
 ## Priority 2
 
-- [ ] Create Action before Stream?
 - [ ] Matchstick tests
-- [ ] Reuse GraphQL schema for Stream
+- [ ] Reuse `Action_t` type and `Asset_t` type between Flow and Lockup
+- [ ] Reuse GraphQL schema between Flow Stream and Lockup Stream
 
 ## Priority 3
 

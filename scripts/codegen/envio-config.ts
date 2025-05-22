@@ -31,7 +31,7 @@ async function main(): Promise<void> {
     }
 
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all Envio configs!");
+    logger.info("🎉 Successfully generated all Envio configs!\n");
   }
 
   if (protocolArg === "all") {
@@ -65,6 +65,6 @@ function generateConfig(protocol: Indexed.Protocol): void {
   const configPath = paths.envioConfig(protocol);
   fs.writeFileSync(configPath, content);
 
-  logger.info(`🎉 Successfully generated the Envio config for ${protocol} protocol`);
-  logger.info(`📁 Config path: ${getRelative(configPath)}`);
+  logger.info(`✅ Successfully generated the Envio config for ${protocol} protocol`);
+  logger.info(`📁 Envio config path: ${getRelative(configPath)}\n`);
 }

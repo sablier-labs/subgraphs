@@ -2,11 +2,14 @@
  * @file Reusable Envio loaders
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
-import type { Address, Event } from "@envio/common/bindings";
-import { Id } from "@envio/common/id";
+import type { Address, Event } from "@envio-common/bindings";
+import { Id } from "@envio-common/id";
 import type { Context, Entity } from "@envio-lockup/bindings";
 import type {
-  SablierV2LockupLinear_v1_0_Approval_loader as Approval_All,
+  SablierV2LockupLinear_v1_0_Approval_loader as Approval_v1_0,
+  SablierV2LockupLinear_v1_1_Approval_loader as Approval_v1_1,
+  SablierV2LockupLinear_v1_2_Approval_loader as Approval_v1_2,
+  SablierLockup_v2_0_Approval_loader as Approval_v2_0,
   SablierV2LockupLinear_v1_0_CancelLockupStream_loader as Cancel_v1_0,
   SablierV2LockupLinear_v1_1_CancelLockupStream_loader as Cancel_v1_1_to_v2_0,
   SablierV2LockupDynamic_v1_0_CreateLockupDynamicStream_loader as CreateDynamic_v1_0,
@@ -19,8 +22,14 @@ import type {
   SablierLockup_v2_0_CreateLockupLinearStream_loader as CreateLinear_v2_0,
   SablierV2LockupTranched_v1_2_CreateLockupTranchedStream_loader as CreateTranched_v1_2,
   SablierLockup_v2_0_CreateLockupTranchedStream_loader as CreateTranched_v2_0,
-  SablierV2LockupLinear_v1_0_RenounceLockupStream_loader as Renounce_All,
-  SablierV2LockupLinear_v1_0_Transfer_loader as Transfer_All,
+  SablierV2LockupLinear_v1_0_RenounceLockupStream_loader as Renounce_v1_0,
+  SablierV2LockupLinear_v1_1_RenounceLockupStream_loader as Renounce_v1_1,
+  SablierV2LockupLinear_v1_2_RenounceLockupStream_loader as Renounce_v1_2,
+  SablierLockup_v2_0_RenounceLockupStream_loader as Renounce_v2_0,
+  SablierV2LockupLinear_v1_0_Transfer_loader as Transfer_v1_0,
+  SablierV2LockupLinear_v1_1_Transfer_loader as Transfer_v1_1,
+  SablierV2LockupLinear_v1_2_Transfer_loader as Transfer_v1_2,
+  SablierLockup_v2_0_Transfer_loader as Transfer_v2_0,
   SablierV2LockupLinear_v1_0_WithdrawFromLockupStream_loader as Withdraw_v1_0,
   SablierV2LockupLinear_v1_1_WithdrawFromLockupStream_loader as Withdraw_v1_1_to_v2_0,
 } from "@envio-lockup/bindings/src/Types.gen";
@@ -37,11 +46,20 @@ export namespace Loader {
     watcher: Entity.Watcher;
   };
 
-  type Base<T> = Approval_All<T> &
+  type Base<T> = Approval_v1_0<T> &
+    Approval_v1_1<T> &
+    Approval_v1_2<T> &
+    Approval_v2_0<T> &
     Cancel_v1_0<T> &
     Cancel_v1_1_to_v2_0<T> &
-    Renounce_All<T> &
-    Transfer_All<T> &
+    Renounce_v1_0<T> &
+    Renounce_v1_1<T> &
+    Renounce_v1_2<T> &
+    Renounce_v2_0<T> &
+    Transfer_v1_0<T> &
+    Transfer_v1_1<T> &
+    Transfer_v1_2<T> &
+    Transfer_v2_0<T> &
     Withdraw_v1_0<T> &
     Withdraw_v1_1_to_v2_0<T>;
 
@@ -55,7 +73,7 @@ export namespace Loader {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
     const stream = await Store.Stream.getOrThrow(context, event, tokenId);
-    const watcher = await Store.Watcher.getOrThrow(context, event);
+    const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
     return {
       stream,
       watcher,
@@ -79,17 +97,15 @@ export namespace Loader {
   };
 
   async function loaderForCreate(context: Context.Loader, event: Event, params: EventParams): Promise<CreateReturn> {
-    const assetId = Id.asset(params.asset, event.chainId);
-    const asset = await context.Asset.get(assetId);
+    const asset = await Store.Asset.get(context, event.chainId, params.asset);
 
     const batchId = Id.batch(event, params.sender);
     const batch = await context.Batch.get(batchId);
 
-    const batcherId = Id.batcher(event, params.sender);
+    const batcherId = Id.batcher(event.chainId, params.sender);
     const batcher = await context.Batcher.get(batcherId);
 
-    const watcherId = event.chainId.toString();
-    const watcher = await context.Watcher.get(watcherId);
+    const watcher = await Store.Watcher.get(context, event.chainId);
 
     return {
       asset,

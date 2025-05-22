@@ -2,10 +2,9 @@
  * @file Processors are reusable logic that is used in multiple event handlers.
  */
 
-import type { Event } from "@envio/common/bindings";
-import type { ActionParams } from "@envio/common/params";
-import { type CreateEntities, type Params } from "@envio/lockup/helpers/types";
+import type { Event } from "@envio-common/bindings";
 import { type Context, type Entity } from "@envio-lockup/bindings";
+import { type CreateEntities, type Params } from "@envio-lockup/helpers/types";
 import { Store } from "@envio-lockup/store";
 import { Lockup as enums } from "@src/schema/enums";
 import { type Loader } from "./loader";
@@ -64,7 +63,7 @@ export namespace Processor {
       const { context, event, loaderReturn, params } = input;
       const entities = await loadEntities(context, loaderReturn, event, params);
       const stream = await Store.Stream.createLinear(context, event, entities, params as Params.CreateLinear);
-      await create(context, event, entities.watcher, params, stream.id);
+      await action(context, event, entities.watcher, params, stream.id);
       return stream;
     }
 
@@ -72,7 +71,7 @@ export namespace Processor {
       const { context, event, loaderReturn, params } = input;
       const entities = await loadEntities(context, loaderReturn, event, params);
       const stream = await Store.Stream.createDynamic(context, event, entities, params as Params.CreateDynamic);
-      await create(context, event, entities.watcher, params, stream.id);
+      await action(context, event, entities.watcher, params, stream.id);
       return stream;
     }
 
@@ -80,7 +79,7 @@ export namespace Processor {
       const { context, event, loaderReturn, params } = input;
       const entities = await loadEntities(context, loaderReturn, event, params);
       const stream = await Store.Stream.createTranched(context, event, entities, params as Params.CreateTranche);
-      await create(context, event, entities.watcher, params, stream.id);
+      await action(context, event, entities.watcher, params, stream.id);
       return stream;
     }
 
@@ -96,14 +95,14 @@ export namespace Processor {
       params: EventParams,
     ): Promise<CreateEntities> {
       return {
-        asset: loaderReturn.asset ?? (await Store.Asset.create(context, event, params.asset)),
+        asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, params.asset)),
         batch: loaderReturn.batch ?? (await Store.Batch.create(context, event, params.sender)),
         batcher: loaderReturn.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
-        watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event)),
+        watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
       };
     }
 
-    async function create(
+    async function action(
       context: Context.Handler,
       event: Event,
       watcher: Entity.Watcher,
@@ -114,9 +113,9 @@ export namespace Processor {
         addressA: params.sender,
         addressB: params.recipient,
         amountA: params.depositAmount,
-        category: "Create",
+        category: enums.ActionCategory.Create,
         streamId: streamId,
-      } as ActionParams);
+      });
     }
   }
 

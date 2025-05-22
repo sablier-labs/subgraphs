@@ -9,8 +9,8 @@ export function createOrUpdateActivity(
 ): EntityActivity {
   const timestamp = event.block.timestamp.toU32();
   const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
-
   const id = `activity-${campaign.id}-${day.toString()}`;
+
   let activity = EntityActivity.load(id);
   if (activity != null) {
     activity.amount = activity.amount.plus(amount);

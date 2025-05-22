@@ -39,7 +39,7 @@ async function main(): Promise<void> {
     }
 
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all GraphQL schemas!");
+    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
   }
 
   if (protocolArg === "all") {
@@ -76,8 +76,8 @@ function generateSchema(protocol: Indexed.Protocol): void {
   fs.writeFileSync(outputPaths.envio, schema);
 
   logger.info(`✅ Successfully generated GraphQL schema for ${protocol} protocol`);
-  logger.info(`📁 GraphQL schema path: ${getRelative(outputPaths.graph)}`);
-  logger.info(`📁 Envio schema path: ${getRelative(outputPaths.envio)}`);
+  logger.info(`📁 GraphQL schema path:  ${getRelative(outputPaths.graph)}`);
+  logger.info(`📁 Envio schema path:    ${getRelative(outputPaths.envio)}`);
   console.log();
 }
 

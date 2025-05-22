@@ -6,9 +6,9 @@ import { getClient } from "./rpc-clients";
 import type { ERC20Metadata } from "./types";
 
 /**
- * Query ERC20 metadata for a given asset address. If the data is not found in the cache, it will be fetched from the chain.
+ * Reads or fetches ERC20 metadata for a given asset address. If the data is not found in the cache, it will be fetched from the chain.
  */
-export async function queryERC20Metadata(chainId: number, address: Address): Promise<ERC20Metadata> {
+export async function readOrFetchERC20Metadata(chainId: number, address: Address): Promise<ERC20Metadata> {
   const key = address.toLowerCase();
   const data = initDataEntry(DataCategory.Asset, chainId);
   const asset = data.read(key);

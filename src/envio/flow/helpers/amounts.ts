@@ -1,4 +1,4 @@
-import { DECIMALS_18 } from "@envio/common/constants";
+import { DECIMALS_18 } from "@envio-common/constants";
 
 /**
  * Scale an amount from the ERC20 token's decimals to 18 decimals.

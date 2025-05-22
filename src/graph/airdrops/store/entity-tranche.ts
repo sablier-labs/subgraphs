@@ -15,18 +15,14 @@ export function createTranchesWithPercentages(
 
     const id = `${campaign.id}-${i.toString()}`;
     const tranche = new EntityTranche(id);
-
-    tranche.percentage = current.unlockPercentage;
+    tranche.campaign = campaign.id;
     tranche.duration = current.duration;
-
-    tranche.startDuration = previous.duration;
-    tranche.startPercentage = previous.unlockPercentage;
-
     tranche.endDuration = previous.duration.plus(current.duration);
     tranche.endPercentage = previous.unlockPercentage.plus(current.unlockPercentage);
-
-    tranche.campaign = campaign.id;
+    tranche.percentage = current.unlockPercentage;
     tranche.position = BigInt.fromU32(i);
+    tranche.startDuration = previous.duration;
+    tranche.startPercentage = previous.unlockPercentage;
     tranche.save();
 
     previous = tranches[i];

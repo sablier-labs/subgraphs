@@ -3,7 +3,7 @@
  */
 import { ethereum } from "@graphprotocol/graph-ts";
 import { logError } from "../../common/logger";
-import { ActionParams } from "../../common/types";
+import { CommonParams } from "../../common/types";
 import { EntityStream } from "../bindings";
 import { Params } from "../helpers/types";
 import { Store } from "../store";
@@ -27,7 +27,7 @@ export namespace Processor {
       amountB: params.recipientAmount,
       category: "Cancel",
       streamId: stream.id,
-    } as ActionParams);
+    } as CommonParams.Action);
 
     stream.cancelable = false;
     stream.canceled = true;
@@ -89,7 +89,7 @@ export namespace Processor {
         amountA: params.depositAmount,
         category: "Create",
         streamId: streamId,
-      } as ActionParams);
+      } as CommonParams.Action);
     }
   }
 
@@ -124,6 +124,6 @@ export namespace Processor {
       amountB: withdrawAmount,
       category: "Withdraw",
       streamId: stream.id,
-    } as ActionParams);
+    } as CommonParams.Action);
   }
 }

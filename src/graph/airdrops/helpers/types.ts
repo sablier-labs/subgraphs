@@ -1,45 +1,60 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
-export class CampaignCommonParams {
-  admin: Address;
-  aggregateAmount: BigInt;
-  asset: Address;
-  campaignAddress: Address;
-  category: string;
-  expiration: BigInt;
-  minimumFee: BigInt | null;
-  ipfsCID: string;
-  name: string | null;
-  recipientCount: BigInt;
-  root: Bytes;
-}
+export namespace Params {
+  export class Action {
+    category: string;
+    claimAmount: BigInt | null;
+    claimIndex: BigInt | null;
+    claimRecipient: Address | null;
+    claimStreamId: string | null;
+    claimTokenId: BigInt | null;
+    clawbackAmount: BigInt | null;
+    clawbackFrom: Address | null;
+    clawbackTo: Address | null;
+    fee: BigInt | null;
+  }
 
-export class CampaignLLParams {
-  // Lockup
-  cancelable: boolean;
-  lockup: Address;
-  shape: string | null;
-  startTime: BigInt | null;
-  transferable: boolean;
-  totalDuration: BigInt;
+  export class CampaignBase {
+    admin: Address;
+    aggregateAmount: BigInt;
+    asset: Address;
+    campaignAddress: Address;
+    category: string;
+    expiration: BigInt;
+    minimumFee: BigInt | null;
+    ipfsCID: string;
+    merkleRoot: Bytes;
+    name: string | null;
+    recipientCount: BigInt;
+  }
 
-  // LockupLinear
-  cliffDuration: BigInt;
-  cliffPercentage: BigInt | null;
-  startPercentage: BigInt | null;
-}
+  export class CampaignLL {
+    // Lockup
+    cancelable: boolean;
+    lockup: Address;
+    shape: string | null;
+    startTime: BigInt | null;
+    transferable: boolean;
+    totalDuration: BigInt;
 
-export class CampaignLTParams {
-  // Lockup
-  cancelable: boolean;
-  lockup: Address;
-  shape: string | null;
-  startTime: BigInt | null;
-  transferable: boolean;
-  totalDuration: BigInt;
+    // LockupLinear
+    cliffDuration: BigInt;
+    cliffPercentage: BigInt | null;
+    startPercentage: BigInt | null;
+  }
 
-  // LockupTranched
-  tranchesWithPercentages: TrancheWithPercentage[];
+  export class CampaignLT {
+    // Lockup
+    cancelable: boolean;
+    lockup: Address;
+    shape: string | null;
+    startTime: BigInt | null;
+    transferable: boolean;
+    totalDuration: BigInt;
+
+    // LockupTranched
+    tranchesWithPercentages: TrancheWithPercentage[];
+  }
 }
 
 export class TrancheWithPercentage {

@@ -1,34 +1,60 @@
-import { ADDRESS_ZERO } from "@envio/common/constants";
-import { LockupBase } from "@envio-lockup/bindings";
+import { ADDRESS_ZERO } from "@envio-common/constants";
+import { Contract } from "@envio-lockup/bindings";
+import type {
+  SablierV2LockupLinear_v1_0_Transfer_handler as Handler_v1_0,
+  SablierV2LockupLinear_v1_1_Transfer_handler as Handler_v1_1,
+  SablierV2LockupLinear_v1_2_Transfer_handler as Handler_v1_2,
+  SablierLockup_v2_0_Transfer_handler as Handler_v2_0,
+} from "@envio-lockup/bindings/src/Types.gen";
 import { Store } from "@envio-lockup/store";
 import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 
-LockupBase.Transfer.handlerWithLoader({
-  loader: Loader.base,
-  handler: async ({ context, event, loaderReturn }) => {
-    const watcher = loaderReturn.watcher;
-    let stream = loaderReturn.stream;
+/* -------------------------------------------------------------------------- */
+/*                                   HANDLER                                  */
+/* -------------------------------------------------------------------------- */
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_v2_0<T>;
 
-    // We exclude `Transfer` events emitted by the initial mint transaction.
-    // See https://github.com/sablier-labs/indexers/issues/18
-    if (event.params.from === ADDRESS_ZERO) {
-      return;
-    }
+const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
+  const watcher = loaderReturn.watcher;
+  let stream = loaderReturn.stream;
 
-    /* --------------------------------- STREAM --------------------------------- */
-    stream = {
-      ...stream,
-      recipient: event.params.to.toLowerCase(),
-    };
-    context.Stream.set(stream);
+  // We exclude `Transfer` events emitted by the initial mint transaction.
+  // See https://github.com/sablier-labs/indexers/issues/18
+  if (event.params.from === ADDRESS_ZERO) {
+    return;
+  }
 
-    /* --------------------------------- ACTION --------------------------------- */
-    await Store.Action.create(context, event, watcher, {
-      category: enums.ActionCategory.Transfer,
-      streamId: stream.id,
-      addressA: event.params.from,
-      addressB: event.params.to,
-    });
-  },
-});
+  /* --------------------------------- STREAM --------------------------------- */
+  stream = {
+    ...stream,
+    recipient: event.params.to.toLowerCase(),
+  };
+  context.Stream.set(stream);
+
+  /* --------------------------------- ACTION --------------------------------- */
+  await Store.Action.create(context, event, watcher, {
+    category: enums.ActionCategory.Transfer,
+    streamId: stream.id,
+    addressA: event.params.from,
+    addressB: event.params.to,
+  });
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  MAPPINGS                                  */
+/* -------------------------------------------------------------------------- */
+
+const handlerWithLoader = { loader: Loader.base, handler };
+
+Contract.LockupDynamic_v1_0.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_0.Transfer.handlerWithLoader(handlerWithLoader);
+
+Contract.LockupDynamic_v1_1.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_1.Transfer.handlerWithLoader(handlerWithLoader);
+
+Contract.LockupDynamic_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupTranched_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
+
+Contract.Lockup_v2_0.Transfer.handlerWithLoader(handlerWithLoader);

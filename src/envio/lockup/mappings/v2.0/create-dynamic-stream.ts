@@ -1,5 +1,6 @@
-import { SablierLockup_v2_0 } from "@envio-lockup/bindings";
+import { Contract } from "@envio-lockup/bindings";
 import { convertSegments } from "@envio-lockup/helpers/segments";
+import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 import { Processor } from "../processor";
 
@@ -42,29 +43,30 @@ event CreateLockupDynamicStream(
 
 ──────────────────────────────────────────────────────────────
 */
-SablierLockup_v2_0.CreateLockupDynamicStream.handlerWithLoader({
+Contract.Lockup_v2_0.CreateLockupDynamicStream.handlerWithLoader({
   loader: Loader.create["v2.0"],
   handler: async ({ context, event, loaderReturn }) => {
     const commonParams = event.params.commonParams;
+    const params = {
+      asset: commonParams[4],
+      cancelable: commonParams[5],
+      category: enums.StreamCategory.LockupDynamic,
+      depositAmount: commonParams[3][0],
+      endTime: commonParams[7][1],
+      funder: commonParams[0],
+      recipient: commonParams[2],
+      sender: commonParams[1],
+      segments: convertSegments(event.params.segments),
+      shape: commonParams[8],
+      startTime: commonParams[7][0],
+      tokenId: event.params.streamId,
+      transferable: commonParams[6],
+    };
     await Processor.Create.dynamic({
       context,
       loaderReturn,
       event,
-      params: {
-        asset: commonParams[4],
-        cancelable: commonParams[5],
-        category: "LockupDynamic",
-        depositAmount: commonParams[3][0],
-        endTime: commonParams[7][1],
-        funder: commonParams[0],
-        recipient: commonParams[2],
-        sender: commonParams[1],
-        segments: convertSegments(event.params.segments),
-        shape: commonParams[8],
-        startTime: commonParams[7][0],
-        tokenId: event.params.streamId,
-        transferable: commonParams[6],
-      },
+      params,
     });
   },
 });

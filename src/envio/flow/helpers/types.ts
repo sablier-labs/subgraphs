@@ -1,4 +1,4 @@
-import type { Address } from "@envio/common/bindings";
+import type { Address } from "@envio-common/bindings";
 import type { Entity } from "@envio-flow/bindings";
 
 export type CreateEntities = {

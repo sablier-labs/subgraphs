@@ -4,7 +4,7 @@ import "./approval-for-all";
 import "./create-stream";
 import "./deposit-stream";
 import "./pause-stream";
-import "./refund-from-flow-stream";
+import "./refund-stream";
 import "./restart-stream";
 import "./transfer";
 import "./void-stream";

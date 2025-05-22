@@ -54,13 +54,18 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
       continue;
     }
 
-    // Find all contracts that match the release version.
-    const contractNames = indexedContracts[protocol]
-      .filter((contract) => contract.versions.includes(release.version))
-      .map((contract) => contract.name);
+    // Filter all contracts that match the release version.
+    const filteredContracts = indexedContracts[protocol].filter((c) => c.versions.includes(release.version));
 
     const possibleStartBlocks: number[] = [];
-    for (const contractName of contractNames) {
+    for (const filteredContract of filteredContracts) {
+      const { name: contractName, isTemplate } = filteredContract;
+      if (isTemplate) {
+        networkContracts.push({
+          name: sanitizeName(contractName, release.version),
+        });
+        continue;
+      }
       const contract = queries.contracts.get({ contractName, deployment });
 
       // If it's a deployment that exists, the contract from the contract map must exist.
@@ -68,7 +73,6 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
         logger.debug(messages.contractNotFound(release, chainId, contractName));
         continue;
       }
-
       // If a contract is found, it must have an alias and a start block. These are required for indexing.
       if (!contract.alias) {
         throw new WinstonError.AliasNotFound(release, chainId, contractName);
@@ -79,7 +83,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
       networkContracts.push({
         address: contract.address.toLowerCase() as `0x${string}`,
-        name: sanitizeName(contract.name, release.version),
+        name: sanitizeName(contractName, release.version),
       });
       if (startBlock === 0) {
         possibleStartBlocks.push(contract.block);

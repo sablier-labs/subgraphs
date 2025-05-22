@@ -1,9 +1,9 @@
 import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../common/constants";
-import { readChainId, readContractVersion } from "../../common/context";
+import { getContractVersion, readChainId } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
-import { ActionParams } from "../../common/types";
+import { CommonParams } from "../../common/types";
 import { EntityStream } from "../bindings";
 import { loadProxy } from "../helpers";
 import { Params } from "../helpers/types";
@@ -179,7 +179,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.timestamp = event.block.timestamp;
   stream.tokenId = params.tokenId;
   stream.transferable = params.transferable;
-  stream.version = readContractVersion();
+  stream.version = getContractVersion();
   stream.withdrawnAmount = ZERO;
 
   /* --------------------------------- ACTION --------------------------------- */
@@ -189,7 +189,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
     amountA: params.depositAmount,
     category: "Create",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
   if (stream.cancelable === false) {
     stream.renounceAction = action.id;
     stream.renounceTime = event.block.timestamp;

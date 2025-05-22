@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
-import { readChainId, readContractAlias } from "./context";
+import { getContractAlias, readChainId } from "./context";
 
 export namespace Id {
   /**
@@ -50,7 +50,7 @@ export namespace Id {
    * LK-137-42
    */
   export function streamAlias(tokenId: BigInt): string {
-    const alias = readContractAlias();
+    const alias = getContractAlias();
     const chainId = readChainId().toString();
     return `${alias}-${chainId}-${tokenId.toString()}`;
   }

@@ -1,6 +1,5 @@
-import { ONE } from "../../../../common/constants";
-import { logError } from "../../../../common/logger";
 import { Claim as EventClaimInstant } from "../../../bindings/templates/SablierMerkleInstant_v1_3/SablierMerkleInstant";
+import { Params } from "../../../helpers";
 import { Store } from "../../../store";
 
 export function handleClaimInstant(event: EventClaimInstant): void {
@@ -9,24 +8,19 @@ export function handleClaimInstant(event: EventClaimInstant): void {
     return;
   }
 
-  const action = Store.Action.create(event, campaign, "Claim");
-  if (action === null) {
-    logError("Could not handle the Instant claim airdrop: {}", [event.transaction.hash.toString()]);
-    return;
-  }
-
   /* -------------------------------- CAMPAIGN -------------------------------- */
-  campaign.claimedAmount = campaign.claimedAmount.plus(event.params.amount);
-  campaign.claimedCount = campaign.claimedCount.plus(ONE);
-  campaign.save();
-
-  /* --------------------------------- ACTION --------------------------------- */
-  action.claimIndex = event.params.index;
-  action.claimAmount = event.params.amount;
-  action.claimRecipient = event.params.recipient;
-  action.fee = event.transaction.value;
-  action.save();
+  const claimAmount = event.params.amount;
+  Store.Campaign.updateClaimed(campaign, claimAmount);
 
   /* -------------------------------- ACTIVITY -------------------------------- */
-  Store.Activity.createOrUpdate(event, campaign, event.params.amount);
+  Store.Activity.createOrUpdate(event, campaign, claimAmount);
+
+  /* --------------------------------- ACTION --------------------------------- */
+  Store.Action.create(event, campaign, {
+    category: "Claim",
+    claimAmount: claimAmount,
+    claimIndex: event.params.index,
+    claimRecipient: event.params.recipient,
+    fee: event.transaction.value,
+  } as Params.Action);
 }

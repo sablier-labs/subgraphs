@@ -44,7 +44,7 @@ export namespace Loader {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
     const stream = await Store.Stream.getOrThrow(context, event, tokenId);
-    const watcher = await Store.Watcher.getOrThrow(context, event);
+    const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
     return {
       stream,
       watcher,

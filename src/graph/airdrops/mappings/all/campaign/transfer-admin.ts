@@ -1,8 +1,6 @@
-import { Address } from "@graphprotocol/graph-ts";
 import { ADDRESS_ZERO } from "../../../../common/constants";
-import { logError } from "../../../../common/logger";
 import { EventTransferAdmin } from "../../../bindings";
-import { getNickname } from "../../../helpers";
+import { Params } from "../../../helpers/types";
 import { Store } from "../../../store";
 
 export function handleTransferAdminInCampaign(event: EventTransferAdmin): void {
@@ -16,16 +14,9 @@ export function handleTransferAdminInCampaign(event: EventTransferAdmin): void {
     return;
   }
 
-  const action = Store.Action.create(event, campaign, "TransferAdmin");
-  if (action === null) {
-    logError("Could not handle the admin transfer: {}", [event.transaction.hash.toString()]);
-    return;
-  }
+  /* -------------------------------- CAMPAIGN -------------------------------- */
+  Store.Campaign.updateAdmin(campaign, event.params.newAdmin);
 
-  // Update the admin and the nickname.
-  campaign.admin = event.params.newAdmin;
-  const asset = Store.Asset.getOrCreate(Address.fromString(campaign.asset));
-  const nickname = getNickname(Address.fromBytes(campaign.admin), asset, campaign.name);
-  campaign.nickname = nickname;
-  campaign.save();
+  /* --------------------------------- ACTION --------------------------------- */
+  Store.Action.create(event, campaign, { category: "TransferAdmin" } as Params.Action);
 }

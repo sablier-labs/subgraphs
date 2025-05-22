@@ -1,6 +1,6 @@
 import { ADDRESS_ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventTransfer } from "../../bindings";
 import { Store } from "../../store";
 
@@ -23,7 +23,7 @@ export function handleTransfer(event: EventTransfer): void {
     addressB: event.params.to,
     category: "Transfer",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
 
   stream.recipient = event.params.to;
   const parties = [stream.sender, event.params.to];

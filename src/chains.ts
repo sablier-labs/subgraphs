@@ -262,16 +262,6 @@ export const supportedChains: SupportedChain[] = [
     },
     graph: {
       isEnabled: true,
-      name: "ultra",
-    },
-    id: ChainId.ULTRA,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
       name: "unichain",
     },
     id: ChainId.UNICHAIN,

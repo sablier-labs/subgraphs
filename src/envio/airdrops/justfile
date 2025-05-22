@@ -5,4 +5,4 @@ export PROTOCOL := "airdrops"
 
 # Show available commands
 default:
-  @just --list
+    @just --list

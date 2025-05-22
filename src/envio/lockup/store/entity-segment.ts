@@ -1,5 +1,5 @@
-import type { Segment } from "@envio/lockup/helpers/types";
 import type { Context, Entity } from "@envio-lockup/bindings";
+import type { Segment } from "@envio-lockup/helpers/types";
 
 export async function create(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {
   let streamed = 0n;

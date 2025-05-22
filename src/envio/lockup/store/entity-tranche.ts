@@ -1,5 +1,5 @@
-import type { Tranche } from "@envio/lockup/helpers/types";
 import type { Context, Entity } from "@envio-lockup/bindings";
+import type { Tranche } from "@envio-lockup/helpers/types";
 
 export async function create(context: Context.Handler, stream: Entity.Stream, tranches: Tranche[]): Promise<void> {
   let streamedAmount = 0n;

@@ -1,4 +1,4 @@
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventRenounceLockupStream } from "../../bindings";
 import { Store } from "../../store";
 
@@ -9,7 +9,7 @@ export function handleRenounceLockupStream(event: EventRenounceLockupStream): vo
     return;
   }
 
-  const action = Store.Action.create(event, { category: "Renounce", streamId: stream.id } as ActionParams);
+  const action = Store.Action.create(event, { category: "Renounce", streamId: stream.id } as CommonParams.Action);
 
   stream.cancelable = false;
   stream.renounceAction = action.id;

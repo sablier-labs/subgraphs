@@ -49,7 +49,7 @@ async function main(): Promise<void> {
 
     if (!chainNameArg) {
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      logger.info(`🎉 Successfully generated ${totalManifests} total subgraph manifests!`);
+      logger.info(`🎉 Successfully generated ${totalManifests} manifests in total!\n`);
     }
   }
 

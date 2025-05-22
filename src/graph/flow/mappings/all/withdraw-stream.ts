@@ -1,5 +1,5 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventWithdraw } from "../../bindings";
 import { Store } from "../../store";
 
@@ -23,5 +23,5 @@ export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
     amountA: event.params.withdrawAmount,
     category: "Withdraw",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
 }

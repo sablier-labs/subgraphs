@@ -1,17 +1,17 @@
-import { Address, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
-import { readChainId, readContractVersion } from "../../common/context";
+import { getContractVersion, readChainId } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { EntityCampaign } from "../bindings";
 import { getNickname } from "../helpers";
-import { CampaignCommonParams, CampaignLLParams, CampaignLTParams } from "../helpers/types";
+import { Params } from "../helpers/types";
 import { getOrCreateAsset } from "./entity-asset";
 import { getOrCreateFactory } from "./entity-factory";
 import { createTranchesWithPercentages } from "./entity-tranche";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createCampaignInstant(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
+export function createCampaignInstant(event: ethereum.Event, params: Params.CampaignBase): EntityCampaign {
   const campaign = createBaseCampaign(event, params);
   campaign.save();
   return campaign;
@@ -19,12 +19,12 @@ export function createCampaignInstant(event: ethereum.Event, params: CampaignCom
 
 export function createCampaignLL(
   event: ethereum.Event,
-  paramsCommon: CampaignCommonParams,
-  paramsLL: CampaignLLParams,
+  paramsBase: Params.CampaignBase,
+  paramsLL: Params.CampaignLL,
 ): EntityCampaign {
-  const campaign = createBaseCampaign(event, paramsCommon);
+  const campaign = createBaseCampaign(event, paramsBase);
 
-  // Lockup
+  /* --------------------------------- LOCKUP --------------------------------- */
   campaign.lockup = paramsLL.lockup;
   campaign.streamCancelable = paramsLL.cancelable;
   campaign.streamShape = paramsLL.shape;
@@ -37,7 +37,7 @@ export function createCampaignLL(
     campaign.streamStartTime = startTime;
   }
 
-  // LockupLinear
+  /* ------------------------------ LOCKUP LINEAR ----------------------------- */
   campaign.streamCliff = paramsLL.cliffDuration.isZero() === false;
   campaign.streamCliffDuration = paramsLL.cliffDuration;
   campaign.streamCliffPercentage = paramsLL.cliffPercentage;
@@ -53,12 +53,12 @@ export function createCampaignLL(
 
 export function createCampaignLT(
   event: ethereum.Event,
-  paramsCommon: CampaignCommonParams,
-  paramsLT: CampaignLTParams,
+  paramsBase: Params.CampaignBase,
+  paramsLT: Params.CampaignLT,
 ): EntityCampaign {
-  let campaign = createBaseCampaign(event, paramsCommon);
+  let campaign = createBaseCampaign(event, paramsBase);
 
-  // Lockup
+  /* --------------------------------- LOCKUP --------------------------------- */
   campaign.lockup = paramsLT.lockup;
   campaign.streamCancelable = paramsLT.cancelable;
   campaign.streamShape = paramsLT.shape;
@@ -70,7 +70,7 @@ export function createCampaignLT(
     campaign.streamStartTime = startTime;
   }
 
-  // LockupTranched
+  /* ----------------------------- LOCKUP TRANCHED ---------------------------- */
   campaign = createTranchesWithPercentages(campaign, paramsLT.tranchesWithPercentages);
 
   campaign.save();
@@ -86,53 +86,68 @@ export function getCampaign(address: Address): EntityCampaign | null {
   return campaign;
 }
 
-function createBaseCampaign(event: ethereum.Event, params: CampaignCommonParams): EntityCampaign {
-  const id = Id.campaign(params.campaignAddress);
-  const campaign = new EntityCampaign(id);
+export function updateCampaignAdmin(campaign: EntityCampaign, admin: Address): void {
+  campaign.admin = admin;
+  const asset = getOrCreateAsset(Address.fromString(campaign.asset));
+  const nickname = getNickname(Address.fromBytes(campaign.admin), asset, campaign.name);
+  campaign.nickname = nickname;
+  campaign.save();
+}
 
-  /* --------------------------------- WATCHER -------------------------------- */
-  const watcher = getOrCreateWatcher();
-  campaign.subgraphId = watcher.campaignCounter;
-  watcher.campaignCounter = watcher.campaignCounter.plus(ONE);
-  watcher.save();
+export function updateCampaignClaimed(campaign: EntityCampaign, amount: BigInt): void {
+  campaign.claimedAmount = campaign.claimedAmount.plus(amount);
+  campaign.claimedCount = campaign.claimedCount.plus(ONE);
+  campaign.save();
+}
 
-  /* --------------------------------- ASSET --------------------------------- */
+export function updateCampaignClawback(event: ethereum.Event, campaign: EntityCampaign, actionId: string): void {
+  campaign.clawbackAction = actionId;
+  campaign.clawbackTime = event.block.timestamp;
+  campaign.save();
+}
+
+function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase): EntityCampaign {
+  const campaignId = Id.campaign(params.campaignAddress);
+  const campaign = new EntityCampaign(campaignId);
   const asset = getOrCreateAsset(params.asset);
-  campaign.asset = asset.id;
-
-  /* --------------------------------- FACTORY -------------------------------- */
   const factory = getOrCreateFactory(event.address);
-  campaign.factory = factory.id;
-  const campaignCounter = factory.campaignCounter.plus(ONE);
-  campaign.position = campaignCounter;
-  factory.campaignCounter = campaignCounter;
-  factory.save();
+  const watcher = getOrCreateWatcher();
 
   /* --------------------------------- CAMPAIGN -------------------------------- */
-  campaign.chainId = readChainId();
-  campaign.hash = event.transaction.hash;
-  campaign.timestamp = event.block.timestamp;
-  campaign.version = readContractVersion();
-
-  /* --------------------------------- PARAMS --------------------------------- */
   campaign.address = params.campaignAddress;
   campaign.admin = params.admin;
   campaign.aggregateAmount = params.aggregateAmount;
+  campaign.asset = asset.id;
   campaign.category = params.category;
-  campaign.expires = params.expiration.isZero() === false;
-  campaign.expiration = params.expiration;
-  campaign.name = params.name;
-  campaign.nickname = getNickname(params.admin, asset, params.name);
-  campaign.ipfsCID = params.ipfsCID;
-  campaign.root = params.root;
-  campaign.totalRecipients = params.recipientCount;
-  if (params.minimumFee) {
-    campaign.fee = params.minimumFee;
-  }
-
-  /* --------------------------------- DEFAULTS -------------------------------- */
+  campaign.chainId = readChainId();
   campaign.claimedAmount = ZERO;
   campaign.claimedCount = ZERO;
+  campaign.expiration = params.expiration;
+  campaign.expires = params.expiration.isZero() === false;
+  campaign.factory = factory.id;
+  campaign.hash = event.transaction.hash;
+  campaign.ipfsCID = params.ipfsCID;
+  campaign.name = params.name;
+  campaign.nickname = getNickname(params.admin, asset, params.name);
+  campaign.position = factory.campaignCounter;
+  campaign.root = params.merkleRoot;
+  campaign.subgraphId = watcher.campaignCounter;
+  campaign.timestamp = event.block.timestamp;
+  campaign.totalRecipients = params.recipientCount;
+  campaign.version = getContractVersion();
+
+  const minimumFee = params.minimumFee;
+  if (minimumFee) {
+    campaign.fee = minimumFee;
+  }
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  watcher.campaignCounter = watcher.campaignCounter.plus(ONE);
+  watcher.save();
+
+  /* --------------------------------- FACTORY -------------------------------- */
+  factory.campaignCounter = factory.campaignCounter.plus(ONE);
+  factory.save();
 
   return campaign;
 }

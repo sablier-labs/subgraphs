@@ -1,55 +1,67 @@
-import { FlowCommon } from "@envio-flow/bindings";
+import { SablierFlow_v1_0, SablierFlow_v1_1 } from "@envio-flow/bindings";
+import type { SablierFlow_v1_0_VoidFlowStream_handler as Handler } from "@envio-flow/bindings/src/Types.gen";
 import { scale } from "@envio-flow/helpers";
 import { Store } from "@envio-flow/store";
 import { Flow as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 
-FlowCommon.VoidFlowStream.handlerWithLoader({
-  loader: Loader.base,
-  handler: async ({ context, event, loaderReturn }) => {
-    const watcher = loaderReturn.watcher;
-    let stream = loaderReturn.stream;
+/* -------------------------------------------------------------------------- */
+/*                                   HANDLER                                  */
+/* -------------------------------------------------------------------------- */
 
-    /* --------------------------------- STREAM --------------------------------- */
+const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
+  const watcher = loaderReturn.watcher;
+  let stream = loaderReturn.stream;
 
-    // Void is actually an adjustment with the new rate set to zero.
-    const now = BigInt(event.block.timestamp);
-    const elapsedTime = now - stream.lastAdjustmentTimestamp;
-    const streamedAmount = stream.ratePerSecond * elapsedTime;
-    const snapshotAmount = stream.snapshotAmount + streamedAmount;
+  /* --------------------------------- STREAM --------------------------------- */
 
-    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
-    const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
-    const maxAvailable = withdrawnAmount + availableAmount;
+  // Void is actually an adjustment with the new rate set to zero.
+  const now = BigInt(event.block.timestamp);
+  const elapsedTime = now - stream.lastAdjustmentTimestamp;
+  const streamedAmount = stream.ratePerSecond * elapsedTime;
+  const snapshotAmount = stream.snapshotAmount + streamedAmount;
 
-    stream = {
-      ...stream,
-      depletionTime: 0n,
-      forgivenDebt: event.params.writtenOffDebt,
-      lastAdjustmentTimestamp: BigInt(event.block.timestamp),
-      paused: true,
-      pausedTime: BigInt(event.block.timestamp),
-      ratePerSecond: 0n,
-      snapshotAmount: maxAvailable < snapshotAmount ? maxAvailable : snapshotAmount,
-      voided: true,
-      voidedTime: BigInt(event.block.timestamp),
-    };
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const maxAvailable = withdrawnAmount + availableAmount;
 
-    /* --------------------------------- ACTION --------------------------------- */
-    const action = await Store.Action.create(context, event, watcher, {
-      category: enums.ActionCategory.Void,
-      streamId: stream.id,
-      addressA: event.params.recipient,
-      addressB: event.params.sender,
-      amountA: event.params.newTotalDebt,
-      amountB: event.params.writtenOffDebt,
-    });
-    stream = {
-      ...stream,
-      lastAdjustmentAction_id: action.id,
-      pausedAction_id: action.id,
-      voidedAction_id: action.id,
-    };
-    context.Stream.set(stream);
-  },
-});
+  stream = {
+    ...stream,
+    depletionTime: 0n,
+    forgivenDebt: event.params.writtenOffDebt,
+    lastAdjustmentTimestamp: BigInt(event.block.timestamp),
+    paused: true,
+    pausedTime: BigInt(event.block.timestamp),
+    ratePerSecond: 0n,
+    snapshotAmount: maxAvailable < snapshotAmount ? maxAvailable : snapshotAmount,
+    voided: true,
+    voidedTime: BigInt(event.block.timestamp),
+  };
+
+  /* --------------------------------- ACTION --------------------------------- */
+  const action = await Store.Action.create(context, event, watcher, {
+    category: enums.ActionCategory.Void,
+    streamId: stream.id,
+    addressA: event.params.recipient,
+    addressB: event.params.sender,
+    amountA: event.params.newTotalDebt,
+    amountB: event.params.writtenOffDebt,
+  });
+  stream = {
+    ...stream,
+    lastAdjustmentAction_id: action.id,
+    pausedAction_id: action.id,
+    voidedAction_id: action.id,
+  };
+  context.Stream.set(stream);
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  MAPPINGS                                  */
+/* -------------------------------------------------------------------------- */
+
+const handlerWithLoader = { loader: Loader.base, handler };
+
+SablierFlow_v1_0.VoidFlowStream.handlerWithLoader(handlerWithLoader);
+
+SablierFlow_v1_1.VoidFlowStream.handlerWithLoader(handlerWithLoader);

@@ -1,6 +1,6 @@
 import { ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventPause } from "../../bindings";
 import { Store } from "../../store";
 
@@ -33,7 +33,7 @@ export function handlePauseFlowStream(event: EventPause): void {
     amountA: event.params.totalDebt,
     category: "Pause",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
   stream.lastAdjustmentAction = action.id;
   stream.pausedAction = action.id;
   stream.save();

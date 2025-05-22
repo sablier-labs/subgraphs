@@ -1,5 +1,5 @@
-import { logError } from "../../../../common/logger";
 import { EventClawback } from "../../../bindings";
+import { Params } from "../../../helpers/types";
 import { Store } from "../../../store";
 
 export function handleClawback(event: EventClawback): void {
@@ -8,18 +8,14 @@ export function handleClawback(event: EventClawback): void {
     return;
   }
 
-  const action = Store.Action.create(event, campaign, "Clawback");
-  if (action === null) {
-    logError("Could not handle clawback: {}", [event.transaction.hash.toString()]);
-    return;
-  }
+  /* --------------------------------- ACTION --------------------------------- */
+  const action = Store.Action.create(event, campaign, {
+    category: "Clawback",
+    clawbackAmount: event.params.amount,
+    clawbackFrom: event.params.admin,
+    clawbackTo: event.params.to,
+  } as Params.Action);
 
-  campaign.clawbackAction = action.id;
-  campaign.clawbackTime = event.block.timestamp;
-  campaign.save();
-
-  action.clawbackAmount = event.params.amount;
-  action.clawbackFrom = event.params.admin;
-  action.clawbackTo = event.params.to;
-  action.save();
+  /* -------------------------------- CAMPAIGN -------------------------------- */
+  Store.Campaign.updateClawback(event, campaign, action.id);
 }

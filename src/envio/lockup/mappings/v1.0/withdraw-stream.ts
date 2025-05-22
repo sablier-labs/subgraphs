@@ -1,19 +1,17 @@
-import { SablierV2LockupLinear_v1_0 } from "@envio-lockup/bindings";
+import { Contract } from "@envio-lockup/bindings";
+import type { SablierV2LockupLinear_v1_0_WithdrawFromLockupStream_handler as Handler } from "@envio-lockup/bindings/src/Types.gen";
 import { Loader } from "../loader";
 import { Processor } from "../processor";
 
-/**
- * Handles events emitted by:
- * - SablierV2LockupLinear_v1_0
- * - SablierV2LockupDynamic_v1_0
- */
-SablierV2LockupLinear_v1_0.WithdrawFromLockupStream.handlerWithLoader({
-  loader: Loader.base,
-  handler: async ({ context, event, loaderReturn }) => {
-    await Processor.withdraw(context, event, loaderReturn, {
-      amount: event.params.amount,
-      streamId: event.params.streamId,
-      to: event.params.to,
-    });
-  },
-});
+const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
+  await Processor.withdraw(context, event, loaderReturn, {
+    amount: event.params.amount,
+    streamId: event.params.streamId,
+    to: event.params.to,
+  });
+};
+
+const handlerWithLoader = { loader: Loader.base, handler };
+
+Contract.LockupLinear_v1_0.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_0.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);

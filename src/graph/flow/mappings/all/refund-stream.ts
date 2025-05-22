@@ -1,6 +1,6 @@
 import { ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventRefund } from "../../bindings";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
@@ -40,5 +40,5 @@ export function handleRefundFromFlowStream(event: EventRefund): void {
     amountA: event.params.amount,
     category: "Refund",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
 }

@@ -1,4 +1,5 @@
-import { SablierV2LockupLinear_v1_2 } from "@envio-lockup/bindings";
+import { Contract } from "@envio-lockup/bindings";
+import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 import { Processor } from "../processor";
 
@@ -29,27 +30,28 @@ event CreateLockupLinearStream(
 );
 ──────────────────────────────────────────────────────────────
 */
-SablierV2LockupLinear_v1_2.CreateLockupLinearStream.handlerWithLoader({
+Contract.LockupLinear_v1_2.CreateLockupLinearStream.handlerWithLoader({
   loader: Loader.create["v1.2"],
   handler: async ({ context, event, loaderReturn }) => {
+    const params = {
+      asset: event.params.asset,
+      cancelable: event.params.cancelable,
+      category: enums.StreamCategory.LockupLinear,
+      cliffTime: event.params.timestamps[1],
+      depositAmount: event.params.amounts[0],
+      endTime: event.params.timestamps[2],
+      funder: event.params.funder,
+      recipient: event.params.recipient,
+      sender: event.params.sender,
+      startTime: event.params.timestamps[0],
+      tokenId: event.params.streamId,
+      transferable: event.params.transferable,
+    };
     await Processor.Create.linear({
       context,
       loaderReturn,
       event,
-      params: {
-        asset: event.params.asset,
-        cancelable: event.params.cancelable,
-        category: "LockupLinear",
-        cliffTime: event.params.timestamps[1],
-        depositAmount: event.params.amounts[0],
-        endTime: event.params.timestamps[2],
-        funder: event.params.funder,
-        recipient: event.params.recipient,
-        sender: event.params.sender,
-        startTime: event.params.timestamps[0],
-        tokenId: event.params.streamId,
-        transferable: event.params.transferable,
-      },
+      params,
     });
   },
 });

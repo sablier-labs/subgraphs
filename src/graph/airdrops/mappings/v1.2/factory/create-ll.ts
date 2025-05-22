@@ -3,6 +3,7 @@ import { SablierV2MerkleLT_v1_2 as TemplateLL } from "../../../bindings/template
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
+  /* -------------------------------- CAMPAIGN -------------------------------- */
   Processor.Create.merkleLL(
     event,
     {
@@ -13,10 +14,10 @@ export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
       category: "LockupLinear",
       expiration: event.params.baseParams.expiration,
       ipfsCID: event.params.baseParams.ipfsCID,
+      merkleRoot: event.params.baseParams.merkleRoot,
       minimumFee: null,
       name: event.params.baseParams.name,
       recipientCount: event.params.recipientCount,
-      root: event.params.baseParams.merkleRoot,
     },
     {
       cancelable: event.params.baseParams.cancelable,
@@ -24,13 +25,13 @@ export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
       cliffPercentage: null,
       lockup: event.params.lockupLinear,
       shape: null,
-      startPercentage: null, // all v1.2 streams use the claim time as the start time
-      startTime: null,
+      startPercentage: null,
+      startTime: null, // all v1.2 streams use the claim time as the start time
       totalDuration: event.params.streamDurations.total,
       transferable: event.params.baseParams.transferable,
     },
   );
 
-  // Create an instance of the campaign template so that future events can be indexed.
+  /* ---------------------------- CONTRACT TEMPLATE --------------------------- */
   TemplateLL.create(event.params.merkleLL);
 }

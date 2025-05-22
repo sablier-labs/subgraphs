@@ -7,17 +7,26 @@ export namespace Context {
 }
 
 // Contracts
-export {
+import {
   SablierLockup_v2_0,
   SablierV2LockupDynamic_v1_0,
   SablierV2LockupDynamic_v1_1,
   SablierV2LockupDynamic_v1_2,
-  SablierV2LockupLinear_v1_0 as LockupBase,
   SablierV2LockupLinear_v1_0,
   SablierV2LockupLinear_v1_1,
   SablierV2LockupLinear_v1_2,
   SablierV2LockupTranched_v1_2,
 } from "./bindings/src/Handlers.gen";
+export namespace Contract {
+  export const Lockup_v2_0 = SablierLockup_v2_0;
+  export const LockupDynamic_v1_0 = SablierV2LockupDynamic_v1_0;
+  export const LockupDynamic_v1_1 = SablierV2LockupDynamic_v1_1;
+  export const LockupDynamic_v1_2 = SablierV2LockupDynamic_v1_2;
+  export const LockupLinear_v1_0 = SablierV2LockupLinear_v1_0;
+  export const LockupLinear_v1_1 = SablierV2LockupLinear_v1_1;
+  export const LockupLinear_v1_2 = SablierV2LockupLinear_v1_2;
+  export const LockupTranched_v1_2 = SablierV2LockupTranched_v1_2;
+}
 
 // Enums
 import type { ActionCategory_t, StreamCategory_t } from "./bindings/src/db/Enums.gen";

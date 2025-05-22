@@ -1,4 +1,4 @@
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventCreate } from "../../bindings";
 import { Store } from "../../store";
 
@@ -10,5 +10,5 @@ export function handleCreateFlowStream(event: EventCreate): void {
     amountA: event.params.ratePerSecond,
     category: "Create",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
 }

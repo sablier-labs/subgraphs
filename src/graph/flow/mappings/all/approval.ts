@@ -1,5 +1,5 @@
 import { logInfo } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventApproval } from "../../bindings";
 import { Store } from "../../store";
 
@@ -16,5 +16,5 @@ export function handleApproval(event: EventApproval): void {
     addressB: event.params.approved,
     category: "Approval",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
 }

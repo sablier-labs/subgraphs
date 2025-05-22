@@ -1,5 +1,6 @@
-import { SablierV2LockupTranched_v1_2 } from "@envio-lockup/bindings";
+import { Contract } from "@envio-lockup/bindings";
 import { convertTranches } from "@envio-lockup/helpers/tranches";
+import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 import { Processor } from "../processor";
 
@@ -36,27 +37,28 @@ event CreateLockupTranchedStream(
 
 ──────────────────────────────────────────────────────────────
 */
-SablierV2LockupTranched_v1_2.CreateLockupTranchedStream.handlerWithLoader({
+Contract.LockupTranched_v1_2.CreateLockupTranchedStream.handlerWithLoader({
   loader: Loader.create["v1.2"],
   handler: async ({ context, event, loaderReturn }) => {
+    const params = {
+      asset: event.params.asset,
+      cancelable: event.params.cancelable,
+      category: enums.StreamCategory.LockupTranched,
+      depositAmount: event.params.amounts[0],
+      endTime: event.params.timestamps[1],
+      funder: event.params.funder,
+      recipient: event.params.recipient,
+      sender: event.params.sender,
+      startTime: event.params.timestamps[0],
+      tokenId: event.params.streamId,
+      transferable: event.params.transferable,
+      tranches: convertTranches(event.params.tranches),
+    };
     await Processor.Create.tranched({
       context,
       loaderReturn,
       event,
-      params: {
-        asset: event.params.asset,
-        cancelable: event.params.cancelable,
-        category: "LockupTranched",
-        depositAmount: event.params.amounts[0],
-        endTime: event.params.timestamps[1],
-        funder: event.params.funder,
-        recipient: event.params.recipient,
-        sender: event.params.sender,
-        startTime: event.params.timestamps[0],
-        tokenId: event.params.streamId,
-        transferable: event.params.transferable,
-        tranches: convertTranches(event.params.tranches),
-      },
+      params,
     });
   },
 });

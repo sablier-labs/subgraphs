@@ -1,12 +1,12 @@
-import type { Address, Event } from "@envio/common/bindings";
-import { Id } from "@envio/common/id";
+import type { Address, Event } from "@envio-common/bindings";
+import { Id } from "@envio-common/id";
 import type { Context, Entity } from "@envio-lockup/bindings";
 import { updateCounter as updateBatcherCounter } from "./entity-batcher";
 
 export async function create(context: Context.Handler, event: Event, sender: Address): Promise<Entity.Batch> {
   const id = Id.batch(event, sender);
   const batch: Entity.Batch = {
-    batcher_id: Id.batcher(event, sender),
+    batcher_id: Id.batcher(event.chainId, sender),
     hash: "",
     id,
     size: 0n,

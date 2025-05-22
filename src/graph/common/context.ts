@@ -9,11 +9,11 @@ export function readChainId(): BigInt {
   return readBigInt("chainId");
 }
 
-export function readContractAlias(): string {
+export function getContractAlias(): string {
   return readString("alias");
 }
 
-export function readContractVersion(): string {
+export function getContractVersion(): string {
   return readString("version");
 }
 

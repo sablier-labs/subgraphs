@@ -1,5 +1,5 @@
 import { ONE, ZERO } from "../../../common/constants";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventApprovalForAll } from "../../bindings";
 import { Store } from "../../store";
 
@@ -9,5 +9,5 @@ export function handleApprovalForAll(event: EventApprovalForAll): void {
     addressB: event.params.operator,
     amountA: event.params.approved ? ONE : ZERO,
     category: "ApprovalForAll",
-  } as ActionParams);
+  } as CommonParams.Action);
 }

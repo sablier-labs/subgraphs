@@ -1,6 +1,6 @@
-import type { Address } from "@envio/common/bindings";
+import type { Address } from "@envio-common/bindings";
 import type { Entity } from "@envio-lockup/bindings";
-
+import type { Lockup as enums } from "@src/schema/enums";
 export namespace Params {
   export type Cancel = {
     recipient: Address;
@@ -13,7 +13,7 @@ export namespace Params {
   export type CreateCommon = {
     asset: Address;
     cancelable: boolean;
-    category: string;
+    category: enums.StreamCategory;
     depositAmount: bigint;
     endTime: bigint;
     funder: Address;

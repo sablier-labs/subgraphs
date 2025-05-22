@@ -1,4 +1,5 @@
-import { SablierLockup_v2_0 } from "@envio-lockup/bindings";
+import { Contract } from "@envio-lockup/bindings";
+import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 import { Processor } from "../processor";
 
@@ -41,31 +42,32 @@ event CreateLockupLinearStream(
 
 ──────────────────────────────────────────────────────────────
 */
-SablierLockup_v2_0.CreateLockupLinearStream.handlerWithLoader({
+Contract.Lockup_v2_0.CreateLockupLinearStream.handlerWithLoader({
   loader: Loader.create["v2.0"],
   handler: async ({ context, event, loaderReturn }) => {
     const commonParams = event.params.commonParams;
+    const params = {
+      asset: commonParams[4],
+      cancelable: commonParams[5],
+      category: enums.StreamCategory.LockupLinear,
+      cliffTime: event.params.cliffTime,
+      depositAmount: commonParams[3][0],
+      endTime: commonParams[7][1],
+      funder: commonParams[0],
+      recipient: commonParams[2],
+      sender: commonParams[1],
+      shape: commonParams[8],
+      startTime: commonParams[7][0],
+      tokenId: event.params.streamId,
+      transferable: commonParams[6],
+      unlockAmountCliff: event.params.unlockAmounts[1],
+      unlockAmountStart: event.params.unlockAmounts[0],
+    };
     await Processor.Create.linear({
       context,
       loaderReturn,
       event,
-      params: {
-        asset: commonParams[4],
-        cancelable: commonParams[5],
-        category: "LockupLinear",
-        cliffTime: event.params.cliffTime,
-        depositAmount: commonParams[3][0],
-        endTime: commonParams[7][1],
-        funder: commonParams[0],
-        recipient: commonParams[2],
-        sender: commonParams[1],
-        shape: commonParams[8],
-        startTime: commonParams[7][0],
-        tokenId: event.params.streamId,
-        transferable: commonParams[6],
-        unlockAmountCliff: event.params.unlockAmounts[1],
-        unlockAmountStart: event.params.unlockAmounts[0],
-      },
+      params,
     });
   },
 });

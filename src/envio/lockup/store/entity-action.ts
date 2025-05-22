@@ -1,13 +1,13 @@
-import type { Event } from "@envio/common/bindings";
-import { Id } from "@envio/common/id";
-import type { ActionParams } from "@envio/common/params";
+import type { Event } from "@envio-common/bindings";
+import { Id } from "@envio-common/id";
+import type { CommonParams } from "@envio-common/types";
 import type { Context, Entity, EnvioEnum } from "@envio-lockup/bindings";
 
 export async function create(
   context: Context.Handler,
   event: Event,
   watcher: Entity.Watcher,
-  params: ActionParams,
+  params: CommonParams.Action,
 ): Promise<Entity.Action> {
   const id = Id.action(event);
 

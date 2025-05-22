@@ -1,11 +1,12 @@
 import { ethereum } from "@graphprotocol/graph-ts";
-import { AIRDROPS_V1_1, AIRDROPS_V1_2, ONE } from "../../common/constants";
-import { readChainId, readContractVersion } from "../../common/context";
+import { ONE } from "../../common/constants";
+import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
 import { EntityAction, EntityCampaign } from "../bindings";
+import { Params } from "../helpers/types";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createAction(event: ethereum.Event, campaign: EntityCampaign, category: string): EntityAction | null {
+export function createAction(event: ethereum.Event, campaign: EntityCampaign, params: Params.Action): EntityAction {
   const actionId = Id.action(event);
   const action = new EntityAction(actionId);
   const watcher = getOrCreateWatcher();
@@ -13,20 +14,19 @@ export function createAction(event: ethereum.Event, campaign: EntityCampaign, ca
   /* --------------------------------- ACTION --------------------------------- */
   action.block = event.block.number;
   action.campaign = campaign.id;
-  action.category = category;
+  action.category = params.category;
   action.chainId = readChainId();
-  action.from = event.transaction.from;
+  action.claimAmount = params.claimAmount;
+  action.claimIndex = params.claimIndex;
+  action.claimRecipient = params.claimRecipient;
+  action.claimStreamId = params.claimStreamId;
+  action.claimTokenId = params.claimTokenId;
+  action.clawbackAmount = params.clawbackAmount;
+  action.clawbackFrom = params.clawbackFrom;
+  action.fee = params.fee;
   action.hash = event.transaction.hash;
   action.subgraphId = watcher.actionCounter;
   action.timestamp = event.block.timestamp;
-
-  // Only set the fee if it's not an old version.
-  const version = readContractVersion();
-  const isVersionWithFees = version !== AIRDROPS_V1_1 && version !== AIRDROPS_V1_2;
-  if (isVersionWithFees) {
-    action.fee = event.transaction.value;
-  }
-  action.save();
 
   /* --------------------------------- WATCHER -------------------------------- */
   watcher.actionCounter = watcher.actionCounter.plus(ONE);

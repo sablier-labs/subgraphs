@@ -1,5 +1,5 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventRestart } from "../../bindings";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
@@ -38,7 +38,7 @@ export function handleRestartFlowStream(event: EventRestart): void {
     amountA: event.params.ratePerSecond,
     category: "Restart",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
   stream.lastAdjustmentAction = action.id;
   stream.save();
 }

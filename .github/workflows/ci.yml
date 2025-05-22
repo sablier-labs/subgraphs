@@ -21,13 +21,13 @@ jobs:
         with:
           bun-version: "latest"
 
+      - name: "Install the Node.js dependencies"
+        run: "bun install --frozen-lockfile"
+
       - name: "Install Just"
         uses: "extractions/setup-just@v3"
         with:
           just-version: "1"
-
-      - name: "Install the Node.js dependencies"
-        run: "just install-frozen"
 
       - name: "Check the code"
         run: "just check"

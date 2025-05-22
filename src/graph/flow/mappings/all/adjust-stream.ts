@@ -1,5 +1,5 @@
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventAdjust } from "../../bindings";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
@@ -37,7 +37,7 @@ export function handleAdjustFlowStream(event: EventAdjust): void {
     amountB: event.params.newRatePerSecond,
     category: "Adjust",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
   stream.lastAdjustmentAction = action.id;
   stream.save();
 }

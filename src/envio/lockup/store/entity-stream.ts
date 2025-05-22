@@ -1,12 +1,12 @@
-import type { Event } from "@envio/common/bindings";
-import { readContract } from "@envio/common/contract";
-import { Id } from "@envio/common/id";
+import type { Event } from "@envio-common/bindings";
+import { getContract } from "@envio-common/deployments";
+import { Id } from "@envio-common/id";
 import type { Context, Entity, EnvioEnum } from "@envio-lockup/bindings";
 import { Version } from "@sablier/deployments";
 import type { CreateEntities, Params } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
-import { create as createSegment } from "./entity-segment";
-import { create as createTranche } from "./entity-tranche";
+import { create as createSegments } from "./entity-segment";
+import { create as createTranches } from "./entity-tranche";
 
 export async function createDynamic(
   context: Context.Handler,
@@ -15,7 +15,8 @@ export async function createDynamic(
   params: Params.CreateDynamic,
 ): Promise<Entity.Stream> {
   let stream = await createBase(context, entities, event, params);
-  await createSegment(context, stream, params.segments);
+  await context.Stream.set(stream);
+  await createSegments(context, stream, params.segments);
   return stream;
 }
 
@@ -54,7 +55,8 @@ export async function createTranched(
   params: Params.CreateTranche,
 ): Promise<Entity.Stream> {
   const stream = await createBase(context, entities, event, params);
-  await createTranche(context, stream, params.tranches);
+  await context.Stream.set(stream);
+  await createTranches(context, stream, params.tranches);
   return stream;
 }
 
@@ -66,7 +68,7 @@ export async function getOrThrow(
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);
   const stream = await context.Stream.get(id);
   if (!stream) {
-    throw new Error(`Stream not loaded from the database: ${id}`);
+    throw new Error(`Stream not loaded from the entity store: ${id}`);
   }
   return stream;
 }
@@ -85,19 +87,12 @@ async function createBase(
 
   const now = BigInt(event.block.timestamp);
   const streamId = Id.stream(event.srcAddress, event.chainId, params.tokenId);
-  const contract = readContract("lockup", event.chainId, event.srcAddress);
-
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher = {
-    ...watcher,
-    streamCounter: watcher.streamCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
+  const lockup = getContract("lockup", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
-  // Some fields are set to 0/ undefined because they are set later depending on the stream type.
+  // Some fields are set to 0/ undefined because they are set later depending on the stream category.
   const stream: Entity.Stream = {
-    alias: Id.streamAlias(contract.alias, event.chainId, params.tokenId),
+    alias: Id.streamAlias(lockup.alias, event.chainId, params.tokenId),
     asset_id: asset.id,
     assetDecimals: asset.decimals,
     batch_id: batch.id,
@@ -115,7 +110,7 @@ async function createBase(
     duration: 0n,
     endTime: 0n,
     funder: event.transaction.from?.toLowerCase() || "",
-    hash: event.transaction.hash.toLowerCase(),
+    hash: event.transaction.hash,
     id: streamId,
     initial: false,
     initialAmount: 0n,
@@ -134,12 +129,19 @@ async function createBase(
     timestamp: now,
     tokenId: params.tokenId,
     transferable: params.transferable,
-    version: contract.version,
+    version: lockup.version,
     withdrawnAmount: 0n,
   };
 
   /* ---------------------------------- BATCH --------------------------------- */
   await updateBatch(context, event, batch, batcher);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  const updatedWatcher = {
+    ...watcher,
+    streamCounter: watcher.streamCounter + 1n,
+  };
+  await context.Watcher.set(updatedWatcher);
 
   return stream;
 }

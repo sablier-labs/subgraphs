@@ -1,6 +1,6 @@
 import { ZERO } from "../../../common/constants";
 import { logError } from "../../../common/logger";
-import { ActionParams } from "../../../common/types";
+import { CommonParams } from "../../../common/types";
 import { EventVoid } from "../../bindings";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
@@ -43,7 +43,7 @@ export function handleVoidFlowStream(event: EventVoid): void {
     amountB: event.params.writtenOffDebt,
     category: "Void",
     streamId: stream.id,
-  } as ActionParams);
+  } as CommonParams.Action);
   stream.lastAdjustmentAction = action.id;
   stream.pausedAction = action.id;
   stream.voidedAction = action.id;

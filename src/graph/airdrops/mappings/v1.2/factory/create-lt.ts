@@ -4,6 +4,7 @@ import { convertTranchesV1_2 } from "../../../helpers";
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
+  /* -------------------------------- CAMPAIGN -------------------------------- */
   Processor.Create.merkleLT(
     event,
     {
@@ -14,10 +15,10 @@ export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
       category: "LockupLinear",
       expiration: event.params.baseParams.expiration,
       ipfsCID: event.params.baseParams.ipfsCID,
+      merkleRoot: event.params.baseParams.merkleRoot,
       minimumFee: null,
       name: event.params.baseParams.name,
       recipientCount: event.params.recipientCount,
-      root: event.params.baseParams.merkleRoot,
     },
     {
       cancelable: event.params.baseParams.cancelable,
@@ -30,6 +31,6 @@ export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
     },
   );
 
-  // Create an instance of the campaign template so that future events can be indexed.
+  /* ---------------------------- CONTRACT TEMPLATE --------------------------- */
   TemplateLT.create(event.params.merkleLT);
 }

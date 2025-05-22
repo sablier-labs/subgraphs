@@ -17,15 +17,13 @@ export function getNickname(admin: Address, asset: EntityAsset, name: string | n
 }
 
 /**
- * Checks if the given address is a known Lockup contract. This is needed because the Lockup contracts are
- * passed as function parameters when creating a campaign.
- * @param address - The address to check.
- * @returns `true` if the address is a known lockup contract, `false` otherwise.
+ * Checks if the given address is an official Lockup contract. This check is needed because the Lockup contract
+ * is passed as function parameters when creating an airdrop campaign.
  */
-export function isKnownLockup(address: string): boolean {
+export function isOfficialLockup(address: Address): boolean {
   const lockups = readLockups();
   for (let i = 0; i < lockups.length; i++) {
-    if (lockups[i] === address) {
+    if (lockups[i].toLowerCase() === address.toHexString().toLowerCase()) {
       return true;
     }
   }

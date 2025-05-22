@@ -21,7 +21,7 @@ export namespace EnvioConfig {
 
   export type NetworkContract = {
     name: string;
-    address: Sablier.Address | Sablier.Address[];
+    address?: Sablier.Address | Sablier.Address[];
   };
 
   export type Network = {

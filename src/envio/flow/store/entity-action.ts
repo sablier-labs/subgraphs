@@ -1,16 +1,17 @@
-import type { Event } from "@envio/common/bindings";
-import { Id } from "@envio/common/id";
-import type { ActionParams } from "@envio/common/params";
+import type { Event } from "@envio-common/bindings";
+import { Id } from "@envio-common/id";
+import type { CommonParams } from "@envio-common/types";
 import type { Context, Entity, EnvioEnum } from "@envio-flow/bindings";
 
 export async function create(
   context: Context.Handler,
   event: Event,
   watcher: Entity.Watcher,
-  params: ActionParams,
+  params: CommonParams.Action,
 ): Promise<Entity.Action> {
   const id = Id.action(event);
 
+  /* --------------------------------- ACTION --------------------------------- */
   const action: Entity.Action = {
     addressA: params.addressA?.toLowerCase(),
     addressB: params.addressB?.toLowerCase(),
@@ -30,7 +31,7 @@ export async function create(
   };
   await context.Action.set(action);
 
-  // Watcher
+  /* --------------------------------- WATCHER -------------------------------- */
   const updatedWatcher: Entity.Watcher = {
     ...watcher,
     actionCounter: watcher.actionCounter + 1n,

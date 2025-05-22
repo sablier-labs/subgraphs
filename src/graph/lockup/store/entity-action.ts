@@ -2,11 +2,11 @@ import { ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../common/constants";
 import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
-import { ActionParams } from "../../common/types";
+import { CommonParams } from "../../common/types";
 import { EntityAction } from "../bindings";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createAction(event: ethereum.Event, params: ActionParams): EntityAction {
+export function createAction(event: ethereum.Event, params: CommonParams.Action): EntityAction {
   const id = Id.action(event);
   const action = new EntityAction(id);
   const watcher = getOrCreateWatcher();
