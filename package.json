@@ -15,7 +15,8 @@
     "@graphql-tools/merge": "^9.0",
     "@graphql-tools/schema": "^10.0",
     "@rescript/react": "^0.13",
-    "@sablier/deployments": "1.0.0-alpha.40",
+    "@sablier/deployments": "1.0.0-alpha.42",
+    "@sablier/devkit": "github:sablier-labs/devkit",
     "@types/fs-extra": "^11.0",
     "@types/jest": "^29.5",
     "@types/js-yaml": "^4.0",
@@ -28,8 +29,10 @@
     "graphql": "^16.11",
     "graphql-request": "^7.1",
     "graphql-tag": "^2.12",
+    "husky": "^9.1.7",
     "jest": "^29.7",
     "js-yaml": "^4.1",
+    "lint-staged": "^16.0.0",
     "lodash": "^4.17",
     "matchstick-as": "^0.6",
     "prettier": "^3.5.3",
@@ -46,7 +49,7 @@
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
   },
-  "devDependencies": {
-    "@sablier/configs": "github:sablier-labs/configs"
+  "scripts": {
+    "prepare": "husky"
   }
 }

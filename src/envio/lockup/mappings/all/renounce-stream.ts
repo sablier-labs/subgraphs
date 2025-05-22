@@ -28,16 +28,16 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-Contract.LockupDynamic_v1_0.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_0.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_0.RenounceLockupStream.handlerWithLoader(input);
+Contract.LockupLinear_v1_0.RenounceLockupStream.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_1.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_1.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_1.RenounceLockupStream.handlerWithLoader(input);
+Contract.LockupLinear_v1_1.RenounceLockupStream.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_2.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_2.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupTranched_v1_2.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_2.RenounceLockupStream.handlerWithLoader(input);
+Contract.LockupLinear_v1_2.RenounceLockupStream.handlerWithLoader(input);
+Contract.LockupTranched_v1_2.RenounceLockupStream.handlerWithLoader(input);
 
-Contract.Lockup_v2_0.RenounceLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.Lockup_v2_0.RenounceLockupStream.handlerWithLoader(input);

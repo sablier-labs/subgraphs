@@ -23,7 +23,7 @@ export function getNickname(admin: Address, asset: Entity.Asset, name: string | 
  */
 export function isOfficialLockup(chainId: number, address: Address): boolean {
   const lowercasedAddress = address.toLowerCase() as Sablier.Address;
-  const contract = contracts.catalog.lockup[chainId][lowercasedAddress];
+  const contract = contracts.queryCatalog("lockup", chainId, lowercasedAddress);
   if (!contract) {
     return false;
   }

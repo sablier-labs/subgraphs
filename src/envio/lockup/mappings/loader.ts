@@ -97,7 +97,8 @@ export namespace Loader {
   };
 
   async function loaderForCreate(context: Context.Loader, event: Event, params: EventParams): Promise<CreateReturn> {
-    const asset = await Store.Asset.get(context, event.chainId, params.asset);
+    const assetId = Id.asset(params.asset, event.chainId);
+    const asset = await context.Asset.get(assetId);
 
     const batchId = Id.batch(event, params.sender);
     const batch = await context.Batch.get(batchId);
@@ -105,7 +106,8 @@ export namespace Loader {
     const batcherId = Id.batcher(event.chainId, params.sender);
     const batcher = await context.Batcher.get(batcherId);
 
-    const watcher = await Store.Watcher.get(context, event.chainId);
+    const watcherId = event.chainId.toString();
+    const watcher = await context.Watcher.get(watcherId);
 
     return {
       asset,

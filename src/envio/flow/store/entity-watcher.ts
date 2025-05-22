@@ -12,14 +12,6 @@ export function create(chainId: number): Entity.Watcher {
   return watcher;
 }
 
-export async function get(
-  context: Context.Loader | Context.Handler,
-  chainId: number,
-): Promise<Entity.Watcher | undefined> {
-  const id = chainId.toString();
-  return await context.Watcher.get(id);
-}
-
 export async function getOrThrow(context: Context.Loader | Context.Handler, chainId: number): Promise<Entity.Watcher> {
   const id = chainId.toString();
   const watcher = await context.Watcher.get(id);

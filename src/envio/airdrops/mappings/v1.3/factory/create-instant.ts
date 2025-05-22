@@ -39,7 +39,6 @@ struct ConstructorParams {
 */
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
-  loader: Loader.create["v1.3"],
   handler: async ({ context, event, loaderReturn }) => {
     const entities = {
       asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, event.params.baseParams[0])),
@@ -74,4 +73,5 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
       category: enums.ActionCategory.Create,
     });
   },
+  loader: Loader.create["v1.3"],
 });

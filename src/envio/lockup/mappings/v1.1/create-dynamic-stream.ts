@@ -39,7 +39,6 @@ event CreateLockupDynamicStream(
 ──────────────────────────────────────────────────────────────
 */
 Contract.LockupDynamic_v1_1.CreateLockupDynamicStream.handlerWithLoader({
-  loader: Loader.create["v1.1"],
   handler: async ({ context, event, loaderReturn }) => {
     const params = {
       asset: event.params.asset,
@@ -49,17 +48,18 @@ Contract.LockupDynamic_v1_1.CreateLockupDynamicStream.handlerWithLoader({
       endTime: event.params.range[1],
       funder: event.params.funder,
       recipient: event.params.recipient,
-      sender: event.params.sender,
       segments: convertSegments(event.params.segments),
+      sender: event.params.sender,
       startTime: event.params.range[0],
       tokenId: event.params.streamId,
       transferable: event.params.transferable,
     };
     await Processor.Create.dynamic({
       context,
-      loaderReturn,
       event,
+      loaderReturn,
       params,
     });
   },
+  loader: Loader.create["v1.1"],
 });

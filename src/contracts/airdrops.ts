@@ -1,21 +1,21 @@
 import type { Sablier } from "@sablier/deployments";
-import { Version } from "@sablier/deployments";
+import { contracts, Version } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
 
 const airdropsContracts: Indexed.ContractSource<Sablier.Version.Airdrops>[] = [
   {
     isTemplate: false,
-    name: "SablierV2MerkleStreamerFactory",
+    name: contracts.names.SABLIER_V2_MERKLE_STREAMER_FACTORY,
     versions: [Version.Airdrops.V1_1],
   },
   {
     isTemplate: true,
-    name: "SablierV2MerkleStreamerLL",
+    name: contracts.names.SABLIER_V2_MERKLE_STREAMER_LL,
     versions: [Version.Airdrops.V1_1],
   },
   {
     isTemplate: false,
-    name: "SablierV2MerkleLockupFactory",
+    name: contracts.names.SABLIER_V2_MERKLE_LOCKUP_FACTORY,
     versions: [Version.Airdrops.V1_2],
   },
   {
@@ -30,7 +30,7 @@ const airdropsContracts: Indexed.ContractSource<Sablier.Version.Airdrops>[] = [
   },
   {
     isTemplate: false,
-    name: "SablierMerkleFactory",
+    name: contracts.names.SABLIER_MERKLE_FACTORY,
     versions: [Version.Airdrops.V1_3],
   },
   {

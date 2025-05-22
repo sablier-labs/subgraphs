@@ -34,10 +34,10 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 
   /* --------------------------------- ACTION --------------------------------- */
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Transfer,
-    streamId: stream.id,
     addressA: event.params.from,
     addressB: event.params.to,
+    category: enums.ActionCategory.Transfer,
+    streamId: stream.id,
   });
 };
 
@@ -45,16 +45,16 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-Contract.LockupDynamic_v1_0.Transfer.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_0.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_0.Transfer.handlerWithLoader(input);
+Contract.LockupLinear_v1_0.Transfer.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_1.Transfer.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_1.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_1.Transfer.handlerWithLoader(input);
+Contract.LockupLinear_v1_1.Transfer.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
-Contract.LockupTranched_v1_2.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_2.Transfer.handlerWithLoader(input);
+Contract.LockupLinear_v1_2.Transfer.handlerWithLoader(input);
+Contract.LockupTranched_v1_2.Transfer.handlerWithLoader(input);
 
-Contract.Lockup_v2_0.Transfer.handlerWithLoader(handlerWithLoader);
+Contract.Lockup_v2_0.Transfer.handlerWithLoader(input);

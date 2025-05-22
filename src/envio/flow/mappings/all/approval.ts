@@ -11,9 +11,9 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const { stream, watcher } = loaderReturn;
 
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Approval,
     addressA: event.params.owner,
     addressB: event.params.approved,
+    category: enums.ActionCategory.Approval,
     streamId: stream.id,
   });
 };
@@ -22,8 +22,8 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-SablierFlow_v1_0.Approval.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_0.Approval.handlerWithLoader(input);
 
-SablierFlow_v1_1.Approval.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_1.Approval.handlerWithLoader(input);

@@ -39,10 +39,10 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   const { watcher } = loaderReturn;
 
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Approval,
     addressA: event.params.owner,
     addressB: event.params.operator,
     amountA: event.params.approved ? 1n : 0n,
+    category: enums.ActionCategory.Approval,
   });
 };
 
@@ -50,16 +50,16 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader, handler };
+const input = { handler, loader };
 
-Contract.LockupDynamic_v1_0.ApprovalForAll.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_0.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_0.ApprovalForAll.handlerWithLoader(input);
+Contract.LockupLinear_v1_0.ApprovalForAll.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_1.ApprovalForAll.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_1.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_1.ApprovalForAll.handlerWithLoader(input);
+Contract.LockupLinear_v1_1.ApprovalForAll.handlerWithLoader(input);
 
-Contract.LockupDynamic_v1_2.ApprovalForAll.handlerWithLoader(handlerWithLoader);
-Contract.LockupLinear_v1_2.ApprovalForAll.handlerWithLoader(handlerWithLoader);
-Contract.LockupTranched_v1_2.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+Contract.LockupDynamic_v1_2.ApprovalForAll.handlerWithLoader(input);
+Contract.LockupLinear_v1_2.ApprovalForAll.handlerWithLoader(input);
+Contract.LockupTranched_v1_2.ApprovalForAll.handlerWithLoader(input);
 
-Contract.Lockup_v2_0.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+Contract.Lockup_v2_0.ApprovalForAll.handlerWithLoader(input);

@@ -30,19 +30,19 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 
   stream = {
     ...stream,
-    paused: false,
-    pausedTime: undefined,
-    pausedAction_id: undefined,
-    lastAdjustmentTimestamp: now,
-    ratePerSecond: event.params.ratePerSecond,
     depletionTime,
+    lastAdjustmentTimestamp: now,
+    paused: false,
+    pausedAction_id: undefined,
+    pausedTime: undefined,
+    ratePerSecond: event.params.ratePerSecond,
   };
 
   /* --------------------------------- ACTION --------------------------------- */
   const action = await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Restart,
     addressA: event.params.sender,
     amountA: event.params.ratePerSecond,
+    category: enums.ActionCategory.Restart,
     streamId: stream.id,
   });
   stream = {
@@ -56,8 +56,8 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-SablierFlow_v1_0.RestartFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_0.RestartFlowStream.handlerWithLoader(input);
 
-SablierFlow_v1_1.RestartFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_1.RestartFlowStream.handlerWithLoader(input);

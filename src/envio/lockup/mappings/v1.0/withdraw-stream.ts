@@ -11,7 +11,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   });
 };
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-Contract.LockupLinear_v1_0.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupDynamic_v1_0.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_0.WithdrawFromLockupStream.handlerWithLoader(input);
+Contract.LockupDynamic_v1_0.WithdrawFromLockupStream.handlerWithLoader(input);

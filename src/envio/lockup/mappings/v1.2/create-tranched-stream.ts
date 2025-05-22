@@ -38,7 +38,6 @@ event CreateLockupTranchedStream(
 ──────────────────────────────────────────────────────────────
 */
 Contract.LockupTranched_v1_2.CreateLockupTranchedStream.handlerWithLoader({
-  loader: Loader.create["v1.2"],
   handler: async ({ context, event, loaderReturn }) => {
     const params = {
       asset: event.params.asset,
@@ -51,14 +50,15 @@ Contract.LockupTranched_v1_2.CreateLockupTranchedStream.handlerWithLoader({
       sender: event.params.sender,
       startTime: event.params.timestamps[0],
       tokenId: event.params.streamId,
-      transferable: event.params.transferable,
       tranches: convertTranches(event.params.tranches),
+      transferable: event.params.transferable,
     };
     await Processor.Create.tranched({
       context,
-      loaderReturn,
       event,
+      loaderReturn,
       params,
     });
   },
+  loader: Loader.create["v1.2"],
 });

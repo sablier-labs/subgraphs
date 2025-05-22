@@ -18,11 +18,6 @@ export async function create(context: Context.Handler, chainId: number, assetAdd
   return asset;
 }
 
-export async function get(context: Context.Loader | Context.Handler, chainId: number, assetAddress: Address) {
-  const id = Id.asset(assetAddress, chainId);
-  return await context.Asset.get(id);
-}
-
 export async function getOrThrow(context: Context.Loader, chainId: number, address: Address) {
   const id = Id.asset(address, chainId);
   const asset = await context.Asset.get(id);

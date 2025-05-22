@@ -7,7 +7,7 @@ import { Processor } from "../../processor";
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.contractRegister(
   ({ context, event }) => {
     const lockupAddress = event.params.merkleStreamer;
-    if (!isOfficialLockup(lockupAddress)) {
+    if (!isOfficialLockup(event.chainId, lockupAddress)) {
       throw new Error(`Unknown deployment of LockupLinear ${lockupAddress} used in airdrop campaign`);
     }
     context.addSablierV2MerkleStreamerLL_v1_1(lockupAddress);
@@ -46,7 +46,6 @@ struct Durations {
 */
 
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLoader({
-  loader: Loader.create["v1.1"],
   handler: async ({ context, event, loaderReturn }) => {
     const params = {
       admin: event.params.admin,
@@ -77,4 +76,5 @@ Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLo
       params,
     });
   },
+  loader: Loader.create["v1.1"],
 });

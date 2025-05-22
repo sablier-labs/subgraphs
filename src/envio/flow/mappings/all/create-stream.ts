@@ -17,7 +17,8 @@ type LoaderReturn = {
   watcher: Entity.Watcher | undefined;
 };
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const asset = await Store.Asset.get(context, event.chainId, event.params.token);
+  const assetId = Id.asset(event.params.token, event.chainId);
+  const asset = await context.Asset.get(assetId);
 
   const batchId = Id.batch(event, event.params.sender);
   const batch = await context.Batch.get(batchId);
@@ -25,7 +26,8 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const batcherId = Id.batcher(event.chainId, event.params.sender);
   const batcher = await context.Batcher.get(batcherId);
 
-  const watcher = await Store.Watcher.get(context, event.chainId);
+  const watcherId = event.chainId.toString();
+  const watcher = await context.Watcher.get(watcherId);
 
   return {
     asset,
@@ -47,18 +49,18 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   };
 
   const stream = await Store.Stream.create(context, event, entities, {
-    recipient: event.params.recipient,
     ratePerSecond: event.params.ratePerSecond,
+    recipient: event.params.recipient,
     sender: event.params.sender,
     tokenId: event.params.streamId,
     transferable: event.params.transferable,
   });
 
   await Store.Action.create(context, event, entities.watcher, {
-    category: enums.ActionCategory.Create,
     addressA: event.params.sender,
     addressB: event.params.recipient,
     amountA: event.params.ratePerSecond,
+    category: enums.ActionCategory.Create,
     streamId: stream.id,
   });
 };
@@ -67,8 +69,8 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader, handler };
+const input = { handler, loader };
 
-SablierFlow_v1_0.CreateFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_0.CreateFlowStream.handlerWithLoader(input);
 
-SablierFlow_v1_1.CreateFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_1.CreateFlowStream.handlerWithLoader(input);

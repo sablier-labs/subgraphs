@@ -2,6 +2,7 @@ import { Contract } from "@envio-airdrops/bindings";
 import { Store } from "@envio-airdrops/store";
 import { Airdrops as enums } from "@src/schema/enums";
 
+// biome-ignore assist/source/useSortedKeys: handler/loader order matters
 Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
   loader: async ({ context, event }) => {
     const activity = await Store.Activity.get(context, event);

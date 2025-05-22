@@ -37,16 +37,16 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   stream = {
     ...stream,
     availableAmount,
-    depositedAmount,
     depletionTime,
+    depositedAmount,
   };
   context.Stream.set(stream);
 
   /* --------------------------------- ACTION --------------------------------- */
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Deposit,
     addressA: event.params.funder,
     amountA: event.params.amount,
+    category: enums.ActionCategory.Deposit,
     streamId: stream.id,
   });
 };
@@ -55,8 +55,8 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-SablierFlow_v1_0.DepositFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_0.DepositFlowStream.handlerWithLoader(input);
 
-SablierFlow_v1_1.DepositFlowStream.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_1.DepositFlowStream.handlerWithLoader(input);

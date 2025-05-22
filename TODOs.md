@@ -6,23 +6,23 @@
 - [x] Envio Lockup
 - [x] Test to ensure the same mappings directory structure between indexers
 - [x] Params for create in Flow
-- [ ] Use contract manifests for contract names
+- [x] Use contract manifests for contract names
 - [x] Write `isOfficialLockup`
 - [x] Update `config.yaml` with proper YAML for templates
 
 ## Priority 2
 
-- [ ] Matchstick tests
+- [ ] Issue for Matchstick tests
 - [ ] Reuse `Action_t` type and `Asset_t` type between Flow and Lockup
 - [ ] Reuse GraphQL schema between Flow Stream and Lockup Stream
 
 ## Priority 3
 
-- [ ] Run Dockerized version of Envio
+- [ ] Run Dockerized version of Envio OR use pnpm
 
 ## Priority 4
 
-- [ ] Add Husky
+- [x] Add Husky
 - [ ] Bring back CHANGELOGs
 - [ ] Reuse asset, batch, and watcher logic; note: this is difficult
 
@@ -52,7 +52,7 @@
 ## Priority 3
 
 - [x] Immutable entities - check if `derivedFrom` breaks this
-- [x] Use Biome config from `@sablier/configs`
+- [x] Use Biome config from `@sablier/devkit`
 - [x] Standardize address type used in Envio
 
 ## Priority 4

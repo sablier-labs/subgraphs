@@ -29,10 +29,10 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   const { watcher } = loaderReturn;
 
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Approval,
     addressA: event.params.owner,
     addressB: event.params.operator,
     amountA: event.params.approved ? 1n : 0n,
+    category: enums.ActionCategory.Approval,
   });
 };
 
@@ -40,8 +40,8 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader, handler };
+const input = { handler, loader };
 
-SablierFlow_v1_0.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_0.ApprovalForAll.handlerWithLoader(input);
 
-SablierFlow_v1_1.ApprovalForAll.handlerWithLoader(handlerWithLoader);
+SablierFlow_v1_1.ApprovalForAll.handlerWithLoader(input);

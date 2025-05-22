@@ -26,13 +26,13 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader: Loader.base, handler };
+const input = { handler, loader: Loader.base };
 
-Contract.LockupLinear_v1_1.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupDynamic_v1_1.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_1.WithdrawFromLockupStream.handlerWithLoader(input);
+Contract.LockupDynamic_v1_1.WithdrawFromLockupStream.handlerWithLoader(input);
 
-Contract.LockupLinear_v1_2.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupDynamic_v1_2.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
-Contract.LockupTranched_v1_2.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.LockupLinear_v1_2.WithdrawFromLockupStream.handlerWithLoader(input);
+Contract.LockupDynamic_v1_2.WithdrawFromLockupStream.handlerWithLoader(input);
+Contract.LockupTranched_v1_2.WithdrawFromLockupStream.handlerWithLoader(input);
 
-Contract.Lockup_v2_0.WithdrawFromLockupStream.handlerWithLoader(handlerWithLoader);
+Contract.Lockup_v2_0.WithdrawFromLockupStream.handlerWithLoader(input);

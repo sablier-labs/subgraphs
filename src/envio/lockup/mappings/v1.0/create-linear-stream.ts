@@ -31,7 +31,6 @@ event CreateLockupLinearStream(
 ──────────────────────────────────────────────────────────────
 */
 Contract.LockupLinear_v1_0.CreateLockupLinearStream.handlerWithLoader({
-  loader: Loader.create["v1.0"],
   handler: async ({ context, event, loaderReturn }) => {
     const params = {
       asset: event.params.asset,
@@ -49,9 +48,10 @@ Contract.LockupLinear_v1_0.CreateLockupLinearStream.handlerWithLoader({
     };
     await Processor.Create.linear({
       context,
-      loaderReturn,
       event,
+      loaderReturn,
       params,
     });
   },
+  loader: Loader.create["v1.0"],
 });

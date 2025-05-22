@@ -1,8 +1,12 @@
 import type { Entity } from "@envio-airdrops/bindings";
 import { Contract } from "@envio-airdrops/bindings";
 import type {
-  SablierV2MerkleStreamerLL_v1_1_Claim_handler as Handler,
-  SablierV2MerkleStreamerLL_v1_1_Claim_loader as Loader,
+  SablierV2MerkleStreamerLL_v1_1_Claim_handler as Handler_v1_1,
+  SablierV2MerkleLL_v1_2_Claim_handler as Handler_v1_2,
+  SablierMerkleInstant_v1_3_Claim_handler as Handler_v1_3,
+  SablierV2MerkleStreamerLL_v1_1_Claim_loader as Loader_v1_1,
+  SablierV2MerkleLL_v1_2_Claim_loader as Loader_v1_2,
+  SablierMerkleInstant_v1_3_Claim_loader as Loader_v1_3,
 } from "@envio-airdrops/bindings/index";
 import { isVersionWithFees } from "@envio-airdrops/helpers";
 import { Store } from "@envio-airdrops/store";
@@ -17,6 +21,7 @@ type LoaderReturn = {
   watcher: Entity.Watcher;
 };
 
+type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const activity = await Store.Activity.get(context, event);
   const campaign = await Store.Campaign.getOrThrow(context, event);
@@ -32,6 +37,8 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /* -------------------------------------------------------------------------- */
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
+
+type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { campaign, watcher } = loaderReturn;
@@ -65,12 +72,12 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 /*                                  MAPPINGS                                  */
 /* -------------------------------------------------------------------------- */
 
-const handlerWithLoader = { loader, handler };
+const input = { handler, loader };
 
-Contract.Campaign.MerkleStreamerLL_v1_1.Claim.handlerWithLoader(handlerWithLoader);
+Contract.Campaign.MerkleStreamerLL_v1_1.Claim.handlerWithLoader(input);
 
-Contract.Campaign.MerkleLL_v1_2.Claim.handlerWithLoader(handlerWithLoader);
-Contract.Campaign.MerkleLT_v1_2.Claim.handlerWithLoader(handlerWithLoader);
+Contract.Campaign.MerkleLL_v1_2.Claim.handlerWithLoader(input);
+Contract.Campaign.MerkleLT_v1_2.Claim.handlerWithLoader(input);
 
-Contract.Campaign.MerkleLL_v1_3.Claim.handlerWithLoader(handlerWithLoader);
-Contract.Campaign.MerkleLT_v1_3.Claim.handlerWithLoader(handlerWithLoader);
+Contract.Campaign.MerkleLL_v1_3.Claim.handlerWithLoader(input);
+Contract.Campaign.MerkleLT_v1_3.Claim.handlerWithLoader(input);

@@ -1,6 +1,13 @@
-# Set default log level if not specified
+# ---------------------------------------------------------------------------- #
+#                                  ENVIRONMENT                                 #
+# ---------------------------------------------------------------------------- #
 
+# Set default log level if not specified
 export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
+
+# ---------------------------------------------------------------------------- #
+#                                    RECIPES                                   #
+# ---------------------------------------------------------------------------- #
 
 # Show available commands
 default:
@@ -8,14 +15,14 @@ default:
 
 # Check code with Biome
 biome-check:
-    bun run biome check .
+    bun biome check .
 
 # Fix code with Biome
 
 # See https://github.com/biomejs/biome-vscode/discussions/576
 biome-write:
-    bun run biome check --write .
-    bun run biome lint --write --only correctness/noUnusedImports .
+    bun biome check --write .
+    bun biome lint --write --only correctness/noUnusedImports .
 
 # Build all The Graph subgraphs
 build-graph:
@@ -23,20 +30,9 @@ build-graph:
     just -f src/graph/flow/justfile build
     just -f src/graph/lockup/justfile build
 
-# Run all checks
-check: biome-check prettier-check tsc-check
-
-# Clean build files
-clean:
-    rm -rf **/bindings **/build **/logs
-
-# Fix all issues
-fix: biome-write prettier-write
-
 # Generate:
 # - The GraphQL schema
 # - The subgraph manifest
-
 # - The Envio config
 @codegen protocol="all" chain_name="":
     @just codegen-schema {{ protocol }}
@@ -54,6 +50,16 @@ fix: biome-write prettier-write
 # Generate the GraphQL schema
 @codegen-schema protocol="all":
     bun run scripts/codegen/schema.ts {{ protocol }}
+
+# Clean build files
+clean:
+    rm -rf **/bindings **/build **/logs
+
+# Run all code checks
+full-check: biome-check prettier-check tsc-check
+
+# Run all code fixes
+full-write: biome-write prettier-write
 
 # Install the Node.js dependencies
 install *ARGS:
@@ -73,15 +79,15 @@ install *ARGS:
 
 # Check markdown and YAML files with Prettier
 prettier-check:
-    bun run prettier --cache --check "**/*.{md,yaml,yml}"
+    bun prettier --cache --check "**/*.{md,yaml,yml}"
 
 # Format markdown and YAML files with Prettier
 prettier-write:
-    bun run prettier --cache --write --log-level warn "**/*.{md,yaml,yml}"
+    bun prettier --cache --write --log-level warn "**/*.{md,yaml,yml}"
 
 # Run Jest tests
 test:
-    bun run jest
+    bun jest
 
 # Type check with TypeScript
 tsc-check:

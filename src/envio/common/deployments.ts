@@ -6,7 +6,7 @@ import { IndexingError } from "./error";
 
 export function getContract(protocol: Indexed.Protocol, chainId: number, contractAddress: Address): Indexed.Contract {
   const lowercasedAddress = contractAddress.toLowerCase() as Sablier.Address;
-  const contract = contracts.catalog[protocol][chainId][lowercasedAddress];
+  const contract = contracts.queryCatalog(protocol, chainId, lowercasedAddress);
   if (!contract) {
     throw new IndexingError.ContractNotFound(protocol, chainId, contractAddress);
   }
