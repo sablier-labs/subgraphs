@@ -1,3 +1,9 @@
-const sharedConfig = require("@sablier/devkit/prettier");
+const baseConfig = require("@sablier/devkit/prettier");
 
-module.exports = sharedConfig;
+/**
+ * @see https://prettier.io/docs/configuration
+ * @type {import("prettier").Config}
+ */
+const config = baseConfig;
+
+module.exports = config;

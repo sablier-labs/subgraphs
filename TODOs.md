@@ -1,5 +1,26 @@
 # TODOs
 
+## Priority 2
+
+- [ ] Issue for Matchstick tests
+- [ ] Reuse `Action_t` type and `Asset_t` type between Flow and Lockup
+
+## Priority 3
+
+- [ ] Reuse GraphQL schema between Flow Stream and Lockup Stream
+- [x] Switch to PNPM
+
+## Priority 4
+
+- [ ] Bring back CHANGELOGs
+- [ ] Reuse asset, batch, and watcher logic; note: this is difficult
+
+---
+
+# Previous TODOs 1
+
+---
+
 ## Priority 1
 
 - [x] Envio Airdrops
@@ -10,25 +31,11 @@
 - [x] Write `isOfficialLockup`
 - [x] Update `config.yaml` with proper YAML for templates
 
-## Priority 2
-
-- [ ] Issue for Matchstick tests
-- [ ] Reuse `Action_t` type and `Asset_t` type between Flow and Lockup
-- [ ] Reuse GraphQL schema between Flow Stream and Lockup Stream
-
-## Priority 3
-
-- [ ] Run Dockerized version of Envio OR use pnpm
-
 ## Priority 4
 
 - [x] Add Husky
-- [ ] Bring back CHANGELOGs
-- [ ] Reuse asset, batch, and watcher logic; note: this is difficult
 
----
-
-# Previous TODOs
+# Previous TODOs 2
 
 ## Priority 1
 

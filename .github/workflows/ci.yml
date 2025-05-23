@@ -16,13 +16,13 @@ jobs:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
 
-      - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v2"
+      - name: "Install Pnpm"
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: "latest"
+          version: 10
 
       - name: "Install the Node.js dependencies"
-        run: "bun install --frozen-lockfile"
+        run: "pnpm install --frozen-lockfile"
 
       - name: "Install Just"
         uses: "extractions/setup-just@v3"

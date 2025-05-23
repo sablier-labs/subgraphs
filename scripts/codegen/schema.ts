@@ -10,7 +10,8 @@ import logger, { logAndThrow } from "@src/winston";
 import { print } from "graphql";
 import _ from "lodash";
 import { AUTOGEN_COMMENT } from "../constants";
-import { getRelative, validateProtocolArg } from "../helpers";
+import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
+import type { VendorArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -19,23 +20,28 @@ import { getRelative, validateProtocolArg } from "../helpers";
 /**
  * CLI for generating GraphQL schema files
  *
- * @example Generate for Flow:
- * just codegen-schema flow
- *
  * @example Generate for all protocols:
  * just codegen-schema all
  *
+ * @example Generate for Flow:
+ * just codegen-schema flow
+ *
+ * @example Generate for Flow with Graph vendor:
+ * just codegen-schema flow graph
+ *
  * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} vendor - Optional: 'graph', 'envio', or 'all' (default: 'all')
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const protocolArg = validateProtocolArg(args[0]);
+  const vendorArg = validateVendorArg(args[0]);
+  const protocolArg = validateProtocolArg(args[1]);
 
-  function handleAll(): void {
+  function handleAllProtocols(): void {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
 
     for (const p of protocols) {
-      generateSchema(p);
+      generateSchema(vendorArg, p);
     }
 
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -43,9 +49,9 @@ async function main(): Promise<void> {
   }
 
   if (protocolArg === "all") {
-    handleAll();
+    handleAllProtocols();
   } else {
-    generateSchema(protocolArg);
+    generateSchema(vendorArg, protocolArg);
   }
 }
 
@@ -59,10 +65,11 @@ main().catch((error) => {
 
 /**
  * Generates and writes a GraphQL schema for a specific protocol
+ * @param vendor The vendor to generate schemas for
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function generateSchema(protocol: Indexed.Protocol): void {
+function generateSchema(vendor: VendorArg, protocol: Indexed.Protocol): void {
   const typeDefs = loadTypeDefs(protocol);
   const mergedSchema = mergeTypeDefs(typeDefs, { throwOnConflict: true });
   const printedSchema = print(mergedSchema);
@@ -72,12 +79,19 @@ function generateSchema(protocol: Indexed.Protocol): void {
     envio: paths.envioSchema(protocol),
     graph: paths.graphSchema(protocol),
   };
-  fs.writeFileSync(outputPaths.graph, schema);
-  fs.writeFileSync(outputPaths.envio, schema);
+
+  // Write files based on vendor parameter
+  if (vendor === "all" || vendor === "graph") {
+    fs.writeFileSync(outputPaths.graph, schema);
+    logger.info(`📁 Schema path: ${getRelative(outputPaths.graph)}`);
+  }
+
+  if (vendor === "all" || vendor === "envio") {
+    fs.writeFileSync(outputPaths.envio, schema);
+    logger.info(`📁 Schema path: ${getRelative(outputPaths.envio)}`);
+  }
 
   logger.info(`✅ Successfully generated GraphQL schema for ${protocol} protocol`);
-  logger.info(`📁 GraphQL schema path:  ${getRelative(outputPaths.graph)}`);
-  logger.info(`📁 Envio schema path:    ${getRelative(outputPaths.envio)}`);
   console.log();
 }
 

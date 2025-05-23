@@ -13,10 +13,9 @@ node_modules
 *.log
 *.tsbuildinfo
 .env*
-.latest.json
 !.env.example
 config.yaml
-pnpm-lock.yaml
 schema.graphql
 subgraph.yaml
+**/graph/**/tests/**/*.latest.json
 **/manifests/**/*.yaml

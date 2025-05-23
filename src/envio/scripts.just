@@ -1,34 +1,34 @@
+mod root "../../justfile"
+
 set allow-duplicate-variables
 
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
-# Has to be specified by each protocol's justfile
 
-export PROTOCOL := ""
+# Has to be specified by each protocol's justfile
+export PROTOCOL := env_var_or_default("PROTOCOL", "")
 
 # ---------------------------------------------------------------------------- #
 #                                    RECIPES                                   #
 # ---------------------------------------------------------------------------- #
 
-# Clean auto-generated files
+# Remove build files
 clean:
     rm -rf bindings build
 
-# Generate everything needed for building the indexer (the order matters!):
-# 1. GraphQL schema
-# 2. Envio config YAML
-# 3. Envio bindings
-codegen: clean codegen-schema codegen-config codegen-envio
+# Codegen everything for the Envio indexer
+@codegen:
+    just root::codegen-envio {{ PROTOCOL }}
 
-# Generate Envio config
+# Codegen the Envio bindings
+@codegen-bindings:
+    just root::codegen-envio-bindings {{ PROTOCOL }}
+
+# Codegen the Envio config
 @codegen-config:
-    bun run {{ source_dir() }}/../../scripts/codegen/envio-config.ts "{{ PROTOCOL }}"
+    just root::codegen-envio-config {{ PROTOCOL }}
 
-# Generate Envio bindings
-@codegen-envio:
-    bun run envio codegen --config config.yaml --output-directory bindings
-
-# Generate GraphQL schema
+# Codegen the Envio schema
 @codegen-schema:
-    bun run {{ source_dir() }}/../../scripts/codegen/schema.ts "{{ PROTOCOL }}"
+    just root::codegen-schema envio {{ PROTOCOL }}

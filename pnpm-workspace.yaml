@@ -1,0 +1,4 @@
+# Dummy YAML needed to make envio work
+# See https://github.com/enviodev/hyperindex/issues/548
+packages:
+  - "src/envio/*"

@@ -1,11 +1,13 @@
+mod root "../../justfile"
+
 set allow-duplicate-variables
 
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
-# Has to be specified by each protocol's justfile
 
-export PROTOCOL := ""
+# Has to be specified by each protocol's justfile
+export PROTOCOL := env_var_or_default("PROTOCOL", "")
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #
@@ -19,61 +21,60 @@ NODE_XDC := "https://graph.xinfin.network"
 #                                    RECIPES                                   #
 # ---------------------------------------------------------------------------- #
 
-# Authenticate with Graph hosted service
-auth:
-    bun run graph auth --product hosted-service
-
 # Build the subgraph
-@build: codegen
-    bun run graph build manifests/ethereum.yaml --output-dir build
+@build:
+    just root::build-graph {{ PROTOCOL }}
 
-# Clean auto-generated files
-@clean:
+# Remove build files
+clean:
     rm -rf bindings build
 
-# Generate everything needed for building the subgraph (the order matters):
-# 1. GraphQL schema
-# 2. YAML manifest
+# Codegen the subgraph
+@codegen:
+    just root::codegen-graph {{ PROTOCOL }}
 
-# 3. AssemblyScript bindings
-codegen: clean codegen-schema codegen-bindings
+# Codegen the subgraph bindings
+@codegen-bindings:
+    just root::codegen-graph-bindings {{ PROTOCOL }}
 
-# Generate subgraph bindings
-@codegen-bindings: (codegen-manifest "ethereum")
-    bun run graph codegen manifests/ethereum.yaml --output-dir bindings
+# Codegen the subgraph manifest
+@codegen-manifest chain="ethereum":
+    just root::codegen-graph-manifest {{ PROTOCOL }} {{ chain }}
 
-# Generate subgraph manifest for a specific chain
-@codegen-manifest chain_name:
-    bun run {{ source_dir() }}/../../scripts/codegen/graph-manifest.ts {{ PROTOCOL }} {{ chain_name }}
-
-# Generate GraphQL schema
+# Codegen the GraphQL schema
 @codegen-schema:
-    bun run {{ source_dir() }}/../../scripts/codegen/schema.ts "{{ PROTOCOL }}"
+    just root::codegen-schema graph {{ PROTOCOL }}
 
 # Deploy the subgraph
-deploy chain_name:
-    bun run graph deploy sablier-{{ PROTOCOL }}-{{ chain_name }} manifests/{{ chain_name }}.yaml
+deploy chain:
+    pnpm graph deploy \
+    sablier-{{ PROTOCOL }}-{{ chain }} \
+    {{ justfile_dir() }}/manifests/{{ chain }}.yaml
 
 # Deploy to Lightlink
-deploy_lightlink:
-    _deploy_custom {{ NODE_LIGHTLINK }} {{ IPFS_URL }} {{ PROTOCOL }} lightlink
+deploy-lightlink:
+    _deploy-custom lightlink \
+    {{ PROTOCOL }} \
+    {{ NODE_LIGHTLINK }} \
+    {{ IPFS_URL }}
 
 # Deploy to XDC
-deploy_xdc:
-    _deploy_custom {{ NODE_XDC }} {{ IPFS_URL }} {{ PROTOCOL }} xdc
-
-# Run tests with Matchstick
-test:
-    bun run graph test
+deploy-xdc:
+    _deploy-custom xdc \
+    {{ PROTOCOL }} \
+    {{ NODE_XDC }} \
+    {{ IPFS_URL }}
 
 # ---------------------------------------------------------------------------- #
-#                                    PRIVATE                                   #
+#                               RECIPES: HELPERS                               #
 # ---------------------------------------------------------------------------- #
 
 # Deploy to a custom The Graph endpoint
-_deploy_custom node_url ipfs_url protocol chain_name: build
-    bun run graph deploy \
+_deploy-custom chain protocol node_url ipfs_url=IPFS_URL: build
+    #!/usr/bin/env sh
+    subgraph_name="{{ chain }}/sablier-{{ protocol }}-{{ chain }}"
+    pnpm graph deploy \
       --ipfs {{ ipfs_url }} \
       --node {{ node_url }} \
-      {{ chain_name }}/sablier-{{ protocol }}-{{ chain_name }} \
-      manifests/{{ chain_name }}.yaml
+      $subgraph_name \
+      {{ justfile_dir() }}/manifests/{{ chain }}.yaml

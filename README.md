@@ -26,9 +26,9 @@ any informal concerns or feedback, please join our [Discord server](https://disc
 You will need the following software on your machine:
 
 - [Git](https://git-scm.com/downloads)
-- [Node.Js](https://nodejs.org/en/download)
-- [Bun](https://bun.sh)
 - [Just](https://github.com/casey/just)
+- [Node.Js](https://nodejs.org/en/download)
+- [Pnpm](https://pnpm.io)
 
 For running the tests for The Graph, you will need:
 
@@ -45,15 +45,15 @@ $ git clone git@github.com:sablier-labs/indexers.git && cd indexers
 Then, run this to install the Node.js dependencies and build the contracts:
 
 ```shell
-$ bun install
+$ pnpm install
 ```
 
 Now you can start making changes.
 
-To see a list of all available scripts:
+To see a list of all available scripts, run this command:
 
 ```shell
-$ bun run
+$ just --list
 ```
 
 ## License

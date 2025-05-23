@@ -16,29 +16,31 @@ import { getRelative, validateProtocolArg } from "../helpers";
 /**
  * CLI for generating subgraph manifests
  *
- * @example Generate for Flow:
- * just codegen-manifest flow
+ * @example Generate for all protocols on all chains:
+ * just codegen-manifest all all
  *
- * @example Generate for Flow on a specific chain:
- * just codegen-manifest flow polygon
+ * @example Generate for all protocols on a specific chain:
+ * just codegen-manifest all polygon
  *
- * @example Generate for all protocols:
- * just codegen-manifest all
- *
- * @param {string} [protocol='all'] - 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} [chainName] - If not provided, the manifest will be generated for all chains.
+ * @param {string} [protocol] - 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} [chainName] - The chain name to generate manifests for. Use 'all' to generate for all chains.
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const protocolArg = validateProtocolArg(args[0]);
-  const chainNameArg = args[1];
+  let chainNameArg = args[1];
 
-  function handleAll() {
+  if (!chainNameArg) {
+    logAndThrow("❌ Error: Chain name argument is required. Use 'all' to generate for all chains.");
+  }
+  chainNameArg = chainNameArg.toLowerCase();
+
+  function handleAllProtocols() {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
     let totalManifests = 0;
 
     for (const p of protocols) {
-      if (!chainNameArg) {
+      if (chainNameArg === "all") {
         const filesGenerated = generateForAllChains(p, true);
         totalManifests += filesGenerated;
         logger.info(`✅ Generated ${filesGenerated} manifest${filesGenerated !== 1 ? "s" : ""} for ${p} protocol`);
@@ -47,16 +49,16 @@ async function main(): Promise<void> {
       }
     }
 
-    if (!chainNameArg) {
+    if (chainNameArg === "all") {
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
       logger.info(`🎉 Successfully generated ${totalManifests} manifests in total!\n`);
     }
   }
 
   if (protocolArg === "all") {
-    handleAll();
+    handleAllProtocols();
   } else {
-    if (!chainNameArg) {
+    if (chainNameArg.toLowerCase() === "all") {
       generateForAllChains(protocolArg);
     } else {
       generateForSpecificChain(protocolArg, chainNameArg);
@@ -129,9 +131,6 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
   logger.info(`📁 Manifest path: ${manifestPath}`);
 }
 
-/**
- * @returns The relative path to the manifest file.
- */
 function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graphManifests(protocol);
   const content = getYAMLContent(protocol, chainId);

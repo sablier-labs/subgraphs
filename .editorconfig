@@ -14,3 +14,6 @@ trim_trailing_whitespace = true
 
 [*.just]
 indent_size = 4
+
+[justfile]
+indent_size = 4

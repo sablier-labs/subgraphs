@@ -15,7 +15,7 @@ import { getRelative, validateProtocolArg } from "../helpers";
  * CLI for generating Envio config file
  *
  * @example Generate for Flow:
- * bun run scripts/codegen/envio-config.ts flow
+ * pnpm tsx scripts/codegen/envio-config.ts flow
  *
  * @param {string} [protocol='all'] - 'flow' or 'lockup'
  */
