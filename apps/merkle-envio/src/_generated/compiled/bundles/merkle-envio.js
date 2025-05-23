@@ -17,6 +17,7 @@ var optimism = require("../addresses/optimism");
 var polygon = require("../addresses/polygon");
 var scroll = require("../addresses/scroll");
 var sepolia = require("../addresses/sepolia");
+var sophon = require("../addresses/sophon");
 var superseed = require("../addresses/superseed");
 var tangle = require("../addresses/tangle");
 var zksync = require("../addresses/zksync");
@@ -57,6 +58,7 @@ var chains = function () {
         [polygon, definitions_1.default.polygon],
         [scroll, definitions_1.default.scroll],
         [false ? experimental : sepolia, definitions_1.default.sepolia],
+        [sophon, definitions_1.default.sophon],
         [superseed, definitions_1.default.superseed],
         [tangle, definitions_1.default.tangle],
         [zksync, definitions_1.default.zksync],

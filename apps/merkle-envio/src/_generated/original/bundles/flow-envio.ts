@@ -14,6 +14,7 @@ import * as optimism from "../addresses/optimism";
 import * as polygon from "../addresses/polygon";
 import * as scroll from "../addresses/scroll";
 import * as sepolia from "../addresses/sepolia";
+import * as sophon from "../addresses/sophon";
 import * as superseed from "../addresses/superseed";
 import * as tangle from "../addresses/tangle";
 import * as zksync from "../addresses/zksync";
@@ -57,6 +58,7 @@ export const chains = () => {
     [polygon, definitions.polygon],
     [false ? experimental : sepolia, definitions.sepolia],
     [scroll, definitions.scroll],
+    [sophon, definitions.sophon],
     [superseed, definitions.superseed],
     [tangle, definitions.tangle],
     [zksync, definitions.zksync],

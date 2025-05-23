@@ -284,6 +284,18 @@ networks:
       - name: MerkleLockupV22
       - name: MerkleLockupV23
       - name: MerkleInstant
+  - id: 50104
+    start_block: 11290000
+    hypersync_config:
+      url: https://sophon.hypersync.xyz
+    contracts:
+      - name: MerkleLockupFactoryV23
+        address:
+          - 0x9d4923e2ff0b9dadc447a89f528760928f84d0f7
+      - name: MerkleLockupV21
+      - name: MerkleLockupV22
+      - name: MerkleLockupV23
+      - name: MerkleInstant
   - id: 5330
     start_block: 2896400
     hypersync_config:
