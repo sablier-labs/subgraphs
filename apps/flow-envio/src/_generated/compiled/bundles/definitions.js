@@ -253,5 +253,13 @@ var definitions = {
         }),
         [],
     ],
+    sophon: [
+        chains_1.sophon,
+        [
+            "https://rpc.sophon.xyz",
+            "https://rpc-quicknode.sophon.xyz",
+            "https://sophon-mainnet-public.unifra.io",
+        ],
+    ],
 };
 exports.default = definitions;

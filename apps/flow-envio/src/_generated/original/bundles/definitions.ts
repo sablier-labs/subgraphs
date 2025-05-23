@@ -18,6 +18,7 @@ import {
   polygon,
   scroll,
   sepolia,
+  sophon,
   zksync, // @ts-ignore
 } from "viem/chains";
 
@@ -262,6 +263,14 @@ const definitions: Record<string, [Chain, string[]]> = {
       },
     }),
     [],
+  ],
+  sophon: [
+    sophon,
+    [
+      "https://rpc.sophon.xyz",
+      "https://rpc-quicknode.sophon.xyz",
+      "https://sophon-mainnet-public.unifra.io",
+    ],
   ],
 } as const;
 

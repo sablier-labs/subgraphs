@@ -194,6 +194,14 @@ networks:
       - name: FlowV11
         address:
           - 0xc4f104ce12cb12484ff67cf0c4bd0561f0014ec2
+  - id: 50104
+    start_block: 11290000
+    hypersync_config:
+      url: https://sophon.hypersync.xyz
+    contracts:
+      - name: FlowV11
+        address:
+          - 0x20c9a3e27322fc2b21ced430d1b2e12d90804db6
   - id: 5330
     start_block: 2896400
     hypersync_config:
