@@ -22,6 +22,8 @@
     "@types/js-yaml": "^4.0",
     "@types/lodash": "^4.17",
     "@types/node": "^22.15",
+    "add": "^2.0.6",
+    "bignumber.js": "^9.3.0",
     "dir-compare": "^5.0.0",
     "envio": "^2.20",
     "fs-extra": "^11.3",

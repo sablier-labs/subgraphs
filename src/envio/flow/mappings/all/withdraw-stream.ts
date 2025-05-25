@@ -37,6 +37,6 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 
 const input = { handler, loader: Loader.base };
 
-SablierFlow_v1_0.WithdrawFromFlowStream.input(input);
+SablierFlow_v1_0.WithdrawFromFlowStream.handlerWithLoader(input);
 
-SablierFlow_v1_1.WithdrawFromFlowStream.input(input);
+SablierFlow_v1_1.WithdrawFromFlowStream.handlerWithLoader(input);

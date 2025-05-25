@@ -33,7 +33,7 @@ type Stream @entity(immutable: false) {
   hash: Bytes!
 
   """
-  Timestamp of the Ethereum transaction that created this stream.
+  Unix timestamp of the Ethereum transaction that created this stream.
   """
   timestamp: BigInt!
 
@@ -86,7 +86,7 @@ type Stream @entity(immutable: false) {
   category: StreamCategory!
 
   """
-  The Flow contract the stream originates from.
+  The contract the stream originates from.
   """
   contract: Bytes!
 
@@ -147,7 +147,7 @@ type Stream @entity(immutable: false) {
   refundedAmount: BigInt!
 
   """
-  Manager of the stream, defined at creation by the creator. This is usually the same as the creator.
+  Manager of the stream, with ability to cancel the stream.
   """
   sender: Bytes!
 

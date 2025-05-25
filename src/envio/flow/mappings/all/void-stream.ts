@@ -62,6 +62,6 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 
 const input = { handler, loader: Loader.base };
 
-SablierFlow_v1_0.VoidFlowStream.input(input);
+SablierFlow_v1_0.VoidFlowStream.handlerWithLoader(input);
 
-SablierFlow_v1_1.VoidFlowStream.input(input);
+SablierFlow_v1_1.VoidFlowStream.handlerWithLoader(input);

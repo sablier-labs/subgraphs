@@ -55,7 +55,7 @@ type Segment @entity(immutable: true) {
 type Stream @entity(immutable: false) {
   # ------------------------------------ IDs ----------------------------------- #
   """
-  Unique identifier: {contractAddress}-{chainId}-{tokenId}"
+  Unique identifier: {contractAddress}-{chainId}-{tokenId}
   """
   id: String!
 
@@ -113,6 +113,7 @@ type Stream @entity(immutable: false) {
   ERC-20 token distributed via this stream.
   """
   asset: Asset!
+
   """
   ERC-20 token decimals. Stored here to avoid loading the asset entity on each stream.
   """
@@ -145,7 +146,7 @@ type Stream @entity(immutable: false) {
   category: StreamCategory!
 
   """
-  The Lockup contract the stream originates from.
+  The contract the stream originates from.
   """
   contract: Bytes!
 
@@ -208,7 +209,7 @@ type Stream @entity(immutable: false) {
   renounceTime: BigInt
 
   """
-  Manager of the stream, defined at creation by the funder. This is usually the same as the funder.
+  Manager of the stream, with ability to cancel the stream.
   """
   sender: Bytes!
 

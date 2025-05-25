@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
-
 # Set default log level if not specified
+
 export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
 
 # ---------------------------------------------------------------------------- #
@@ -20,6 +20,7 @@ default:
     @just --list
 
 # Authenticate with Graph hosted service
+[group("graph")]
 auth:
     pnpm graph auth --product hosted-service
 
@@ -28,12 +29,13 @@ biome-check:
     pnpm biome check .
 
 # Fix code with Biome
+
 # See https://github.com/biomejs/biome-vscode/discussions/576
 biome-write:
     pnpm biome check --write .
     pnpm biome lint --write --only correctness/noUnusedImports .
 
-# Clean build files
+# Remove build files
 clean:
     rm -rf **/bindings **/build **/generated **/logs
 
@@ -48,22 +50,25 @@ install *args:
     pnpm install {{ args }}
 
 # Print available chain arguments
+[group("print")]
 @print-chains:
-    pnpm exec tsc scripts/print-chains.ts
+    pnpm tsc scripts/print-chains.ts
 
 # Print available log levels available in Winston
+[group("print")]
 @print-log-levels:
     echo "Available log levels: error, warn, info, http, verbose, debug, silly"
 
 # Print available protocol arguments
+[group("print")]
 @print-protocol-args:
     echo "Available protocol arguments: all, flow, lockup, airdrops"
 
-# Check markdown and YAML files with Prettier
+# Check code with Prettier
 prettier-check:
     pnpm prettier --cache --check "{{ globs_prettier }}"
 
-# Format markdown and YAML files with Prettier
+# Format code with Prettier
 prettier-write:
     pnpm prettier --cache --write "{{ globs_prettier }}"
 
@@ -75,12 +80,12 @@ test:
 tsc-check:
     pnpm tsc --noEmit
 
-
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: CODEGEN                               #
 # ---------------------------------------------------------------------------- #
 
 # Build all subgraphs
+[group("graph")]
 @build-graph protocol="all":
     just for-each _build-graph {{ protocol }}
 
@@ -90,6 +95,7 @@ _build-graph protocol: (codegen-graph protocol)
         src/graph/{{ protocol }}/manifests/ethereum.yaml
 
 # Codegen all vendors
+[group("codegen")]
 @codegen:
     just codegen-envio
     just codegen-graph
@@ -97,8 +103,10 @@ _build-graph protocol: (codegen-graph protocol)
 # Codegen everything for the Envio indexer (order matters):
 # 1. GraphQL schema
 # 2. Envio config YAML
-# 3. Envio bindings
+
 [doc("Codegen everything needed for building the Envio indexer")]
+[group("codegen")]
+[group("envio")]
 @codegen-envio protocol="all":
     just for-each _codegen-envio {{ protocol }}
 
@@ -108,6 +116,8 @@ _build-graph protocol: (codegen-graph protocol)
     just codegen-envio-bindings {{ protocol }}
 
 # Codegen the Envio bindings
+[group("codegen")]
+[group("envio")]
 @codegen-envio-bindings protocol="all":
     just for-each _codegen-envio-bindings {{ protocol }}
 
@@ -120,6 +130,8 @@ _codegen-envio-bindings protocol:
         --output-directory $protocol_dir/bindings
 
 # Codegen the Envio config YAML
+[group("codegen")]
+[group("envio")]
 @codegen-envio-config protocol="all":
     pnpm tsx scripts/codegen/envio-config.ts {{ protocol }}
 
@@ -127,7 +139,10 @@ _codegen-envio-bindings protocol:
 # 1. GraphQL schema
 # 2. YAML manifest
 # 3. AssemblyScript bindings
+
 [doc("Codegen everything needed for building the Graph subgraph")]
+[group("codegen")]
+[group("graph")]
 @codegen-graph protocol="all":
     just for-each _codegen-graph {{ protocol }}
 
@@ -137,6 +152,8 @@ _codegen-envio-bindings protocol:
     just codegen-graph-bindings {{ protocol }}
 
 # Codegen the Graph subgraph bindings
+[group("codegen")]
+[group("graph")]
 @codegen-graph-bindings protocol="all":
     just for-each _codegen-graph-bindings {{ protocol }}
 
@@ -149,10 +166,15 @@ _codegen-graph-bindings-for protocol:
         $protocol_dir/manifests/ethereum.yaml
 
 # Codegen the Graph subgraph manifest
+[group("codegen")]
+[group("graph")]
 @codegen-graph-manifest protocol="all" chain="all":
     pnpm tsx scripts/codegen/graph-manifest.ts {{ protocol }} {{ chain }}
 
 # Codegen the GraphQL schema
+[group("codegen")]
+[group("envio")]
+[group("graph")]
 @codegen-schema vendor="all" protocol="all":
     pnpm tsx scripts/codegen/schema.ts {{ vendor }} {{ protocol }}
 
