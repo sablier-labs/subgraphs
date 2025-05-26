@@ -2,7 +2,8 @@
  * @file Processors are reusable logic that is used in multiple event handlers.
  */
 
-import type { Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
+import { Store as CommonStore } from "@envio-common/store";
 import { type Context, type Entity } from "@envio-lockup/bindings";
 import { type CreateEntities, type Params } from "@envio-lockup/helpers/types";
 import { Store } from "@envio-lockup/store";
@@ -16,7 +17,7 @@ export namespace Processor {
 
   export async function cancel(
     context: Context.Handler,
-    event: Event,
+    event: Envio.Event,
     loaderReturn: Loader.BaseReturn,
     params: Params.Cancel,
   ): Promise<void> {
@@ -54,7 +55,7 @@ export namespace Processor {
   export namespace Create {
     type Input = {
       context: Context.Handler;
-      event: Event;
+      event: Envio.Event;
       loaderReturn: Loader.CreateReturn;
       params: Params.CreateLinear | Params.CreateDynamic | Params.CreateTranche;
     };
@@ -91,20 +92,20 @@ export namespace Processor {
     async function loadEntities(
       context: Context.Handler,
       loaderReturn: Loader.CreateReturn,
-      event: Event,
+      event: Envio.Event,
       params: EventParams,
     ): Promise<CreateEntities> {
       return {
         asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, params.asset)),
-        batch: loaderReturn.batch ?? (await Store.Batch.create(context, event, params.sender)),
-        batcher: loaderReturn.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
-        watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
+        batch: loaderReturn.batch ?? (await Store.Batch.create(event, params.sender)),
+        batcher: loaderReturn.batcher ?? (await Store.Batcher.create(event, params.sender)),
+        watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(event.chainId)),
       };
     }
 
     async function action(
       context: Context.Handler,
-      event: Event,
+      event: Envio.Event,
       watcher: Entity.Watcher,
       params: Params.CreateCommon,
       streamId: string,
@@ -125,7 +126,7 @@ export namespace Processor {
 
   export async function withdraw(
     context: Context.Handler,
-    event: Event,
+    event: Envio.Event,
     loaderReturn: Loader.BaseReturn,
     params: Params.Withdraw,
   ): Promise<void> {

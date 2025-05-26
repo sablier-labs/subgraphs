@@ -1,11 +1,11 @@
 import type { Context, Entity, EnvioEnum } from "@envio-airdrops/bindings";
 import type { ActionEntities, Params } from "@envio-airdrops/helpers/types";
-import type { Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
 
 export async function create(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: ActionEntities,
   params: Params.Action,
 ): Promise<Entity.Action> {

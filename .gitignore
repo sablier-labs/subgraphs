@@ -5,7 +5,6 @@ node_modules
 **/flow/bindings
 **/lockup/bindings
 **/build
-**/_generated
 **/generated
 **/.bin
 
@@ -17,5 +16,5 @@ node_modules
 config.yaml
 schema.graphql
 subgraph.yaml
+**/graph/**/manifests/**/*.yaml
 **/graph/**/tests/**/*.latest.json
-**/manifests/**/*.yaml

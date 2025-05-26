@@ -1,4 +1,4 @@
-import type { Address, Event } from "./bindings";
+import type { Envio } from "./bindings";
 
 export namespace Id {
   /**
@@ -8,7 +8,7 @@ export namespace Id {
    * @example
    * activity-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6-137-20300
    */
-  export function activity(event: Event): string {
+  export function activity(event: Envio.Event): string {
     const campaignId = campaign(event.chainId, event.srcAddress);
     const timestamp = event.block.timestamp;
     const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
@@ -22,7 +22,7 @@ export namespace Id {
    * @example
    * 0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35-3
    */
-  export function action(event: Event): string {
+  export function action(event: Envio.Event): string {
     return `${event.transaction.hash}-${event.logIndex}`;
   }
 
@@ -38,7 +38,7 @@ export namespace Id {
    * @example
    * 137-0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6
    */
-  export function batch(event: Event, sender: Address): string {
+  export function batch(event: Envio.Event, sender: Envio.Address): string {
     return `${event.chainId}-${event.transaction.hash}-${sender}`;
   }
 
@@ -46,7 +46,7 @@ export namespace Id {
    * @example
    * 137-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6
    */
-  export function batcher(chainId: number, sender: Address): string {
+  export function batcher(chainId: number, sender: Envio.Address): string {
     return `${chainId}-${sender}`;
   }
 
@@ -54,14 +54,14 @@ export namespace Id {
    * @example
    * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
    */
-  export function campaign(chainId: number, campaignAddress: Address): string {
+  export function campaign(chainId: number, campaignAddress: Envio.Address): string {
     return `${campaignAddress}-${chainId}`;
   }
   /**
    * @example
    * 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4-137-42
    */
-  export function stream(contractAddress: Address, chainId: number, tokenId: bigint | string): string {
+  export function stream(contractAddress: Envio.Address, chainId: number, tokenId: bigint | string): string {
     return `${contractAddress}-${chainId}-${tokenId}`;
   }
 
@@ -69,7 +69,7 @@ export namespace Id {
    * @example
    * LK-137-42
    */
-  export function streamAlias(contractAlias: Address, chainId: number, tokenId: bigint): string {
+  export function streamAlias(contractAlias: Envio.Address, chainId: number, tokenId: bigint): string {
     return `${contractAlias}-${chainId}-${tokenId}`;
   }
 }

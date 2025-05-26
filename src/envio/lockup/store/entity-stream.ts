@@ -1,7 +1,8 @@
-import type { Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { getContract } from "@envio-common/deployments";
 import { Id } from "@envio-common/id";
 import type { Context, Entity, EnvioEnum } from "@envio-lockup/bindings";
+import { fetchOrReadProxender } from "@envio-lockup/helpers/proxy";
 import { Version } from "@sablier/deployments";
 import type { CreateEntities, Params } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
@@ -10,7 +11,7 @@ import { create as createTranches } from "./entity-tranche";
 
 export async function createDynamic(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CreateDynamic,
 ): Promise<Entity.Stream> {
@@ -22,7 +23,7 @@ export async function createDynamic(
 
 export async function createLinear(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CreateLinear,
 ): Promise<Entity.Stream> {
@@ -50,7 +51,7 @@ export async function createLinear(
 
 export async function createTranched(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CreateTranche,
 ): Promise<Entity.Stream> {
@@ -62,7 +63,7 @@ export async function createTranched(
 
 export async function getOrThrow(
   context: Context.Loader,
-  event: Event,
+  event: Envio.Event,
   tokenId: bigint | string,
 ): Promise<Entity.Stream> {
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);
@@ -80,7 +81,7 @@ export async function getOrThrow(
 async function createBase(
   context: Context.Handler,
   entities: CreateEntities,
-  event: Event,
+  event: Envio.Event,
   params: Params.CreateCommon,
 ): Promise<Entity.Stream> {
   const { asset, batch, batcher, watcher } = entities;
@@ -90,6 +91,21 @@ async function createBase(
   const lockup = getContract("lockup", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
+
+  const funder = event.transaction.from?.toLowerCase() || "";
+  const recipient = params.recipient.toLowerCase();
+  const sender = params.sender.toLowerCase();
+  const parties = [recipient, sender];
+
+  // PRBProxy was only used in Lockup v1.0
+  let proxender: Envio.Address | undefined;
+  if (lockup.version === Version.Lockup.V1_0) {
+    proxender = await fetchOrReadProxender(event.chainId, event.srcAddress, sender);
+    if (proxender) {
+      parties.push(proxender);
+    }
+  }
+
   // Some fields are set to 0/ undefined because they are set later depending on the stream category.
   const stream: Entity.Stream = {
     alias: Id.streamAlias(lockup.alias, event.chainId, params.tokenId),
@@ -109,20 +125,20 @@ async function createBase(
     depositAmount: 0n,
     duration: 0n,
     endTime: 0n,
-    funder: event.transaction.from?.toLowerCase() || "",
+    funder,
     hash: event.transaction.hash,
     id: streamId,
     initial: false,
     initialAmount: 0n,
     intactAmount: 0n,
-    parties: [params.recipient.toLowerCase(), params.sender.toLowerCase()],
+    parties,
     position: batch.size,
-    proxender: undefined,
-    proxied: false,
-    recipient: params.recipient.toLowerCase(),
+    proxender: proxender,
+    proxied: Boolean(proxender),
+    recipient,
     renounceAction_id: undefined,
     renounceTime: undefined,
-    sender: params.sender.toLowerCase(),
+    sender,
     shape: params.shape,
     startTime: now,
     subgraphId: BigInt(watcher.streamCounter),

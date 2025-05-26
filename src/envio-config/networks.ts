@@ -1,5 +1,5 @@
 import { queries, releasesByProtocol } from "@sablier/deployments";
-import { envioChains, getChainName } from "@src/chains";
+import { envioChains } from "@src/chains";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import { sanitizeName } from "@src/helpers";
@@ -42,7 +42,6 @@ type ExtractContractsReturn = {
  */
 function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractContractsReturn {
   const networkContracts: EnvioConfig.NetworkContract[] = [];
-  const chainName = getChainName(chainId);
   let startBlock = 0;
 
   for (const release of releasesByProtocol[protocol]) {
@@ -50,7 +49,8 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
     // Some contracts are not deployed on all chains, so we skip them.
     if (!deployment) {
-      logger.debug(`No deployment found for ${protocol} ${release.version} on chain ${chainName}`);
+      const chainName = queries.chains.getName(chainId) ?? "chain";
+      logger.debug(`No deployment found for ${protocol} ${release.version} on ${chainName}`);
       continue;
     }
 

@@ -1,6 +1,6 @@
 import type { Context, Entity, EnvioEnum } from "@envio-airdrops/bindings";
 import type { CreateEntities, Params } from "@envio-airdrops/helpers/types";
-import type { Address, Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { getContract } from "@envio-common/deployments";
 import { Id } from "@envio-common/id";
 import { getNickname } from "../helpers/campaign";
@@ -8,7 +8,7 @@ import { getOrThrow as getAssetOrThrow } from "./entity-asset";
 
 export async function createInstant(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CampaignBase,
 ): Promise<Entity.Campaign> {
@@ -19,7 +19,7 @@ export async function createInstant(
 
 export async function createLL(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CampaignLL,
 ): Promise<Entity.Campaign> {
@@ -45,7 +45,7 @@ export async function createLL(
 
 export async function createLT(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CampaignLT,
 ): Promise<Entity.Campaign> {
@@ -64,7 +64,7 @@ export async function createLT(
   return campaign;
 }
 
-export async function getOrThrow(context: Context.Loader, event: Event) {
+export async function getOrThrow(context: Context.Loader, event: Envio.Event) {
   const id = Id.campaign(event.chainId, event.srcAddress);
   const campaign = await context.Campaign.get(id);
   if (!campaign) {
@@ -75,9 +75,9 @@ export async function getOrThrow(context: Context.Loader, event: Event) {
 
 export async function updateAdmin(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   campaign: Entity.Campaign,
-  admin: Address,
+  admin: Envio.Address,
 ): Promise<void> {
   const asset = await getAssetOrThrow(context, event.chainId, campaign.asset_id);
   const updatedCampaign: Entity.Campaign = {
@@ -90,7 +90,7 @@ export async function updateAdmin(
 
 export async function updateClawback(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   campaign: Entity.Campaign,
   actionId: string,
 ): Promise<void> {
@@ -117,7 +117,7 @@ export async function updateClaimed(
 
 async function createBaseCampaign(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.CampaignBase,
 ): Promise<Entity.Campaign> {

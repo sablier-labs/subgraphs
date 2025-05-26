@@ -29,7 +29,6 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     depletionTime = now + extraAmount / event.params.newRatePerSecond;
   }
 
-  // Update stream entity.
   stream = {
     ...stream,
     depletionTime,

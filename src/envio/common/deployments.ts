@@ -1,10 +1,14 @@
 import { queries, type Sablier } from "@sablier/deployments";
 import { getIndexedContract } from "@src/contracts";
 import type { Indexed } from "@src/types";
-import type { Address } from "./bindings";
+import type { Envio } from "./bindings";
 import { IndexingError } from "./error";
 
-export function getContract(protocol: Indexed.Protocol, chainId: number, contractAddress: Address): Indexed.Contract {
+export function getContract(
+  protocol: Indexed.Protocol,
+  chainId: number,
+  contractAddress: Envio.Address,
+): Indexed.Contract {
   const lowercasedAddress = contractAddress.toLowerCase() as Sablier.Address;
   const contract = queries.contracts.get({ chainId, contractAddress: lowercasedAddress, protocol });
   if (!contract) {
@@ -16,7 +20,7 @@ export function getContract(protocol: Indexed.Protocol, chainId: number, contrac
   return getIndexedContract(contract);
 }
 
-export function getContractAlias(protocol: Indexed.Protocol, chainId: number, contractAddress: string) {
+export function getContractAlias(protocol: Indexed.Protocol, chainId: number, contractAddress: Envio.Address) {
   const contract = getContract(protocol, chainId, contractAddress);
   if (!contract.alias) {
     throw new IndexingError.AliasNotFound(protocol, chainId, contractAddress);
@@ -24,7 +28,7 @@ export function getContractAlias(protocol: Indexed.Protocol, chainId: number, co
   return contract.alias;
 }
 
-export function getContractVersion(protocol: Indexed.Protocol, chainId: number, contractAddress: string) {
+export function getContractVersion(protocol: Indexed.Protocol, chainId: number, contractAddress: Envio.Address) {
   const contract = getContract(protocol, chainId, contractAddress);
   return contract.version;
 }

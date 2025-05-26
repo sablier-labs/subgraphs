@@ -5,7 +5,7 @@ import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { CommonParams } from "../../common/types";
 import { EntityStream } from "../bindings";
-import { loadProxy } from "../helpers";
+import { loadProxender } from "../helpers";
 import { Params } from "../helpers/types";
 import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
@@ -150,13 +150,16 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.position = batch.size.minus(ONE);
 
   /* ---------------------------------- PROXY --------------------------------- */
-  const proxy = loadProxy(params.sender);
-  if (proxy) {
-    stream.parties.push(proxy);
-    stream.proxied = true;
-    stream.proxender = proxy;
-  } else {
-    stream.proxied = false;
+  const contractVersion = getContractVersion();
+  // PRBProxy was only used in Lockup v1.0
+  stream.proxied = false;
+  if (contractVersion === LOCKUP_V1_0) {
+    const proxender = loadProxender(params.sender);
+    if (proxender) {
+      stream.parties.push(proxender);
+      stream.proxied = true;
+      stream.proxender = proxender;
+    }
   }
 
   /* --------------------------------- STREAM --------------------------------- */
@@ -179,7 +182,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.timestamp = event.block.timestamp;
   stream.tokenId = params.tokenId;
   stream.transferable = params.transferable;
-  stream.version = getContractVersion();
+  stream.version = contractVersion;
   stream.withdrawnAmount = ZERO;
 
   /* --------------------------------- ACTION --------------------------------- */

@@ -1,5 +1,5 @@
 import { queries, type Sablier } from "@sablier/deployments";
-import { getChainName } from "@src/chains";
+import { getGraphChainName } from "@src/chains";
 import indexedContracts, { getIndexedContract } from "@src/contracts";
 import type { Manifest } from "@src/graph-manifest/types";
 import { sanitizeName } from "@src/helpers";
@@ -58,7 +58,7 @@ function createCommon(params: CreateSourcesParams) {
   return {
     kind: "ethereum/contract",
     name: dataSourceName,
-    network: getChainName(chainId),
+    network: getGraphChainName(chainId),
     context,
     source: {
       address: isTemplate ? undefined : contractAddress,

@@ -1,5 +1,5 @@
 import { Contract } from "@envio-lockup/bindings";
-import { convertTranches } from "@envio-lockup/helpers/tranches";
+import { convertTranches } from "@envio-lockup/helpers";
 import { Lockup as enums } from "@src/schema/enums";
 import { Loader } from "../loader";
 import { Processor } from "../processor";

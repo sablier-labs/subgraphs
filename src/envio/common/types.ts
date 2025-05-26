@@ -6,13 +6,11 @@ export type ERC20Metadata = {
   symbol: string;
 };
 
-export namespace CommonParams {
-  export type Action = {
-    addressA?: string;
-    addressB?: string;
-    amountA?: bigint;
-    amountB?: bigint;
-    category: enums.Flow.ActionCategory | enums.Lockup.ActionCategory;
-    streamId?: string;
-  };
-}
+export type ParamsAction = {
+  addressA?: string;
+  addressB?: string;
+  amountA?: bigint;
+  amountB?: bigint;
+  category: enums.Flow.ActionCategory | enums.Lockup.ActionCategory;
+  streamId?: string;
+};

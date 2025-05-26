@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { erc20Abi, erc20Abi_bytes32, hexToString, trim } from "viem";
-import type { Address } from "./bindings";
+import type { Envio } from "./bindings";
 import { DataCategory, initDataEntry } from "./data";
 import { getClient } from "./rpc-clients";
 import type { ERC20Metadata } from "./types";
@@ -8,12 +8,11 @@ import type { ERC20Metadata } from "./types";
 /**
  * Reads or fetches ERC20 metadata for a given asset address. If the data is not found in the cache, it will be fetched from the chain.
  */
-export async function readOrFetchERC20Metadata(chainId: number, address: Address): Promise<ERC20Metadata> {
-  const key = address.toLowerCase();
+export async function readOrFetchERC20Metadata(chainId: number, address: Envio.Address): Promise<ERC20Metadata> {
+  const dataKey = address.toLowerCase();
   const data = initDataEntry(DataCategory.Asset, chainId);
-  const asset = data.read(key);
+  const asset = data.read(dataKey);
 
-  // If the data is found in the cache, return it.
   if (!_.isEmpty(asset)) {
     return asset;
   }
@@ -21,13 +20,13 @@ export async function readOrFetchERC20Metadata(chainId: number, address: Address
   // Try standard ERC20 ABI first
   try {
     const result = await fetchStandard(address, chainId);
-    data.save({ [key]: result });
+    data.save({ [dataKey]: result });
     return result;
   } catch (err1) {
     // Try bytes32 ERC20 ABI as fallback
     try {
       const result = await fetchBytes32(address, chainId);
-      data.save({ [key]: result });
+      data.save({ [dataKey]: result });
       return result;
     } catch (err2) {
       console.error("Failed to fetch ERC20 metadata", err1, err2);
@@ -40,23 +39,23 @@ export async function readOrFetchERC20Metadata(chainId: number, address: Address
   }
 }
 
-async function fetchStandard(address: Address, chainId: number): Promise<ERC20Metadata> {
+async function fetchStandard(address: Envio.Address, chainId: number): Promise<ERC20Metadata> {
   const client = getClient(chainId);
-  const contract = { abi: erc20Abi, address: address as `0x${string}` };
+  const erc20Contract = { abi: erc20Abi, address: address as `0x${string}` };
 
   const results = await client.multicall({
     allowFailure: false,
     contracts: [
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "decimals",
       },
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "name",
       },
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "symbol",
       },
     ],
@@ -69,23 +68,23 @@ async function fetchStandard(address: Address, chainId: number): Promise<ERC20Me
   };
 }
 
-async function fetchBytes32(address: Address, chainId: number): Promise<ERC20Metadata> {
+async function fetchBytes32(address: Envio.Address, chainId: number): Promise<ERC20Metadata> {
   const client = getClient(chainId);
-  const contract = { abi: erc20Abi_bytes32, address: address as `0x${string}` };
+  const erc20Contract = { abi: erc20Abi_bytes32, address: address as `0x${string}` };
 
   const results = await client.multicall({
     allowFailure: false,
     contracts: [
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "decimals",
       },
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "name",
       },
       {
-        ...contract,
+        ...erc20Contract,
         functionName: "symbol",
       },
     ],

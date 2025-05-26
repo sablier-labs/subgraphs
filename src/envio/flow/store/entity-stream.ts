@@ -1,4 +1,4 @@
-import type { Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { getContract } from "@envio-common/deployments";
 import { Id } from "@envio-common/id";
 import type { Context, Entity } from "@envio-flow/bindings";
@@ -8,7 +8,7 @@ import { update as updateBatch } from "./entity-batch";
 
 export async function create(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   entities: CreateEntities,
   params: Params.Create,
 ): Promise<Entity.Stream> {
@@ -72,7 +72,7 @@ export async function create(
 
 export async function getOrThrow(
   context: Context.Loader,
-  event: Event,
+  event: Envio.Event,
   tokenId: bigint | string,
 ): Promise<Entity.Stream> {
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);

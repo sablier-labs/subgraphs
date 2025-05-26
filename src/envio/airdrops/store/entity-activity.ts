@@ -1,8 +1,12 @@
 import type { Context, Entity } from "@envio-airdrops/bindings";
-import type { Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
 
-export async function create(context: Context.Handler, event: Event, campaignId: string): Promise<Entity.Activity> {
+export async function create(
+  context: Context.Handler,
+  event: Envio.Event,
+  campaignId: string,
+): Promise<Entity.Activity> {
   const timestamp = event.block.timestamp;
   const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
 
@@ -19,7 +23,7 @@ export async function create(context: Context.Handler, event: Event, campaignId:
   return activity;
 }
 
-export async function get(context: Context.Loader, event: Event): Promise<Entity.Activity | undefined> {
+export async function get(context: Context.Loader, event: Envio.Event): Promise<Entity.Activity | undefined> {
   return await context.Activity.get(Id.activity(event));
 }
 

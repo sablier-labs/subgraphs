@@ -2,7 +2,7 @@ import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
 export function getAssetDefs(protocol: Indexed.Protocol) {
-  const protocolField =
+  const customField =
     protocol !== "airdrops"
       ? `"""
        Streams that rely on this token
@@ -42,7 +42,7 @@ export function getAssetDefs(protocol: Indexed.Protocol) {
       Symbol of the ERC20 token
       """
       symbol: String!
-      ${protocolField}
+      ${customField}
     }
   `;
 }

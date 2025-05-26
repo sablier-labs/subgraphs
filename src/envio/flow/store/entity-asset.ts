@@ -1,24 +1,13 @@
-import type { Address } from "@envio-common/bindings";
-import { readOrFetchERC20Metadata } from "@envio-common/erc20";
+import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
+import { Store as CommonStore } from "@envio-common/store";
 import type { Context, Entity } from "@envio-flow/bindings";
 
-export async function create(context: Context.Handler, chainId: number, assetAddress: Address) {
-  const metadata = await readOrFetchERC20Metadata(chainId, assetAddress);
-  const asset: Entity.Asset = {
-    address: assetAddress.toLowerCase(),
-    chainId: BigInt(chainId),
-    decimals: BigInt(metadata.decimals),
-    id: Id.asset(assetAddress, chainId),
-    name: metadata.name,
-    symbol: metadata.symbol,
-  };
-  await context.Asset.set(asset);
-
-  return asset;
+export async function create(context: Context.Handler, chainId: number, assetAddress: Envio.Address) {
+  return CommonStore.Asset.create<typeof context, Entity.Asset>(context, chainId, assetAddress);
 }
 
-export async function getOrThrow(context: Context.Loader, chainId: number, address: Address) {
+export async function getOrThrow(context: Context.Loader, chainId: number, address: Envio.Address) {
   const id = Id.asset(address, chainId);
   const asset = await context.Asset.get(id);
   if (!asset) {

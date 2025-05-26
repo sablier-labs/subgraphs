@@ -12,7 +12,7 @@ import type {
   SablierV2MerkleLockupFactory_v1_2_CreateMerkleLT_loader as CreateLT_v1_2,
   SablierMerkleFactory_v1_3_CreateMerkleLT_loader as CreateLT_v1_3,
 } from "@envio-airdrops/bindings/src/Types.gen";
-import type { Address, Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
 import { Version } from "@sablier/deployments";
 
@@ -27,7 +27,11 @@ export namespace Loader {
     watcher: Entity.Watcher | undefined;
   };
 
-  async function loaderForCreate(context: Context.Loader, event: Event, assetAddress: Address): Promise<CreateReturn> {
+  async function loaderForCreate(
+    context: Context.Loader,
+    event: Envio.Event,
+    assetAddress: Envio.Address,
+  ): Promise<CreateReturn> {
     const assetId = Id.asset(assetAddress, event.chainId);
     const asset = await context.Asset.get(assetId);
 

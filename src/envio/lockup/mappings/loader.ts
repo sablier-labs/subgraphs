@@ -2,7 +2,7 @@
  * @file Reusable Envio loaders
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
-import type { Address, Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
 import type { Context, Entity } from "@envio-lockup/bindings";
 import type {
@@ -92,11 +92,15 @@ export namespace Loader {
   };
 
   type EventParams = {
-    asset: Address;
-    sender: Address;
+    asset: Envio.Address;
+    sender: Envio.Address;
   };
 
-  async function loaderForCreate(context: Context.Loader, event: Event, params: EventParams): Promise<CreateReturn> {
+  async function loaderForCreate(
+    context: Context.Loader,
+    event: Envio.Event,
+    params: EventParams,
+  ): Promise<CreateReturn> {
     const assetId = Id.asset(params.asset, event.chainId);
     const asset = await context.Asset.get(assetId);
 

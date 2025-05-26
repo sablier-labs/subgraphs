@@ -1,3 +1,5 @@
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
@@ -16,8 +18,7 @@ globs_prettier := "**/*.{md,yaml,yml}"
 # ---------------------------------------------------------------------------- #
 
 # Show available commands
-default:
-    @just --list
+default: full-check
 
 # Authenticate with Graph hosted service
 [group("graph")]
@@ -28,12 +29,16 @@ auth:
 biome-check:
     pnpm biome check .
 
+alias bc := biome-check
+
 # Fix code with Biome
 
 # See https://github.com/biomejs/biome-vscode/discussions/576
 biome-write:
     pnpm biome check --write .
     pnpm biome lint --write --only correctness/noUnusedImports .
+
+alias bw := biome-write
 
 # Remove build files
 clean:
@@ -42,12 +47,18 @@ clean:
 # Run all code checks
 full-check: biome-check prettier-check tsc-check
 
+alias check := full-check
+alias fc := full-check
+
 # Run all code fixes
 full-write: biome-write prettier-write
 
+alias write := full-write
+alias fw := full-write
+
 # Install the Node.js dependencies
 install *args:
-    pnpm install {{ args }}
+    ni install {{ args }}
 
 # Print available chain arguments
 [group("print")]
@@ -68,13 +79,23 @@ install *args:
 prettier-check:
     pnpm prettier --cache --check "{{ globs_prettier }}"
 
+alias pc := prettier-check
+
 # Format code with Prettier
 prettier-write:
     pnpm prettier --cache --write "{{ globs_prettier }}"
 
+alias pw := prettier-write
+
+# Setup Husky
+setup:
+    pnpm husky
+
 # Run Jest tests
 test:
     pnpm jest
+
+alias t := test
 
 # Type check with TypeScript
 tsc-check:
@@ -157,7 +178,7 @@ _codegen-envio-bindings protocol:
 @codegen-graph-bindings protocol="all":
     just for-each _codegen-graph-bindings {{ protocol }}
 
-_codegen-graph-bindings-for protocol:
+_codegen-graph-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/graph/{{ protocol }}"
     rm -rf $protocol_dir/bindings

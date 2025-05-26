@@ -1,7 +1,7 @@
 import type { Context } from "@envio-airdrops/bindings";
 import type { CreateEntities, Params } from "@envio-airdrops/helpers/types";
 import { Store } from "@envio-airdrops/store";
-import type { Address, Event } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import { Airdrops as enums } from "@src/schema/enums";
 import { type Loader } from "./loader";
 
@@ -9,7 +9,7 @@ export namespace Processor {
   export namespace Create {
     type Input = {
       context: Context.Handler;
-      event: Event;
+      event: Envio.Event;
       loaderReturn: Loader.CreateReturn;
       params: Params.CampaignLL | Params.CampaignLT;
     };
@@ -44,9 +44,9 @@ export namespace Processor {
 
     async function loadEntities(
       context: Context.Handler,
-      event: Event,
+      event: Envio.Event,
       loaderReturn: Loader.CreateReturn,
-      assetAddress: Address,
+      assetAddress: Envio.Address,
     ): Promise<CreateEntities> {
       return {
         asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, assetAddress)),

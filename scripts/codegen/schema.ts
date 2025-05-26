@@ -4,10 +4,10 @@ import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { paths, SCHEMA_DIR } from "@src/paths";
-import { enums, getAssetDefs, getWatcherDefs } from "@src/schema";
+import { enums, getAssetDefs, getStreamDefs, getWatcherDefs } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger, { logAndThrow } from "@src/winston";
-import { print } from "graphql";
+import { type DocumentNode, print } from "graphql";
 import _ from "lodash";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
@@ -55,7 +55,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error) => {
+main().catch((error: Error) => {
   logAndThrow(`❌ Error generating GraphQL schema: ${error.message}`);
 });
 
@@ -131,25 +131,22 @@ function getEnumDefs(protocol: Indexed.Protocol) {
 function loadTypeDefs(protocol: Indexed.Protocol): string[] {
   const enumDefs = getEnumDefs(protocol);
   const assetDefs = getAssetDefs(protocol);
+  let streamDefs: DocumentNode | undefined;
   const watcherDefs = getWatcherDefs(protocol);
 
-  const schemaPaths = [];
-  const protocolPath = path.join(SCHEMA_DIR, `${protocol}.graphql`);
+  const protocolPaths = [path.join(SCHEMA_DIR, `${protocol}.graphql`)];
 
   switch (protocol) {
     case "airdrops":
-      schemaPaths.push(protocolPath);
       break;
     case "flow":
-    case "lockup":
-      schemaPaths.push(
-        protocolPath,
-        path.join(SCHEMA_DIR, "common/action.graphql"),
-        path.join(SCHEMA_DIR, "common/batch.graphql"),
-      );
+    case "lockup": {
+      streamDefs = getStreamDefs(protocol);
+      protocolPaths.push(path.join(SCHEMA_DIR, "common/action.graphql"), path.join(SCHEMA_DIR, "common/batch.graphql"));
       break;
+    }
   }
 
-  const otherTypeDefs = loadFilesSync(schemaPaths);
-  return [enumDefs, assetDefs, watcherDefs, ...otherTypeDefs];
+  const otherTypeDefs = loadFilesSync(protocolPaths);
+  return [enumDefs, assetDefs, streamDefs, watcherDefs, ...otherTypeDefs];
 }

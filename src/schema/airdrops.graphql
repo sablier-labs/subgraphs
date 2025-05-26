@@ -94,6 +94,9 @@ type Action @entity(immutable: true) {
   clawbackTo: Bytes
 }
 
+"""
+User activity grouped by day.
+"""
 type Activity @entity(immutable: true) {
   """
   Unique identifier: activity-{campaignId}-{dayOfSnapshot}
@@ -126,6 +129,9 @@ type Activity @entity(immutable: true) {
   timestamp: BigInt!
 }
 
+"""
+Entity for Merkle campaigns.
+"""
 type Campaign @entity(immutable: false) {
   # ------------------------------------ IDs ----------------------------------- #
 
@@ -315,6 +321,9 @@ type Campaign @entity(immutable: false) {
   streamTransferable: Boolean
 }
 
+"""
+Entity for Merkle factories, which deploy campaigns.
+"""
 type Factory @entity(immutable: true) {
   """
   Contract address.
@@ -347,6 +356,9 @@ type Factory @entity(immutable: true) {
   campaigns: [Campaign!]! @derivedFrom(field: "factory")
 }
 
+"""
+Used in Merkle Lockup campaigns for the vesting schedule.
+"""
 type Tranche @entity(immutable: true) {
   """
   Unique identifier: {campaignId}-{position}

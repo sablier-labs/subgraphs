@@ -1,25 +1,25 @@
 import { type Entity } from "@envio-airdrops/bindings";
-import type { Address } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import type * as enums from "@src/schema/enums";
 export namespace Params {
   export type Action = {
     category: enums.Airdrops.ActionCategory;
     claimAmount?: bigint;
     claimIndex?: bigint;
-    claimRecipient?: Address;
+    claimRecipient?: Envio.Address;
     claimStreamId?: string;
     claimTokenId?: bigint;
     clawbackAmount?: bigint;
-    clawbackFrom?: Address;
-    clawbackTo?: Address;
+    clawbackFrom?: Envio.Address;
+    clawbackTo?: Envio.Address;
     fee?: bigint;
   };
 
   export type CampaignBase = {
-    admin: Address;
+    admin: Envio.Address;
     aggregateAmount: bigint;
-    asset: Address;
-    campaignAddress: Address;
+    asset: Envio.Address;
+    campaignAddress: Envio.Address;
     category: enums.Airdrops.CampaignCategory;
     expiration: bigint;
     merkleRoot: string;
@@ -31,7 +31,7 @@ export namespace Params {
 
   type CampaignLockup = CampaignBase & {
     cancelable: boolean;
-    lockup: Address;
+    lockup: Envio.Address;
     shape: string | undefined;
     startTime: bigint | undefined;
     transferable: boolean;

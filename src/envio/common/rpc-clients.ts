@@ -9,6 +9,7 @@ const clients: PublicClient[] = [];
 for (const envioChain of envioChains) {
   const chain = queries.chains.getOrThrow(envioChain.id);
 
+  // @todo: add multiple RPC URLs
   const URLs = _.compact([chain.rpcUrls.default.http[0], envioChain.envio.hypersync]).map((url) => http(url));
   const transport = fallback(URLs, {
     rank: false,
@@ -18,8 +19,7 @@ for (const envioChain of envioChains) {
     batch: {
       multicall: true,
     },
-    // TODO: add chain definition
-    // chain,
+    chain,
     transport,
   });
   clients.push(client);

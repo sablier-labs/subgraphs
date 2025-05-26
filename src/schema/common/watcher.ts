@@ -2,16 +2,7 @@ import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
 export function getWatcherDefs(protocol: Indexed.Protocol) {
-  const protocolField =
-    protocol === "airdrops"
-      ? `"""
-       Global counter for campaigns.
-       """
-       campaignCounter: BigInt!`
-      : `"""
-       Global index for streams.
-       """
-       streamCounter: BigInt!`;
+  const counterField = protocol === "airdrops" ? "campaign" : "stream";
 
   return gql`
     type Watcher @entity(immutable: false) {
@@ -34,7 +25,10 @@ export function getWatcherDefs(protocol: Indexed.Protocol) {
       Used for debugging purposes. They are normally empty.
       """
       logs: [String!]
-      ${protocolField}
+      """
+      Global counter.
+      """
+      ${counterField}Counter: BigInt!
     }
   `;
 }

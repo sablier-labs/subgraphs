@@ -1,24 +1,24 @@
-import type { Address } from "@envio-common/bindings";
+import type { Envio } from "@envio-common/bindings";
 import type { Entity } from "@envio-lockup/bindings";
 import type { Lockup as enums } from "@src/schema/enums";
 export namespace Params {
   export type Cancel = {
-    recipient: Address;
+    recipient: Envio.Address;
     recipientAmount: bigint;
-    sender: Address;
+    sender: Envio.Address;
     senderAmount: bigint;
     streamId: bigint;
   };
 
   export type CreateCommon = {
-    asset: Address;
+    asset: Envio.Address;
     cancelable: boolean;
     category: enums.StreamCategory;
     depositAmount: bigint;
     endTime: bigint;
-    funder: Address;
-    recipient: Address;
-    sender: Address;
+    funder: Envio.Address;
+    recipient: Envio.Address;
+    sender: Envio.Address;
     shape?: string;
     startTime: bigint;
     tokenId: bigint;
@@ -42,7 +42,7 @@ export namespace Params {
   export type Withdraw = {
     amount: bigint;
     streamId: bigint;
-    to: Address;
+    to: Envio.Address;
   };
 }
 

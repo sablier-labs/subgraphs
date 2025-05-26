@@ -1,355 +1,95 @@
-import { chains } from "@sablier/deployments";
+import { chains, queries } from "@sablier/deployments";
+import _ from "lodash";
 import { logAndThrow } from "./winston";
-
-type EnvioConfig = {
-  isEnabled: boolean;
-  hypersync?: string;
-};
-
-type GraphConfig = {
-  isEnabled: boolean;
-  name: string;
-};
 
 type SupportedChain = {
   id: number;
-  envio?: EnvioConfig;
-  graph?: GraphConfig;
+  envio?: { isEnabled: boolean; hypersync?: string };
+  graph?: { isEnabled: boolean; name: string };
 };
 
 type EnvioChain = SupportedChain & {
-  envio: EnvioConfig;
+  envio: { isEnabled: boolean; hypersync?: string };
   graph: never;
 };
 
 type GraphChain = SupportedChain & {
   envio: never;
-  graph: GraphConfig;
+  graph: { isEnabled: boolean; name: string };
 };
 
-export const supportedChains: SupportedChain[] = [
-  /* -------------------------------------------------------------------------- */
-  /*                                  MAINNETS                                  */
-  /* -------------------------------------------------------------------------- */
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "abstract",
-    },
-    id: chains.abstract.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "arbitrum-one",
-    },
-    id: chains.arbitrum.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "avalanche",
-    },
-    id: chains.avalanche.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "base",
-    },
-    id: chains.base.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "berachain",
-    },
-    id: chains.berachain.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "blast",
-    },
-    id: chains.blast.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "bsc",
-    },
-    id: chains.bsc.id,
-  },
-  {
-    envio: {
-      hypersync: "https://chiliz.hypersync.xyz",
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "chiliz",
-    },
-    id: chains.chiliz.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "ethereum",
-    },
-    id: chains.ethereum.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "form",
-    },
-    id: chains.form.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "gnosis",
-    },
-    id: chains.gnosis.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "iotex",
-    },
-    id: chains.iotex.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "lightlink",
-    },
-    id: chains.lightlink.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "linea",
-    },
-    id: chains.linea.id,
-  },
-  {
-    envio: {
-      hypersync: "https://mode.hypersync.xyz",
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "mode",
-    },
-    id: chains.mode.id,
-  },
-  {
-    envio: {
-      hypersync: "https://morph.hypersync.xyz/",
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "morph",
-    },
-    id: chains.morph.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "optimism",
-    },
-    id: chains.optimism.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "polygon",
-    },
-    id: chains.polygon.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "scroll",
-    },
-    id: chains.scroll.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "sei",
-    },
-    id: chains.sei.id,
-  },
-  {
-    envio: {
-      hypersync: "https://extrabud.hypersync.xyz",
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "superseed",
-    },
-    id: chains.superseed.id,
-  },
-  {
-    envio: {
-      hypersync: "https://tangle.hypersync.xyz",
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "tangle",
-    },
-    id: chains.tangle.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "unichain",
-    },
-    id: chains.unichain.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "xdc",
-    },
-    id: chains.xdc.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "zksync",
-    },
-    id: chains.zksync.id,
-  },
-  /* -------------------------------------------------------------------------- */
-  /*                                  TESTNETS                                  */
-  /* -------------------------------------------------------------------------- */
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "arbitrum-sepolia",
-    },
-    id: chains.arbitrumSepolia.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "base-sepolia",
-    },
-    id: chains.baseSepolia.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "sepolia",
-    },
-    id: chains.ethereumSepolia.id,
-  },
-  {
-    envio: {
-      isEnabled: true,
-    },
-    graph: {
-      isEnabled: true,
-      name: "optimism-sepolia",
-    },
-    id: chains.optimismSepolia.id,
-  },
-  {
-    envio: {
-      isEnabled: false,
-    },
-    graph: {
-      isEnabled: true,
-      name: "zksync-sepolia",
-    },
-    id: chains.zksyncSepolia.id,
-  },
+// Most chains' names on The Graph are the same as the chain's slug, but some are not.
+// See https://thegraph.com/docs/en/supported-networks
+const overrides: { [chainId: number]: string } = {
+  [chains.arbitrum.id]: "arbitrum-one",
+  [chains.blast.id]: "blast-mainnet",
+  [chains.ethereumSepolia.id]: "sepolia",
+  [chains.mode.id]: "mode-mainnet",
+  [chains.sei.id]: "sei-mainnet",
+};
+
+// Chain configuration builder
+const fill = (id: number) => ({
+  both: (hypersync?: string) => ({
+    envio: { isEnabled: true, ...(hypersync && { hypersync }) },
+    graph: { isEnabled: true, name: overrides[id] || queries.chains.getOrThrow(id).slug },
+    id,
+  }),
+  envio: (hypersync?: string) => ({
+    envio: { hypersync, isEnabled: true },
+    id,
+  }),
+  graph: () => ({
+    graph: { isEnabled: true, name: overrides[id] || queries.chains.getOrThrow(id).slug },
+    id,
+  }),
+});
+
+const supportedChains: SupportedChain[] = [
+  /* ---------------------------------- BOTH ---------------------------------- */
+  fill(chains.arbitrumSepolia.id).both(),
+  fill(chains.arbitrum.id).both(),
+  fill(chains.avalanche.id).both(),
+  fill(chains.base.id).both(),
+  fill(chains.baseSepolia.id).both(),
+  fill(chains.bsc.id).both(),
+  fill(chains.chiliz.id).both("https://chiliz.hypersync.xyz"),
+  fill(chains.ethereum.id).both(),
+  fill(chains.ethereumSepolia.id).both(),
+  fill(chains.gnosis.id).both(),
+  fill(chains.iotex.id).graph(),
+  fill(chains.lightlink.id).graph(),
+  fill(chains.linea.id).both(),
+  fill(chains.mode.id).both("https://mode.hypersync.xyz"),
+  fill(chains.optimism.id).both(),
+  fill(chains.optimismSepolia.id).both(),
+  fill(chains.polygon.id).both(),
+  fill(chains.scroll.id).both(),
+  fill(chains.sei.id).graph(),
+  fill(chains.unichain.id).graph(),
+  fill(chains.xdc.id).graph(),
+  fill(chains.zksync.id).both(),
+
+  /* ------------------------------- ENVIO-ONLY ------------------------------- */
+  fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
+  fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),
+  fill(chains.tangle.id).envio("https://tangle.hypersync.xyz"),
+
+  /* ------------------------------- GRAPH-ONLY ------------------------------- */
+  fill(chains.abstract.id).graph(),
+  fill(chains.berachain.id).graph(),
+  fill(chains.blast.id).graph(),
+  fill(chains.form.id).graph(),
+  fill(chains.zksyncSepolia.id).graph(),
 ];
 
-export const envioChains: EnvioChain[] = supportedChains.filter((chain) => chain.envio?.isEnabled) as EnvioChain[];
+export const envioChains: EnvioChain[] = _.filter(supportedChains, (c) => c.envio?.isEnabled) as EnvioChain[];
+export const graphChains: GraphChain[] = _.filter(supportedChains, (c) => c.graph?.isEnabled) as GraphChain[];
 
-export const graphChains: GraphChain[] = supportedChains.filter((chain) => chain.graph?.isEnabled) as GraphChain[];
-
-export function getChainName(chainId: number): string {
-  const chain = supportedChains.find((chain) => chain.id === chainId);
-  const chainName = chain?.graph?.name;
-  if (!chainName) {
-    logAndThrow(`Chain with ID ${chainId} not supported`);
+export function getGraphChainName(chainId: number): string {
+  const chain = graphChains.find((chain) => chain.id === chainId);
+  if (!chain) {
+    logAndThrow(`Chain with ID ${chainId} not supported on The Graph`);
   }
-  return chainName;
+  return chain.graph.name;
 }

@@ -2,21 +2,21 @@ import * as path from "node:path";
 import { queries } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import _ from "lodash";
-import type { Address } from "./bindings";
+import type { Envio } from "./bindings";
 import type { ERC20Metadata } from "./types";
 
 export enum DataCategory {
   Asset = "assets",
-  Proxy = "proxies",
+  Proxender = "proxenders",
 }
 
-type ProxyInfo = {
-  owner?: Address;
+type ProxenderInfo = {
+  owner: Envio.Address;
 };
 
 type ShapeMap = {
-  [DataCategory.Asset]: Record<Address, ERC20Metadata>;
-  [DataCategory.Proxy]: Record<Address, ProxyInfo>;
+  [DataCategory.Asset]: Record<Envio.Address, ERC20Metadata>;
+  [DataCategory.Proxender]: Record<Envio.Address, ProxenderInfo>;
 };
 
 export function initDataEntry<C extends DataCategory>(category: C, chainId: number): DataEntry<C> {

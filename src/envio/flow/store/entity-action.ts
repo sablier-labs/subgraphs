@@ -1,42 +1,13 @@
-import type { Event } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { CommonParams } from "@envio-common/types";
-import type { Context, Entity, EnvioEnum } from "@envio-flow/bindings";
+import type { Envio } from "@envio-common/bindings";
+import { Store as CommonStore } from "@envio-common/store";
+import type { ParamsAction } from "@envio-common/types";
+import type { Context, Entity } from "@envio-flow/bindings";
 
 export async function create(
   context: Context.Handler,
-  event: Event,
+  event: Envio.Event,
   watcher: Entity.Watcher,
-  params: CommonParams.Action,
+  params: ParamsAction,
 ): Promise<Entity.Action> {
-  const id = Id.action(event);
-
-  /* --------------------------------- ACTION --------------------------------- */
-  const action: Entity.Action = {
-    addressA: params.addressA?.toLowerCase(),
-    addressB: params.addressB?.toLowerCase(),
-    amountA: params.amountA,
-    amountB: params.amountB,
-    block: BigInt(event.block.number),
-    category: params.category as EnvioEnum.ActionCategory,
-    chainId: BigInt(event.chainId),
-    contract: event.srcAddress,
-    fee: event.transaction.value,
-    from: event.transaction.from?.toLowerCase() || "",
-    hash: event.transaction.hash,
-    id,
-    stream_id: params.streamId,
-    subgraphId: watcher.actionCounter,
-    timestamp: BigInt(event.block.timestamp),
-  };
-  await context.Action.set(action);
-
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher: Entity.Watcher = {
-    ...watcher,
-    actionCounter: watcher.actionCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
-
-  return action;
+  return CommonStore.Action.create<typeof context, Entity.Action, typeof watcher>(context, event, watcher, params);
 }

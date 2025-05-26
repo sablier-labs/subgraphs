@@ -1,6 +1,8 @@
 import { EntityStream } from "../bindings";
 
+/**
+ * @todo
+ */
 export function createDefaultLinearStream(): EntityStream {
-  // TODO
   return new EntityStream("foo");
 }
