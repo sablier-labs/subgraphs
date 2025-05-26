@@ -1,5 +1,4 @@
-import { getChain } from "@sablier/deployments";
-import { WinstonError } from "@src/winston";
+import { queries } from "@sablier/deployments";
 import _ from "lodash";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
 import { envioChains } from "../../chains";
@@ -8,12 +7,9 @@ import { IndexingError } from "./error";
 const clients: PublicClient[] = [];
 
 for (const envioChain of envioChains) {
-  const chain = getChain(envioChain.id);
-  if (!chain) {
-    throw new WinstonError.ChainNotFound(envioChain.id);
-  }
+  const chain = queries.chains.getOrThrow(envioChain.id);
 
-  const URLs = _.compact([chain.rpc.public, envioChain.envio.hypersync]).map((url) => http(url));
+  const URLs = _.compact([chain.rpcUrls.default.http[0], envioChain.envio.hypersync]).map((url) => http(url));
   const transport = fallback(URLs, {
     rank: false,
     retryCount: 5,

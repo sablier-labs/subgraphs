@@ -140,7 +140,7 @@ function extractContract(params: {
 
   // Query contract deployment for this release and chain, skipping if not deployed because not all
   // chains are available for a particular release.
-  const contract = queries.contracts.get({ release, chainId, contractName });
+  const contract = queries.contracts.get({ chainId, contractName, deployments: release.deployments });
   if (!contract) {
     logger.debug(messages.contractNotFound(release, chainId, contractName));
     return undefined;

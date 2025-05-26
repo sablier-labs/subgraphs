@@ -66,7 +66,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
         });
         continue;
       }
-      const contract = queries.contracts.get({ contractName, deployment });
+      const contract = queries.contracts.get({ chainId, contractName, deployments: [deployment] });
 
       // If it's a deployment that exists, the contract from the contract map must exist.
       if (!contract) {

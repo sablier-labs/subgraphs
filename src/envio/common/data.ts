@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { getChain } from "@sablier/deployments";
+import { queries } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import _ from "lodash";
 import type { Address } from "./bindings";
@@ -35,8 +35,8 @@ export class DataEntry<C extends DataCategory> {
     public readonly category: C,
     public readonly chainId: number,
   ) {
-    const chain = getChain(chainId);
-    this.file = path.join(DataEntry.BASE_DIR, category, `${chain.key}.json`);
+    const chain = queries.chains.getOrThrow(chainId);
+    this.file = path.join(DataEntry.BASE_DIR, category, `${chain.slug}.json`);
     fs.ensureDirSync(path.dirname(this.file));
     fs.ensureFileSync(this.file);
     this.load();

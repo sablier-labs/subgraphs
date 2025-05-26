@@ -1,6 +1,6 @@
 import { type Entity } from "@envio-airdrops/bindings";
 import { type Address } from "@envio-common/bindings";
-import { contracts, type Sablier } from "@sablier/deployments";
+import { queries, type Sablier } from "@sablier/deployments";
 
 /**
  * Generates a nickname by using the asset symbol and the admin address.
@@ -23,7 +23,7 @@ export function getNickname(admin: Address, asset: Entity.Asset, name: string | 
  */
 export function isOfficialLockup(chainId: number, address: Address): boolean {
   const lowercasedAddress = address.toLowerCase() as Sablier.Address;
-  const contract = contracts.queryCatalog("lockup", chainId, lowercasedAddress);
+  const contract = queries.contracts.get({ chainId, contractAddress: lowercasedAddress, protocol: "lockup" });
   if (!contract) {
     return false;
   }

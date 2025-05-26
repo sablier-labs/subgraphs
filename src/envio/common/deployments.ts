@@ -1,4 +1,4 @@
-import { contracts, type Sablier } from "@sablier/deployments";
+import { queries, type Sablier } from "@sablier/deployments";
 import { getIndexedContract } from "@src/contracts";
 import type { Indexed } from "@src/types";
 import type { Address } from "./bindings";
@@ -6,7 +6,7 @@ import { IndexingError } from "./error";
 
 export function getContract(protocol: Indexed.Protocol, chainId: number, contractAddress: Address): Indexed.Contract {
   const lowercasedAddress = contractAddress.toLowerCase() as Sablier.Address;
-  const contract = contracts.queryCatalog(protocol, chainId, lowercasedAddress);
+  const contract = queries.contracts.get({ chainId, contractAddress: lowercasedAddress, protocol });
   if (!contract) {
     throw new IndexingError.ContractNotFound(protocol, chainId, contractAddress);
   }

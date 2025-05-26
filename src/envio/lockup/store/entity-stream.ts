@@ -14,7 +14,7 @@ export async function createDynamic(
   entities: CreateEntities,
   params: Params.CreateDynamic,
 ): Promise<Entity.Stream> {
-  let stream = await createBase(context, entities, event, params);
+  const stream = await createBase(context, entities, event, params);
   await context.Stream.set(stream);
   await createSegments(context, stream, params.segments);
   return stream;
@@ -36,7 +36,7 @@ export async function createLinear(
       initialAmount = params.unlockAmountStart;
     }
   }
-  let cliff = createCliff(baseStream, params);
+  const cliff = createCliff(baseStream, params);
 
   const stream: Entity.Stream = {
     ...baseStream,

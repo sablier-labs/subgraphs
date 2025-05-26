@@ -6,3 +6,4 @@
 # Files
 **/config.yaml
 **/manifests/**/*.yaml
+pnpm-lock.yaml

@@ -42,7 +42,7 @@ type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { campaign, watcher } = loaderReturn;
-  let activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
+  const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateClaimed(context, campaign, event.params.amount);

@@ -17,7 +17,7 @@ Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
   },
   handler: async ({ context, event, loaderReturn }) => {
     const { campaign, watcher } = loaderReturn;
-    let activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
+    const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
 
     /* -------------------------------- CAMPAIGN -------------------------------- */
     await Store.Campaign.updateClaimed(context, campaign, event.params.amount);

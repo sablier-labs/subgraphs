@@ -19,7 +19,7 @@ export function createStreamDynamic(
   commonParams: Params.CreateCommon,
   dynamicParams: Params.CreateDynamic,
 ): EntityStream | null {
-  let stream = createBaseStream(event, commonParams);
+  const stream = createBaseStream(event, commonParams);
   if (stream == null) {
     return null;
   }
@@ -65,7 +65,7 @@ export function createStreamTranched(
   commonParams: Params.CreateCommon,
   tranchedParams: Params.CreateTranched,
 ): EntityStream | null {
-  let stream = createBaseStream(event, commonParams);
+  const stream = createBaseStream(event, commonParams);
   if (stream == null) {
     return null;
   }

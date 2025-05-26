@@ -1,4 +1,4 @@
-import { ChainId } from "@sablier/deployments";
+import { chains } from "@sablier/deployments";
 import { logAndThrow } from "./winston";
 
 type EnvioConfig = {
@@ -39,7 +39,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "abstract",
     },
-    id: ChainId.ABSTRACT,
+    id: chains.abstract.id,
   },
   {
     envio: {
@@ -49,7 +49,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "arbitrum-one",
     },
-    id: ChainId.ARBITRUM_ONE,
+    id: chains.arbitrum.id,
   },
   {
     envio: {
@@ -59,7 +59,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "avalanche",
     },
-    id: ChainId.AVALANCHE,
+    id: chains.avalanche.id,
   },
   {
     envio: {
@@ -69,7 +69,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "base",
     },
-    id: ChainId.BASE,
+    id: chains.base.id,
   },
   {
     envio: {
@@ -79,7 +79,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "berachain",
     },
-    id: ChainId.BERACHAIN,
+    id: chains.berachain.id,
   },
   {
     envio: {
@@ -89,7 +89,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "blast",
     },
-    id: ChainId.BLAST,
+    id: chains.blast.id,
   },
   {
     envio: {
@@ -99,7 +99,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "bsc",
     },
-    id: ChainId.BSC,
+    id: chains.bsc.id,
   },
   {
     envio: {
@@ -110,7 +110,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "chiliz",
     },
-    id: ChainId.CHILIZ,
+    id: chains.chiliz.id,
   },
   {
     envio: {
@@ -120,7 +120,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "ethereum",
     },
-    id: ChainId.ETHEREUM,
+    id: chains.ethereum.id,
   },
   {
     envio: {
@@ -130,7 +130,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "form",
     },
-    id: ChainId.FORM,
+    id: chains.form.id,
   },
   {
     envio: {
@@ -140,7 +140,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "gnosis",
     },
-    id: ChainId.GNOSIS,
+    id: chains.gnosis.id,
   },
   {
     envio: {
@@ -150,7 +150,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "iotex",
     },
-    id: ChainId.IOTEX,
+    id: chains.iotex.id,
   },
   {
     envio: {
@@ -160,7 +160,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "lightlink",
     },
-    id: ChainId.LIGHTLINK,
+    id: chains.lightlink.id,
   },
   {
     envio: {
@@ -170,7 +170,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "linea",
     },
-    id: ChainId.LINEA,
+    id: chains.linea.id,
   },
   {
     envio: {
@@ -181,7 +181,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "mode",
     },
-    id: ChainId.MODE,
+    id: chains.mode.id,
   },
   {
     envio: {
@@ -192,7 +192,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "morph",
     },
-    id: ChainId.MORPH,
+    id: chains.morph.id,
   },
   {
     envio: {
@@ -202,7 +202,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "optimism",
     },
-    id: ChainId.OP_MAINNET,
+    id: chains.optimism.id,
   },
   {
     envio: {
@@ -212,7 +212,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "polygon",
     },
-    id: ChainId.POLYGON,
+    id: chains.polygon.id,
   },
   {
     envio: {
@@ -222,7 +222,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "scroll",
     },
-    id: ChainId.SCROLL,
+    id: chains.scroll.id,
   },
   {
     envio: {
@@ -232,7 +232,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "sei",
     },
-    id: ChainId.SEI,
+    id: chains.sei.id,
   },
   {
     envio: {
@@ -243,7 +243,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "superseed",
     },
-    id: ChainId.SUPERSEED,
+    id: chains.superseed.id,
   },
   {
     envio: {
@@ -254,7 +254,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "tangle",
     },
-    id: ChainId.TANGLE,
+    id: chains.tangle.id,
   },
   {
     envio: {
@@ -264,7 +264,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "unichain",
     },
-    id: ChainId.UNICHAIN,
+    id: chains.unichain.id,
   },
   {
     envio: {
@@ -274,7 +274,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "xdc",
     },
-    id: ChainId.XDC,
+    id: chains.xdc.id,
   },
   {
     envio: {
@@ -284,7 +284,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "zksync",
     },
-    id: ChainId.ZK_SYNC_ERA,
+    id: chains.zksync.id,
   },
   /* -------------------------------------------------------------------------- */
   /*                                  TESTNETS                                  */
@@ -297,7 +297,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "arbitrum-sepolia",
     },
-    id: ChainId.ARBITRUM_SEPOLIA,
+    id: chains.arbitrumSepolia.id,
   },
   {
     envio: {
@@ -307,7 +307,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "base-sepolia",
     },
-    id: ChainId.BASE_SEPOLIA,
+    id: chains.baseSepolia.id,
   },
   {
     envio: {
@@ -317,7 +317,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "sepolia",
     },
-    id: ChainId.ETHEREUM_SEPOLIA,
+    id: chains.ethereumSepolia.id,
   },
   {
     envio: {
@@ -327,7 +327,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "optimism-sepolia",
     },
-    id: ChainId.OP_SEPOLIA,
+    id: chains.optimismSepolia.id,
   },
   {
     envio: {
@@ -337,7 +337,7 @@ export const supportedChains: SupportedChain[] = [
       isEnabled: true,
       name: "zksync-sepolia",
     },
-    id: ChainId.ZK_SYNC_SEPOLIA,
+    id: chains.zksyncSepolia.id,
   },
 ];
 
