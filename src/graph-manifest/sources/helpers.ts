@@ -1,10 +1,11 @@
 import { queries, type Sablier } from "@sablier/deployments";
 import { getGraphChainName } from "@src/chains";
 import indexedContracts, { getIndexedContract } from "@src/contracts";
-import type { Manifest } from "@src/graph-manifest/types";
+import { Errors } from "@src/errors";
+import type { GraphManifest } from "@src/graph-manifest/types";
 import { sanitizeName } from "@src/helpers";
 import type { Indexed } from "@src/types";
-import logger, { messages, WinstonError } from "@src/winston";
+import logger, { messages } from "@src/winston";
 import _ from "lodash";
 import ABIs from "./abi-entries";
 import entities from "./entities";
@@ -13,13 +14,13 @@ import eventHandlers from "./event-handlers";
 /**
  * Creates an array of data sources/templates for a subgraph manifest.
  */
-export function create(protocol: Indexed.Protocol, chainId: number): Manifest.Source[] {
-  const sources: Manifest.Source[] = [];
+export function create(protocol: Indexed.Protocol, chainId: number): GraphManifest.Source[] {
+  const sources: GraphManifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
       const release = queries.releases.get({ protocol, version });
       if (!release) {
-        throw new WinstonError.ReleaseNotFound(protocol, version);
+        throw new Errors.ReleaseNotFound(protocol, version);
       }
 
       const { name: contractName, isTemplate } = indexedContract;
@@ -28,7 +29,7 @@ export function create(protocol: Indexed.Protocol, chainId: number): Manifest.So
 
       const common = createCommon({ protocol, chainId, version, contract, isTemplate });
       const mapping = createMapping({ protocol, version, contractName: contract.name });
-      const source = _.merge({}, common, { mapping }) as Manifest.Source;
+      const source = _.merge({}, common, { mapping }) as GraphManifest.Source;
       sources.push(source);
     }
   }
@@ -74,7 +75,7 @@ function createCommon(params: CreateSourcesParams) {
   };
 }
 
-function createContext(params: CreateSourcesParams): Manifest.Context | undefined {
+function createContext(params: CreateSourcesParams): GraphManifest.Context | undefined {
   const { chainId, version, isTemplate, contract } = params;
   if (isTemplate) {
     return undefined;
@@ -86,7 +87,7 @@ function createContext(params: CreateSourcesParams): Manifest.Context | undefine
       type: "String",
     },
     chainId: {
-      data: chainId,
+      data: chainId.toString(),
       type: "BigInt",
     },
     version: {
@@ -149,10 +150,10 @@ function extractContract(params: {
   // Validate required indexing fields
   // Both alias and block number are necessary for proper subgraph indexing
   if (!contract.alias) {
-    throw new WinstonError.AliasNotFound(release, chainId, contractName);
+    throw new Errors.AliasNotFound(release, chainId, contractName);
   }
   if (!contract.block) {
-    throw new WinstonError.BlockNotFound(release, chainId, contractName);
+    throw new Errors.BlockNotFound(release, chainId, contractName);
   }
 
   return getIndexedContract(contract);

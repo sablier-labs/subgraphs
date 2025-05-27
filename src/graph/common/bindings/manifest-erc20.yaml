@@ -13,9 +13,9 @@ dataSources:
       language: wasm/assemblyscript
       abis:
         - name: ERC20
-          file: ../../abi/ERC20.json
+          file: ../../../abi/ERC20.json
         - name: ERC20Bytes
-          file: ../../abi/ERC20Bytes.json
+          file: ../../../abi/ERC20Bytes.json
       entities:
         - Token
       eventHandlers:

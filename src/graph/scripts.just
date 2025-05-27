@@ -1,13 +1,6 @@
 mod root "../../justfile"
 
-set allow-duplicate-variables
-
-# ---------------------------------------------------------------------------- #
-#                                  ENVIRONMENT                                 #
-# ---------------------------------------------------------------------------- #
-
-# Has to be specified by each protocol's justfile
-export PROTOCOL := env_var_or_default("PROTOCOL", "")
+set allow-duplicate-variables := true
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #
@@ -23,45 +16,61 @@ NODE_XDC := "https://graph.xinfin.network"
 
 # Build the subgraph
 @build:
-    just root::build-graph {{ PROTOCOL }}
+    just root::build-graph $PROTOCOL
 
 # Remove build files
 clean:
     rm -rf bindings build
 
 # Codegen the subgraph
+[group("codegen")]
 @codegen:
-    just root::codegen-graph {{ PROTOCOL }}
+    just root::codegen-graph $PROTOCOL
 
 # Codegen the subgraph bindings
+[group("codegen")]
 @codegen-bindings:
-    just root::codegen-graph-bindings {{ PROTOCOL }}
+    just root::codegen-graph-bindings $PROTOCOL
 
 # Codegen the subgraph manifest
+[group("codegen")]
 @codegen-manifest chain="ethereum":
-    just root::codegen-graph-manifest {{ PROTOCOL }} {{ chain }}
+    just root::codegen-graph-manifest $PROTOCOL {{ chain }}
 
 # Codegen the GraphQL schema
+[group("codegen")]
 @codegen-schema:
-    just root::codegen-schema graph {{ PROTOCOL }}
+    just root::codegen-schema graph $PROTOCOL
 
 # Deploy the subgraph
-deploy chain:
+[group("deploy")]
+deploy chain version:
     pnpm graph deploy \
-    sablier-{{ PROTOCOL }}-{{ chain }} \
+    --version-label {{ version }} \
+    sablier-$PROTOCOL-{{ chain }} \
     {{ justfile_dir() }}/manifests/{{ chain }}.yaml
 
+# Deploy to experimental subgraph on Ethereum Sepolia
+[group("deploy")]
+deploy-experimental version:
+    pnpm graph deploy \
+    --version-label {{ version }} \
+    sablier-$PROTOCOL-experimental \
+    {{ justfile_dir() }}/manifests/sepolia.yaml
+
 # Deploy to Lightlink
-deploy-lightlink:
+[group("deploy")]
+deploy-lightlink version:
     _deploy-custom lightlink \
-    {{ PROTOCOL }} \
+    {{ version }} \
     {{ NODE_LIGHTLINK }} \
     {{ IPFS_URL }}
 
 # Deploy to XDC
-deploy-xdc:
+[group("deploy")]
+deploy-xdc version:
     _deploy-custom xdc \
-    {{ PROTOCOL }} \
+    {{ version }} \
     {{ NODE_XDC }} \
     {{ IPFS_URL }}
 
@@ -70,11 +79,12 @@ deploy-xdc:
 # ---------------------------------------------------------------------------- #
 
 # Deploy to a custom The Graph endpoint
-_deploy-custom chain protocol node_url ipfs_url=IPFS_URL: build
+_deploy-custom chain version node_url ipfs_url=IPFS_URL: build
     #!/usr/bin/env sh
-    subgraph_name="{{ chain }}/sablier-{{ protocol }}-{{ chain }}"
+    subgraph_name="{{ chain }}/sablier-$PROTOCOL-{{ chain }}"
     pnpm graph deploy \
-      --ipfs {{ ipfs_url }} \
-      --node {{ node_url }} \
-      $subgraph_name \
-      {{ justfile_dir() }}/manifests/{{ chain }}.yaml
+        --version-label {{ version }} \
+        --ipfs {{ ipfs_url }} \
+        --node {{ node_url }} \
+        $subgraph_name \
+        {{ justfile_dir() }}/manifests/{{ chain }}.yaml

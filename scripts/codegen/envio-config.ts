@@ -1,11 +1,9 @@
 import { createEnvioConfig } from "@src/envio-config";
 import { paths } from "@src/paths";
 import type { Indexed } from "@src/types";
-import logger, { logAndThrow } from "@src/winston";
+import logger from "@src/winston";
 import * as fs from "fs-extra";
-import * as yaml from "js-yaml";
-import { AUTOGEN_COMMENT, ENVIO_SCHEMA_COMMENT } from "../constants";
-import { getRelative, validateProtocolArg } from "../helpers";
+import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -41,29 +39,17 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error) => {
-  logAndThrow(`❌ Error generating Envio config: ${error.message}`);
-});
+main();
 
 /* -------------------------------------------------------------------------- */
-/*                                  FUNCTIONS                                 */
+/*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
-
-function getYAMLContent(protocol: Indexed.Protocol): string {
-  const config = createEnvioConfig(protocol);
-
-  const yamlContent = yaml.dump(config, {
-    lineWidth: -1, // Prevent line wrapping
-    quotingType: '"', // Use double quotes for strings
-  });
-
-  return `${AUTOGEN_COMMENT}${ENVIO_SCHEMA_COMMENT}${yamlContent}`;
-}
 
 function generateConfig(protocol: Indexed.Protocol): void {
-  const content = getYAMLContent(protocol);
+  const config = createEnvioConfig(protocol);
+  const yaml = dumpYAML(config);
   const configPath = paths.envioConfig(protocol);
-  fs.writeFileSync(configPath, content);
+  fs.writeFileSync(configPath, yaml);
 
   logger.info(`✅ Successfully generated the Envio config for ${protocol} protocol`);
   logger.info(`📁 Envio config path: ${getRelative(configPath)}\n`);

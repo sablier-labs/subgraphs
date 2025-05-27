@@ -1,16 +1,14 @@
 import type { Sablier } from "@sablier/deployments";
 import { queries } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
-import { formatRelease, logAndThrow } from "./helpers";
+import { formatRelease } from "./winston/helpers";
 
-export namespace WinstonError {
+export namespace Errors {
   export class AliasNotFound extends Error {
     constructor(release: Sablier.Release, chainId: number, contractName: string) {
       const chainName = queries.chains.getName(chainId) ?? "chain";
       const message = `Alias not found for contract ${contractName} in ${formatRelease(release)} on ${chainName}`;
       super(message);
-      this.name = "AliasNotFoundError";
-      logAndThrow(message);
     }
   }
 
@@ -19,8 +17,6 @@ export namespace WinstonError {
       const chainName = queries.chains.getName(chainId) ?? "chain";
       const message = `Start block not found for contract ${contractName} in ${formatRelease(release)} on ${chainName}`;
       super(message);
-      this.name = "BlockNotFoundError";
-      logAndThrow(message);
     }
   }
 
@@ -28,8 +24,6 @@ export namespace WinstonError {
     constructor(chainId: number) {
       const message = `Chain with ID ${chainId} not found`;
       super(message);
-      this.name = "ChainNotFound";
-      logAndThrow(message);
     }
   }
   export class ContractsNotFound extends Error {
@@ -37,8 +31,6 @@ export namespace WinstonError {
       const chainName = queries.chains.getName(chainId) ?? "chain";
       const message = `No contracts found for ${protocol} on ${chainName}`;
       super(message);
-      this.name = "ContractsNotFoundError";
-      logAndThrow(message);
     }
   }
 
@@ -46,8 +38,6 @@ export namespace WinstonError {
     constructor(protocol: Indexed.Protocol, version: Indexed.Version) {
       const message = `Sablier release not found for ${protocol} ${version}`;
       super(message);
-      this.name = "ReleaseNotFoundError";
-      logAndThrow(message);
     }
   }
 }

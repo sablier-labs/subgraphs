@@ -9,7 +9,7 @@
       "**/*.jsonc",
       "**/*.ts",
       "!**/deprecated/**/*",
-      "!**/src/graph/common/bindings"
+      "!**/src/graph/common/bindings/**/*"
     ]
   },
   "overrides": [

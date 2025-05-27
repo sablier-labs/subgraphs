@@ -19,6 +19,7 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
   let batch = EntityBatch.load(id);
   if (batch === null) {
     batch = new EntityBatch(id);
+    batch.size = ZERO;
   } else {
     const hash = batch.hash;
     if (hash === null) {

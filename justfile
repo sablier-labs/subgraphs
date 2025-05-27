@@ -1,9 +1,9 @@
+set dotenv-load := true
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
-# Set default log level if not specified
 
 export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
 
@@ -23,7 +23,7 @@ default: full-check
 # Authenticate with Graph hosted service
 [group("graph")]
 auth:
-    pnpm graph auth --product hosted-service
+    pnpm graph auth $GRAPH_DEPLOY_KEY
 
 # Check code with Biome
 biome-check:
@@ -31,13 +31,10 @@ biome-check:
 
 alias bc := biome-check
 
-# Fix code with Biome
-
-# See https://github.com/biomejs/biome-vscode/discussions/576
+[doc("Fix code with Biome")]
 biome-write:
     pnpm biome check --write .
     pnpm biome lint --write --only correctness/noUnusedImports .
-
 alias bw := biome-write
 
 # Remove build files
@@ -46,13 +43,11 @@ clean:
 
 # Run all code checks
 full-check: biome-check prettier-check tsc-check
-
 alias check := full-check
 alias fc := full-check
 
 # Run all code fixes
 full-write: biome-write prettier-write
-
 alias write := full-write
 alias fw := full-write
 
@@ -78,13 +73,11 @@ install *args:
 # Check code with Prettier
 prettier-check:
     pnpm prettier --cache --check "{{ globs_prettier }}"
-
 alias pc := prettier-check
 
 # Format code with Prettier
 prettier-write:
     pnpm prettier --cache --write "{{ globs_prettier }}"
-
 alias pw := prettier-write
 
 # Setup Husky
@@ -94,7 +87,6 @@ setup:
 # Run Jest tests
 test:
     pnpm jest
-
 alias t := test
 
 # Type check with TypeScript
@@ -124,7 +116,6 @@ _build-graph protocol: (codegen-graph protocol)
 # Codegen everything for the Envio indexer (order matters):
 # 1. GraphQL schema
 # 2. Envio config YAML
-
 [doc("Codegen everything needed for building the Envio indexer")]
 [group("codegen")]
 [group("envio")]
@@ -160,7 +151,6 @@ _codegen-envio-bindings protocol:
 # 1. GraphQL schema
 # 2. YAML manifest
 # 3. AssemblyScript bindings
-
 [doc("Codegen everything needed for building the Graph subgraph")]
 [group("codegen")]
 [group("graph")]
@@ -169,7 +159,7 @@ _codegen-envio-bindings protocol:
 
 @_codegen-graph protocol:
     just codegen-schema graph {{ protocol }}
-    just codegen-graph-manifest {{ protocol }} ethereum
+    just codegen-graph-manifest {{ protocol }} all
     just codegen-graph-bindings {{ protocol }}
 
 # Codegen the Graph subgraph bindings

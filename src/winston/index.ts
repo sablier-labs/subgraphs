@@ -4,7 +4,7 @@
  */
 
 /** @internal */
-export * from "./error";
+export * from "../errors";
 export * from "./helpers";
 export { default as messages } from "./messages";
 

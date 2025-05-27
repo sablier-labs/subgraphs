@@ -2,9 +2,10 @@ import { queries, releasesByProtocol } from "@sablier/deployments";
 import { envioChains } from "@src/chains";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
+import { Errors } from "@src/errors";
 import { sanitizeName } from "@src/helpers";
 import type { Indexed } from "@src/types";
-import logger, { messages, WinstonError } from "@src/winston";
+import logger, { messages } from "@src/winston";
 
 export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
@@ -75,10 +76,10 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
       }
       // If a contract is found, it must have an alias and a start block. These are required for indexing.
       if (!contract.alias) {
-        throw new WinstonError.AliasNotFound(release, chainId, contractName);
+        throw new Errors.AliasNotFound(release, chainId, contractName);
       }
       if (!contract.block) {
-        throw new WinstonError.BlockNotFound(release, chainId, contractName);
+        throw new Errors.BlockNotFound(release, chainId, contractName);
       }
 
       networkContracts.push({
@@ -98,7 +99,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
   // At least one contract must be found for the indexer to work.
   if (networkContracts.length === 0) {
-    throw new WinstonError.ContractsNotFound(protocol, chainId);
+    throw new Errors.ContractsNotFound(protocol, chainId);
   }
 
   return { contracts: networkContracts, startBlock };

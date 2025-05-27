@@ -1,15 +1,15 @@
-import type { Manifest } from "@src/graph-manifest/types";
+import type { GraphManifest } from "@src/graph-manifest/types";
 import { paths } from "@src/paths";
 import type { Indexed } from "@src/types";
-import logger, { logAndThrow } from "@src/winston";
+import logger from "@src/winston";
 import * as fs from "fs-extra";
 
 /**
  * Resolves an event handler for The Graph manifest.
  * @param event The event object; @see Indexed.Event
- * @returns A Manifest.EventHandler object
+ * @returns A GraphManifest.EventHandler object
  */
-export function resolveEventHandler(event: Indexed.Event): Manifest.EventHandler {
+export function resolveEventHandler(event: Indexed.Event): GraphManifest.EventHandler {
   const { contractName, eventName, handlerSuffix, protocol, version } = event;
   const abiPath = paths.abi(contractName, protocol, version);
 
@@ -100,11 +100,11 @@ function findEventInAbi(abiContent: AbiItem[], eventName: string, contractName: 
   const event = abiContent.find((item) => item.type === "event" && item.name === eventName);
 
   if (!event) {
-    logAndThrow(`Event ${eventName} not found in ABI for contract ${contractName}`);
+    throw new Error(`Event ${eventName} not found in ABI for contract ${contractName}`);
   }
 
   if (!event.inputs) {
-    logAndThrow(`Event ${eventName} has no inputs in ABI for contract ${contractName}`);
+    throw new Error(`Event ${eventName} has no inputs in ABI for contract ${contractName}`);
   }
 
   return event;

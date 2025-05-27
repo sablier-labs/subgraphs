@@ -15,12 +15,12 @@ type Batch @entity(immutable: true) {
   """
   Hash of the Ethereum transaction that created this batch.
   """
-  hash: Bytes!
+  hash: Bytes
 
   """
   Timestamp of the transaction that created this batch.
   """
-  timestamp: BigInt!
+  timestamp: BigInt
 
   # ------------------------------- Batch Fields ------------------------------- #
   """

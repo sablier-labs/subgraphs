@@ -1,19 +1,33 @@
 import type { Sablier } from "@sablier/deployments";
-import logger from "./logger";
 
 /**
- * Logs an error message and exits the process by throwing an error.
+ * Logs an error message with stack trace and exits the process by throwing an error.
  *
- * @param message The error message to log
+ * @param error The error object or message to log
+ * @param customMessage Optional custom message to override the error message
  * @example
  * if (!contract) {
- *   logAndThrow(`Contract not found: ${contract}`);
+ *   logAndThrow(new Error(`Contract not found: ${contract}`));
+ * }
+ *
+ * // Or with custom message
+ * try {
+ *   // some operation
+ * } catch (err) {
+ *   logAndThrow(err, "Failed to process contract");
  * }
  */
-export function logAndThrow(message: string): never {
-  logger.error(message);
-  throw new Error(message);
-}
+// export function logAndThrow(error: Error | string, customMessage?: string): never {
+//   const errorObj = typeof error === "string" ? new Error(error) : error;
+//   const message = customMessage || errorObj.message;
+
+//   logger.error(message);
+//   if (errorObj.stack) {
+//     logger.error(errorObj.stack);
+//   }
+
+//   throw errorObj;
+// }
 
 export function formatRelease(release: Sablier.Release) {
   return `${release.protocol} ${release.version}`;

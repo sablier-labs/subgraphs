@@ -1,5 +1,5 @@
 import { Address } from "@graphprotocol/graph-ts";
-import { ERC20, ERC20Bytes } from ".";
+import { ERC20, ERC20Bytes } from "./bindings";
 
 export function getAssetSymbol(address: Address): string {
   const contract = ERC20.bind(address);

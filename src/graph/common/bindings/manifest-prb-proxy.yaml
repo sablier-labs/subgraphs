@@ -13,9 +13,9 @@ dataSources:
       language: wasm/assemblyscript
       abis:
         - name: PRBProxy
-          file: ../../abi/PRBProxy.json
+          file: ../../../abi/PRBProxy.json
         - name: PRBProxyRegistry
-          file: ../../abi/PRBProxyRegistry.json
+          file: ../../../abi/PRBProxyRegistry.json
       entities:
         - Proxy
       eventHandlers:

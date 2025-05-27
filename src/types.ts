@@ -30,8 +30,11 @@ export namespace Indexed {
   };
 
   export type ContractSource<V extends Version> = {
+    /** The name of the contract, e.g., SablierFlow. */
     name: string;
+    /** Whether the contract is a template, i.e., deployed by a factory. */
     isTemplate: boolean;
+    /** The Sablier versions the contract is part of. */
     versions: V[];
   };
 

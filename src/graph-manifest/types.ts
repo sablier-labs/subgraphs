@@ -1,14 +1,14 @@
 import type { Sablier } from "@sablier/deployments";
 import type { ComponentMap } from "@src/types";
 
-export type ABIEntriesMap = ComponentMap<Manifest.ABI[]>;
+export type ABIEntriesMap = ComponentMap<GraphManifest.ABI[]>;
 export type EntitiesMap = ComponentMap<string[]>;
-export type EventHandlersMap = ComponentMap<Manifest.EventHandler[]>;
+export type EventHandlersMap = ComponentMap<GraphManifest.EventHandler[]>;
 
 /**
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/
  */
-export namespace Manifest {
+export namespace GraphManifest {
   export type ABI = {
     name: string;
     file: string;
@@ -21,7 +21,7 @@ export namespace Manifest {
     };
 
     export type BigInt = {
-      data: number;
+      data: string;
       type: "BigInt";
     };
     export type List<T> = {

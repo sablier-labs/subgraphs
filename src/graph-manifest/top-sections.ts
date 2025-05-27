@@ -1,7 +1,7 @@
-import type { Manifest } from "@src/graph-manifest/types";
+import type { GraphManifest } from "@src/graph-manifest/types";
 import type { Indexed } from "@src/types";
 
-const topSections: Record<Indexed.Protocol, Manifest.TopSection> = {
+const topSections: Record<Indexed.Protocol, GraphManifest.TopSection> = {
   airdrops: get("Airdrops"),
   flow: get("Flow"),
   lockup: get("Lockup"),
@@ -9,7 +9,7 @@ const topSections: Record<Indexed.Protocol, Manifest.TopSection> = {
 
 export default topSections;
 
-function get(name: string): Manifest.TopSection {
+function get(name: string): GraphManifest.TopSection {
   return {
     specVersion: "1.3.0",
     description: `The Graph indexer for Sablier ${name}`,

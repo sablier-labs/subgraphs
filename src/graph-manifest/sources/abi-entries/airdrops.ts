@@ -1,37 +1,45 @@
-import type { ABIEntriesMap } from "@src/graph-manifest/types";
-import { createABIEntryFactory } from "./helpers";
+import { contracts } from "@sablier/deployments";
+import type { ABIEntriesMap, GraphManifest } from "@src/graph-manifest/types";
+import type { Indexed } from "@src/types";
+import { erc20BytesEntry, erc20Entry } from "./common";
+import { createABIEntryForProtocol } from "./helpers";
 
-// Create factory function for Flow ABI entries
-const create = createABIEntryFactory("airdrops");
+const { names } = contracts;
+
+function create(version: Indexed.Version, contractName: string): GraphManifest.ABI[] {
+  const protocolEntry = createABIEntryForProtocol("airdrops")(version, contractName);
+  const otherEntries = [erc20Entry, erc20BytesEntry];
+  return [protocolEntry, ...otherEntries];
+}
 
 // Define the ABI entries using a simple constant object with proper typing
 const airdropsEntries: ABIEntriesMap = {
-  SablierV2MerkleStreamerFactory: {
-    "v1.1": create("v1.1", "SablierV2MerkleStreamerFactory"),
+  [names.SABLIER_V2_MERKLE_STREAMER_FACTORY]: {
+    "v1.1": create("v1.1", names.SABLIER_V2_MERKLE_STREAMER_FACTORY),
   },
-  SablierV2MerkleStreamerLL: {
-    "v1.1": create("v1.1", "SablierV2MerkleStreamerLL"),
+  [names.SABLIER_V2_MERKLE_STREAMER_LL]: {
+    "v1.1": create("v1.1", names.SABLIER_V2_MERKLE_STREAMER_LL),
   },
-  SablierV2MerkleLockupFactory: {
-    "v1.2": create("v1.2", "SablierV2MerkleLockupFactory"),
+  [names.SABLIER_V2_MERKLE_LOCKUP_FACTORY]: {
+    "v1.2": create("v1.2", names.SABLIER_V2_MERKLE_LOCKUP_FACTORY),
   },
-  SablierV2MerkleLL: {
-    "v1.2": create("v1.2", "SablierV2MerkleLL"),
+  [names.SABLIER_V2_MERKLE_LL]: {
+    "v1.2": create("v1.2", names.SABLIER_V2_MERKLE_LL),
   },
-  SablierV2MerkleLT: {
-    "v1.2": create("v1.2", "SablierV2MerkleLT"),
+  [names.SABLIER_V2_MERKLE_LT]: {
+    "v1.2": create("v1.2", names.SABLIER_V2_MERKLE_LT),
   },
-  SablierMerkleFactory: {
-    "v1.3": create("v1.3", "SablierMerkleFactory"),
+  [names.SABLIER_MERKLE_FACTORY]: {
+    "v1.3": create("v1.3", names.SABLIER_MERKLE_FACTORY),
   },
-  SablierMerkleInstant: {
-    "v1.3": create("v1.3", "SablierMerkleInstant"),
+  [names.SABLIER_MERKLE_INSTANT]: {
+    "v1.3": create("v1.3", names.SABLIER_MERKLE_INSTANT),
   },
-  SablierMerkleLL: {
-    "v1.3": create("v1.3", "SablierMerkleLL"),
+  [names.SABLIER_MERKLE_LL]: {
+    "v1.3": create("v1.3", names.SABLIER_MERKLE_LL),
   },
-  SablierMerkleLT: {
-    "v1.3": create("v1.3", "SablierMerkleLT"),
+  [names.SABLIER_MERKLE_LT]: {
+    "v1.3": create("v1.3", names.SABLIER_MERKLE_LT),
   },
 } as const;
 

@@ -1,25 +1,32 @@
-import type { Manifest } from "@src/graph-manifest/types";
+import type { GraphManifest } from "@src/graph-manifest/types";
 import { getRelativePath, paths } from "@src/paths";
 import type { Indexed } from "@src/types";
 
-/** Creates a factory function for generating ABI entries. */
-export function createABIEntryFactory(protocol: Indexed.Protocol) {
-  /**
-   * Creates an ABI entry for a specific version and contract
-   * @param version The version of the protocol
-   * @param contractName The name of the contract
-   * @returns An object with contract name as key and ABI array as value
-   */
-  return function createABIEntry(version: Indexed.Version, contractName: string): Manifest.ABI[] {
-    const entry: Manifest.ABI = {
+export function createABIEntry(name: string) {
+  return {
+    name,
+    get file() {
+      return getFilePath(name);
+    },
+  };
+}
+
+export function createABIEntryForProtocol(protocol: Indexed.Protocol) {
+  return function createABIEntry(version: Indexed.Version, contractName: string): GraphManifest.ABI {
+    const entry: GraphManifest.ABI = {
       name: contractName,
       get file() {
-        const manifestsPath = paths.graphManifests(protocol);
-        const abiPath = paths.abi(contractName, protocol, version);
-        return getRelativePath(manifestsPath, abiPath);
+        return getFilePath(contractName, protocol, version);
       },
     };
 
-    return [entry];
+    return entry;
   };
+}
+
+function getFilePath(name: string, protocol?: Indexed.Protocol, version?: Indexed.Version) {
+  // It doesn't matter what protocol we use here, we just need the path to the manifests.
+  const MANIFESTS_PATH = paths.graphManifests(protocol ?? "lockup");
+  const abiPath = paths.abi(name, protocol, version);
+  return getRelativePath(MANIFESTS_PATH, abiPath);
 }

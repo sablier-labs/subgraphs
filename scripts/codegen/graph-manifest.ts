@@ -3,11 +3,9 @@ import { graphChains } from "@src/chains";
 import { createGraphManifest } from "@src/graph-manifest";
 import { paths } from "@src/paths";
 import type { Indexed } from "@src/types";
-import logger, { logAndThrow } from "@src/winston";
+import logger from "@src/winston";
 import * as fs from "fs-extra";
-import * as yaml from "js-yaml";
-import { AUTOGEN_COMMENT } from "../constants";
-import { getRelative, validateProtocolArg } from "../helpers";
+import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -28,28 +26,28 @@ import { getRelative, validateProtocolArg } from "../helpers";
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const protocolArg = validateProtocolArg(args[0]);
-  let chainNameArg = args[1];
+  let chainArg = args[1];
 
-  if (!chainNameArg) {
-    logAndThrow("❌ Error: Chain name argument is required. Use 'all' to generate for all chains.");
+  if (!chainArg) {
+    throw new Error("❌ Error: Chain name argument is required. Use 'all' to generate for all chains.");
   }
-  chainNameArg = chainNameArg.toLowerCase();
+  chainArg = chainArg.toLowerCase();
 
   function handleAllProtocols() {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
     let totalManifests = 0;
 
     for (const p of protocols) {
-      if (chainNameArg === "all") {
+      if (chainArg === "all") {
         const filesGenerated = generateForAllChains(p, true);
         totalManifests += filesGenerated;
         logger.info(`✅ Generated ${filesGenerated} manifest${filesGenerated !== 1 ? "s" : ""} for ${p} protocol`);
       } else {
-        generateForSpecificChain(p, chainNameArg);
+        generateForSpecificChain(p, chainArg);
       }
     }
 
-    if (chainNameArg === "all") {
+    if (chainArg === "all") {
       logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
       logger.info(`🎉 Successfully generated ${totalManifests} manifests in total!\n`);
     }
@@ -58,30 +56,19 @@ async function main(): Promise<void> {
   if (protocolArg === "all") {
     handleAllProtocols();
   } else {
-    if (chainNameArg.toLowerCase() === "all") {
+    if (chainArg.toLowerCase() === "all") {
       generateForAllChains(protocolArg);
     } else {
-      generateForSpecificChain(protocolArg, chainNameArg);
+      generateForSpecificChain(protocolArg, chainArg);
     }
   }
 }
 
-main().catch((error) => {
-  logAndThrow(`❌ Error generating Graph manifest: ${error.message}`);
-});
+main();
 
 /* -------------------------------------------------------------------------- */
-/*                                  FUNCTIONS                                 */
+/*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
-
-function getYAMLContent(protocol: Indexed.Protocol, chainId: number): string {
-  const manifest = createGraphManifest(protocol, chainId);
-  const yamlContent = yaml.dump(manifest, {
-    lineWidth: -1, // Prevent line wrapping
-    quotingType: '"', // Use double quotes for strings
-  });
-  return `${AUTOGEN_COMMENT}${yamlContent}`;
-}
 
 function generateForAllChains(protocol: Indexed.Protocol, suppressFinalLog = false): number {
   const manifestsDir = paths.graphManifests(protocol);
@@ -101,7 +88,7 @@ function generateForAllChains(protocol: Indexed.Protocol, suppressFinalLog = fal
   }
 
   if (filesGenerated === 0) {
-    logAndThrow(`No manifests generated for ${protocol} protocol. This might indicate a configuration issue.`);
+    throw new Error(`No manifests generated for ${protocol} protocol. This might indicate a configuration issue.`);
   }
 
   if (!suppressFinalLog) {
@@ -120,7 +107,7 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
   if (!chain) {
     const availableChains = graphChains.map((c) => c.graph.name).join(", ");
     const message = `❌ Error: Chain "${chainName}" is not supported.\nAvailable chains: ${availableChains}`;
-    logAndThrow(message);
+    throw new Error(message);
   }
 
   const manifestsDir = paths.graphManifests(protocol);
@@ -133,9 +120,10 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
 
 function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graphManifests(protocol);
-  const content = getYAMLContent(protocol, chainId);
+  const manifest = createGraphManifest(protocol, chainId);
+  const yaml = dumpYAML(manifest);
   const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
-  fs.writeFileSync(manifestPath, content);
+  fs.writeFileSync(manifestPath, yaml);
 
   logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
   return getRelative(manifestPath);

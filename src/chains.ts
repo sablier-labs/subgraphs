@@ -1,6 +1,5 @@
 import { chains, queries } from "@sablier/deployments";
 import _ from "lodash";
-import { logAndThrow } from "./winston";
 
 type SupportedChain = {
   id: number;
@@ -89,7 +88,7 @@ export const graphChains: GraphChain[] = _.filter(supportedChains, (c) => c.grap
 export function getGraphChainName(chainId: number): string {
   const chain = graphChains.find((chain) => chain.id === chainId);
   if (!chain) {
-    logAndThrow(`Chain with ID ${chainId} not supported on The Graph`);
+    throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
   }
   return chain.graph.name;
 }

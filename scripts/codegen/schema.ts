@@ -6,7 +6,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { paths, SCHEMA_DIR } from "@src/paths";
 import { enums, getAssetDefs, getStreamDefs, getWatcherDefs } from "@src/schema";
 import type { Indexed } from "@src/types";
-import logger, { logAndThrow } from "@src/winston";
+import logger from "@src/winston";
 import { type DocumentNode, print } from "graphql";
 import _ from "lodash";
 import { AUTOGEN_COMMENT } from "../constants";
@@ -55,9 +55,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error: Error) => {
-  logAndThrow(`❌ Error generating GraphQL schema: ${error.message}`);
-});
+main();
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */

@@ -1,10 +1,9 @@
 import { lockup as lockupReleases, queries, type Sablier, Version } from "@sablier/deployments";
-import type { Manifest } from "@src/graph-manifest/types";
-import { logAndThrow } from "@src/winston";
+import type { GraphManifest } from "@src/graph-manifest/types";
 import _ from "lodash";
 import { create } from "./helpers";
 
-export function createAirdropsSources(chainId: number): Manifest.Source[] {
+export function createAirdropsSources(chainId: number): GraphManifest.Source[] {
   const sources = create("airdrops", chainId);
 
   for (const source of sources) {
@@ -22,13 +21,14 @@ export function createAirdropsSources(chainId: number): Manifest.Source[] {
  * The Merkle contract creation functions take a Lockup contract address as a user-provided argument.
  * So users can provide any address when deploying an airdrop contract, but we only index official deployments.
  */
-function getLockups(context: Manifest.Context): Manifest.ContextItem.ListAddress {
-  const contracts = queries.contracts.getAll({ chainId: context.chainId.data, protocol: "lockup" });
+function getLockups(context: GraphManifest.Context): GraphManifest.ContextItem.ListAddress {
+  const chainId = Number(context.chainId.data);
+  const contracts = queries.contracts.getAll({ chainId, protocol: "lockup" });
   if (_.isEmpty(contracts)) {
-    logAndThrow(`No Lockup contracts found on chain with ID ${context.chainId.data}`);
+    throw new Error(`No Lockup contracts found on chain with ID ${context.chainId.data}`);
   }
 
-  const data: Manifest.ContextItem.Address[] = [];
+  const data: GraphManifest.ContextItem.Address[] = [];
 
   for (const lockupRelease of lockupReleases) {
     const airdropsVersion = context.version.data as Sablier.Version.Airdrops;
@@ -38,7 +38,7 @@ function getLockups(context: Manifest.Context): Manifest.ContextItem.ListAddress
     }
 
     for (const deployment of lockupRelease.deployments) {
-      if (deployment.chainId !== context.chainId.data) {
+      if (deployment.chainId !== chainId) {
         continue;
       }
       for (const contract of deployment.contracts) {
