@@ -4,7 +4,6 @@
 import { ethereum } from "@graphprotocol/graph-ts";
 import { logError } from "../../common/logger";
 import { CommonParams } from "../../common/types";
-import { EntityStream } from "../bindings";
 import { Params } from "../helpers/types";
 import { Store } from "../store";
 
@@ -36,61 +35,6 @@ export namespace Processor {
     stream.intactAmount = params.recipientAmount; // The only amount remaining in the stream is the recipient amount
 
     stream.save();
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   CREATE                                   */
-  /* -------------------------------------------------------------------------- */
-
-  export namespace Create {
-    export function linear(
-      event: ethereum.Event,
-      commonParams: Params.CreateCommon,
-      linearParams: Params.CreateLinear,
-    ): EntityStream | null {
-      const stream = Store.Stream.createLinear(event, commonParams, linearParams);
-      if (stream == null) {
-        return null;
-      }
-      create(event, commonParams, stream.id);
-      return stream;
-    }
-
-    export function dynamic(
-      event: ethereum.Event,
-      commonParams: Params.CreateCommon,
-      dynamicParams: Params.CreateDynamic,
-    ): EntityStream | null {
-      const stream = Store.Stream.createDynamic(event, commonParams, dynamicParams);
-      if (stream == null) {
-        return null;
-      }
-      create(event, commonParams, stream.id);
-      return stream;
-    }
-
-    export function tranched(
-      event: ethereum.Event,
-      commonParams: Params.CreateCommon,
-      tranchedParams: Params.CreateTranched,
-    ): EntityStream | null {
-      const stream = Store.Stream.createTranched(event, commonParams, tranchedParams);
-      if (stream == null) {
-        return null;
-      }
-      create(event, commonParams, stream.id);
-      return stream;
-    }
-
-    function create(event: ethereum.Event, params: Params.CreateCommon, streamId: string): void {
-      Store.Action.create(event, {
-        addressA: params.sender,
-        addressB: params.recipient,
-        amountA: params.depositAmount,
-        category: "Create",
-        streamId: streamId,
-      } as CommonParams.Action);
-    }
   }
 
   /* -------------------------------------------------------------------------- */

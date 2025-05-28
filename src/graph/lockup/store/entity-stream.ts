@@ -10,7 +10,7 @@ import { Params } from "../helpers/types";
 import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
 import { getOrCreateBatch } from "./entity-batch";
-import { createSegment } from "./entity-segment";
+import { createSegments } from "./entity-segment";
 import { createTranche } from "./entity-tranche";
 import { getOrCreateWatcher } from "./entity-watcher";
 
@@ -18,16 +18,11 @@ export function createStreamDynamic(
   event: ethereum.Event,
   commonParams: Params.CreateCommon,
   dynamicParams: Params.CreateDynamic,
-): EntityStream | null {
+): EntityStream {
   const stream = createBaseStream(event, commonParams);
-  if (stream == null) {
-    return null;
-  }
-
   stream.cliff = false;
   stream.save();
-  createSegment(stream, dynamicParams.segments);
-
+  createSegments(stream, dynamicParams.segments);
   return stream;
 }
 
@@ -35,11 +30,8 @@ export function createStreamLinear(
   event: ethereum.Event,
   commonParams: Params.CreateCommon,
   linearParams: Params.CreateLinear,
-): EntityStream | null {
+): EntityStream {
   let stream = createBaseStream(event, commonParams);
-  if (stream == null) {
-    return null;
-  }
 
   const unlockAmountStart = linearParams.unlockAmountStart;
   if (unlockAmountStart) {
@@ -52,9 +44,6 @@ export function createStreamLinear(
   }
 
   stream = addCliff(stream, commonParams, linearParams);
-  if (stream == null) {
-    return null;
-  }
   stream.save();
 
   return stream;
@@ -64,12 +53,8 @@ export function createStreamTranched(
   event: ethereum.Event,
   commonParams: Params.CreateCommon,
   tranchedParams: Params.CreateTranched,
-): EntityStream | null {
+): EntityStream {
   const stream = createBaseStream(event, commonParams);
-  if (stream == null) {
-    return null;
-  }
-
   stream.cliff = false;
   stream.save();
   createTranche(stream, tranchedParams.tranches);
@@ -90,7 +75,7 @@ function addCliff(
   stream: EntityStream,
   commonParams: Params.CreateCommon,
   linearParams: Params.CreateLinear,
-): EntityStream | null {
+): EntityStream {
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
   if (stream.version === LOCKUP_V2_0) {
@@ -123,14 +108,13 @@ function addCliff(
       }
     } else {
       logError("Unknown Lockup version: {}", [stream.version]);
-      return null;
     }
   }
 
   return stream;
 }
 
-function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): EntityStream | null {
+function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): EntityStream {
   const id = Id.stream(dataSource.address(), params.tokenId);
   const stream = new EntityStream(id);
 
@@ -143,6 +127,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   /* ---------------------------------- ASSET --------------------------------- */
   const asset = getOrCreateAsset(params.asset);
   stream.asset = asset.id;
+  stream.assetDecimals = asset.decimals;
 
   /* ---------------------------------- BATCH --------------------------------- */
   const batch = getOrCreateBatch(event, params.sender);

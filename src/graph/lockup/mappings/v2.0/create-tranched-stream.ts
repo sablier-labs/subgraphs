@@ -1,11 +1,11 @@
 import { CreateLockupTranchedStream as EventCreateTranchedV2_0 } from "../../bindings/SablierLockup_v2_0/SablierLockup";
 import { convertTranchesV2_0 } from "../../helpers";
-import { Processor } from "../processor";
+import { Store } from "../../store";
 
 export function handleCreateLockupTranchedStream(event: EventCreateTranchedV2_0): void {
   const allParams = event.params;
   const commonParams = allParams.commonParams;
-  Processor.Create.tranched(
+  Store.Stream.createTranched(
     event,
     {
       asset: commonParams.token,

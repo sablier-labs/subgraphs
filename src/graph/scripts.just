@@ -17,6 +17,7 @@ NODE_XDC := "https://graph.xinfin.network"
 # Build the subgraph
 @build:
     just root::build-graph $PROTOCOL
+alias b := build
 
 # Remove build files
 clean:

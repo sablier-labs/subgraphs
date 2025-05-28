@@ -3,7 +3,7 @@ import { ZERO } from "../../common/constants";
 import { EntitySegment, EntityStream } from "../bindings";
 import { Segment } from "../helpers/types";
 
-export function createSegment(stream: EntityStream, segments: Segment[]): EntityStream {
+export function createSegments(stream: EntityStream, segments: Segment[]): EntityStream {
   let streamed = ZERO;
 
   // The start time of the stream is the first segment's start time

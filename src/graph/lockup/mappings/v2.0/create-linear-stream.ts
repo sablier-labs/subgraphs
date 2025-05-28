@@ -1,10 +1,10 @@
 import { CreateLockupLinearStream as EventCreateLinearV2_0 } from "../../bindings/SablierLockup_v2_0/SablierLockup";
-import { Processor } from "../processor";
+import { Store } from "../../store";
 
 export function handleCreateLockupLinearStream(event: EventCreateLinearV2_0): void {
   const allParams = event.params;
   const commonParams = allParams.commonParams;
-  Processor.Create.linear(
+  Store.Stream.createLinear(
     event,
     {
       asset: commonParams.token,
