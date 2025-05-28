@@ -3,17 +3,17 @@
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#data-source-context
  */
 import { BigInt, dataSource } from "@graphprotocol/graph-ts";
-import { shutDown } from "./logger";
+import { logDebug, shutDown } from "./logger";
 
 export function readChainId(): BigInt {
   return readBigInt("chainId");
 }
 
-export function getContractAlias(): string {
+export function readContractAlias(): string {
   return readString("alias");
 }
 
-export function getContractVersion(): string {
+export function readContractVersion(): string {
   return readString("version");
 }
 
@@ -22,7 +22,19 @@ export function getContractVersion(): string {
  * @see https://github.com/graphprotocol/graph-tooling/discussions/2025
  */
 export function readLockups(): string[] {
-  return readStringArray("lockups");
+  const context = dataSource.context();
+  const value = context.get("lockups");
+  if (value === null) {
+    shutDown("Lockups not found in data source context: {}", [dataSource.address().toHexString()]);
+    return [];
+  }
+  const array = value.toArray();
+  const lockups: string[] = [];
+  for (let i = 0; i < array.length; i++) {
+    lockups.push(array[i].toString());
+  }
+  logDebug("lockups[0]: {}", [lockups[0]]);
+  return lockups;
 }
 
 function readBigInt(key: string): BigInt {
@@ -35,14 +47,4 @@ function readString(key: string): string {
   const context = dataSource.context();
   const value = context.getString(key);
   return value;
-}
-
-function readStringArray(key: string): string[] {
-  const context = dataSource.context();
-  const value = context.get(key);
-  if (value == null) {
-    shutDown("{} not found in data source context: {}", [key, dataSource.address().toHexString()]);
-    return [];
-  }
-  return value.toStringArray();
 }

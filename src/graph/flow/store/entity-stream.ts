@@ -1,6 +1,6 @@
 import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
-import { getContractVersion, readChainId } from "../../common/context";
+import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { EntityStream, EventCreate } from "../bindings";
 import { getOrCreateAsset } from "./entity-asset";
@@ -40,7 +40,7 @@ export function createStream(event: EventCreate): EntityStream {
   stream.sender = event.params.sender;
   stream.timestamp = event.block.timestamp;
   stream.transferable = event.params.transferable;
-  stream.version = getContractVersion();
+  stream.version = readContractVersion();
 
   /* ------------------------------ STREAM: DEFAULTS ----------------------------- */
   stream.availableAmount = ZERO;

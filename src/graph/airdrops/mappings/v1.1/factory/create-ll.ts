@@ -1,10 +1,11 @@
+
 import { CreateMerkleStreamerLL as EventCreateMerkleStreamerLL } from "../../../bindings/SablierV2MerkleStreamerFactory_v1_1/SablierV2MerkleStreamerFactory";
 import { SablierV2MerkleStreamerLL_v1_1 as TemplateLL } from "../../../bindings/templates";
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleStreamerLL(event: EventCreateMerkleStreamerLL): void {
-  /* -------------------------------- CAMPAIGN -------------------------------- */
   Processor.Create.merkleLL(
+    TemplateLL.createWithContext,
     event,
     {
       admin: event.params.admin,
@@ -31,7 +32,4 @@ export function handleCreateMerkleStreamerLL(event: EventCreateMerkleStreamerLL)
       transferable: event.params.transferable,
     },
   );
-
-  /* ---------------------------- CONTRACT TEMPLATE --------------------------- */
-  TemplateLL.create(event.params.merkleStreamer);
 }

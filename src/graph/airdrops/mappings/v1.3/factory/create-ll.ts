@@ -3,8 +3,8 @@ import { SablierMerkleLL_v1_3 as TemplateLL } from "../../../bindings/templates"
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
-  /* -------------------------------- CAMPAIGN -------------------------------- */
   Processor.Create.merkleLL(
+    TemplateLL.createWithContext,
     event,
     {
       admin: event.params.baseParams.initialAdmin,
@@ -31,7 +31,4 @@ export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
       transferable: event.params.transferable,
     },
   );
-
-  /* ---------------------------- CONTRACT TEMPLATE --------------------------- */
-  TemplateLL.create(event.params.merkleLL);
 }

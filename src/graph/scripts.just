@@ -16,7 +16,7 @@ NODE_XDC := "https://graph.xinfin.network"
 
 # Build the subgraph
 @build:
-    just root::build-graph $PROTOCOL
+    just root::build-graph {{ PROTOCOL }}
 alias b := build
 
 # Remove build files
@@ -26,37 +26,37 @@ clean:
 # Codegen the subgraph
 [group("codegen")]
 @codegen:
-    just root::codegen-graph $PROTOCOL
+    just root::codegen-graph {{ PROTOCOL }}
 
 # Codegen the subgraph bindings
 [group("codegen")]
 @codegen-bindings:
-    just root::codegen-graph-bindings $PROTOCOL
+    just root::codegen-graph-bindings {{ PROTOCOL }}
 
 # Codegen the subgraph manifest
 [group("codegen")]
 @codegen-manifest chain="ethereum":
-    just root::codegen-graph-manifest $PROTOCOL {{ chain }}
+    just root::codegen-graph-manifest {{ PROTOCOL }} {{ chain }}
 
 # Codegen the GraphQL schema
 [group("codegen")]
 @codegen-schema:
-    just root::codegen-schema graph $PROTOCOL
+    just root::codegen-schema graph {{ PROTOCOL }}
 
 # Deploy the subgraph
 [group("deploy")]
-deploy chain version:
+deploy chain version: build
     pnpm graph deploy \
     --version-label {{ version }} \
-    sablier-$PROTOCOL-{{ chain }} \
+    sablier-{{ PROTOCOL }}-{{ chain }} \
     {{ justfile_dir() }}/manifests/{{ chain }}.yaml
 
 # Deploy to experimental subgraph on Ethereum Sepolia
 [group("deploy")]
-deploy-experimental version:
+deploy-experimental version: build
     pnpm graph deploy \
     --version-label {{ version }} \
-    sablier-$PROTOCOL-experimental \
+    sablier-{{ PROTOCOL }}-experimental \
     {{ justfile_dir() }}/manifests/sepolia.yaml
 
 # Deploy to Lightlink
@@ -82,7 +82,7 @@ deploy-xdc version:
 # Deploy to a custom The Graph endpoint
 _deploy-custom chain version node_url ipfs_url=IPFS_URL: build
     #!/usr/bin/env sh
-    subgraph_name="{{ chain }}/sablier-$PROTOCOL-{{ chain }}"
+    subgraph_name="{{ chain }}/sablier-{{ PROTOCOL }}-{{ chain }}"
     pnpm graph deploy \
         --version-label {{ version }} \
         --ipfs {{ ipfs_url }} \

@@ -31,7 +31,7 @@ function getLockups(context: GraphManifest.Context): GraphManifest.ContextItem.L
   const data: GraphManifest.ContextItem.Address[] = [];
 
   for (const lockupRelease of lockupReleases) {
-    const airdropsVersion = context.version.data as Sablier.Version.Airdrops;
+    const airdropsVersion = context.version?.data as Sablier.Version.Airdrops;
     const lockupVersion = lockupRelease.version as Sablier.Version.Lockup;
     if (!areVersionsCompatible(airdropsVersion, lockupVersion)) {
       continue;

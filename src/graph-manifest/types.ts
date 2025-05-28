@@ -16,23 +16,23 @@ export namespace GraphManifest {
 
   export namespace ContextItem {
     export type Address = {
-      data: Sablier.Address;
       type: "String";
+      data: Sablier.Address;
     };
 
     export type BigInt = {
-      data: string;
       type: "BigInt";
+      data: string;
     };
     export type List<T> = {
-      data: T[];
       type: "List";
+      data: T[];
     };
     export type ListAddress = List<Address>;
 
     export type String = {
-      data: string;
       type: "String";
+      data: string;
     };
   }
   export type Context = {

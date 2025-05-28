@@ -1,4 +1,3 @@
-
 import { resolveEventHandler as resolve } from "@src/events/resolver";
 
 describe("Event handlers", () => {

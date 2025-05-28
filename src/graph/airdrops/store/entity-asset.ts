@@ -2,10 +2,11 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { ERC20 } from "../../common/bindings";
 import { getAssetName, getAssetSymbol } from "../../common/bindings/getters";
 import { readChainId } from "../../common/context";
+import { Id } from "../../common/id";
 import { EntityAsset } from "../bindings";
 
 export function getOrCreateAsset(address: Address): EntityAsset {
-  const id = address.toHexString();
+  const id = Id.asset(address);
   let asset = EntityAsset.load(id);
 
   if (asset === null) {

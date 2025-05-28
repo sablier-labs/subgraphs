@@ -4,8 +4,8 @@ import { convertTranchesV1_2 } from "../../../helpers";
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
-  /* -------------------------------- CAMPAIGN -------------------------------- */
   Processor.Create.merkleLT(
+    TemplateLT.createWithContext,
     event,
     {
       admin: event.params.baseParams.initialAdmin,
@@ -30,7 +30,4 @@ export function handleCreateMerkleLT(event: EventCreateMerkleLT): void {
       transferable: event.params.baseParams.transferable,
     },
   );
-
-  /* ---------------------------- CONTRACT TEMPLATE --------------------------- */
-  TemplateLT.create(event.params.merkleLT);
 }

@@ -19,7 +19,7 @@ export function getAssetDefs(protocol: Indexed.Protocol) {
     """
     type Asset @entity(immutable: true) {
       """
-      Contract address of the ERC20 token
+      Unique identifier: {contractAddress}-{chainId}
       """
       id: ID!
       """

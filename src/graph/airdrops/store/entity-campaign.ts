@@ -1,6 +1,6 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
-import { getContractVersion, readChainId } from "../../common/context";
+import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { EntityCampaign } from "../bindings";
@@ -134,7 +134,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase):
   campaign.subgraphId = watcher.campaignCounter;
   campaign.timestamp = event.block.timestamp;
   campaign.totalRecipients = params.recipientCount;
-  campaign.version = getContractVersion();
+  campaign.version = readContractVersion();
 
   const minimumFee = params.minimumFee;
   if (minimumFee) {

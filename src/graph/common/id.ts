@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
-import { getContractAlias, readChainId } from "./context";
+import { readChainId, readContractAlias } from "./context";
 
 export namespace Id {
   /**
@@ -14,6 +14,16 @@ export namespace Id {
     const hash = event.transaction.hash.toHexString();
     const index = event.logIndex.toString();
     return `${chainId}-${hash}-${index}`;
+  }
+
+  /**
+   * @example
+   * 0x2791bca1f2de4661ed88a30c99a7a9449aa84174-137
+   */
+  export function asset(assetAddress: Address): string {
+    const address = assetAddress.toHexString();
+    const chainId = readChainId().toString();
+    return `${address}-${chainId}`;
   }
 
   /**
@@ -50,7 +60,7 @@ export namespace Id {
    * LK-137-42
    */
   export function streamAlias(tokenId: BigInt): string {
-    const alias = getContractAlias();
+    const alias = readContractAlias();
     const chainId = readChainId().toString();
     return `${alias}-${chainId}-${tokenId.toString()}`;
   }

@@ -1,6 +1,6 @@
 import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../common/constants";
-import { getContractVersion, readChainId } from "../../common/context";
+import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { CommonParams } from "../../common/types";
@@ -135,7 +135,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.position = batch.size.minus(ONE);
 
   /* ---------------------------------- PROXY --------------------------------- */
-  const contractVersion = getContractVersion();
+  const contractVersion = readContractVersion();
   // PRBProxy was only used in Lockup v1.0
   stream.proxied = false;
   if (contractVersion === LOCKUP_V1_0) {
