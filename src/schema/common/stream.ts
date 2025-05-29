@@ -1,7 +1,7 @@
 import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
-const commonDefs = `#graphql
+const commonDefs = /* GraphQL */ `
   # ------------------------------------ IDs ----------------------------------- #
   """
   Unique identifier: {contractAddress}-{chainId}-{tokenId}

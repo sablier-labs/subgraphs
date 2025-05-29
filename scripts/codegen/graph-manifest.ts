@@ -1,7 +1,7 @@
 import * as path from "node:path";
 import { graphChains } from "@src/chains";
 import { createGraphManifest } from "@src/graph-manifest";
-import { paths } from "@src/paths";
+import paths from "@src/paths";
 import type { Indexed } from "@src/types";
 import logger from "@src/winston";
 import * as fs from "fs-extra";
@@ -71,7 +71,7 @@ main();
 /* -------------------------------------------------------------------------- */
 
 function generateForAllChains(protocol: Indexed.Protocol, suppressFinalLog = false): number {
-  const manifestsDir = paths.graphManifests(protocol);
+  const manifestsDir = paths.graph.manifests(protocol);
 
   if (fs.pathExistsSync(manifestsDir)) {
     fs.emptyDirSync(manifestsDir);
@@ -110,7 +110,7 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
     throw new Error(message);
   }
 
-  const manifestsDir = paths.graphManifests(protocol);
+  const manifestsDir = paths.graph.manifests(protocol);
   fs.ensureDirSync(manifestsDir);
 
   const manifestPath = writeManifestToFile(protocol, chain.id, chain.graph.name);
@@ -119,7 +119,7 @@ function generateForSpecificChain(protocol: Indexed.Protocol, chainName: string)
 }
 
 function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
-  const manifestsDir = paths.graphManifests(protocol);
+  const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);
   const yaml = dumpYAML(manifest);
   const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);

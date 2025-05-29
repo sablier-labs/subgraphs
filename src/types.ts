@@ -62,5 +62,8 @@ export namespace Indexed {
    * The Legacy protocol is not indexed.
    */
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;
+
+  export type Vendor = "envio" | "graph";
+
   export type Version = Sablier.Version.Airdrops | Sablier.Version.Flow | Sablier.Version.Lockup;
 }

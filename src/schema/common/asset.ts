@@ -1,17 +1,22 @@
 import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
+const streams = /* GraphQL */ `
+"""
+Streams that rely on this token
+"""
+streams: [Stream!]! @derivedFrom(field: "asset")
+`;
+
+const campaigns = /* GraphQL */ `
+"""
+Campaigns that rely on this asset.
+"""
+campaigns: [Campaign!]! @derivedFrom(field: "asset")
+`;
+
 export function getAssetDefs(protocol: Indexed.Protocol) {
-  const customField =
-    protocol !== "airdrops"
-      ? `"""
-       Streams that rely on this token
-       """
-       streams: [Stream!]! @derivedFrom(field: "asset")`
-      : `"""
-       Campaigns that rely on this asset.
-       """
-       campaigns: [Campaign!]! @derivedFrom(field: "asset")`;
+  const customField = protocol !== "airdrops" ? streams : campaigns;
 
   return gql`
     """
@@ -19,7 +24,7 @@ export function getAssetDefs(protocol: Indexed.Protocol) {
     """
     type Asset @entity(immutable: true) {
       """
-      Unique identifier: {contractAddress}-{chainId}
+      Contract address of the ERC20 token
       """
       id: ID!
       """

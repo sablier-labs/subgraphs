@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noEmit": false,
+    "paths": {
+      "@src": ["src"],
+      "@src/*": ["src/*"]
+    },
+    "rootDir": "./src",
+    "removeComments": true,
+    "skipLibCheck": true,
+    "stripInternal": true,
+    "types": ["node"]
+  },
+  "include": ["src/queries/**/*.ts"]
+}

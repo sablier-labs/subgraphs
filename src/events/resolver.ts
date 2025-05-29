@@ -1,5 +1,5 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
-import { paths } from "@src/paths";
+import paths from "@src/paths";
 import type { Indexed } from "@src/types";
 import logger from "@src/winston";
 import * as fs from "fs-extra";

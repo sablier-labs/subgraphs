@@ -6,14 +6,18 @@
     "name": "Sablier Labs Ltd",
     "url": "https://sablier.com"
   },
-  "dependencies": {
+  "devDependencies": {
     "@biomejs/biome": "2.0.0-beta.5",
     "@glennsl/rescript-fetch": "^0.2",
     "@graphprotocol/graph-cli": "0.97.1",
     "@graphprotocol/graph-ts": "0.38.1",
+    "@graphql-codegen/cli": "^5.0",
+    "@graphql-codegen/client-preset": "^4.8",
+    "@graphql-codegen/core": "^4.0.2",
     "@graphql-tools/load-files": "^7.0",
     "@graphql-tools/merge": "^9.0",
     "@graphql-tools/schema": "^10.0",
+    "@graphql-typed-document-node/core": "^3.2",
     "@rescript/react": "^0.13",
     "@sablier/deployments": "1.0.0-alpha.45",
     "@sablier/devkit": "github:sablier-labs/devkit#main",
@@ -27,6 +31,7 @@
     "envio": "^2.20",
     "fs-extra": "^11.3",
     "graphql": "^16.11",
+    "graphql-config": "^5.1.5",
     "graphql-request": "^7.1",
     "graphql-tag": "^2.12",
     "husky": "^9.1.7",
@@ -35,7 +40,7 @@
     "lint-staged": "^16.0.0",
     "lodash": "^4.17",
     "matchstick-as": "^0.6",
-    "prettier": "^3.5.3",
+    "prettier": "^3.5",
     "rescript-envsafe": "^5.0",
     "ts-jest": "^29.3",
     "tsx": "^4.19",
@@ -43,11 +48,15 @@
     "viem": "^2.30",
     "winston": "^3.17"
   },
+  "files": [
+    "dist"
+  ],
   "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
-  }
+  },
+  "types": "./dist/index.d.ts"
 }

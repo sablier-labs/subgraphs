@@ -2,7 +2,7 @@ import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import indexedEvents from "@src/events";
 import { sanitizeName } from "@src/helpers";
-import { getRelativePath, paths } from "@src/paths";
+import paths, { getRelativePath } from "@src/paths";
 import type { Indexed } from "@src/types";
 
 export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contract[] {
@@ -22,7 +22,7 @@ export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contrac
 }
 
 function getRelativeAbiFilePath(protocol: Indexed.Protocol, contractName: string, version: Indexed.Version): string {
-  const envioConfigDir = paths.envioConfig(protocol);
+  const envioConfigDir = paths.envio.config(protocol);
   const abiPath = paths.abi(contractName, protocol, version);
   return getRelativePath(envioConfigDir, abiPath);
 }

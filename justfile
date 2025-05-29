@@ -55,21 +55,6 @@ alias fw := full-write
 install *args:
     ni install {{ args }}
 
-# Print available chain arguments
-[group("print")]
-@print-chains:
-    pnpm tsc scripts/print-chains.ts
-
-# Print available log levels available in Winston
-[group("print")]
-@print-log-levels:
-    echo "Available log levels: error, warn, info, http, verbose, debug, silly"
-
-# Print available protocol arguments
-[group("print")]
-@print-protocol-args:
-    echo "Available protocol arguments: all, flow, lockup, airdrops"
-
 # Check code with Prettier
 prettier-check:
     pnpm prettier --cache --check "{{ globs_prettier }}"
@@ -147,6 +132,15 @@ _codegen-envio-bindings protocol:
 @codegen-envio-config protocol="all":
     pnpm tsx scripts/codegen/envio-config.ts {{ protocol }}
 
+# Codegen the GraphQL types
+[group("codegen")]
+[group("gql")]
+codegen-gql vendor protocol: (codegen-schema vendor protocol)
+    #!/usr/bin/env sh
+    pnpm graphql-codegen \
+        --config src/gql/config.js \
+        --project {{ vendor }}_{{ protocol }}
+
 # Codegen everything for the Graph subgraph (order matters):
 # 1. GraphQL schema
 # 2. YAML manifest
@@ -188,6 +182,25 @@ _codegen-graph-bindings protocol:
 [group("graph")]
 @codegen-schema vendor="all" protocol="all":
     pnpm tsx scripts/codegen/schema.ts {{ vendor }} {{ protocol }}
+
+# ---------------------------------------------------------------------------- #
+#                                RECIPES: PRINT                                #
+# ---------------------------------------------------------------------------- #
+
+# Print available chain arguments
+[group("print")]
+@print-chains:
+    pnpm tsc scripts/print-chains.ts
+
+# Print available log levels available in Winston
+[group("print")]
+@print-log-levels:
+    echo "Available log levels: error, warn, info, http, verbose, debug, silly"
+
+# Print available protocol arguments
+[group("print")]
+@print-protocol-args:
+    echo "Available protocol arguments: all, flow, lockup, airdrops"
 
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: HELPERS                               #

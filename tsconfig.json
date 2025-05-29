@@ -2,7 +2,12 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "dist",
+    "declarationMap": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "lib": ["ESNext"],
@@ -21,9 +26,10 @@
     "resolveJsonModule": true,
     "rootDir": ".",
     "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
     "target": "ESNext"
   },
-  "exclude": ["deprecated/**/*.ts", "src/envio/**/bindings.ts", "src/graph/**/*.ts"],
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
+  "exclude": ["src/envio/**/bindings.ts", "src/graph/**/*.ts"],
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts", "src/gql/config.js"]
 }

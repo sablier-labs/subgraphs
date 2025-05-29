@@ -1,17 +1,10 @@
 import * as fs from "node:fs";
-import * as path from "node:path";
-import { loadFilesSync } from "@graphql-tools/load-files";
-import { mergeTypeDefs } from "@graphql-tools/merge";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import { paths, SCHEMA_DIR } from "@src/paths";
-import { enums, getAssetDefs, getStreamDefs, getWatcherDefs } from "@src/schema";
+import paths from "@src/paths";
+import { mergeSchema } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger from "@src/winston";
-import { type DocumentNode, print } from "graphql";
-import _ from "lodash";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
-import type { VendorArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -37,21 +30,37 @@ async function main(): Promise<void> {
   const vendorArg = validateVendorArg(args[0]);
   const protocolArg = validateProtocolArg(args[1]);
 
-  function handleAllProtocols(): void {
+  function handleAllProtocols(vendor: Indexed.Vendor): void {
     const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
 
     for (const p of protocols) {
-      generateSchema(vendorArg, p);
+      generateSchema(vendor, p);
+    }
+  }
+
+  function handleAllVendors(): void {
+    const vendors: Indexed.Vendor[] = ["envio", "graph"];
+
+    for (const v of vendors) {
+      if (protocolArg === "all") {
+        handleAllProtocols(v);
+      } else {
+        generateSchema(v, protocolArg);
+      }
     }
 
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     logger.info("🎉 Successfully generated all GraphQL schemas!\n");
   }
 
-  if (protocolArg === "all") {
-    handleAllProtocols();
+  if (vendorArg === "all") {
+    handleAllVendors();
+  } else if (protocolArg === "all") {
+    handleAllProtocols(vendorArg as Indexed.Vendor);
+    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
   } else {
-    generateSchema(vendorArg, protocolArg);
+    generateSchema(vendorArg as Indexed.Vendor, protocolArg);
   }
 }
 
@@ -67,84 +76,14 @@ main();
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function generateSchema(vendor: VendorArg, protocol: Indexed.Protocol): void {
-  const typeDefs = loadTypeDefs(protocol);
-  const mergedSchema = mergeTypeDefs(typeDefs, { throwOnConflict: true });
-  const printedSchema = print(mergedSchema);
-  const schema = `${AUTOGEN_COMMENT}${printedSchema}`;
+function generateSchema(vendor: Indexed.Vendor, protocol: Indexed.Protocol): void {
+  const mergedSchema = mergeSchema(protocol);
+  const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 
-  const outputPaths = {
-    envio: paths.envioSchema(protocol),
-    graph: paths.graphSchema(protocol),
-  };
+  const outputPath = paths.schema(vendor, protocol);
+  fs.writeFileSync(outputPath, schema);
 
-  // Write files based on vendor parameter
-  if (vendor === "all" || vendor === "graph") {
-    fs.writeFileSync(outputPaths.graph, schema);
-    logger.info(`📁 Schema path: ${getRelative(outputPaths.graph)}`);
-  }
-
-  if (vendor === "all" || vendor === "envio") {
-    fs.writeFileSync(outputPaths.envio, schema);
-    logger.info(`📁 Schema path: ${getRelative(outputPaths.envio)}`);
-  }
-
-  logger.info(`✅ Successfully generated GraphQL schema for ${protocol} protocol`);
+  logger.info(`📁 Schema path: ${getRelative(outputPath)}`);
+  logger.info(`✅ Successfully generated GraphQL schema for ${vendor} ${protocol}`);
   console.log();
-}
-
-function getEnum<T extends Record<string, string>>(enumObj: T, name: string): string {
-  const enumValues = _.keys(enumObj)
-    .map((key) => `  ${enumObj[key]}`)
-    .join("\n");
-
-  return `enum ${name} {\n${enumValues}\n}`;
-}
-
-function getEnumDefs(protocol: Indexed.Protocol) {
-  const enumDefs: string[] = [];
-  switch (protocol) {
-    case "airdrops":
-      enumDefs.push(
-        getEnum(enums.Airdrops.ActionCategory, "ActionCategory"),
-        getEnum(enums.Airdrops.CampaignCategory, "CampaignCategory"),
-      );
-      break;
-    case "flow":
-      enumDefs.push(
-        getEnum(enums.Flow.ActionCategory, "ActionCategory"),
-        getEnum(enums.Flow.StreamCategory, "StreamCategory"),
-      );
-      break;
-    case "lockup":
-      enumDefs.push(
-        getEnum(enums.Lockup.ActionCategory, "ActionCategory"),
-        getEnum(enums.Lockup.StreamCategory, "StreamCategory"),
-      );
-      break;
-  }
-  return makeExecutableSchema({ typeDefs: enumDefs });
-}
-
-function loadTypeDefs(protocol: Indexed.Protocol): string[] {
-  const enumDefs = getEnumDefs(protocol);
-  const assetDefs = getAssetDefs(protocol);
-  let streamDefs: DocumentNode | undefined;
-  const watcherDefs = getWatcherDefs(protocol);
-
-  const protocolPaths = [path.join(SCHEMA_DIR, `${protocol}.graphql`)];
-
-  switch (protocol) {
-    case "airdrops":
-      break;
-    case "flow":
-    case "lockup": {
-      streamDefs = getStreamDefs(protocol);
-      protocolPaths.push(path.join(SCHEMA_DIR, "common/action.graphql"), path.join(SCHEMA_DIR, "common/batch.graphql"));
-      break;
-    }
-  }
-
-  const otherTypeDefs = loadFilesSync(protocolPaths);
-  return [enumDefs, assetDefs, streamDefs, watcherDefs, ...otherTypeDefs];
 }

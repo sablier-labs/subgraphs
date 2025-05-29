@@ -1,11 +1,8 @@
-/**
- * @file This is the source of truth for the enums in the GraphQL schemas, which are auto-generated from these enums.
- * Unfortunately, because AssemblyScript does not support enum strings, this cannot be used in the AssemblyScript mappings.
- * @see https://github.com/AssemblyScript/assemblyscript/issues/560
- * @see {@link file://./schema/airdrops.graphql}
- * @see {@link file://./schema/flow.graphql}
- * @see {@link file://./schema/lockup.graphql}
- */
+import { Protocol } from "@sablier/deployments";
+import { type Indexed } from "@src/types";
+import { type DocumentNode } from "graphql";
+import gql from "graphql-tag";
+import _ from "lodash";
 
 export namespace Airdrops {
   export enum ActionCategory {
@@ -58,4 +55,31 @@ export namespace Lockup {
     LockupLinear = "LockupLinear",
     LockupTranched = "LockupTranched",
   }
+}
+
+export function getEnumDefs(protocol: Indexed.Protocol): DocumentNode {
+  const enumDefs: string[] = [];
+  switch (protocol) {
+    case Protocol.Airdrops:
+      enumDefs.push(
+        getEnum(Airdrops.ActionCategory, "ActionCategory"),
+        getEnum(Airdrops.CampaignCategory, "CampaignCategory"),
+      );
+      break;
+    case Protocol.Flow:
+      enumDefs.push(getEnum(Flow.ActionCategory, "ActionCategory"), getEnum(Flow.StreamCategory, "StreamCategory"));
+      break;
+    case Protocol.Lockup:
+      enumDefs.push(getEnum(Lockup.ActionCategory, "ActionCategory"), getEnum(Lockup.StreamCategory, "StreamCategory"));
+      break;
+  }
+  return gql`${enumDefs.join("\n")}`;
+}
+
+function getEnum<T extends Record<string, string>>(enumObj: T, name: string): string {
+  const enumValues = _.keys(enumObj)
+    .map((key) => `  ${enumObj[key]}`)
+    .join("\n");
+
+  return `enum ${name} {\n${enumValues}\n}`;
 }

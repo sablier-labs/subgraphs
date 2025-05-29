@@ -1,12 +1,12 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ONE, ZERO } from "../../common/constants";
+import { ONE, TWO, ZERO } from "../../common/constants";
 import { Id } from "../../common/id";
 import { EntityBatch, EntityBatcher } from "../bindings";
 
 /**
  * This function may be run multiple times within the same transaction:
  *
- * 1. For the 1st stream, the Batch entity is created but all other fields are left null.
+ * 1. For the 1st stream, the Batch entity is created with a size of zero and all other fields null.
  * 2. For the 2nd stream, all fields are set.
  * 3. For the 3rd stream and later, only the size is updated.
  *
@@ -25,7 +25,7 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
     if (hash === null) {
       batch.batcher = batcher.id;
       batch.hash = event.transaction.hash;
-      batch.size = ONE;
+      batch.size = TWO;
       batch.timestamp = event.block.timestamp;
     } else {
       batch.size = batch.size.plus(ONE);

@@ -1,5 +1,5 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
-import { getRelativePath, paths } from "@src/paths";
+import paths, { getRelativePath } from "@src/paths";
 import type { Indexed } from "@src/types";
 
 export function createABIEntry(name: string) {
@@ -26,7 +26,7 @@ export function createABIEntryForProtocol(protocol: Indexed.Protocol) {
 
 function getFilePath(name: string, protocol?: Indexed.Protocol, version?: Indexed.Version) {
   // It doesn't matter what protocol we use here, we just need the path to the manifests.
-  const MANIFESTS_PATH = paths.graphManifests(protocol ?? "lockup");
+  const MANIFESTS_PATH = paths.graph.manifests(protocol ?? "lockup");
   const abiPath = paths.abi(name, protocol, version);
   return getRelativePath(MANIFESTS_PATH, abiPath);
 }
