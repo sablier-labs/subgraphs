@@ -13,7 +13,7 @@ export function handleTransfer(event: EventTransfer): void {
 
   const id = event.params.tokenId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this Transfer event: {}", [id.toHexString()]);
     return;
   }

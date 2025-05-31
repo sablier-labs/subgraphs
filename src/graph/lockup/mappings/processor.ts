@@ -13,10 +13,10 @@ export namespace Processor {
   /* -------------------------------------------------------------------------- */
 
   export function cancel(event: ethereum.Event, params: Params.Cancel): void {
-    const id = params.streamId;
-    const stream = Store.Stream.get(id);
-    if (stream == null) {
-      logError("Stream not saved before this CancelLockupStream event: {}", [id.toHexString()]);
+    const tokenId = params.streamId;
+    const stream = Store.Stream.get(tokenId);
+    if (stream === null) {
+      logError("Stream not saved before this CancelLockupStream event: {}", [tokenId.toHexString()]);
       return;
     }
     const action = Store.Action.create(event, {
@@ -42,10 +42,10 @@ export namespace Processor {
   /* -------------------------------------------------------------------------- */
 
   export function withdraw(event: ethereum.Event, params: Params.Withdraw): void {
-    const id = params.streamId;
-    const stream = Store.Stream.get(id);
-    if (stream == null) {
-      logError("Stream not saved before this withdraw event: {}", [id.toHexString()]);
+    const tokenId = params.streamId;
+    const stream = Store.Stream.get(tokenId);
+    if (stream === null) {
+      logError("Stream not saved before this withdraw event: {}", [tokenId.toHexString()]);
       return;
     }
 

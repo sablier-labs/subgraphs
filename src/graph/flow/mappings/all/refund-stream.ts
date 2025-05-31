@@ -8,7 +8,7 @@ import { Store } from "../../store";
 export function handleRefundFromFlowStream(event: EventRefund): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this Refund event: {}", [id.toHexString()]);
     return;
   }

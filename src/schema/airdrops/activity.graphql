@@ -1,7 +1,7 @@
 """
 User activity grouped by day.
 """
-type Activity @entity(immutable: true) {
+type Activity @entity(immutable: false) {
   """
   Unique identifier: activity-{campaignId}-{dayOfSnapshot}
   """

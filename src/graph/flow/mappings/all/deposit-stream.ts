@@ -7,7 +7,7 @@ import { Store } from "../../store";
 export function handleDepositFlowStream(event: EventDeposit): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this DepositFlowStream event: {}", [id.toHexString()]);
     return;
   }

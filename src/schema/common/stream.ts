@@ -199,7 +199,7 @@ const lockupDefs = gql`
     """
     Flag for Linear streams with a cliff.
     """
-    cliff: Boolean!
+    cliff: Boolean
 
     """
     The amount that will unlock at the cliff time.
@@ -215,7 +215,7 @@ const lockupDefs = gql`
     Flag for Linear stream with an initial unlock.
     Available since Lockup v2.0.
     """
-    initial: Boolean!
+    initial: Boolean
 
     """
     The initial unlock amount of a Linear stream.

@@ -7,19 +7,23 @@ import { queries, type Sablier } from "@sablier/deployments";
  * If the name is not provided, it will use the first 6 and last 4 characters of the admin address.
  * @example "USDC by 0xcafe..beef"
  */
-export function getNickname(admin: Envio.Address, asset: Entity.Asset, name: string | undefined): string {
-  if (name === null) {
-    const prefix = admin.slice(0, 6);
-    const suffix = admin.slice(-4);
-    return `${asset.symbol} by ${prefix}..${suffix}`;
+export function getNickname(
+  campaignAdmin: Envio.Address,
+  campaignName: string | undefined,
+  asset: Entity.Asset | undefined,
+): string {
+  const symbol = asset?.symbol ?? "UNKNOWN";
+  if (!campaignName) {
+    const prefix = campaignAdmin.slice(0, 6);
+    const suffix = campaignAdmin.slice(-4);
+    return `${symbol} by ${prefix}..${suffix}`;
   }
-  return `${asset.symbol} in ${name}`;
+  return `${symbol} in ${campaignName}`;
 }
 
 /**
  * Checks if the given address is an official Lockup contract. This check is needed because the Lockup contract
- * is passed as function parameters when creating an airdrop campaign.
- * Note: the contract catalog provides a reverse mapping from addresses to contracts.
+ * is a user-provided parameter when deploying an airdrop campaign.
  */
 export function isOfficialLockup(chainId: number, address: Envio.Address): boolean {
   const lowercasedAddress = address.toLowerCase() as Sablier.Address;

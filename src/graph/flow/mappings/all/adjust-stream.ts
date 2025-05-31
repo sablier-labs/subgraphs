@@ -7,7 +7,7 @@ import { Store } from "../../store";
 export function handleAdjustFlowStream(event: EventAdjust): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this AdjustFlowStream event: {}", [id.toHexString()]);
     return;
   }

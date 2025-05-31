@@ -6,7 +6,7 @@ import { Store } from "../../store";
 export function handleApproval(event: EventApproval): void {
   const id = event.params.tokenId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
     return;
   }

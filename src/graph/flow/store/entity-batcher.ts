@@ -6,7 +6,7 @@ export function getOrCreateBatcher(sender: Address): EntityBatcher {
   const id = sender.toHexString();
   let batcher = EntityBatcher.load(id);
 
-  if (batcher == null) {
+  if (batcher === null) {
     batcher = new EntityBatcher(id);
     batcher.batchCounter = ZERO;
     batcher.save();

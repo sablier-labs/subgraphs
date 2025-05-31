@@ -3,7 +3,7 @@ import { ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
-import { EntityCampaign } from "../bindings";
+import { EntityAsset, EntityCampaign } from "../bindings";
 import { getNickname } from "../helpers";
 import { Params } from "../helpers/types";
 import { getOrCreateAsset } from "./entity-asset";
@@ -88,8 +88,8 @@ export function getCampaign(address: Address): EntityCampaign | null {
 
 export function updateCampaignAdmin(campaign: EntityCampaign, admin: Address): void {
   campaign.admin = admin;
-  const asset = getOrCreateAsset(Address.fromString(campaign.asset));
-  const nickname = getNickname(Address.fromBytes(campaign.admin), asset, campaign.name);
+  const asset = EntityAsset.load(campaign.asset);
+  const nickname = getNickname(Address.fromBytes(campaign.admin), campaign.name, asset);
   campaign.nickname = nickname;
   campaign.save();
 }
@@ -110,7 +110,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase):
   const campaignId = Id.campaign(params.campaignAddress);
   const campaign = new EntityCampaign(campaignId);
   const asset = getOrCreateAsset(params.asset);
-  const factory = getOrCreateFactory(event.address);
+  const factory = getOrCreateFactory();
   const watcher = getOrCreateWatcher();
 
   /* --------------------------------- CAMPAIGN -------------------------------- */
@@ -128,7 +128,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase):
   campaign.hash = event.transaction.hash;
   campaign.ipfsCID = params.ipfsCID;
   campaign.name = params.name;
-  campaign.nickname = getNickname(params.admin, asset, params.name);
+  campaign.nickname = getNickname(params.admin, params.name, asset);
   campaign.position = factory.campaignCounter;
   campaign.root = params.merkleRoot;
   campaign.subgraphId = watcher.campaignCounter;

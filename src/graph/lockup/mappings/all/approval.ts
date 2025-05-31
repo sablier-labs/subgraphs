@@ -4,10 +4,10 @@ import { EventApproval } from "../../bindings";
 import { Store } from "../../store";
 
 export function handleApproval(event: EventApproval): void {
-  const id = event.params.tokenId;
-  const stream = Store.Stream.get(id);
-  if (stream == null) {
-    logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
+  const tokenId = event.params.tokenId;
+  const stream = Store.Stream.get(tokenId);
+  if (stream === null) {
+    logInfo("Stream not saved before this Approval event: {}", [tokenId.toHexString()]);
     return;
   }
 

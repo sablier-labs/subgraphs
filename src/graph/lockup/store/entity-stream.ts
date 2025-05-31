@@ -3,6 +3,7 @@ import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from ".
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
+import { areStringsEqual } from "../../common/strings";
 import { CommonParams } from "../../common/types";
 import { EntityStream } from "../bindings";
 import { loadProxender } from "../helpers";
@@ -20,7 +21,6 @@ export function createStreamDynamic(
   dynamicParams: Params.CreateDynamic,
 ): EntityStream {
   const stream = createBaseStream(event, commonParams);
-  stream.cliff = false;
   stream.save();
   createSegments(stream, dynamicParams.segments);
   return stream;
@@ -55,7 +55,6 @@ export function createStreamTranched(
   tranchedParams: Params.CreateTranched,
 ): EntityStream {
   const stream = createBaseStream(event, commonParams);
-  stream.cliff = false;
   stream.save();
   createTranche(stream, tranchedParams.tranches);
 
@@ -76,13 +75,15 @@ function addCliff(
   commonParams: Params.CreateCommon,
   linearParams: Params.CreateLinear,
 ): EntityStream {
-  // In v2.0, the cliff time is set to zero if there is no cliff.
+  // In v2.0, no cliff means the cliff time is zero.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
-  if (stream.version === LOCKUP_V2_0) {
-    if (!linearParams.cliffTime.isZero()) {
+  if (areStringsEqual(stream.version, LOCKUP_V2_0)) {
+    if (linearParams.cliffTime.isZero() === false) {
       stream.cliff = true;
       stream.cliffAmount = linearParams.unlockAmountCliff;
       stream.cliffTime = linearParams.cliffTime;
+    } else {
+      stream.cliff = false;
     }
   } else {
     const cliffDuration = linearParams.cliffTime.minus(commonParams.startTime);
@@ -90,21 +91,25 @@ function addCliff(
 
     // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
     // See https://github.com/sablier-labs/lockup/blob/v1.2.0/src/libraries/Helpers.sol#L157-L168
-    if (stream.version === LOCKUP_V1_2) {
-      if (!linearParams.cliffTime.isZero()) {
+    if (areStringsEqual(stream.version, LOCKUP_V1_2)) {
+      if (linearParams.cliffTime.isZero() === false) {
         stream.cliff = true;
         stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
         stream.cliffTime = linearParams.cliffTime;
+      } else {
+        stream.cliff = false;
       }
     }
-    // In v1.0 and v1.1, no cliff means the cliff time is equal to the start time.
+    // In v1.0 and v1.1, no cliff means the cliff duration is zero, i.e., cliff time is the same as start time.
     // See https://github.com/sablier-labs/lockup/blob/v1.1.2/src/libraries/Helpers.sol#L88-L103
     // See https://github.com/sablier-labs/lockup/blob/v1.0.2/src/libraries/Helpers.sol#L88-L103
-    else if (stream.version === LOCKUP_V1_0 || stream.version === LOCKUP_V1_1) {
-      if (!cliffDuration.isZero()) {
+    else if (areStringsEqual(stream.version, LOCKUP_V1_0) || areStringsEqual(stream.version, LOCKUP_V1_1)) {
+      if (cliffDuration.isZero() === false) {
         stream.cliff = true;
         stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
         stream.cliffTime = linearParams.cliffTime;
+      } else {
+        stream.cliff = false;
       }
     } else {
       logError("Unknown Lockup version: {}", [stream.version]);
@@ -138,7 +143,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   const contractVersion = readContractVersion();
   // PRBProxy was only used in Lockup v1.0
   stream.proxied = false;
-  if (contractVersion === LOCKUP_V1_0) {
+  if (areStringsEqual(contractVersion, LOCKUP_V1_0)) {
     const proxender = loadProxender(params.sender);
     if (proxender) {
       stream.parties.push(proxender);
@@ -157,6 +162,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.depositAmount = params.depositAmount;
   stream.duration = params.endTime.minus(params.startTime);
   stream.endTime = params.endTime;
+  stream.funder = params.funder;
   stream.hash = event.transaction.hash;
   stream.intactAmount = params.depositAmount;
   stream.parties = [params.recipient, params.sender];

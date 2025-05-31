@@ -1,7 +1,7 @@
 """
 Entity for Merkle factories, which deploy campaigns.
 """
-type Factory @entity(immutable: true) {
+type Factory @entity(immutable: false) {
   """
   Contract address.
   """

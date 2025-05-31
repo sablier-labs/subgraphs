@@ -8,5 +8,5 @@
  * specific version files.
  * @see {@link file://./../v1.1/index.ts}
  */
-export * from "./cancel-stream";
-export * from "./withdraw-stream";
+export { handleCancelLockupStream } from "./cancel-stream";
+export { handleWithdrawFromLockupStream } from "./withdraw-stream";

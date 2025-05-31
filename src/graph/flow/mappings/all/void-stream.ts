@@ -8,7 +8,7 @@ import { Store } from "../../store";
 export function handleVoidFlowStream(event: EventVoid): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this VoidFlowStream event: {}", [id.toHexString()]);
     return;
   }

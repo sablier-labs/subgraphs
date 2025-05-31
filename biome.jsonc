@@ -14,7 +14,7 @@
       "linter": {
         "rules": {
           "style": { "useImportType": "off" },
-          "suspicious": { "noShadowRestrictedNames": "off" }
+          "suspicious": { "noDoubleEquals": "off", "noShadowRestrictedNames": "off" }
         }
       }
     }

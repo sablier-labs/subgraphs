@@ -7,7 +7,7 @@ import { Store } from "../../store";
 export function handlePauseFlowStream(event: EventPause): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this Pause event: {}", [id.toHexString()]);
     return;
   }

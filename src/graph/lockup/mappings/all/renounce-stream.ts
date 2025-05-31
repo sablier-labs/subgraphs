@@ -3,9 +3,9 @@ import { EventRenounceLockupStream } from "../../bindings";
 import { Store } from "../../store";
 
 export function handleRenounceLockupStream(event: EventRenounceLockupStream): void {
-  const id = event.params.streamId;
-  const stream = Store.Stream.get(id);
-  if (stream == null) {
+  const tokenId = event.params.streamId;
+  const stream = Store.Stream.get(tokenId);
+  if (stream === null) {
     return;
   }
 

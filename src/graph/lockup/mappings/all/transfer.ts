@@ -11,10 +11,10 @@ export function handleTransfer(event: EventTransfer): void {
     return;
   }
 
-  const id = event.params.tokenId;
-  const stream = Store.Stream.get(id);
-  if (stream == null) {
-    logError("Stream not saved before this Transfer event: {}", [id.toHexString()]);
+  const tokenId = event.params.tokenId;
+  const stream = Store.Stream.get(tokenId);
+  if (stream === null) {
+    logError("Stream not saved before this Transfer event: {}", [tokenId.toHexString()]);
     return;
   }
 
@@ -31,7 +31,7 @@ export function handleTransfer(event: EventTransfer): void {
   if (stream.proxied === true) {
     // AssemblyScript requires an explicit copy. Pushing `stream.proxender` directly won't work.
     const proxender = stream.proxender;
-    if (proxender !== null) {
+    if (proxender) {
       parties.push(proxender);
     }
   }

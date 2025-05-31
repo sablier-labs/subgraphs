@@ -9,7 +9,7 @@ export function getOrCreateAsset(address: Address): EntityAsset {
   const id = Id.asset(address);
   let asset = EntityAsset.load(id);
 
-  if (asset == null) {
+  if (asset === null) {
     asset = new EntityAsset(id);
 
     const erc20 = ERC20.bind(address);

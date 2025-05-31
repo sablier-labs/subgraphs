@@ -12,7 +12,7 @@ export function createOrUpdateActivity(
   const id = `activity-${campaign.id}-${day.toString()}`;
 
   let activity = EntityActivity.load(id);
-  if (activity != null) {
+  if (activity) {
     activity.amount = activity.amount.plus(amount);
     activity.claims = activity.claims.plus(ONE);
 

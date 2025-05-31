@@ -1,5 +1,3 @@
-export * from "../all";
-
 import { CreateLockupDynamicStream as EventCreateDynamicV1_0 } from "../../bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
 import { convertSegmentsV1_0 } from "../../helpers";
 import { Store } from "../../store";

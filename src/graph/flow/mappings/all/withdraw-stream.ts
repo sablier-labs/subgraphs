@@ -6,7 +6,7 @@ import { Store } from "../../store";
 export function handleWithdrawFromFlowStream(event: EventWithdraw): void {
   const id = event.params.streamId;
   const stream = Store.Stream.get(id);
-  if (stream == null) {
+  if (stream === null) {
     logError("Stream not saved before this WithdrawFromFlowStream event: {}", [id.toHexString()]);
     return;
   }

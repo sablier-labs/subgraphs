@@ -4,7 +4,6 @@ import type { Envio } from "@envio-common/bindings";
 import { getContract } from "@envio-common/deployments";
 import { Id } from "@envio-common/id";
 import { getNickname } from "../helpers/campaign";
-import { getOrThrow as getAssetOrThrow } from "./entity-asset";
 
 export async function createInstant(
   context: Context.Handler,
@@ -75,15 +74,14 @@ export async function getOrThrow(context: Context.Loader, event: Envio.Event) {
 
 export async function updateAdmin(
   context: Context.Handler,
-  event: Envio.Event,
   campaign: Entity.Campaign,
-  admin: Envio.Address,
+  newAdmin: Envio.Address,
 ): Promise<void> {
-  const asset = await getAssetOrThrow(context, event.chainId, campaign.asset_id);
+  const asset = await context.Asset.get(campaign.asset_id);
   const updatedCampaign: Entity.Campaign = {
     ...campaign,
-    admin,
-    nickname: getNickname(admin, asset, campaign.name),
+    admin: newAdmin,
+    nickname: getNickname(newAdmin, campaign.name, asset),
   };
   await context.Campaign.set(updatedCampaign);
 }
@@ -146,7 +144,7 @@ async function createBaseCampaign(
     ipfsCID: params.ipfsCID,
     lockup: undefined,
     name: params.name,
-    nickname: getNickname(params.admin, entities.asset, params.name),
+    nickname: getNickname(params.admin, params.name, entities.asset),
     position: entities.factory.campaignCounter,
     root: params.merkleRoot,
     streamCancelable: undefined,

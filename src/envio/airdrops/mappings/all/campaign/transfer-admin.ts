@@ -46,7 +46,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   }
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
-  await Store.Campaign.updateAdmin(context, event, campaign, event.params.newAdmin);
+  await Store.Campaign.updateAdmin(context, campaign, event.params.newAdmin);
 
   /* --------------------------------- ACTION --------------------------------- */
   await Store.Action.create(context, event, loaderReturn, {

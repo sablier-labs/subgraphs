@@ -163,10 +163,6 @@ async function createBase(
 }
 
 function createCliff(stream: Entity.Stream, params: Params.CreateLinear) {
-  if (params.cliffTime === null) {
-    return null;
-  }
-
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
   if (stream.version === Version.Lockup.V2_0) {
