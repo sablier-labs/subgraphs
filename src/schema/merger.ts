@@ -15,8 +15,7 @@ import { getEnumDefs } from "./enums";
  * @returns A merged schema for the given protocol.
  */
 export function mergeSchema(protocol: Indexed.Protocol): string {
-  const scalarsDefs = getDefs("common", "scalars");
-  const gqlDefs: string[] = [scalarsDefs];
+  const gqlDefs: string[] = [];
 
   // Defs common to all protocols
   const enumDefs = getEnumDefs(protocol);
@@ -30,7 +29,8 @@ export function mergeSchema(protocol: Indexed.Protocol): string {
     const actionDefs = getDefs(protocol, "action");
     const campaignDefs = getDefs(protocol, "campaign");
     const factoryDefs = getDefs(protocol, "factory");
-    gqlDefs.push(activityDefs, actionDefs, campaignDefs, factoryDefs);
+    const trancheDefs = getDefs(protocol, "tranche");
+    gqlDefs.push(activityDefs, actionDefs, campaignDefs, factoryDefs, trancheDefs);
   }
   // Defs common to Flow and Lockup
   else {

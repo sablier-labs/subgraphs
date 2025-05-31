@@ -2,15 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@sablier/devkit/biome"],
   "files": {
-    "includes": [
-      "**/*.graphql",
-      "**/*.js",
-      "**/*.json",
-      "**/*.jsonc",
-      "**/*.ts",
-      "!src/graph/common/bindings/**/*",
-      "!src/out/gql/**/*"
-    ]
+    "includes": ["**/*.graphql", "**/*.js", "**/*.json", "**/*.jsonc", "**/*.ts", "!src/graph/common/bindings/**/*"]
   },
   "overrides": [
     {

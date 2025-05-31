@@ -3,7 +3,6 @@ import path, { join, resolve } from "node:path";
 import type { Indexed } from "./types";
 
 export const SRC_DIR = resolve(__dirname);
-export const SRC_OUT_DIR = join(SRC_DIR, "out");
 export const ABI_DIR = join(SRC_DIR, "abi");
 export const GQL_DIR = join(SRC_DIR, "gql");
 export const ENVIO_DIR = join(SRC_DIR, "envio");
@@ -24,15 +23,9 @@ const paths = {
     config: (protocol: P): string => join(ENVIO_DIR, protocol, "config.yaml"),
     schema: (protocol: P): string => join(ENVIO_DIR, protocol, "schema.graphql"),
   },
-  gql: {
-    documents: (protocol: P | "common"): string => join(GQL_DIR, protocol, "**/*.ts"),
-  },
   graph: {
     manifests: (protocol: P): string => join(GRAPH_DIR, protocol, "manifests"),
     schema: (protocol: P): string => join(GRAPH_DIR, protocol, "schema.graphql"),
-  },
-  out: {
-    gql: (vendor: V, protocol: P): string => join(SRC_OUT_DIR, "gql", vendor, protocol, "/"),
   },
   schema: (vendor: V, protocol: P): string => join(SRC_DIR, vendor, protocol, "schema.graphql"),
 };

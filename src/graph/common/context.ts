@@ -2,7 +2,7 @@
  * @see {@link file://./../../types.ts}
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#data-source-context
  */
-import { BigInt, dataSource } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource, } from "@graphprotocol/graph-ts";
 import { logDebug, shutDown } from "./logger";
 
 export function readChainId(): BigInt {
@@ -28,11 +28,7 @@ export function readLockups(): string[] {
     shutDown("Lockups not found in data source context: {}", [dataSource.address().toHexString()]);
     return [];
   }
-  const array = value.toArray();
-  const lockups: string[] = [];
-  for (let i = 0; i < array.length; i++) {
-    lockups.push(array[i].toString());
-  }
+  const lockups = changetype<string[]>(value.toArray());
   logDebug("lockups[0]: {}", [lockups[0]]);
   return lockups;
 }

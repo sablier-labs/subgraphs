@@ -1,5 +1,5 @@
 import { CreateMerkleLL as EventCreateMerkleLL } from "../../../bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
-import { SablierV2MerkleLT_v1_2 as TemplateLL } from "../../../bindings/templates";
+import { SablierV2MerkleLL_v1_2 as TemplateLL } from "../../../bindings/templates";
 import { Processor } from "../../processor";
 
 export function handleCreateMerkleLL(event: EventCreateMerkleLL): void {
