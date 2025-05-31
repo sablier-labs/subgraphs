@@ -1,7 +1,7 @@
 import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
 
-const commonDefs = /* GraphQL */ `
+const commonDefs = `#graphql
   # ------------------------------------ IDs ----------------------------------- #
   """
   Unique identifier: {contractAddress}-{chainId}-{tokenId}
@@ -326,5 +326,9 @@ const flowDefs = gql`
 `;
 
 export function getStreamDefs(protocol: Indexed.Protocol) {
+  if (protocol === "airdrops") {
+    throw new Error("Airdrops does not have streams");
+  }
+
   return protocol === "lockup" ? lockupDefs : flowDefs;
 }
