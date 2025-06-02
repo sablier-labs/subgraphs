@@ -3,6 +3,7 @@ import paths from "@src/paths";
 import { mergeSchema } from "@src/schema";
 import type { Indexed } from "@src/types";
 import logger from "@src/winston";
+import { print } from "graphql";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
 
@@ -77,7 +78,7 @@ main();
  * @returns Result of the schema generation
  */
 function generateSchema(vendor: Indexed.Vendor, protocol: Indexed.Protocol): void {
-  const mergedSchema = mergeSchema(protocol);
+  const mergedSchema = print(mergeSchema(protocol));
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 
   const outputPath = paths.schema(vendor, protocol);

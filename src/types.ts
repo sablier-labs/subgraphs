@@ -46,14 +46,12 @@ export namespace Indexed {
   export type Event = {
     /** Name of contract whose ABI contains the event, e.g., SablierLockup. */
     contractName: string;
-    /** Needed to differentiate between multiple handlers for the same event. */
-    handlerSuffix?: string;
     /** Event name, e.g., Approval. */
     eventName: string;
     /** Protocol of contract, e.g., flow. */
-    protocol?: Protocol;
+    protocol: Protocol;
     /** Version of contract, e.g., v1.0. */
-    version?: Version;
+    version: Version;
   };
 
   export type EventMap = ComponentMap<Event[]>;

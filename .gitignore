@@ -14,6 +14,8 @@ node_modules
 .env*
 !.env.example
 config.yaml
+repomix-output.txt
+repomix-output.xml
 schema.graphql
 subgraph.yaml
 **/graph/**/manifests/**/*.yaml

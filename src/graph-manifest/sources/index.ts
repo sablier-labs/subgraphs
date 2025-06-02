@@ -1,19 +1,19 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
 import type { Indexed } from "@src/types";
-import { createAirdropsSources } from "./airdrops";
-import { createFlowSources } from "./flow";
-import { createLockupSources } from "./lockup";
+import { getAirdropsSources } from "./airdrops";
+import { getFlowSources } from "./flow";
+import { getLockupSources } from "./lockup";
 
 export function createSources(protocol: Indexed.Protocol, chainId: number): GraphManifest.Source[] {
   switch (protocol) {
     case "airdrops": {
-      return createAirdropsSources(chainId);
+      return getAirdropsSources(chainId);
     }
     case "flow": {
-      return createFlowSources(chainId);
+      return getFlowSources(chainId);
     }
     case "lockup": {
-      return createLockupSources(chainId);
+      return getLockupSources(chainId);
     }
   }
 }

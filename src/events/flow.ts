@@ -1,33 +1,37 @@
+import { contracts, type Sablier } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
-import erc721 from "./common/erc721";
+import { erc721 } from "./common/erc721";
 
-function get(contractName: string, eventName: string): Indexed.Event {
+function get(version: Sablier.Version.Flow, contractName: string, eventName: string): Indexed.Event {
   return {
     contractName,
     eventName,
     protocol: "flow",
-    version: "v1.0",
+    version,
   };
 }
 
-const baseEvents: Indexed.Event[] = [
-  ...erc721,
-  get("SablierFlow", "AdjustFlowStream"),
-  get("SablierFlow", "CreateFlowStream"),
-  get("SablierFlow", "DepositFlowStream"),
-  get("SablierFlow", "PauseFlowStream"),
-  get("SablierFlow", "RefundFromFlowStream"),
-  get("SablierFlow", "RestartFlowStream"),
-  get("SablierFlow", "VoidFlowStream"),
-  get("SablierFlow", "WithdrawFromFlowStream"),
-];
+function base(version: Sablier.Version.Flow): Indexed.Event[] {
+  const name = contracts.names.SABLIER_FLOW;
+  return [
+    ...erc721("flow", version, name),
+    get(version, name, "AdjustFlowStream"),
+    get(version, name, "CreateFlowStream"),
+    get(version, name, "DepositFlowStream"),
+    get(version, name, "PauseFlowStream"),
+    get(version, name, "RefundFromFlowStream"),
+    get(version, name, "RestartFlowStream"),
+    get(version, name, "VoidFlowStream"),
+    get(version, name, "WithdrawFromFlowStream"),
+  ];
+}
 
 // v1.1 event handlers are the same as v1.0 handlers because the ABIs are identical.
-const v1_0Events = baseEvents;
-const v1_1Events = baseEvents;
+const v1_0Events = base("v1.0");
+const v1_1Events = base("v1.1");
 
 const flowEvents: Indexed.EventMap = {
-  SablierFlow: {
+  [contracts.names.SABLIER_FLOW]: {
     "v1.0": v1_0Events,
     "v1.1": v1_1Events,
   },

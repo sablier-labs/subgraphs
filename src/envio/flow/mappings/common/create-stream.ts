@@ -1,0 +1,73 @@
+import { Id } from "@envio-common/id";
+import { Store as CommonStore } from "@envio-common/store";
+import { type Entity } from "@envio-flow/bindings";
+import type {
+  SablierFlow_v1_0_CreateFlowStream_handler as Handler,
+  SablierFlow_v1_0_CreateFlowStream_loader as Loader,
+} from "@envio-flow/bindings/src/Types.gen";
+import { Store } from "@envio-flow/store";
+import { Flow as enums } from "@src/schema/enums";
+
+/* -------------------------------------------------------------------------- */
+/*                                   LOADER                                   */
+/* -------------------------------------------------------------------------- */
+type LoaderReturn = {
+  asset: Entity.Asset | undefined;
+  batch: Entity.Batch | undefined;
+  batcher: Entity.Batcher | undefined;
+  watcher: Entity.Watcher | undefined;
+};
+const loader: Loader<LoaderReturn> = async ({ context, event }) => {
+  const assetId = Id.asset(event.params.token, event.chainId);
+  const asset = await context.Asset.get(assetId);
+
+  const batchId = Id.batch(event, event.params.sender);
+  const batch = await context.Batch.get(batchId);
+
+  const batcherId = Id.batcher(event.chainId, event.params.sender);
+  const batcher = await context.Batcher.get(batcherId);
+
+  const watcherId = event.chainId.toString();
+  const watcher = await context.Watcher.get(watcherId);
+
+  return {
+    asset,
+    batch,
+    batcher,
+    watcher,
+  };
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   HANDLER                                  */
+/* -------------------------------------------------------------------------- */
+const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
+  const entities = {
+    asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, event.params.token)),
+    batch: loaderReturn.batch ?? (await Store.Batch.create(event, event.params.sender)),
+    batcher: loaderReturn.batcher ?? (await Store.Batcher.create(event, event.params.sender)),
+    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(event.chainId)),
+  };
+
+  const stream = await Store.Stream.create(context, event, entities, {
+    ratePerSecond: event.params.ratePerSecond,
+    recipient: event.params.recipient,
+    sender: event.params.sender,
+    tokenId: event.params.streamId,
+    transferable: event.params.transferable,
+  });
+
+  await Store.Action.create(context, event, entities.watcher, {
+    addressA: event.params.sender,
+    addressB: event.params.recipient,
+    amountA: event.params.ratePerSecond,
+    category: enums.ActionCategory.Create,
+    streamId: stream.id,
+  });
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  MAPPINGS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const createStream = { handler, loader };

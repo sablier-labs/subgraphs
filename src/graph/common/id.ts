@@ -59,9 +59,8 @@ export namespace Id {
    * @example
    * LK-137-42
    */
-  export function streamAlias(tokenId: BigInt): string {
+  export function streamAlias(chainId: BigInt, tokenId: BigInt): string {
     const alias = readContractAlias();
-    const chainId = readChainId().toString();
-    return `${alias}-${chainId}-${tokenId.toString()}`;
+    return `${alias}-${chainId.toString()}-${tokenId.toString()}`;
   }
 }

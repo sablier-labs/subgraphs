@@ -17,8 +17,8 @@ import { getOrCreateWatcher } from "./entity-watcher";
 
 export function createStreamDynamic(
   event: ethereum.Event,
-  commonParams: Params.CreateCommon,
-  dynamicParams: Params.CreateDynamic,
+  commonParams: Params.CreateStreamCommon,
+  dynamicParams: Params.CreateStreamDynamic,
 ): EntityStream {
   const stream = createBaseStream(event, commonParams);
   stream.save();
@@ -28,8 +28,8 @@ export function createStreamDynamic(
 
 export function createStreamLinear(
   event: ethereum.Event,
-  commonParams: Params.CreateCommon,
-  linearParams: Params.CreateLinear,
+  commonParams: Params.CreateStreamCommon,
+  linearParams: Params.CreateStreamLinear,
 ): EntityStream {
   let stream = createBaseStream(event, commonParams);
 
@@ -51,8 +51,8 @@ export function createStreamLinear(
 
 export function createStreamTranched(
   event: ethereum.Event,
-  commonParams: Params.CreateCommon,
-  tranchedParams: Params.CreateTranched,
+  commonParams: Params.CreateStreamCommon,
+  tranchedParams: Params.CreateStreamTranched,
 ): EntityStream {
   const stream = createBaseStream(event, commonParams);
   stream.save();
@@ -72,13 +72,13 @@ export function getStream(tokenId: BigInt): EntityStream | null {
 
 function addCliff(
   stream: EntityStream,
-  commonParams: Params.CreateCommon,
-  linearParams: Params.CreateLinear,
+  commonParams: Params.CreateStreamCommon,
+  linearParams: Params.CreateStreamLinear,
 ): EntityStream {
   // In v2.0, no cliff means the cliff time is zero.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
   if (areStringsEqual(stream.version, LOCKUP_V2_0)) {
-    if (linearParams.cliffTime.isZero() === false) {
+    if (linearParams.cliffTime.gt(ZERO)) {
       stream.cliff = true;
       stream.cliffAmount = linearParams.unlockAmountCliff;
       stream.cliffTime = linearParams.cliffTime;
@@ -92,7 +92,7 @@ function addCliff(
     // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
     // See https://github.com/sablier-labs/lockup/blob/v1.2.0/src/libraries/Helpers.sol#L157-L168
     if (areStringsEqual(stream.version, LOCKUP_V1_2)) {
-      if (linearParams.cliffTime.isZero() === false) {
+      if (linearParams.cliffTime.gt(ZERO)) {
         stream.cliff = true;
         stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
         stream.cliffTime = linearParams.cliffTime;
@@ -104,7 +104,7 @@ function addCliff(
     // See https://github.com/sablier-labs/lockup/blob/v1.1.2/src/libraries/Helpers.sol#L88-L103
     // See https://github.com/sablier-labs/lockup/blob/v1.0.2/src/libraries/Helpers.sol#L88-L103
     else if (areStringsEqual(stream.version, LOCKUP_V1_0) || areStringsEqual(stream.version, LOCKUP_V1_1)) {
-      if (cliffDuration.isZero() === false) {
+      if (cliffDuration.gt(ZERO)) {
         stream.cliff = true;
         stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
         stream.cliffTime = linearParams.cliffTime;
@@ -119,9 +119,11 @@ function addCliff(
   return stream;
 }
 
-function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): EntityStream {
-  const id = Id.stream(dataSource.address(), params.tokenId);
-  const stream = new EntityStream(id);
+function createBaseStream(event: ethereum.Event, params: Params.CreateStreamCommon): EntityStream {
+  const chainId = readChainId();
+  const tokenId = params.streamId;
+  const streamId = Id.stream(dataSource.address(), tokenId);
+  const stream = new EntityStream(streamId);
 
   /* --------------------------------- WATCHER -------------------------------- */
   const watcher = getOrCreateWatcher();
@@ -153,11 +155,11 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   }
 
   /* --------------------------------- STREAM --------------------------------- */
-  stream.alias = Id.streamAlias(params.tokenId);
+  stream.alias = Id.streamAlias(chainId, tokenId);
   stream.canceled = false;
   stream.cancelable = params.cancelable;
   stream.category = params.category;
-  stream.chainId = readChainId();
+  stream.chainId = chainId;
   stream.contract = event.address;
   stream.depositAmount = params.depositAmount;
   stream.duration = params.endTime.minus(params.startTime);
@@ -171,7 +173,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateCommon): E
   stream.shape = params.shape;
   stream.startTime = params.startTime;
   stream.timestamp = event.block.timestamp;
-  stream.tokenId = params.tokenId;
+  stream.tokenId = tokenId;
   stream.transferable = params.transferable;
   stream.version = contractVersion;
   stream.withdrawnAmount = ZERO;

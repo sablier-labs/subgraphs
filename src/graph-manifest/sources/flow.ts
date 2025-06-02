@@ -1,6 +1,6 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
-import { create } from "./helpers";
+import { getSources } from "./helpers";
 
-export function createFlowSources(chainId: number): GraphManifest.Source[] {
-  return create("flow", chainId);
+export function getFlowSources(chainId: number): GraphManifest.Source[] {
+  return getSources("flow", chainId);
 }

@@ -14,13 +14,15 @@ export async function create(
 ): Promise<Entity.Stream> {
   const { asset, batch, batcher, watcher } = entities;
 
+  const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);
-  const streamId = Id.stream(event.srcAddress, event.chainId, params.tokenId);
+  const tokenId = params.tokenId;
+  const streamId = Id.stream(event.srcAddress, event.chainId, tokenId);
   const flow = getContract("flow", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
   const stream: Entity.Stream = {
-    alias: Id.streamAlias(flow.alias, event.chainId, params.tokenId),
+    alias: Id.streamAlias(flow.alias, event.chainId, tokenId),
     asset_id: asset.id,
     assetDecimals: asset.decimals,
     availableAmount: 0n,
@@ -46,9 +48,9 @@ export async function create(
     sender: params.sender.toLowerCase(),
     snapshotAmount: 0n,
     startTime: now,
-    subgraphId: BigInt(watcher.streamCounter),
+    subgraphId: counter,
     timestamp: now,
-    tokenId: params.tokenId,
+    tokenId: tokenId,
     transferable: params.transferable,
     version: flow.version,
     voided: false,
@@ -63,7 +65,7 @@ export async function create(
   /* --------------------------------- WATCHER -------------------------------- */
   const updatedWatcher = {
     ...watcher,
-    streamCounter: watcher.streamCounter + 1n,
+    streamCounter: counter + 1n,
   };
   await context.Watcher.set(updatedWatcher);
 

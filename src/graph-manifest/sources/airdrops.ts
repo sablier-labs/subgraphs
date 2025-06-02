@@ -1,10 +1,10 @@
 import { lockup as lockupReleases, queries, type Sablier, Version } from "@sablier/deployments";
 import type { GraphManifest } from "@src/graph-manifest/types";
 import _ from "lodash";
-import { create } from "./helpers";
+import { getSources } from "./helpers";
 
-export function createAirdropsSources(chainId: number): GraphManifest.Source[] {
-  const sources = create("airdrops", chainId);
+export function getAirdropsSources(chainId: number): GraphManifest.Source[] {
+  const sources = getSources("airdrops", chainId);
 
   for (const source of sources) {
     if (source._type === "template" || !source.context) {

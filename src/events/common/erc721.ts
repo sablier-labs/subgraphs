@@ -5,21 +5,32 @@
  *
  * @see https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v5.3.0/contracts/token/ERC721/ERC721.sol
  */
+import type { Sablier } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
 
-const erc721Events: Indexed.Event[] = [
-  {
-    contractName: "ERC721",
-    eventName: "Approval",
-  },
-  {
-    contractName: "ERC721",
-    eventName: "ApprovalForAll",
-  },
-  {
-    contractName: "ERC721",
-    eventName: "Transfer",
-  },
-];
-
-export default erc721Events;
+export function erc721(
+  protocol: Indexed.Protocol,
+  version: Sablier.Version.Lockup,
+  contractName: string,
+): Indexed.Event[] {
+  return [
+    {
+      contractName,
+      eventName: "Approval",
+      protocol,
+      version,
+    },
+    {
+      contractName,
+      eventName: "ApprovalForAll",
+      protocol,
+      version,
+    },
+    {
+      contractName,
+      eventName: "Transfer",
+      protocol,
+      version,
+    },
+  ];
+}

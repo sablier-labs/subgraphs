@@ -3,18 +3,19 @@ import { getGraphChainName } from "@src/chains";
 import indexedContracts, { getIndexedContract } from "@src/contracts";
 import { Errors } from "@src/errors";
 import type { GraphManifest } from "@src/graph-manifest/types";
-import { sanitizeName } from "@src/helpers";
+import { sanitizeContractName } from "@src/helpers";
+import { mergeSchema } from "@src/schema/merger";
 import type { Indexed } from "@src/types";
 import logger, { messages } from "@src/winston";
+import { Kind } from "graphql";
 import _ from "lodash";
-import ABIs from "./abi-entries";
-import entities from "./entities";
+import { getABIEntries } from "./abi-entries";
 import eventHandlers from "./event-handlers";
 
 /**
  * Creates an array of data sources/templates for a subgraph manifest.
  */
-export function create(protocol: Indexed.Protocol, chainId: number): GraphManifest.Source[] {
+export function getSources(protocol: Indexed.Protocol, chainId: number): GraphManifest.Source[] {
   const sources: GraphManifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
@@ -25,10 +26,12 @@ export function create(protocol: Indexed.Protocol, chainId: number): GraphManife
 
       const { name: contractName, isTemplate } = indexedContract;
       const contract = extractContract({ release, chainId, contractName, isTemplate });
-      if (!contract) continue;
+      if (!contract) {
+        continue;
+      }
 
-      const common = createCommon({ protocol, chainId, version, contract, isTemplate });
-      const mapping = createMapping({ protocol, version, contractName: contract.name });
+      const common = getCommon({ protocol, chainId, version, contract, isTemplate });
+      const mapping = getMapping({ protocol, version, contractName: contract.name });
       const source = _.merge({}, common, { mapping }) as GraphManifest.Source;
       sources.push(source);
     }
@@ -49,11 +52,11 @@ type CreateSourcesParams = {
   isTemplate: boolean;
 };
 
-function createCommon(params: CreateSourcesParams) {
+function getCommon(params: CreateSourcesParams) {
   const { protocol, chainId, version, contract, isTemplate } = params;
-  const dataSourceName = sanitizeName(contract.name, version);
+  const dataSourceName = sanitizeContractName(contract.name, version);
 
-  const context = createContext({ protocol, chainId, version, contract, isTemplate });
+  const context = getContext({ protocol, chainId, version, contract, isTemplate });
   const contractAddress = contract.address.toLowerCase() as Sablier.Address;
 
   return {
@@ -75,7 +78,7 @@ function createCommon(params: CreateSourcesParams) {
   };
 }
 
-function createContext(params: CreateSourcesParams): GraphManifest.Context | undefined {
+function getContext(params: CreateSourcesParams): GraphManifest.Context | undefined {
   const { chainId, version, isTemplate, contract } = params;
   if (isTemplate) {
     return undefined;
@@ -98,16 +101,37 @@ function createContext(params: CreateSourcesParams): GraphManifest.Context | und
 }
 
 /**
+ * Extracts all entity definitions from the merged schema for a given protocol.
+ *
+ * @param protocol - The protocol to extract entities for.
+ * @returns An array of entity names available in the merged schema.
+ */
+export function getEntities(protocol: Indexed.Protocol): string[] {
+  const schema = mergeSchema(protocol);
+
+  const entityNames: string[] = [];
+
+  for (const definition of schema.definitions) {
+    // Filter for type definitions (entities) and exclude enums, interfaces, etc.
+    if (definition.kind === Kind.OBJECT_TYPE_DEFINITION && definition.name) {
+      entityNames.push(definition.name.value);
+    }
+  }
+
+  return entityNames.sort();
+}
+
+/**
  * Helper for accessing mapping configuration based on protocol and version.
  */
-function createMapping(params: { protocol: Indexed.Protocol; version: Indexed.Version; contractName: string }) {
+function getMapping(params: { protocol: Indexed.Protocol; contractName: string; version: Indexed.Version }) {
   const { protocol, version, contractName } = params;
 
   return {
-    abis: ABIs[protocol][contractName][version],
-    entities: entities[protocol][contractName][version],
+    abis: getABIEntries(protocol, contractName, version),
+    entities: getEntities(protocol),
     eventHandlers: eventHandlers[protocol][contractName][version],
-    file: `../mappings/${version}/index.ts`,
+    file: `../mappings/${version}/${contractName}.ts`,
   };
 }
 

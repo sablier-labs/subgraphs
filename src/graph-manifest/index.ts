@@ -18,8 +18,8 @@ export function createGraphManifest(protocol: Indexed.Protocol, chainId: number)
   }
 
   const sourcesByType = _.groupBy(sources, "_type");
-  const dataSources = _.map(sourcesByType["data-source"] || [], ({ _type, ...rest }) => rest);
-  const templates = _.map(sourcesByType.template || [], ({ _type, ...rest }) => rest);
+  const dataSources = _.map(sourcesByType["data-source"], (source) => _.omit(source, "_type"));
+  const templates = _.map(sourcesByType.template, (source) => _.omit(source, "_type"));
 
   const config = {
     ...topSection,

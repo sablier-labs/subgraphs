@@ -8,4 +8,15 @@ export namespace CommonParams {
     category: string;
     streamId: string | null = null;
   }
+  export class Approval {
+    approved: Address;
+    owner: Address;
+    tokenId: BigInt;
+  }
+
+  export class ApprovalForAll {
+    approved: boolean;
+    owner: Address;
+    operator: Address;
+  }
 }

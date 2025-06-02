@@ -1,6 +1,6 @@
-import type { Sablier } from "@sablier/deployments";
+import { contracts, type Sablier } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
-import erc721 from "./common/erc721";
+import { erc721 } from "./common/erc721";
 
 function get(version: Sablier.Version.Lockup, contractName: string, eventName: string): Indexed.Event {
   return {
@@ -11,44 +11,68 @@ function get(version: Sablier.Version.Lockup, contractName: string, eventName: s
   };
 }
 
-// It doesn't matter what contract/version we're using because the events have the same signatures across all versions.
-const baseContract = "SablierV2LockupDynamic";
-const baseEvents: Indexed.Event[] = [...erc721, get("v1.0", baseContract, "RenounceLockupStream")];
+function dynamic(version: Sablier.Version.Lockup): Indexed.Event[] {
+  const contractName = contracts.names.SABLIER_V2_LOCKUP_DYNAMIC;
+  return [
+    ...erc721("lockup", version, contractName),
+    get(version, contractName, "CancelLockupStream"),
+    get(version, contractName, "CreateLockupDynamicStream"),
+    get(version, contractName, "RenounceLockupStream"),
+    get(version, contractName, "WithdrawFromLockupStream"),
+  ];
+}
 
-// Similarly, it doesn't matter what contract we're using here since the ABIs are identical.
-const v1_0Events: Indexed.Event[] = [
-  ...baseEvents,
-  get("v1.0", baseContract, "CancelLockupStream"),
-  get("v1.0", baseContract, "WithdrawFromLockupStream"),
-];
+function linear(version: Sablier.Version.Lockup): Indexed.Event[] {
+  const contractName = contracts.names.SABLIER_V2_LOCKUP_LINEAR;
+  return [
+    ...erc721("lockup", version, contractName),
+    get(version, contractName, "CancelLockupStream"),
+    get(version, contractName, "CreateLockupLinearStream"),
+    get(version, contractName, "RenounceLockupStream"),
+    get(version, contractName, "WithdrawFromLockupStream"),
+  ];
+}
 
-const v1_1ToV2_0Events: Indexed.Event[] = [
-  ...baseEvents,
-  get("v1.1", baseContract, "CancelLockupStream"),
-  get("v1.1", baseContract, "WithdrawFromLockupStream"),
-];
+function tranched(version: Sablier.Version.Lockup): Indexed.Event[] {
+  const contractName = contracts.names.SABLIER_V2_LOCKUP_TRANCHED;
+  return [
+    ...erc721("lockup", version, contractName),
+    get(version, contractName, "CancelLockupStream"),
+    get(version, contractName, "CreateLockupTranchedStream"),
+    get(version, contractName, "RenounceLockupStream"),
+    get(version, contractName, "WithdrawFromLockupStream"),
+  ];
+}
+
+function lockup(version: Sablier.Version.Lockup): Indexed.Event[] {
+  const contractName = contracts.names.SABLIER_LOCKUP;
+  return [
+    ...erc721("lockup", version, contractName),
+    get(version, contractName, "CancelLockupStream"),
+    get(version, contractName, "CreateLockupDynamicStream"),
+    get(version, contractName, "CreateLockupLinearStream"),
+    get(version, contractName, "CreateLockupTranchedStream"),
+    get(version, contractName, "RenounceLockupStream"),
+    get(version, contractName, "WithdrawFromLockupStream"),
+  ];
+}
 
 const lockupEvents: Indexed.EventMap = {
-  SablierV2LockupDynamic: {
-    "v1.0": [...v1_0Events, get("v1.0", "SablierV2LockupDynamic", "CreateLockupDynamicStream")],
-    "v1.1": [...v1_1ToV2_0Events, get("v1.1", "SablierV2LockupDynamic", "CreateLockupDynamicStream")],
-    "v1.2": [...v1_1ToV2_0Events, get("v1.2", "SablierV2LockupDynamic", "CreateLockupDynamicStream")],
+  [contracts.names.SABLIER_V2_LOCKUP_DYNAMIC]: {
+    "v1.0": dynamic("v1.0"),
+    "v1.1": dynamic("v1.1"),
+    "v1.2": dynamic("v1.2"),
   },
-  SablierV2LockupLinear: {
-    "v1.0": [...v1_0Events, get("v1.0", "SablierV2LockupLinear", "CreateLockupLinearStream")],
-    "v1.1": [...v1_1ToV2_0Events, get("v1.1", "SablierV2LockupLinear", "CreateLockupLinearStream")],
-    "v1.2": [...v1_1ToV2_0Events, get("v1.2", "SablierV2LockupLinear", "CreateLockupLinearStream")],
+  [contracts.names.SABLIER_V2_LOCKUP_LINEAR]: {
+    "v1.0": linear("v1.0"),
+    "v1.1": linear("v1.1"),
+    "v1.2": linear("v1.2"),
   },
-  SablierV2LockupTranched: {
-    "v1.2": [...v1_1ToV2_0Events, get("v1.2", "SablierV2LockupTranched", "CreateLockupTranchedStream")],
+  [contracts.names.SABLIER_V2_LOCKUP_TRANCHED]: {
+    "v1.2": tranched("v1.2"),
   },
-  SablierLockup: {
-    "v2.0": [
-      ...v1_1ToV2_0Events,
-      get("v2.0", "SablierLockup", "CreateLockupDynamicStream"),
-      get("v2.0", "SablierLockup", "CreateLockupLinearStream"),
-      get("v2.0", "SablierLockup", "CreateLockupTranchedStream"),
-    ],
+  [contracts.names.SABLIER_LOCKUP]: {
+    "v2.0": lockup("v2.0"),
   },
 } as const;
 

@@ -14,7 +14,20 @@ export namespace Params {
     fee: BigInt | null;
   }
 
-  export class CampaignBase {
+  export class ClaimLockup {
+    amount: BigInt;
+    index: BigInt;
+    recipient: Address;
+    streamId: BigInt;
+  }
+
+  export class Clawback {
+    admin: Address;
+    amount: BigInt;
+    to: Address;
+  }
+
+  export class CreateCampaignBase {
     admin: Address;
     aggregateAmount: BigInt;
     asset: Address;
@@ -28,32 +41,27 @@ export namespace Params {
     recipientCount: BigInt;
   }
 
-  export class CampaignLL {
-    // Lockup
-    cancelable: boolean;
-    lockup: Address;
-    shape: string | null;
-    startTime: BigInt | null;
-    transferable: boolean;
-    totalDuration: BigInt;
-
-    // LockupLinear
+  export class CreateCampaignLockup {
+    cancelable: boolean = false;
+    lockup: Address = Address.zero();
+    shape: string | null = null;
+    startTime: BigInt | null = null;
+    transferable: boolean = false;
+    totalDuration: BigInt = BigInt.zero();
+  }
+  export class CreateCampaignLL extends CreateCampaignLockup {
     cliffDuration: BigInt;
     cliffPercentage: BigInt | null;
     startPercentage: BigInt | null;
   }
 
-  export class CampaignLT {
-    // Lockup
-    cancelable: boolean;
-    lockup: Address;
-    shape: string | null;
-    startTime: BigInt | null;
-    transferable: boolean;
-    totalDuration: BigInt;
-
-    // LockupTranched
+  export class CreateCampaignLT extends CreateCampaignLockup {
     tranchesWithPercentages: TrancheWithPercentage[];
+  }
+
+  export class TransferAdmin {
+    newAdmin: Address;
+    oldAdmin: Address;
   }
 }
 

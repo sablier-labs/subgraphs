@@ -6,12 +6,13 @@ import { logError } from "../../common/logger";
 import { EntityAsset, EntityCampaign } from "../bindings";
 import { getNickname } from "../helpers";
 import { Params } from "../helpers/types";
+import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
 import { getOrCreateFactory } from "./entity-factory";
 import { createTranchesWithPercentages } from "./entity-tranche";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createCampaignInstant(event: ethereum.Event, params: Params.CampaignBase): EntityCampaign {
+export function createCampaignInstant(event: ethereum.Event, params: Params.CreateCampaignBase): EntityCampaign {
   const campaign = createBaseCampaign(event, params);
   campaign.save();
   return campaign;
@@ -19,31 +20,18 @@ export function createCampaignInstant(event: ethereum.Event, params: Params.Camp
 
 export function createCampaignLL(
   event: ethereum.Event,
-  paramsBase: Params.CampaignBase,
-  paramsLL: Params.CampaignLL,
+  paramsBase: Params.CreateCampaignBase,
+  paramsLL: Params.CreateCampaignLL,
 ): EntityCampaign {
-  const campaign = createBaseCampaign(event, paramsBase);
+  let campaign = createBaseCampaign(event, paramsBase);
 
-  /* --------------------------------- LOCKUP --------------------------------- */
-  campaign.lockup = paramsLL.lockup;
-  campaign.streamCancelable = paramsLL.cancelable;
-  campaign.streamShape = paramsLL.shape;
-  campaign.streamTotalDuration = paramsLL.totalDuration;
-  campaign.streamTransferable = paramsLL.transferable;
-
-  const startTime = paramsLL.startTime;
-  if (startTime) {
-    campaign.streamStart = startTime.isZero() === false;
-    campaign.streamStartTime = startTime;
-  }
-
-  /* ------------------------------ LOCKUP LINEAR ----------------------------- */
-  campaign.streamCliff = paramsLL.cliffDuration.isZero() === false;
+  campaign = initLockupCampaign(campaign, paramsLL);
+  campaign.streamCliff = paramsLL.cliffDuration.gt(ZERO);
   campaign.streamCliffDuration = paramsLL.cliffDuration;
   campaign.streamCliffPercentage = paramsLL.cliffPercentage;
   const startPercentage = paramsLL.startPercentage;
   if (startPercentage) {
-    campaign.streamInitial = startPercentage.isZero() === false;
+    campaign.streamInitial = startPercentage.gt(ZERO);
     campaign.streamInitialPercentage = startPercentage;
   }
 
@@ -53,24 +41,12 @@ export function createCampaignLL(
 
 export function createCampaignLT(
   event: ethereum.Event,
-  paramsBase: Params.CampaignBase,
-  paramsLT: Params.CampaignLT,
+  paramsBase: Params.CreateCampaignBase,
+  paramsLT: Params.CreateCampaignLT,
 ): EntityCampaign {
   let campaign = createBaseCampaign(event, paramsBase);
 
-  /* --------------------------------- LOCKUP --------------------------------- */
-  campaign.lockup = paramsLT.lockup;
-  campaign.streamCancelable = paramsLT.cancelable;
-  campaign.streamShape = paramsLT.shape;
-  campaign.streamTransferable = paramsLT.transferable;
-  campaign.streamTotalDuration = paramsLT.totalDuration;
-  const startTime = paramsLT.startTime;
-  if (startTime) {
-    campaign.streamStart = startTime.isZero() === false;
-    campaign.streamStartTime = startTime;
-  }
-
-  /* ----------------------------- LOCKUP TRANCHED ---------------------------- */
+  campaign = initLockupCampaign(campaign, paramsLT);
   campaign = createTranchesWithPercentages(campaign, paramsLT.tranchesWithPercentages);
 
   campaign.save();
@@ -106,7 +82,7 @@ export function updateCampaignClawback(event: ethereum.Event, campaign: EntityCa
   campaign.save();
 }
 
-function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase): EntityCampaign {
+function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaignBase): EntityCampaign {
   const campaignId = Id.campaign(params.campaignAddress);
   const campaign = new EntityCampaign(campaignId);
   const asset = getOrCreateAsset(params.asset);
@@ -123,7 +99,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase):
   campaign.claimedAmount = ZERO;
   campaign.claimedCount = ZERO;
   campaign.expiration = params.expiration;
-  campaign.expires = params.expiration.isZero() === false;
+  campaign.expires = params.expiration.gt(ZERO);
   campaign.factory = factory.id;
   campaign.hash = event.transaction.hash;
   campaign.ipfsCID = params.ipfsCID;
@@ -148,6 +124,25 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CampaignBase):
   /* --------------------------------- FACTORY -------------------------------- */
   factory.campaignCounter = factory.campaignCounter.plus(ONE);
   factory.save();
+
+  /* --------------------------------- ACTION --------------------------------- */
+  createAction(event, campaign, { category: "Create" } as Params.Action);
+
+  return campaign;
+}
+
+function initLockupCampaign(campaign: EntityCampaign, params: Params.CreateCampaignLockup): EntityCampaign {
+  campaign.lockup = params.lockup;
+  campaign.streamCancelable = params.cancelable;
+  campaign.streamShape = params.shape;
+  campaign.streamTotalDuration = params.totalDuration;
+  campaign.streamTransferable = params.transferable;
+
+  const startTime = params.startTime;
+  if (startTime) {
+    campaign.streamStart = startTime.gt(ZERO);
+    campaign.streamStartTime = startTime;
+  }
 
   return campaign;
 }

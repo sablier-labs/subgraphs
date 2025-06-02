@@ -45,7 +45,7 @@ export namespace GraphManifest {
   export type EventHandler = {
     /** Event signature without parameter names. */
     event: string;
-    handler: `handle${string}`;
+    handler: `handle_${string}_${string}`;
   };
 
   export type Source = {

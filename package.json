@@ -27,7 +27,6 @@
     "@types/lodash": "^4.17",
     "@types/node": "^22.15",
     "bignumber.js": "^9.3",
-    "dir-compare": "^5.0",
     "envio": "^2.20",
     "fs-extra": "^11.3",
     "graphql": "^16.11",

@@ -13,7 +13,7 @@ export async function createDynamic(
   context: Context.Handler,
   event: Envio.Event,
   entities: CreateEntities,
-  params: Params.CreateDynamic,
+  params: Params.CreateStreamDynamic,
 ): Promise<Entity.Stream> {
   const stream = await createBase(context, entities, event, params);
   await context.Stream.set(stream);
@@ -25,7 +25,7 @@ export async function createLinear(
   context: Context.Handler,
   event: Envio.Event,
   entities: CreateEntities,
-  params: Params.CreateLinear,
+  params: Params.CreateStreamLinear,
 ): Promise<Entity.Stream> {
   const baseStream = await createBase(context, entities, event, params);
 
@@ -82,16 +82,17 @@ async function createBase(
   context: Context.Handler,
   entities: CreateEntities,
   event: Envio.Event,
-  params: Params.CreateCommon,
+  params: Params.CreateStreamCommon,
 ): Promise<Entity.Stream> {
   const { asset, batch, batcher, watcher } = entities;
 
+  const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);
-  const streamId = Id.stream(event.srcAddress, event.chainId, params.tokenId);
+  const tokenId = params.tokenId;
+  const streamId = Id.stream(event.srcAddress, event.chainId, tokenId);
   const lockup = getContract("lockup", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
-
   const funder = event.transaction.from?.toLowerCase() || "";
   const recipient = params.recipient.toLowerCase();
   const sender = params.sender.toLowerCase();
@@ -108,7 +109,7 @@ async function createBase(
 
   // Some fields are set to 0/ undefined because they are set later depending on the stream category.
   const stream: Entity.Stream = {
-    alias: Id.streamAlias(lockup.alias, event.chainId, params.tokenId),
+    alias: Id.streamAlias(lockup.alias, event.chainId, tokenId),
     asset_id: asset.id,
     assetDecimals: asset.decimals,
     batch_id: batch.id,
@@ -141,7 +142,7 @@ async function createBase(
     sender,
     shape: params.shape,
     startTime: now,
-    subgraphId: BigInt(watcher.streamCounter),
+    subgraphId: counter,
     timestamp: now,
     tokenId: params.tokenId,
     transferable: params.transferable,
@@ -155,14 +156,14 @@ async function createBase(
   /* --------------------------------- WATCHER -------------------------------- */
   const updatedWatcher = {
     ...watcher,
-    streamCounter: watcher.streamCounter + 1n,
+    streamCounter: counter + 1n,
   };
   await context.Watcher.set(updatedWatcher);
 
   return stream;
 }
 
-function createCliff(stream: Entity.Stream, params: Params.CreateLinear) {
+function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
   if (stream.version === Version.Lockup.V2_0) {

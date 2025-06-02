@@ -3,7 +3,7 @@ import { envioChains } from "@src/chains";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
 import { Errors } from "@src/errors";
-import { sanitizeName } from "@src/helpers";
+import { sanitizeContractName } from "@src/helpers";
 import type { Indexed } from "@src/types";
 import logger, { messages } from "@src/winston";
 
@@ -63,7 +63,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
       const { name: contractName, isTemplate } = filteredContract;
       if (isTemplate) {
         networkContracts.push({
-          name: sanitizeName(contractName, release.version),
+          name: sanitizeContractName(contractName, release.version),
         });
         continue;
       }
@@ -84,7 +84,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
       networkContracts.push({
         address: contract.address.toLowerCase() as `0x${string}`,
-        name: sanitizeName(contractName, release.version),
+        name: sanitizeContractName(contractName, release.version),
       });
       if (startBlock === 0) {
         possibleStartBlocks.push(contract.block);

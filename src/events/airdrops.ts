@@ -1,66 +1,83 @@
-import type { Sablier } from "@sablier/deployments";
+import { contracts, type Sablier } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
 
-function get(
-  version: Sablier.Version.Airdrops,
-  contractName: string,
-  eventName: string,
-  handlerSuffix?: string,
-): Indexed.Event {
+const names = contracts.names;
+
+function get(version: Sablier.Version.Airdrops, contractName: string, eventName: string): Indexed.Event {
   return {
     contractName,
-    handlerSuffix,
     eventName,
     protocol: "airdrops",
     version,
   };
 }
 
-// It doesn't matter what contract/version we're using because the events have the same signatures across all contracts.
-const campaignEvents: Indexed.Event[] = [
-  {
-    contractName: "Adminable",
-    eventName: "TransferAdmin",
-    handlerSuffix: "InCampaign",
+function campaign(version: Sablier.Version.Airdrops, contractName: string): Indexed.Event[] {
+  return [get(version, contractName, "TransferAdmin"), get(version, contractName, "Clawback")];
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    V1.1                                    */
+/* -------------------------------------------------------------------------- */
+
+const v1_1: Indexed.EventMap = {
+  [names.SABLIER_V2_MERKLE_STREAMER_FACTORY]: {
+    "v1.1": [get("v1.1", names.SABLIER_V2_MERKLE_STREAMER_FACTORY, "CreateMerkleStreamerLL")],
   },
-  get("v1.1", "SablierV2MerkleStreamerLL", "Clawback"),
-];
+  [names.SABLIER_V2_MERKLE_STREAMER_LL]: {
+    "v1.1": [
+      ...campaign("v1.1", names.SABLIER_V2_MERKLE_STREAMER_LL),
+      get("v1.1", names.SABLIER_V2_MERKLE_STREAMER_LL, "Claim"),
+    ],
+  },
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                    V1.2                                    */
+/* -------------------------------------------------------------------------- */
+
+const v1_2: Indexed.EventMap = {
+  [names.SABLIER_V2_MERKLE_LOCKUP_FACTORY]: {
+    "v1.2": [
+      get("v1.2", names.SABLIER_V2_MERKLE_LOCKUP_FACTORY, "CreateMerkleLL"),
+      get("v1.2", names.SABLIER_V2_MERKLE_LOCKUP_FACTORY, "CreateMerkleLT"),
+    ],
+  },
+  [names.SABLIER_V2_MERKLE_LL]: {
+    "v1.2": [...campaign("v1.2", names.SABLIER_V2_MERKLE_LL), get("v1.2", names.SABLIER_V2_MERKLE_LL, "Claim")],
+  },
+  [names.SABLIER_V2_MERKLE_LT]: {
+    "v1.2": [...campaign("v1.2", names.SABLIER_V2_MERKLE_LT), get("v1.2", names.SABLIER_V2_MERKLE_LT, "Claim")],
+  },
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                    V1.3                                    */
+/* -------------------------------------------------------------------------- */
+
+const v1_3: Indexed.EventMap = {
+  [names.SABLIER_MERKLE_FACTORY]: {
+    "v1.3": [
+      get("v1.3", names.SABLIER_MERKLE_FACTORY, "CreateMerkleInstant"),
+      get("v1.3", names.SABLIER_MERKLE_FACTORY, "CreateMerkleLL"),
+      get("v1.3", names.SABLIER_MERKLE_FACTORY, "CreateMerkleLT"),
+    ],
+  },
+  [names.SABLIER_MERKLE_INSTANT]: {
+    "v1.3": [...campaign("v1.3", names.SABLIER_MERKLE_INSTANT), get("v1.3", names.SABLIER_MERKLE_INSTANT, "Claim")],
+  },
+  [names.SABLIER_MERKLE_LL]: {
+    "v1.3": [...campaign("v1.3", names.SABLIER_MERKLE_LL), get("v1.3", names.SABLIER_MERKLE_LL, "Claim")],
+  },
+  [names.SABLIER_MERKLE_LT]: {
+    "v1.3": [...campaign("v1.3", names.SABLIER_MERKLE_LT), get("v1.3", names.SABLIER_MERKLE_LT, "Claim")],
+  },
+};
 
 const airdropHandlers: Indexed.EventMap = {
-  SablierV2MerkleStreamerFactory: {
-    "v1.1": [get("v1.1", "SablierV2MerkleStreamerFactory", "CreateMerkleStreamerLL")],
-  },
-  SablierV2MerkleStreamerLL: {
-    "v1.1": [...campaignEvents, get("v1.1", "SablierV2MerkleStreamerLL", "Claim", "Lockup")],
-  },
-  SablierV2MerkleLockupFactory: {
-    "v1.2": [
-      get("v1.2", "SablierV2MerkleLockupFactory", "CreateMerkleLL"),
-      get("v1.2", "SablierV2MerkleLockupFactory", "CreateMerkleLT"),
-    ],
-  },
-  SablierV2MerkleLL: {
-    "v1.2": [...campaignEvents, get("v1.2", "SablierV2MerkleLL", "Claim", "Lockup")],
-  },
-  SablierV2MerkleLT: {
-    "v1.2": [...campaignEvents, get("v1.2", "SablierV2MerkleLT", "Claim", "Lockup")],
-  },
-  SablierMerkleFactory: {
-    "v1.3": [
-      get("v1.3", "SablierMerkleFactory", "CreateMerkleInstant"),
-      get("v1.3", "SablierMerkleFactory", "CreateMerkleLL"),
-      get("v1.3", "SablierMerkleFactory", "CreateMerkleLT"),
-    ],
-  },
-  SablierMerkleInstant: {
-    "v1.3": [...campaignEvents, get("v1.3", "SablierMerkleInstant", "Claim", "Instant")],
-  },
-  SablierMerkleLL: {
-    "v1.3": [...campaignEvents, get("v1.3", "SablierMerkleLL", "Claim", "Lockup")],
-  },
-  SablierMerkleLT: {
-    "v1.3": [...campaignEvents, get("v1.3", "SablierMerkleLT", "Claim", "Lockup")],
-  },
+  ...v1_1,
+  ...v1_2,
+  ...v1_3,
 } as const;
 
 export default airdropHandlers;

@@ -6,7 +6,7 @@ const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   testEnvironment: "node",
   testMatch: ["<rootDir>/tests/**/*.test.ts"],
-  testPathIgnorePatterns: ["node_modules/"],
+  testPathIgnorePatterns: ["node_modules", "src"],
   transform: {
     "^.+.ts$": ["ts-jest", {}],
   },

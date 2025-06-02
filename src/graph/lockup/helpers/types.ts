@@ -1,7 +1,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export namespace Params {
-  export class Cancel {
+  export class CancelStream {
     recipient: Address;
     recipientAmount: BigInt;
     sender: Address;
@@ -9,7 +9,7 @@ export namespace Params {
     streamId: BigInt;
   }
 
-  export class CreateCommon {
+  export class CreateStreamCommon {
     asset: Address;
     cancelable: boolean;
     category: string;
@@ -19,26 +19,36 @@ export namespace Params {
     recipient: Address;
     shape: string | null;
     sender: Address;
+    streamId: BigInt;
     startTime: BigInt;
-    tokenId: BigInt;
     transferable: boolean;
   }
 
-  export class CreateLinear {
+  export class CreateStreamLinear {
     cliffTime: BigInt;
     unlockAmountCliff: BigInt | null; // v2.0 and above
     unlockAmountStart: BigInt | null; // v2.0 and above
   }
 
-  export class CreateDynamic {
+  export class CreateStreamDynamic {
     segments: Segment[];
   }
 
-  export class CreateTranched {
+  export class CreateStreamTranched {
     tranches: Tranche[];
   }
 
-  export class Withdraw {
+  export class RenounceStream {
+    streamId: BigInt;
+  }
+
+  export class TransferNFT {
+    from: Address;
+    to: Address;
+    tokenId: BigInt;
+  }
+
+  export class WithdrawFromStream {
     amount: BigInt;
     streamId: BigInt;
     to: Address;

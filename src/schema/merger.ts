@@ -4,7 +4,7 @@ import { mergeTypeDefs } from "@graphql-tools/merge";
 import { Protocol } from "@sablier/deployments";
 import { SCHEMA_DIR } from "@src/paths";
 import { type Indexed } from "@src/types";
-import { type DocumentNode, print } from "graphql";
+import { type DocumentNode } from "graphql";
 import { getAssetDefs, getStreamDefs, getWatcherDefs } from "./common";
 import { getEnumDefs } from "./enums";
 
@@ -14,7 +14,7 @@ import { getEnumDefs } from "./enums";
  * @param protocol - The protocol to generate a schema for.
  * @returns A merged schema for the given protocol.
  */
-export function mergeSchema(protocol: Indexed.Protocol): string {
+export function mergeSchema(protocol: Indexed.Protocol): DocumentNode {
   const gqlDefs: string[] = [];
 
   // Defs common to all protocols
@@ -52,7 +52,7 @@ export function mergeSchema(protocol: Indexed.Protocol): string {
   const loadedGqlDefs = loadFilesSync(gqlDefs);
   const allDefs = [...loadedGqlDefs, ...tsDefs];
   const mergedSchema = mergeTypeDefs(allDefs, { throwOnConflict: true });
-  return print(mergedSchema);
+  return mergedSchema;
 }
 
 function getDefs(protocol: Indexed.Protocol | "common", file: string): string {

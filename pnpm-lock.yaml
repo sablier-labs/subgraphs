@@ -68,9 +68,6 @@ importers:
       bignumber.js:
         specifier: ^9.3
         version: 9.3.0
-      dir-compare:
-        specifier: ^5.0
-        version: 5.0.0
       envio:
         specifier: ^2.20
         version: 2.21.0(typescript@5.8.3)(zod@3.25.23)
@@ -1853,9 +1850,6 @@ packages:
   diff@4.0.2:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
     engines: {node: '>=0.3.1'}
-
-  dir-compare@5.0.0:
-    resolution: {integrity: sha512-/GCjdixGQyJ9sj/HiMTYaNGztXqHnj0kWuKDfrGU6fCvZzQBihMBQLToG/dwg5cSs7lm5707iwbKOdsJh5VV4g==}
 
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -6054,11 +6048,6 @@ snapshots:
 
   diff@4.0.2:
     optional: true
-
-  dir-compare@5.0.0:
-    dependencies:
-      minimatch: 3.1.2
-      p-limit: 3.1.0
 
   dir-glob@3.0.1:
     dependencies:

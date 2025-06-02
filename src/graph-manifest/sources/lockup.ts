@@ -1,6 +1,6 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
-import { create } from "./helpers";
+import { getSources } from "./helpers";
 
-export function createLockupSources(chainId: number): GraphManifest.Source[] {
-  return create("lockup", chainId);
+export function getLockupSources(chainId: number): GraphManifest.Source[] {
+  return getSources("lockup", chainId);
 }

@@ -10,7 +10,7 @@ export namespace Params {
     streamId: bigint;
   };
 
-  export type CreateCommon = {
+  export type CreateStreamCommon = {
     asset: Envio.Address;
     cancelable: boolean;
     category: enums.StreamCategory;
@@ -25,17 +25,17 @@ export namespace Params {
     transferable: boolean;
   };
 
-  export type CreateLinear = CreateCommon & {
+  export type CreateStreamLinear = CreateStreamCommon & {
     cliffTime: bigint;
     unlockAmountCliff?: bigint; // v2.0 and above
     unlockAmountStart?: bigint; // v2.0 and above
   };
 
-  export type CreateDynamic = CreateCommon & {
+  export type CreateStreamDynamic = CreateStreamCommon & {
     segments: Segment[];
   };
 
-  export type CreateTranche = CreateCommon & {
+  export type CreateTranche = CreateStreamCommon & {
     tranches: Tranche[];
   };
 

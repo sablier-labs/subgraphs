@@ -1,26 +1,31 @@
 import type { GraphManifest } from "@src/graph-manifest/types";
+import { sanitizeContractName } from "@src/helpers";
 import paths from "@src/paths";
 import type { Indexed } from "@src/types";
 import logger from "@src/winston";
 import * as fs from "fs-extra";
+import _ from "lodash";
 
 /**
  * Resolves an event handler for The Graph manifest.
  * @param event The event object; @see Indexed.Event
  * @returns A GraphManifest.EventHandler object
+ * @example SablierLockup_v2_0_Approval
+ * @example SablierLockup_v2_0_CreateLockupLinearStream
  */
 export function resolveEventHandler(event: Indexed.Event): GraphManifest.EventHandler {
-  const { contractName, eventName, handlerSuffix, protocol, version } = event;
+  const { contractName, eventName, protocol, version } = event;
   const abiPath = paths.abi(contractName, protocol, version);
 
   try {
+    const sanitizedContractName = sanitizeContractName(contractName, version);
     const abiContent: AbiItem[] = JSON.parse(fs.readFileSync(abiPath, "utf-8"));
     const foundEvent = findEventInAbi(abiContent, eventName, contractName);
     const eventSignature = buildEventSignature(foundEvent, eventName);
 
     return {
       event: eventSignature,
-      handler: `handle${eventName}${handlerSuffix || ""}`,
+      handler: `handle_${sanitizedContractName}_${eventName}`,
     };
   } catch (error) {
     logger.error(`Error processing ABI for contract ${contractName} and event ${eventName}: ${error}`);
@@ -47,6 +52,7 @@ type AbiItem = {
 /**
  * Builds the event signature string from the event definition. Note that this will not include parameter names.
  * @example Approval(indexed address,indexed address,uint256)
+ * @example CreateLockupLinearStream(uint256,address,indexed address,indexed address,(uint128,uint128,uint128),indexed address,bool,bool,(uint40,uint40,uint40),address)
  */
 function buildEventSignature(event: AbiItem, name: string): string {
   if (!event.inputs || event.inputs.length === 0) {
@@ -97,7 +103,7 @@ function processComponentsType(input: AbiInput): string {
  * Finds an event in the ABI by name
  */
 function findEventInAbi(abiContent: AbiItem[], eventName: string, contractName: string): AbiItem {
-  const event = abiContent.find((item) => item.type === "event" && item.name === eventName);
+  const event = _.find(abiContent, { name: eventName, type: "event" });
 
   if (!event) {
     throw new Error(`Event ${eventName} not found in ABI for contract ${contractName}`);

@@ -1,14 +1,3 @@
-// biome-ignore-all assist/source/organizeImports: grouped exports
-
-// Events
-export {
-  Approval as EventApproval,
-  ApprovalForAll as EventApprovalForAll,
-  RenounceLockupStream as EventRenounceLockupStream,
-  Transfer as EventTransfer,
-  TransferAdmin as EventTransferAdmin,
-} from "./bindings/SablierV2LockupLinear_v1_0/SablierV2LockupLinear";
-
 // Structs
 export {
   CreateLockupDynamicStreamSegmentsStruct as StructSegmentV2_0,

@@ -8,8 +8,11 @@ export namespace Context {
 }
 
 // Contracts
-// Note: all Flow contracts have the same ABI now. The export name may have to be updated in the future.
-export { SablierFlow_v1_0, SablierFlow_v1_1 } from "./bindings/src/Handlers.gen";
+import { SablierFlow_v1_0, SablierFlow_v1_1 } from "./bindings/src/Handlers.gen";
+export namespace Contract {
+  export const Flow_v1_0 = SablierFlow_v1_0;
+  export const Flow_v1_1 = SablierFlow_v1_1;
+}
 
 // Enums
 import type { ActionCategory_t } from "./bindings/src/db/Enums.gen";

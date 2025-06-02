@@ -6,7 +6,15 @@ import type { Indexed } from "./types";
  * @param version The version of the contract.
  * @returns The sanitized name of the contract.
  */
-export function sanitizeName(contractName: string, version: Indexed.Version): string {
-  const sanitizedVersion = version.replace(".", "_");
-  return `${contractName}_${sanitizedVersion}`; // e.g. SablierLockup_v2_0
+export function sanitizeContractName(contractName: string, version: Indexed.Version): string {
+  return `${contractName}_${sanitizeVersion(version)}`; // e.g. SablierLockup_v2_0
+}
+
+/**
+ * Converts the version from v1.2 to v1_2.
+ * @param version The version to sanitize.
+ * @returns The sanitized version.
+ */
+export function sanitizeVersion(version: Indexed.Version): string {
+  return version.replace(".", "_");
 }

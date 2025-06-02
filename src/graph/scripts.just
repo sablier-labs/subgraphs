@@ -6,7 +6,7 @@ set allow-duplicate-variables := true
 #                                   CONSTANTS                                  #
 # ---------------------------------------------------------------------------- #
 
-IPFS_URL := "https://api.thegraph.com/ipfs"
+IPFS_URL := "https://api.thegraph.com/ipfs/api/v0"
 NODE_LIGHTLINK := "https://graph.pegasus.lightlink.io/rpc"
 NODE_XDC := "https://graph.xinfin.network"
 
