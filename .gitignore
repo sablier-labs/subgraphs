@@ -1,6 +1,7 @@
 # Directories
 logs
 node_modules
+repomix
 **/airdrops/bindings
 **/flow/bindings
 **/lockup/bindings
@@ -13,8 +14,6 @@ node_modules
 *.tsbuildinfo
 .env*
 !.env.example
-repomix-output.txt
-repomix-output.xml
 schema.graphql
 subgraph.yaml
 **/graph/**/manifests/**/*.yaml
