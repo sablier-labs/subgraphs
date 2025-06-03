@@ -1,14 +1,14 @@
 import { dataSource } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../common/constants";
 import { readChainId, readContractAlias } from "../../common/context";
-import { EntityFactory } from "../bindings";
+import * as Entity from "../bindings/schema";
 
-export function getOrCreateFactory(): EntityFactory {
+export function getOrCreateFactory(): Entity.Factory {
   const address = dataSource.address();
-  let factory = EntityFactory.load(address.toHexString());
+  let factory = Entity.Factory.load(address.toHexString());
 
   if (factory === null) {
-    factory = new EntityFactory(address.toHexString());
+    factory = new Entity.Factory(address.toHexString());
     factory.address = address;
     factory.alias = readContractAlias();
     factory.campaignCounter = ZERO;

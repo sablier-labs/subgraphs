@@ -2,17 +2,17 @@ import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
-import { EntityStream } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { Params } from "../helpers/types";
 import { getOrCreateAsset } from "./entity-asset";
 import { getOrCreateBatch } from "./entity-batch";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createStream(event: ethereum.Event, params: Params.CreateFlowStream): EntityStream {
+export function createStream(event: ethereum.Event, params: Params.CreateFlowStream): Entity.Stream {
   const chainId = readChainId();
   const tokenId = params.streamId;
   const streamId = Id.stream(dataSource.address(), tokenId);
-  const stream = new EntityStream(streamId);
+  const stream = new Entity.Stream(streamId);
   const watcher = getOrCreateWatcher();
 
   /* --------------------------------- WATCHER -------------------------------- */
@@ -62,8 +62,8 @@ export function createStream(event: ethereum.Event, params: Params.CreateFlowStr
   return stream;
 }
 
-export function getStream(tokenId: BigInt): EntityStream | null {
+export function getStream(tokenId: BigInt): Entity.Stream | null {
   const flowAddress = dataSource.address();
   const id = Id.stream(flowAddress, tokenId);
-  return EntityStream.load(id);
+  return Entity.Stream.load(id);
 }

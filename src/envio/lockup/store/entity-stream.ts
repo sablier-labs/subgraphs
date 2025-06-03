@@ -3,11 +3,10 @@ import { getContract } from "@envio-common/deployments";
 import { Id } from "@envio-common/id";
 import type { Context, Entity, EnvioEnum } from "@envio-lockup/bindings";
 import { fetchOrReadProxender } from "@envio-lockup/helpers/proxy";
+import type { Segment, Tranche } from "@envio-lockup/helpers/types";
 import { Version } from "@sablier/deployments";
 import type { CreateEntities, Params } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
-import { create as createSegments } from "./entity-segment";
-import { create as createTranches } from "./entity-tranche";
 
 export async function createDynamic(
   context: Context.Handler,
@@ -75,7 +74,7 @@ export async function getOrThrow(
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
+/*                                COMMON LOGIC                                */
 /* -------------------------------------------------------------------------- */
 
 async function createBase(
@@ -203,5 +202,61 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
     } else {
       throw new Error(`Unknown Lockup version: ${stream.version}`);
     }
+  }
+}
+
+async function createSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {
+  let streamed = 0n;
+
+  // The start time of the stream is the first segment's start time
+  let previous: Segment = { amount: 0n, exponent: 0n, milestone: stream.startTime };
+
+  for (let i = 0; i < segments.length; i++) {
+    const current = segments[i];
+
+    const id = `${stream.id}-${i.toString()}`;
+    const segment: Entity.Segment = {
+      amount: current.amount,
+      endAmount: streamed + current.amount,
+      endTime: current.milestone,
+      exponent: current.exponent,
+      id,
+      milestone: current.milestone,
+      position: BigInt(i),
+      startAmount: streamed,
+      startTime: previous.milestone,
+      stream_id: stream.id,
+    };
+    await context.Segment.set(segment);
+
+    streamed += current.amount;
+    previous = current;
+  }
+}
+
+async function createTranches(context: Context.Handler, stream: Entity.Stream, tranches: Tranche[]): Promise<void> {
+  let streamedAmount = 0n;
+
+  // The start time of the stream is the first tranche's start time
+  let previous: Tranche = { amount: 0n, timestamp: stream.startTime };
+
+  for (let i = 0; i < tranches.length; i++) {
+    const current = tranches[i];
+    const id = `${stream.id}-${i.toString()}`;
+    const tranche: Entity.Tranche = {
+      amount: current.amount,
+      endAmount: streamedAmount + current.amount,
+      endTime: current.timestamp,
+      id,
+      position: BigInt(i),
+      startAmount: streamedAmount,
+      startTime: previous.timestamp,
+      stream_id: stream.id,
+      timestamp: current.timestamp,
+    };
+    await context.Tranche.set(tranche);
+
+    streamedAmount += tranche.endAmount;
+    previous = current;
   }
 }

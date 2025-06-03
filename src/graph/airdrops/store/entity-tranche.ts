@@ -1,12 +1,12 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO } from "../../common/constants";
-import { EntityCampaign, EntityTranche } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { TrancheWithPercentage } from "../helpers/types";
 
 export function createTranchesWithPercentages(
-  campaign: EntityCampaign,
+  campaign: Entity.Campaign,
   tranches: TrancheWithPercentage[],
-): EntityCampaign {
+): Entity.Campaign {
   // The start time of the stream is the first tranche's start time, so we use zero for the initial duration.
   let previous = new TrancheWithPercentage(ZERO, ZERO);
 
@@ -14,7 +14,7 @@ export function createTranchesWithPercentages(
     const current = tranches[i];
 
     const id = `${campaign.id}-${i.toString()}`;
-    const tranche = new EntityTranche(id);
+    const tranche = new Entity.Tranche(id);
     tranche.campaign = campaign.id;
     tranche.duration = current.duration;
     tranche.endDuration = previous.duration.plus(current.duration);

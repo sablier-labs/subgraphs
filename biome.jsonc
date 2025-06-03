@@ -2,11 +2,11 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@sablier/devkit/biome"],
   "files": {
-    "includes": ["**/*.graphql", "**/*.js", "**/*.json", "**/*.jsonc", "**/*.ts", "!src/graph/common/bindings/**/*"]
+    "includes": ["**/*.{graphql,js,json,jsonc,ts}", "!src/graph/**/bindings/**/*.ts"]
   },
   "overrides": [
     {
-      "includes": ["src/envio-config/**/*.ts", "src/events/**/*.ts", "src/graph-manifest/**/*.ts"],
+      "includes": ["src/envio-config/**/*.ts", "src/graph-manifest/**/*.ts"],
       "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
     },
     {

@@ -1,7 +1,8 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, TWO, ZERO } from "../../common/constants";
 import { Id } from "../../common/id";
-import { EntityBatch, EntityBatcher } from "../bindings";
+import * as Entity from "../bindings/schema";
+import { getOrCreateBatcher } from "./entity-batcher";
 
 /**
  * This function may be run multiple times within the same transaction:
@@ -12,13 +13,13 @@ import { EntityBatch, EntityBatcher } from "../bindings";
  *
  * The rationale is that creating the batch entity makes sense only if there are at least 2 streams.
  */
-export function getOrCreateBatch(event: ethereum.Event, sender: Address): EntityBatch {
+export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity.Batch {
   const id = Id.batch(event.transaction.hash, sender);
   const batcher = getOrCreateBatcher(sender);
 
-  let batch = EntityBatch.load(id);
+  let batch = Entity.Batch.load(id);
   if (batch === null) {
-    batch = new EntityBatch(id);
+    batch = new Entity.Batch(id);
     batch.size = ZERO;
   } else {
     const hash = batch.hash;
@@ -36,17 +37,4 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
 
   batch.save();
   return batch;
-}
-
-function getOrCreateBatcher(sender: Address): EntityBatcher {
-  const id = sender.toHexString();
-  let batcher = EntityBatcher.load(id);
-
-  if (batcher === null) {
-    batcher = new EntityBatcher(id);
-    batcher.batchCounter = ZERO;
-    batcher.save();
-  }
-
-  return batcher;
 }

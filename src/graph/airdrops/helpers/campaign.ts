@@ -1,13 +1,13 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { readLockups } from "../../common/context";
-import { EntityAsset } from "../bindings";
+import * as Entity from "../bindings/schema";
 
 /**
  * Generates a nickname by using the asset symbol and the admin address.
  * If the name is not provided, it will use the first 6 and last 4 characters of the admin address.
  * @example "USDC by 0xcafe..beef"
  */
-export function getNickname(campaignAdmin: Address, campaignName: string | null, asset: EntityAsset | null): string {
+export function getNickname(campaignAdmin: Address, campaignName: string | null, asset: Entity.Asset | null): string {
   let symbol: string;
   if (asset !== null) {
     symbol = asset.symbol;

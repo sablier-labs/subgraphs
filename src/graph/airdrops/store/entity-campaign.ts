@@ -3,7 +3,7 @@ import { ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
-import { EntityAsset, EntityCampaign } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { getNickname } from "../helpers";
 import { Params } from "../helpers/types";
 import { createAction } from "./entity-action";
@@ -12,7 +12,7 @@ import { getOrCreateFactory } from "./entity-factory";
 import { createTranchesWithPercentages } from "./entity-tranche";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createCampaignInstant(event: ethereum.Event, params: Params.CreateCampaignBase): EntityCampaign {
+export function createCampaignInstant(event: ethereum.Event, params: Params.CreateCampaignBase): Entity.Campaign {
   const campaign = createBaseCampaign(event, params);
   campaign.save();
   return campaign;
@@ -22,7 +22,7 @@ export function createCampaignLL(
   event: ethereum.Event,
   paramsBase: Params.CreateCampaignBase,
   paramsLL: Params.CreateCampaignLL,
-): EntityCampaign {
+): Entity.Campaign {
   let campaign = createBaseCampaign(event, paramsBase);
 
   campaign = initLockupCampaign(campaign, paramsLL);
@@ -43,7 +43,7 @@ export function createCampaignLT(
   event: ethereum.Event,
   paramsBase: Params.CreateCampaignBase,
   paramsLT: Params.CreateCampaignLT,
-): EntityCampaign {
+): Entity.Campaign {
   let campaign = createBaseCampaign(event, paramsBase);
 
   campaign = initLockupCampaign(campaign, paramsLT);
@@ -53,38 +53,38 @@ export function createCampaignLT(
   return campaign;
 }
 
-export function getCampaign(address: Address): EntityCampaign | null {
+export function getCampaign(address: Address): Entity.Campaign | null {
   const id = Id.campaign(address);
-  const campaign = EntityCampaign.load(id);
+  const campaign = Entity.Campaign.load(id);
   if (campaign === null) {
     logError("Campaign entity not saved for address: {}", [address.toHexString()]);
   }
   return campaign;
 }
 
-export function updateCampaignAdmin(campaign: EntityCampaign, admin: Address): void {
+export function updateCampaignAdmin(campaign: Entity.Campaign, admin: Address): void {
   campaign.admin = admin;
-  const asset = EntityAsset.load(campaign.asset);
+  const asset = Entity.Asset.load(campaign.asset);
   const nickname = getNickname(Address.fromBytes(campaign.admin), campaign.name, asset);
   campaign.nickname = nickname;
   campaign.save();
 }
 
-export function updateCampaignClaimed(campaign: EntityCampaign, amount: BigInt): void {
+export function updateCampaignClaimed(campaign: Entity.Campaign, amount: BigInt): void {
   campaign.claimedAmount = campaign.claimedAmount.plus(amount);
   campaign.claimedCount = campaign.claimedCount.plus(ONE);
   campaign.save();
 }
 
-export function updateCampaignClawback(event: ethereum.Event, campaign: EntityCampaign, actionId: string): void {
+export function updateCampaignClawback(event: ethereum.Event, campaign: Entity.Campaign, actionId: string): void {
   campaign.clawbackAction = actionId;
   campaign.clawbackTime = event.block.timestamp;
   campaign.save();
 }
 
-function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaignBase): EntityCampaign {
+function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaignBase): Entity.Campaign {
   const campaignId = Id.campaign(params.campaignAddress);
-  const campaign = new EntityCampaign(campaignId);
+  const campaign = new Entity.Campaign(campaignId);
   const asset = getOrCreateAsset(params.asset);
   const factory = getOrCreateFactory();
   const watcher = getOrCreateWatcher();
@@ -131,7 +131,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaign
   return campaign;
 }
 
-function initLockupCampaign(campaign: EntityCampaign, params: Params.CreateCampaignLockup): EntityCampaign {
+function initLockupCampaign(campaign: Entity.Campaign, params: Params.CreateCampaignLockup): Entity.Campaign {
   campaign.lockup = params.lockup;
   campaign.streamCancelable = params.cancelable;
   campaign.streamShape = params.shape;

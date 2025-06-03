@@ -9,11 +9,12 @@ export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contrac
   const contracts: EnvioConfig.Contract[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
+      const sanitizedName = sanitizeContractName(indexedContract.name, version);
       contracts.push({
         abi_file_path: getRelativeAbiFilePath(protocol, indexedContract.name, version),
-        events: resolveEvents(indexedEvents[protocol][indexedContract.name][version]),
-        handler: `mappings/${version}/index.ts`,
-        name: sanitizeContractName(indexedContract.name, version),
+        events: getEvents(indexedEvents[protocol][indexedContract.name][version]),
+        handler: `mappings/${version}/${indexedContract.name}.ts`,
+        name: sanitizedName,
       });
     }
   }
@@ -27,16 +28,12 @@ function getRelativeAbiFilePath(protocol: Indexed.Protocol, contractName: string
   return getRelativePath(envioConfigDir, abiPath);
 }
 
-/**
- * Resolves the event names from the indexed events.
- */
-function resolveEvents(indexedEvents: Indexed.Event[]): EnvioConfig.Event[] {
+function getEvents(indexedEvents: Indexed.Event[]): EnvioConfig.Event[] {
   const events: EnvioConfig.Event[] = [];
   for (const indexedEvent of indexedEvents) {
-    const event = {
+    events.push({
       event: indexedEvent.eventName,
-    };
-    events.push(event);
+    });
   }
   return events;
 }

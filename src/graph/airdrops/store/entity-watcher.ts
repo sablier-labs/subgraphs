@@ -1,13 +1,13 @@
 import { ONE } from "../../common/constants";
 import { readChainId } from "../../common/context";
-import { EntityWatcher } from "../bindings";
+import * as Entity from "../bindings/schema";
 
-export function getOrCreateWatcher(): EntityWatcher {
+export function getOrCreateWatcher(): Entity.Watcher {
   const chainId = readChainId();
-  let watcher = EntityWatcher.load(chainId.toString());
+  let watcher = Entity.Watcher.load(chainId.toString());
 
   if (watcher === null) {
-    watcher = new EntityWatcher(chainId.toString());
+    watcher = new Entity.Watcher(chainId.toString());
     watcher.actionCounter = ONE;
     watcher.campaignCounter = ONE;
     watcher.chainId = chainId;

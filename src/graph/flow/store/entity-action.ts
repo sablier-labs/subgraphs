@@ -3,12 +3,12 @@ import { ONE } from "../../common/constants";
 import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
 import { CommonParams } from "../../common/types";
-import { EntityAction } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createAction(event: ethereum.Event, params: CommonParams.Action): EntityAction {
+export function createAction(event: ethereum.Event, params: CommonParams.Action): Entity.Action {
   const id = Id.action(event);
-  const action = new EntityAction(id);
+  const action = new Entity.Action(id);
   const watcher = getOrCreateWatcher();
 
   /* --------------------------- ACTION: TRANSACTION -------------------------- */

@@ -34,7 +34,7 @@ export function resolveEventHandler(event: Indexed.Event): GraphManifest.EventHa
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
+/*                                COMMON LOGIC                                */
 /* -------------------------------------------------------------------------- */
 
 type AbiInput = {

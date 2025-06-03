@@ -2,13 +2,13 @@ import { ethereum } from "@graphprotocol/graph-ts";
 import { ONE } from "../../common/constants";
 import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
-import { EntityAction, EntityCampaign } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { Params } from "../helpers/types";
 import { getOrCreateWatcher } from "./entity-watcher";
 
-export function createAction(event: ethereum.Event, campaign: EntityCampaign, params: Params.Action): EntityAction {
+export function createAction(event: ethereum.Event, campaign: Entity.Campaign, params: Params.Action): Entity.Action {
   const actionId = Id.action(event);
-  const action = new EntityAction(actionId);
+  const action = new Entity.Action(actionId);
   const watcher = getOrCreateWatcher();
 
   /* --------------------------------- ACTION --------------------------------- */

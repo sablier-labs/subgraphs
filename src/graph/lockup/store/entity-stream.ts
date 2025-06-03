@@ -5,21 +5,19 @@ import { Id } from "../../common/id";
 import { logError } from "../../common/logger";
 import { areStringsEqual } from "../../common/strings";
 import { CommonParams } from "../../common/types";
-import { EntityStream } from "../bindings";
+import * as Entity from "../bindings/schema";
 import { loadProxender } from "../helpers";
-import { Params } from "../helpers/types";
+import { Params, Segment, Tranche } from "../helpers/types";
 import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
 import { getOrCreateBatch } from "./entity-batch";
-import { createSegments } from "./entity-segment";
-import { createTranche } from "./entity-tranche";
 import { getOrCreateWatcher } from "./entity-watcher";
 
 export function createStreamDynamic(
   event: ethereum.Event,
   commonParams: Params.CreateStreamCommon,
   dynamicParams: Params.CreateStreamDynamic,
-): EntityStream {
+): Entity.Stream {
   const stream = createBaseStream(event, commonParams);
   stream.save();
   createSegments(stream, dynamicParams.segments);
@@ -30,7 +28,7 @@ export function createStreamLinear(
   event: ethereum.Event,
   commonParams: Params.CreateStreamCommon,
   linearParams: Params.CreateStreamLinear,
-): EntityStream {
+): Entity.Stream {
   let stream = createBaseStream(event, commonParams);
 
   const unlockAmountStart = linearParams.unlockAmountStart;
@@ -43,7 +41,7 @@ export function createStreamLinear(
     }
   }
 
-  stream = addCliff(stream, commonParams, linearParams);
+  stream = createCliff(stream, commonParams, linearParams);
   stream.save();
 
   return stream;
@@ -53,7 +51,7 @@ export function createStreamTranched(
   event: ethereum.Event,
   commonParams: Params.CreateStreamCommon,
   tranchedParams: Params.CreateStreamTranched,
-): EntityStream {
+): Entity.Stream {
   const stream = createBaseStream(event, commonParams);
   stream.save();
   createTranche(stream, tranchedParams.tranches);
@@ -61,69 +59,20 @@ export function createStreamTranched(
   return stream;
 }
 
-export function getStream(tokenId: BigInt): EntityStream | null {
+export function getStream(tokenId: BigInt): Entity.Stream | null {
   const id = Id.stream(dataSource.address(), tokenId);
-  return EntityStream.load(id);
+  return Entity.Stream.load(id);
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  INTERNAL                                  */
+/*                                COMMON LOGIC                                */
 /* -------------------------------------------------------------------------- */
 
-function addCliff(
-  stream: EntityStream,
-  commonParams: Params.CreateStreamCommon,
-  linearParams: Params.CreateStreamLinear,
-): EntityStream {
-  // In v2.0, no cliff means the cliff time is zero.
-  // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
-  if (areStringsEqual(stream.version, LOCKUP_V2_0)) {
-    if (linearParams.cliffTime.gt(ZERO)) {
-      stream.cliff = true;
-      stream.cliffAmount = linearParams.unlockAmountCliff;
-      stream.cliffTime = linearParams.cliffTime;
-    } else {
-      stream.cliff = false;
-    }
-  } else {
-    const cliffDuration = linearParams.cliffTime.minus(commonParams.startTime);
-    const totalDuration = stream.duration;
-
-    // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
-    // See https://github.com/sablier-labs/lockup/blob/v1.2.0/src/libraries/Helpers.sol#L157-L168
-    if (areStringsEqual(stream.version, LOCKUP_V1_2)) {
-      if (linearParams.cliffTime.gt(ZERO)) {
-        stream.cliff = true;
-        stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
-        stream.cliffTime = linearParams.cliffTime;
-      } else {
-        stream.cliff = false;
-      }
-    }
-    // In v1.0 and v1.1, no cliff means the cliff duration is zero, i.e., cliff time is the same as start time.
-    // See https://github.com/sablier-labs/lockup/blob/v1.1.2/src/libraries/Helpers.sol#L88-L103
-    // See https://github.com/sablier-labs/lockup/blob/v1.0.2/src/libraries/Helpers.sol#L88-L103
-    else if (areStringsEqual(stream.version, LOCKUP_V1_0) || areStringsEqual(stream.version, LOCKUP_V1_1)) {
-      if (cliffDuration.gt(ZERO)) {
-        stream.cliff = true;
-        stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
-        stream.cliffTime = linearParams.cliffTime;
-      } else {
-        stream.cliff = false;
-      }
-    } else {
-      logError("Unknown Lockup version: {}", [stream.version]);
-    }
-  }
-
-  return stream;
-}
-
-function createBaseStream(event: ethereum.Event, params: Params.CreateStreamCommon): EntityStream {
+function createBaseStream(event: ethereum.Event, params: Params.CreateStreamCommon): Entity.Stream {
   const chainId = readChainId();
   const tokenId = params.streamId;
   const streamId = Id.stream(dataSource.address(), tokenId);
-  const stream = new EntityStream(streamId);
+  const stream = new Entity.Stream(streamId);
 
   /* --------------------------------- WATCHER -------------------------------- */
   const watcher = getOrCreateWatcher();
@@ -192,4 +141,114 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   }
 
   return stream;
+}
+
+function createCliff(
+  stream: Entity.Stream,
+  commonParams: Params.CreateStreamCommon,
+  linearParams: Params.CreateStreamLinear,
+): Entity.Stream {
+  // In v2.0, no cliff means the cliff time is zero.
+  // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
+  if (areStringsEqual(stream.version, LOCKUP_V2_0)) {
+    if (linearParams.cliffTime.gt(ZERO)) {
+      stream.cliff = true;
+      stream.cliffAmount = linearParams.unlockAmountCliff;
+      stream.cliffTime = linearParams.cliffTime;
+    } else {
+      stream.cliff = false;
+    }
+  } else {
+    const cliffDuration = linearParams.cliffTime.minus(commonParams.startTime);
+    const totalDuration = stream.duration;
+
+    // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
+    // See https://github.com/sablier-labs/lockup/blob/v1.2.0/src/libraries/Helpers.sol#L157-L168
+    if (areStringsEqual(stream.version, LOCKUP_V1_2)) {
+      if (linearParams.cliffTime.gt(ZERO)) {
+        stream.cliff = true;
+        stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
+        stream.cliffTime = linearParams.cliffTime;
+      } else {
+        stream.cliff = false;
+      }
+    }
+    // In v1.0 and v1.1, no cliff means the cliff duration is zero, i.e., cliff time is the same as start time.
+    // See https://github.com/sablier-labs/lockup/blob/v1.1.2/src/libraries/Helpers.sol#L88-L103
+    // See https://github.com/sablier-labs/lockup/blob/v1.0.2/src/libraries/Helpers.sol#L88-L103
+    else if (areStringsEqual(stream.version, LOCKUP_V1_0) || areStringsEqual(stream.version, LOCKUP_V1_1)) {
+      if (cliffDuration.gt(ZERO)) {
+        stream.cliff = true;
+        stream.cliffAmount = commonParams.depositAmount.times(cliffDuration).div(totalDuration);
+        stream.cliffTime = linearParams.cliffTime;
+      } else {
+        stream.cliff = false;
+      }
+    } else {
+      logError("Unknown Lockup version: {}", [stream.version]);
+    }
+  }
+
+  return stream;
+}
+
+function createSegments(stream: Entity.Stream, segments: Segment[]): Entity.Stream {
+  let streamed = ZERO;
+
+  // The start time of the stream is the first segment's start time
+  let previous = new Segment(ZERO, ZERO, stream.startTime);
+
+  for (let i = 0; i < segments.length; i++) {
+    const current = segments[i];
+
+    const id = `${stream.id}-${i.toString()}`;
+    const segment = new Entity.Segment(id);
+    segment.position = BigInt.fromI32(i);
+    segment.stream = stream.id;
+
+    segment.amount = current.amount;
+    segment.exponent = current.exponent;
+    segment.milestone = current.milestone;
+
+    segment.startAmount = streamed;
+    segment.startTime = previous.milestone;
+    segment.endAmount = streamed.plus(current.amount);
+    segment.endTime = current.milestone;
+
+    segment.save();
+
+    streamed = streamed.plus(current.amount);
+    previous = current;
+  }
+
+  return stream;
+}
+
+function createTranche(stream: Entity.Stream, tranches: Tranche[]): void {
+  let streamedAmount = ZERO;
+
+  // The start time of the stream is the first tranche's start time
+  let previous = new Tranche(ZERO, stream.startTime);
+
+  for (let i = 0; i < tranches.length; i++) {
+    const current = tranches[i];
+
+    const id = `${stream.id}-${i.toString()}`;
+    const tranche = new Entity.Tranche(id);
+    tranche.stream = stream.id;
+    tranche.position = BigInt.fromU32(i);
+
+    tranche.amount = current.amount;
+    tranche.timestamp = current.timestamp;
+
+    tranche.endAmount = streamedAmount.plus(current.amount);
+    tranche.endTime = current.timestamp;
+    tranche.startAmount = streamedAmount;
+    tranche.startTime = previous.timestamp;
+
+    tranche.save();
+
+    streamedAmount = streamedAmount.plus(tranche.endAmount);
+    previous = current;
+  }
 }
