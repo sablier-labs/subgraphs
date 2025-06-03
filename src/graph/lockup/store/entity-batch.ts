@@ -14,7 +14,7 @@ import { getOrCreateBatcher } from "./entity-batcher";
  * The rationale is that creating the batch entity makes sense only if there are at least 2 streams.
  */
 export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity.Batch {
-  const id = Id.batch(event.transaction.hash, sender);
+  const id = Id.batch(event, sender);
   const batcher = getOrCreateBatcher(sender);
 
   let batch = Entity.Batch.load(id);
@@ -28,10 +28,10 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
       batch.hash = event.transaction.hash;
       batch.size = TWO;
       batch.timestamp = event.block.timestamp;
-    } else {
-      batch.size = batch.size.plus(ONE);
       batcher.batchCounter = batcher.batchCounter.plus(ONE);
       batcher.save();
+    } else {
+      batch.size = batch.size.plus(ONE);
     }
   }
 

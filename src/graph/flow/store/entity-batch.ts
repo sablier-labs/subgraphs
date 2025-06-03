@@ -28,10 +28,10 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
       batch.hash = event.transaction.hash;
       batch.size = TWO;
       batch.timestamp = event.block.timestamp;
-    } else {
-      batch.size = batch.size.plus(ONE);
       batcher.batchCounter = batcher.batchCounter.plus(ONE);
       batcher.save();
+    } else {
+      batch.size = batch.size.plus(ONE);
     }
   }
 
