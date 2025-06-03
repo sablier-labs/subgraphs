@@ -3,7 +3,7 @@
  */
 
 import type { Envio } from "@envio-common/bindings";
-import { Store as CommonStore } from "@envio-common/store";
+import { CommonStore } from "@envio-common/store";
 import { type Context, type Entity } from "@envio-lockup/bindings";
 import { type CreateEntities, type Params } from "@envio-lockup/helpers/types";
 import { type Loader } from "@envio-lockup/mappings/common/loader";
@@ -53,10 +53,10 @@ async function loadEntities(
   params: EventParams,
 ): Promise<CreateEntities> {
   return {
-    asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, params.asset)),
+    asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset)),
     batch: loaderReturn.batch ?? (await Store.Batch.create(event, params.sender)),
-    batcher: loaderReturn.batcher ?? (await Store.Batcher.create(event, params.sender)),
-    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(event.chainId)),
+    batcher: loaderReturn.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
+    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
   };
 }
 

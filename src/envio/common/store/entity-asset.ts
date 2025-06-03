@@ -11,7 +11,7 @@ export async function create<
     address: assetAddress.toLowerCase(),
     chainId: BigInt(chainId),
     decimals: BigInt(metadata.decimals),
-    id: Id.asset(assetAddress, chainId),
+    id: Id.asset(chainId, assetAddress),
     name: metadata.name,
     symbol: metadata.symbol,
   };

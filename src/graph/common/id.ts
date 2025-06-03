@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { readChainId, readContractAlias } from "./context";
 
 export namespace Id {
@@ -18,30 +18,33 @@ export namespace Id {
 
   /**
    * @example
-   * 0x2791bca1f2de4661ed88a30c99a7a9449aa84174-137
+   * 137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174
    */
   export function asset(assetAddress: Address): string {
-    const address = assetAddress.toHexString();
     const chainId = readChainId().toString();
-    return `${address}-${chainId}`;
+    const address = assetAddress.toHexString();
+    return `${chainId}-${address}`;
   }
 
   /**
    * @example
-   * 0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35-0xf50760d8ead9ff322631a1f3ebf26cc7891b3708
+   * 137-0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35
    */
-  export function batch(hash: Bytes, address: Address): string {
-    return `${hash.toHexString()}-${address.toHexString()}`;
+  export function batch(event: ethereum.Event, sender: Address): string {
+    const chainId = readChainId().toString();
+    const address = sender.toHexString();
+    const hash = event.transaction.hash.toHexString();
+    return `${chainId}-${address}-${hash}`;
   }
 
   /**
    * @example
-   * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
+   * 137-0xf50760d8ead9ff322631a1f3ebf26cc7891b3708
    */
   export function campaign(campaignAddress: Address): string {
-    const address = campaignAddress.toHexString();
     const chainId = readChainId().toString();
-    return `${address}-${chainId}`;
+    const address = campaignAddress.toHexString();
+    return `${chainId}-${address}`;
   }
 
   /**

@@ -6,11 +6,11 @@ import { updateCounter as updateBatcherCounter } from "./entity-batcher";
 export async function create(event: Envio.Event, sender: Envio.Address): Promise<Entity.Batch> {
   const id = Id.batch(event, sender);
   const batch: Entity.Batch = {
-    batcher_id: Id.batcher(event.chainId, sender),
-    hash: "",
+    batcher_id: undefined,
+    hash: undefined,
     id,
     size: 0n,
-    timestamp: BigInt(event.block.timestamp),
+    timestamp: undefined,
   };
   return batch;
 }
@@ -35,6 +35,7 @@ export async function update(
   if (newBatchSize === 2n) {
     const updatedBatch: Entity.Batch = {
       ...batch,
+      batcher_id: batcher.id,
       hash: event.transaction.hash.toLowerCase(),
       size: newBatchSize,
       timestamp: BigInt(event.block.timestamp),

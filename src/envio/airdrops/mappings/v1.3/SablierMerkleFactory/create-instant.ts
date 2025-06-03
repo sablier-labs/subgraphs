@@ -1,6 +1,7 @@
 import { Contract } from "@envio-airdrops/bindings";
 import { Loader } from "@envio-airdrops/mappings/loader";
 import { Store } from "@envio-airdrops/store";
+import { CommonStore } from "@envio-common/store";
 import { Airdrops as enums } from "@src/schema/enums";
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.contractRegister(({ event, context }) => {
@@ -38,7 +39,7 @@ struct ConstructorParams {
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
     const entities = {
-      asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, event.params.baseParams[0])),
+      asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, event.params.baseParams[0])),
       factory: loaderReturn.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
       watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
     };

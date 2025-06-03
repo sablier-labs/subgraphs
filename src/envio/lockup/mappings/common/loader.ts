@@ -101,7 +101,7 @@ export namespace Loader {
     event: Envio.Event,
     params: EventParams,
   ): Promise<CreateReturn> {
-    const assetId = Id.asset(params.asset, event.chainId);
+    const assetId = Id.asset(event.chainId, params.asset);
     const asset = await context.Asset.get(assetId);
 
     const batchId = Id.batch(event, params.sender);

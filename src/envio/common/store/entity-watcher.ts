@@ -1,6 +1,9 @@
 import type { Common } from "@envio-common/bindings";
 
-export function create<TWatcher extends Common.StreamWatcher>(chainId: number): TWatcher {
+export async function create<
+  TContext extends { Watcher: { set: (watcher: TWatcher) => void | Promise<void> } },
+  TWatcher extends Common.StreamWatcher,
+>(context: TContext, chainId: number): Promise<TWatcher> {
   const watcher: Common.StreamWatcher = {
     actionCounter: 0n,
     chainId: BigInt(chainId),
@@ -8,6 +11,6 @@ export function create<TWatcher extends Common.StreamWatcher>(chainId: number): 
     logs: [],
     streamCounter: 0n,
   };
-
+  await context.Watcher.set(watcher as TWatcher);
   return watcher as TWatcher;
 }

@@ -32,7 +32,7 @@ export namespace Loader {
     event: Envio.Event,
     assetAddress: Envio.Address,
   ): Promise<CreateReturn> {
-    const assetId = Id.asset(assetAddress, event.chainId);
+    const assetId = Id.asset(event.chainId, assetAddress);
     const asset = await context.Asset.get(assetId);
 
     const factoryId = event.srcAddress;

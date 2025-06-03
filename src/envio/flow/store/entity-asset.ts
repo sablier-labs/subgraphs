@@ -1,6 +1,6 @@
 import type { Envio } from "@envio-common/bindings";
 import { Id } from "@envio-common/id";
-import { Store as CommonStore } from "@envio-common/store";
+import { CommonStore } from "@envio-common/store";
 import type { Context, Entity } from "@envio-flow/bindings";
 
 export async function create(context: Context.Handler, chainId: number, assetAddress: Envio.Address) {
@@ -8,7 +8,7 @@ export async function create(context: Context.Handler, chainId: number, assetAdd
 }
 
 export async function getOrThrow(context: Context.Loader, chainId: number, address: Envio.Address) {
-  const id = Id.asset(address, chainId);
+  const id = Id.asset(chainId, address);
   const asset = await context.Asset.get(id);
   if (!asset) {
     throw new Error(`Asset not loaded from the entity store: ${id}`);

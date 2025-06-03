@@ -7,25 +7,22 @@ export function createOrUpdateActivity(
   campaign: Entity.Campaign,
   amount: BigInt,
 ): Entity.Activity {
-  const timestamp = event.block.timestamp.toU32();
-  const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
-  const id = `activity-${campaign.id}-${day.toString()}`;
+  const timestamp = event.block.timestamp;
+  const day = timestamp.toU32() / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
+  const id = `activity-${campaign.id}-${day}`;
 
   let activity = Entity.Activity.load(id);
-  if (activity) {
+  if (activity === null) {
+    activity = new Entity.Activity(id);
+    activity.amount = amount;
+    activity.campaign = campaign.id;
+    activity.claims = ONE;
+    activity.day = BigInt.fromU32(day);
+    activity.timestamp = timestamp;
+  } else {
     activity.amount = activity.amount.plus(amount);
     activity.claims = activity.claims.plus(ONE);
-
-    activity.save();
-    return activity;
   }
-
-  activity = new Entity.Activity(id);
-  activity.amount = amount;
-  activity.campaign = campaign.id;
-  activity.claims = ONE;
-  activity.day = BigInt.fromU32(day);
-  activity.timestamp = event.block.timestamp;
 
   activity.save();
   return activity;

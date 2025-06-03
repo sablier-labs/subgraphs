@@ -1,5 +1,5 @@
 import { Id } from "@envio-common/id";
-import { Store as CommonStore } from "@envio-common/store";
+import { CommonStore } from "@envio-common/store";
 import { type Entity } from "@envio-flow/bindings";
 import type {
   SablierFlow_v1_0_CreateFlowStream_handler as Handler,
@@ -18,7 +18,7 @@ type LoaderReturn = {
   watcher: Entity.Watcher | undefined;
 };
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const assetId = Id.asset(event.params.token, event.chainId);
+  const assetId = Id.asset(event.chainId, event.params.token);
   const asset = await context.Asset.get(assetId);
 
   const batchId = Id.batch(event, event.params.sender);
@@ -43,10 +43,10 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /* -------------------------------------------------------------------------- */
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const entities = {
-    asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, event.params.token)),
+    asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, event.params.token)),
     batch: loaderReturn.batch ?? (await Store.Batch.create(event, event.params.sender)),
     batcher: loaderReturn.batcher ?? (await Store.Batcher.create(event, event.params.sender)),
-    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(event.chainId)),
+    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
   };
 
   const stream = await Store.Stream.create(context, event, entities, {

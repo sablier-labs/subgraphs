@@ -2,6 +2,7 @@ import type { Context } from "@envio-airdrops/bindings";
 import type { CreateEntities, Params } from "@envio-airdrops/helpers/types";
 import { Store } from "@envio-airdrops/store";
 import type { Envio } from "@envio-common/bindings";
+import { CommonStore } from "@envio-common/store";
 import { Airdrops as enums } from "@src/schema/enums";
 import { type Loader } from "../../loader";
 
@@ -59,7 +60,7 @@ async function loadEntities(
   assetAddress: Envio.Address,
 ): Promise<CreateEntities> {
   return {
-    asset: loaderReturn.asset ?? (await Store.Asset.create(context, event.chainId, assetAddress)),
+    asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, assetAddress)),
     factory: loaderReturn.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
     watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
   };

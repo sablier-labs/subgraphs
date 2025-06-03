@@ -1,5 +1,5 @@
 import type { Envio } from "@envio-common/bindings";
-import { Store as CommonStore } from "@envio-common/store";
+import { CommonStore } from "@envio-common/store";
 import type { ParamsAction } from "@envio-common/types";
 import type { Context, Entity } from "@envio-lockup/bindings";
 
