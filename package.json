@@ -47,6 +47,9 @@
     "viem": "^2.30",
     "winston": "^3.17"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "files": [
     "dist"
   ],

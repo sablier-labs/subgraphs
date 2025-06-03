@@ -1,5 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { StructTrancheV1_2, StructTrancheV1_3 } from "../bindings";
+import { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_3 } from "../bindings/SablierMerkleFactory_v1_3/SablierMerkleFactory";
+import { CreateMerkleLTTranchesWithPercentagesStruct as StructTrancheV1_2 } from "../bindings/SablierV2MerkleLockupFactory_v1_2/SablierV2MerkleLockupFactory";
+
 import { TrancheWithPercentage } from "./types";
 
 export function convertTranchesV1_2(tranches: StructTrancheV1_2[]): TrancheWithPercentage[] {

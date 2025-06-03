@@ -45,7 +45,7 @@ clean:
 
 # Deploy the subgraph
 [group("deploy")]
-deploy chain version: build
+deploy chain version: codegen
     pnpm graph deploy \
     --version-label {{ version }} \
     sablier-{{ PROTOCOL }}-{{ chain }} \
@@ -53,7 +53,7 @@ deploy chain version: build
 
 # Deploy to experimental subgraph on Ethereum Sepolia
 [group("deploy")]
-deploy-experimental version: build
+deploy-experimental version: codegen
     pnpm graph deploy \
     --version-label {{ version }} \
     sablier-{{ PROTOCOL }}-experimental \
@@ -80,7 +80,7 @@ deploy-xdc version:
 # ---------------------------------------------------------------------------- #
 
 # Deploy to a custom The Graph endpoint
-_deploy-custom chain version node_url ipfs_url=IPFS_URL: build
+_deploy-custom chain version node_url ipfs_url=IPFS_URL: codegen
     #!/usr/bin/env sh
     subgraph_name="{{ chain }}/sablier-{{ PROTOCOL }}-{{ chain }}"
     pnpm graph deploy \

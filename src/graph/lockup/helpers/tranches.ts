@@ -1,5 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { StructTrancheV1_2, StructTrancheV2_0 } from "../bindings";
+import { CreateLockupTranchedStreamTranchesStruct as StructTrancheV2_0 } from "../bindings/SablierLockup_v2_0/SablierLockup";
+import { CreateLockupTranchedStreamTranchesStruct as StructTrancheV1_2 } from "../bindings/SablierV2LockupTranched_v1_2/SablierV2LockupTranched";
+
 import { Tranche } from "./types";
 
 export function convertTranchesV1_2(eventTranches: StructTrancheV1_2[]): Tranche[] {

@@ -1,5 +1,8 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { StructSegmentV1_0, StructSegmentV1_1, StructSegmentV1_2, StructSegmentV2_0 } from "../bindings";
+import { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV2_0 } from "../bindings/SablierLockup_v2_0/SablierLockup";
+import { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_0 } from "../bindings/SablierV2LockupDynamic_v1_0/SablierV2LockupDynamic";
+import { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_1 } from "../bindings/SablierV2LockupDynamic_v1_1/SablierV2LockupDynamic";
+import { CreateLockupDynamicStreamSegmentsStruct as StructSegmentV1_2 } from "../bindings/SablierV2LockupDynamic_v1_2/SablierV2LockupDynamic";
 import { Segment } from "./types";
 
 export function convertSegmentsV1_0(eventSegments: StructSegmentV1_0[]): Segment[] {

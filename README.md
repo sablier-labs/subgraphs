@@ -1,27 +1,28 @@
 ![Sablier Branding](/assets/banner-subgraphs.png)
 
-# Sablier Indexers
+# Sablier Indexers 🚀
 
-A collection of EVM data indexers for the Sablier Protocol.
+[Sablier](https://sablier.com) is a protocol for onchain token distribution. This repository contains a suite of data
+indexers that monitor Sablier smart contract events and transform them into structured, queryable data via GraphQL. The
+data powers the [Sablier Interface](https://app.sablier.com).
 
-These indexers serve as the backbone for the [Sablier Interface](https://app.sablier.com), providing real-time data
-access and analytics capabilities.
+We support two indexing vendors: [The Graph](https://thegraph.com) and [Envio](https://envio.dev).
 
-## Documentation
+## Documentation 📚
 
-In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). Our indexers are
-categorized into three main components:
+In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). We provide a separate
+indexer for each protocol:
 
-- [Airdrops Indexers](https://docs.sablier.com/api/airdrops/indexers) - Airdrop distribution data
-- [Flow Indexers](https://docs.sablier.com/api/flow/indexers) - Payment streams data
-- [Lockup Indexers](https://docs.sablier.com/api/lockup/indexers) - Vesting streams data
+- [Sablier Airdrops](https://docs.sablier.com/api/airdrops/indexers) - Airdrop distribution data
+- [Sablier Flow](https://docs.sablier.com/api/flow/indexers) - Payment streams data
+- [Sablier Lockup](https://docs.sablier.com/api/lockup/indexers) - Vesting streams data
 
-## Contributing
+## Contributing 🤝
 
-Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion or submit a PR. For
-any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
+Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion, or submit a PR.
+For any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
 
-## Pre Requisites
+### Pre Requisites 🧰
 
 You will need the following software on your machine:
 
@@ -29,12 +30,9 @@ You will need the following software on your machine:
 - [Just](https://github.com/casey/just)
 - [Node.Js](https://nodejs.org/en/download)
 - [Pnpm](https://pnpm.io)
+- [Docker](https://docker.com)
 
-For running the tests for The Graph, you will need:
-
-- [PostgreSQL](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#install-postgresql)
-
-## Set Up
+### Set Up ⚙️
 
 Clone this repository:
 
@@ -42,10 +40,10 @@ Clone this repository:
 $ git clone git@github.com:sablier-labs/indexers.git && cd indexers
 ```
 
-Then, run this to install the Node.js dependencies and build the contracts:
+Then, run this command to install the Node.js dependencies:
 
 ```shell
-$ pnpm install
+$ just install
 ```
 
 Now you can start making changes.
@@ -56,6 +54,6 @@ To see a list of all available scripts, run this command:
 $ just --list
 ```
 
-## License
+## License 📄
 
 This repo is licensed under GPL 3-0 or later.

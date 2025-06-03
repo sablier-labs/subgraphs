@@ -25,3 +25,9 @@ clean:
 # Codegen the Envio schema
 @codegen-schema:
     just root::codegen-schema envio $PROTOCOL
+
+dev: codegen
+    MAX_BATCH_SIZE=1 pnpm envio dev \
+    --config {{ justfile_dir() }}/config.yaml \
+    --directory {{ justfile_dir() }} \
+    --output-directory {{ justfile_dir() }}/bindings
