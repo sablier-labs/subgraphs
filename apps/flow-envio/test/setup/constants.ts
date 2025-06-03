@@ -27,24 +27,24 @@ export const _configurations = (
         "https://api.studio.thegraph.com/query/112500/sablier-flow-sepolia/version/latest",
     },
     token: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
-    recipient: "0x8468cD99Cea5EB7279Adf189fAe632FFb06b2F6F",
+    recipient: "0xf31b00e025584486f7c37cf0ae0073c97c12c634",
     sender: "0xf31b00e025584486f7c37cf0ae0073c97c12c634",
     streamIds: [
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-4",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-5",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-6",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-7",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-8",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-9",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-10",
-      "0x83dd52fca44e069020b58155b761a590f12b59d3-11155111-11",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-4",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-5",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-6",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-7",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-8",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-9",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-10",
+      "0x93fe8f86e881a23e5a2feb4b160514fd332576a6-11155111-11",
     ],
   },
 });
 
 /** SPECIALIZED CONFIGURATION */
 
-export const REMOTE = false;
+export const REMOTE = true;
 export const SKIP_CLEANUP = false;
 export const POWER_SKIP_SUBGRAPH_ID_ASC = 0;
 
