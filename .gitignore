@@ -13,7 +13,6 @@ node_modules
 *.tsbuildinfo
 .env*
 !.env.example
-config.yaml
 repomix-output.txt
 repomix-output.xml
 schema.graphql
