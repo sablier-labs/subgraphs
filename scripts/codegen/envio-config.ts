@@ -13,7 +13,7 @@ import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
  * CLI for generating Envio config file
  *
  * @example Generate for Flow:
- * pnpm tsx scripts/codegen/envio-config.ts flow
+ * pnpm ts-node scripts/codegen/envio-config.ts flow
  *
  * @param {string} [protocol='all'] - 'flow' or 'lockup'
  */

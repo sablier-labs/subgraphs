@@ -31,12 +31,5 @@
     "target": "ESNext"
   },
   "exclude": ["src/envio/**/bindings.ts", "src/graph/**/*.ts"],
-  "include": [
-    "src/**/*.ts",
-    "scripts/**/*.ts",
-    "tests/**/*.ts",
-    "src/gql/config.js",
-    "src/envio/lockup/mappings/v1.0/cancel-stream.zz",
-    "src/envio/airdrops/mappings/v1.1/SablierV2MerkleStreamerFactory"
-  ]
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
 }
