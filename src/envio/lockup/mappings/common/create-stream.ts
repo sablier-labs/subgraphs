@@ -2,13 +2,13 @@
  * @file Processors are reusable logic that is used in multiple event handlers.
  */
 
-import type { Envio } from "@envio-common/bindings";
-import { CommonStore } from "@envio-common/store";
-import { type Context, type Entity } from "@envio-lockup/bindings";
-import { type CreateEntities, type Params } from "@envio-lockup/helpers/types";
-import { type Loader } from "@envio-lockup/mappings/common/loader";
-import { Store } from "@envio-lockup/store";
-import { Lockup as enums } from "@src/schema/enums";
+import { Lockup as enums } from "../../../../schema/enums";
+import type { Envio } from "../../../common/bindings";
+import { CommonStore } from "../../../common/store";
+import { type Context, type Entity } from "../../bindings";
+import { type CreateEntities, type Params } from "../../helpers/types";
+import { Store } from "../../store";
+import { type Loader } from "./loader";
 
 type Input = {
   context: Context.Handler;

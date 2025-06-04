@@ -11,7 +11,8 @@ export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
 #                                   CONSTANTS                                  #
 # ---------------------------------------------------------------------------- #
 
-globs_prettier := "**/*.{md,yaml,yml}"
+GLOBS_CLEAN := "**/{bindings,build,generated,logs}"
+GLOBS_PRETTIER := "**/*.{md,yaml,yml}"
 
 # ---------------------------------------------------------------------------- #
 #                                 RECIPES: BASE                                #
@@ -28,7 +29,6 @@ auth:
 # Check code with Biome
 biome-check:
     pnpm biome check .
-
 alias bc := biome-check
 
 [doc("Fix code with Biome")]
@@ -39,11 +39,16 @@ alias bw := biome-write
 
 # Remove build files
 clean:
-    rm -rf **/bindings **/build **/generated **/logs
+    pnpm dlx rimraf --glob "{{ GLOBS_CLEAN }}"
+
+# Clear node_modules recursively
+[confirm("Are you sure you want to delete all node_modules?")]
+clean-modules:
+    pnpm dlx rimraf --glob "node_modules" "**/node_modules"
 
 # Run all code checks
 full-check: biome-check prettier-check tsc-check
-alias check := full-check
+alias c := full-check
 alias fc := full-check
 
 # Run all code fixes
@@ -57,12 +62,12 @@ install *args:
 
 # Check code with Prettier
 prettier-check:
-    pnpm prettier --cache --check "{{ globs_prettier }}"
+    pnpm prettier --cache --check "{{ GLOBS_PRETTIER }}"
 alias pc := prettier-check
 
 # Format code with Prettier
 prettier-write:
-    pnpm prettier --cache --write "{{ globs_prettier }}"
+    pnpm prettier --cache --write "{{ GLOBS_PRETTIER }}"
 alias pw := prettier-write
 
 # Setup Husky
@@ -121,7 +126,6 @@ _build-graph protocol: (codegen-graph protocol)
 _codegen-envio-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/envio/{{ protocol }}"
-    rm -rf $protocol_dir/bindings
     pnpm envio codegen \
         --config $protocol_dir/config.yaml \
         --output-directory $protocol_dir/bindings
@@ -165,7 +169,7 @@ codegen-gql vendor protocol: (codegen-schema vendor protocol)
 _codegen-graph-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/graph/{{ protocol }}"
-    rm -rf $protocol_dir/bindings
+    pnpm rimraf $protocol_dir/bindings
     pnpm graph codegen \
         --output-dir $protocol_dir/bindings \
         $protocol_dir/manifests/ethereum.yaml

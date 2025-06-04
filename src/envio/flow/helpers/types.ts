@@ -1,5 +1,5 @@
-import type { Envio } from "@envio-common/bindings";
-import type { Entity } from "@envio-flow/bindings";
+import type { Envio } from "../../common/bindings";
+import type { Entity } from "../bindings";
 
 export type CreateEntities = {
   asset: Entity.Asset;

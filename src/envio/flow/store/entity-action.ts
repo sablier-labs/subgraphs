@@ -1,7 +1,7 @@
-import type { Envio } from "@envio-common/bindings";
-import { CommonStore } from "@envio-common/store";
-import type { ParamsAction } from "@envio-common/types";
-import type { Context, Entity } from "@envio-flow/bindings";
+import type { Envio } from "../../common/bindings";
+import { CommonStore } from "../../common/store";
+import type { ParamsAction } from "../../common/types";
+import type { Context, Entity } from "../bindings";
 
 export async function create(
   context: Context.Handler,

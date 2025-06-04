@@ -1,4 +1,5 @@
-import type { Entity } from "@envio-airdrops/bindings";
+import { Airdrops as enums } from "../../../../../schema/enums";
+import type { Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_Claim_handler as Handler_v1_1,
   SablierV2MerkleLL_v1_2_Claim_handler as Handler_v1_2,
@@ -6,10 +7,9 @@ import type {
   SablierV2MerkleStreamerLL_v1_1_Claim_loader as Loader_v1_1,
   SablierV2MerkleLL_v1_2_Claim_loader as Loader_v1_2,
   SablierMerkleInstant_v1_3_Claim_loader as Loader_v1_3,
-} from "@envio-airdrops/bindings/index";
-import { isVersionWithFees } from "@envio-airdrops/helpers";
-import { Store } from "@envio-airdrops/store";
-import { Airdrops as enums } from "@src/schema/enums";
+} from "../../../bindings/src/Types.gen";
+import { isVersionWithFees } from "../../../helpers";
+import { Store } from "../../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */

@@ -1,7 +1,7 @@
 import * as path from "node:path";
-import type { EnvioConfig } from "@src/envio-config/types";
-import type { GraphManifest } from "@src/graph-manifest/types";
 import * as yaml from "js-yaml";
+import type { EnvioConfig } from "../src/envio-config/config-types";
+import type { GraphManifest } from "../src/graph-manifest/manifest-types";
 import { AUTOGEN_COMMENT } from "./constants";
 import type { ProtocolArg, VendorArg } from "./types";
 

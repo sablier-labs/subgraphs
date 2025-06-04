@@ -1,5 +1,5 @@
-import type { GraphManifest } from "@src/graph-manifest/types";
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../../types";
+import type { GraphManifest } from "../manifest-types";
 import { getAirdropsSources } from "./airdrops";
 import { getFlowSources } from "./flow";
 import { getLockupSources } from "./lockup";

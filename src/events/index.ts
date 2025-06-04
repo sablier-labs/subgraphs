@@ -1,4 +1,4 @@
-import type { Indexed, ProtocolMap } from "@src/types";
+import type { Indexed, ProtocolMap } from "../types";
 import airdrops from "./airdrops";
 import flow from "./flow";
 import lockup from "./lockup";

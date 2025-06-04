@@ -1,5 +1,5 @@
-import type { Indexed } from "@src/types";
 import { gql } from "graphql-tag";
+import type { Indexed } from "../../types";
 
 const streams = `#graphql
 """

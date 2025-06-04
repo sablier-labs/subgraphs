@@ -1,4 +1,4 @@
-import type * as enums from "@src/schema/enums";
+import type * as enums from "../../schema/enums";
 
 export type ERC20Metadata = {
   decimals: number;

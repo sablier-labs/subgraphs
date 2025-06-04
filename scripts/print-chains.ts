@@ -1,4 +1,4 @@
-import { graphChains } from "@src/chains";
+import { graphChains } from "../src/chains";
 
 if (require.main === module) {
   console.log("✨ Available chains:");

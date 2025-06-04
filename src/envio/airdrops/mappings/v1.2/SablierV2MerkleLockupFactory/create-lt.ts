@@ -1,6 +1,6 @@
-import { Contract } from "@envio-airdrops/bindings";
-import { convertTranches, isOfficialLockup } from "@envio-airdrops/helpers";
-import { Airdrops as enums } from "@src/schema/enums";
+import { Airdrops as enums } from "../../../../../schema/enums";
+import { Contract } from "../../../bindings";
+import { convertTranches, isOfficialLockup } from "../../../helpers";
 import { createMerkleLT } from "../../common";
 import { Loader } from "../../loader";
 

@@ -3,7 +3,10 @@
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
 
-import type { Context, Entity } from "@envio-airdrops/bindings";
+import { Version } from "@sablier/deployments";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import type { Context, Entity } from "../bindings";
 import type {
   SablierMerkleFactory_v1_3_CreateMerkleInstant_loader as CreateInstant_v1_3,
   SablierV2MerkleStreamerFactory_v1_1_CreateMerkleStreamerLL_loader as CreateLL_v1_1,
@@ -11,10 +14,7 @@ import type {
   SablierMerkleFactory_v1_3_CreateMerkleLL_loader as CreateLL_v1_3,
   SablierV2MerkleLockupFactory_v1_2_CreateMerkleLT_loader as CreateLT_v1_2,
   SablierMerkleFactory_v1_3_CreateMerkleLT_loader as CreateLT_v1_3,
-} from "@envio-airdrops/bindings/src/Types.gen";
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import { Version } from "@sablier/deployments";
+} from "../bindings/src/Types.gen";
 
 export namespace Loader {
   /* -------------------------------------------------------------------------- */

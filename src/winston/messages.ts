@@ -1,5 +1,5 @@
 import type { Sablier } from "@sablier/deployments";
-import { getGraphChainName } from "@src/chains";
+import { getGraphChainName } from "../chains";
 import { formatRelease } from "./helpers";
 
 const messages = {

@@ -2,9 +2,11 @@
  * @file Reusable Envio loaders
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { Context, Entity } from "@envio-lockup/bindings";
+
+import { Version } from "@sablier/deployments";
+import type { Envio } from "../../../common/bindings";
+import { Id } from "../../../common/id";
+import type { Context, Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_Approval_loader as Approval_v1_0,
   SablierV2LockupLinear_v1_1_Approval_loader as Approval_v1_1,
@@ -32,9 +34,8 @@ import type {
   SablierLockup_v2_0_Transfer_loader as Transfer_v2_0,
   SablierV2LockupLinear_v1_0_WithdrawFromLockupStream_loader as Withdraw_v1_0,
   SablierV2LockupLinear_v1_1_WithdrawFromLockupStream_loader as Withdraw_v1_1_to_v2_0,
-} from "@envio-lockup/bindings/src/Types.gen";
-import { Store } from "@envio-lockup/store";
-import { Version } from "@sablier/deployments";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 
 export namespace Loader {
   /* -------------------------------------------------------------------------- */

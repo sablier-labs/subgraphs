@@ -1,7 +1,7 @@
 import { contracts, type Sablier, sablier, Version } from "@sablier/deployments";
-import type { GraphManifest } from "@src/graph-manifest/types";
 import _ from "lodash";
-import { getSources } from "./helpers";
+import type { GraphManifest } from "../manifest-types";
+import { getSources } from "./get-sources";
 
 export function getAirdropsSources(chainId: number): GraphManifest.Source[] {
   const sources = getSources("airdrops", chainId);

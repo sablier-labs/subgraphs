@@ -1,5 +1,5 @@
 import { contracts, type Sablier, Version } from "@sablier/deployments";
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../types";
 
 const flowContracts: Indexed.ContractSource<Sablier.Version.Flow>[] = [
   {

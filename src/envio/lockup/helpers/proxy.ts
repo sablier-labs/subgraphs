@@ -1,12 +1,12 @@
-import type { Envio } from "@envio-common/bindings";
-import { PRB_PROXY_REGISTRY } from "@envio-common/constants";
-import { DataCategory, initDataEntry } from "@envio-common/data";
-import { getContractVersion } from "@envio-common/deployments";
-import { getClient } from "@envio-common/rpc-clients";
 import { Version } from "@sablier/deployments";
-import PRBProxyABI from "@src/abi/PRBProxy.json";
-import PRBProxyRegistryABI from "@src/abi/PRBProxyRegistry.json";
 import _ from "lodash";
+import PRBProxyABI from "../../../abi/PRBProxy.json";
+import PRBProxyRegistryABI from "../../../abi/PRBProxyRegistry.json";
+import type { Envio } from "../../common/bindings";
+import { PRB_PROXY_REGISTRY } from "../../common/constants";
+import { DataCategory, initDataEntry } from "../../common/data";
+import { getContractVersion } from "../../common/deployments";
+import { getClient } from "../../common/rpc-clients";
 
 /**
  * The proxender is the owner of the proxy that is the sender of the stream.

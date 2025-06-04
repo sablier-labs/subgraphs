@@ -1,8 +1,8 @@
-import indexedContracts from "@src/contracts";
-import type { GraphManifest } from "@src/graph-manifest/types";
-import paths, { getRelativePath } from "@src/paths";
-import type { Indexed } from "@src/types";
 import _ from "lodash";
+import indexedContracts from "../../contracts";
+import paths, { getRelativePath } from "../../paths";
+import type { Indexed } from "../../types";
+import type { GraphManifest } from "../manifest-types";
 
 function get(name: string): GraphManifest.ABI {
   return {

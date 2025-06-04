@@ -15,14 +15,6 @@
     "moduleResolution": "nodenext",
     "noEmit": true,
     "noImplicitAny": true,
-    "paths": {
-      "@envio-airdrops/*": ["src/envio/airdrops/*"],
-      "@envio-common/*": ["src/envio/common/*"],
-      "@envio-flow/*": ["src/envio/flow/*"],
-      "@envio-lockup/*": ["src/envio/lockup/*"],
-      "@src": ["src"],
-      "@src/*": ["src/*"]
-    },
     "resolveJsonModule": true,
     "rootDir": ".",
     "skipLibCheck": true,

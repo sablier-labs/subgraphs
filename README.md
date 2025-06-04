@@ -46,6 +46,12 @@ Then, run this command to install the Node.js dependencies:
 $ just install
 ```
 
+And run the setup recipe:
+
+```shell
+$ just setup
+```
+
 Now you can start making changes.
 
 To see a list of all available scripts, run this command:

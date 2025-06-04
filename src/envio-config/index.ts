@@ -1,8 +1,8 @@
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../types";
+import type { EnvioConfig } from "./config-types";
 import { createContracts } from "./contracts";
 import { createNetworks } from "./networks";
 import { default as topSections } from "./top-sections";
-import type { EnvioConfig } from "./types";
 
 /**
  * Creates a Graph manifest for a given protocol and chain.

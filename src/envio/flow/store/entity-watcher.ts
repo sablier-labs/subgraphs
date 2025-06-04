@@ -1,4 +1,4 @@
-import type { Context, Entity } from "@envio-flow/bindings";
+import type { Context, Entity } from "../bindings";
 
 export async function getOrThrow(context: Context.Loader | Context.Handler, chainId: number): Promise<Entity.Watcher> {
   const id = chainId.toString();

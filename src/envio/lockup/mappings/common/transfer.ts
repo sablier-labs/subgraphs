@@ -1,13 +1,13 @@
-import { ADDRESS_ZERO } from "@envio-common/constants";
+import _ from "lodash";
+import { Lockup as enums } from "../../../../schema/enums";
+import { ADDRESS_ZERO } from "../../../common/constants";
 import type {
   SablierV2LockupLinear_v1_0_Transfer_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_Transfer_handler as Handler_v1_1,
   SablierV2LockupLinear_v1_2_Transfer_handler as Handler_v1_2,
   SablierLockup_v2_0_Transfer_handler as Handler_v2_0,
-} from "@envio-lockup/bindings/src/Types.gen";
-import { Store } from "@envio-lockup/store";
-import { Lockup as enums } from "@src/schema/enums";
-import _ from "lodash";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 import { Loader } from "./loader";
 
 /* -------------------------------------------------------------------------- */

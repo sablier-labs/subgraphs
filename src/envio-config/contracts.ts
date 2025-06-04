@@ -1,9 +1,9 @@
-import indexedContracts from "@src/contracts";
-import type { EnvioConfig } from "@src/envio-config/types";
-import indexedEvents from "@src/events";
-import { sanitizeContractName } from "@src/helpers";
-import paths, { getRelativePath } from "@src/paths";
-import type { Indexed } from "@src/types";
+import indexedContracts from "../contracts";
+import indexedEvents from "../events";
+import { sanitizeContractName } from "../helpers";
+import paths, { getRelativePath } from "../paths";
+import type { Indexed } from "../types";
+import type { EnvioConfig } from "./config-types";
 
 export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contract[] {
   const contracts: EnvioConfig.Contract[] = [];

@@ -1,8 +1,8 @@
-import { Contract } from "@envio-airdrops/bindings";
-import { Loader } from "@envio-airdrops/mappings/loader";
-import { Store } from "@envio-airdrops/store";
-import { CommonStore } from "@envio-common/store";
-import { Airdrops as enums } from "@src/schema/enums";
+import { Airdrops as enums } from "../../../../../schema/enums";
+import { CommonStore } from "../../../../common/store";
+import { Contract } from "../../../bindings";
+import { Store } from "../../../store";
+import { Loader } from "../../loader";
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.contractRegister(({ event, context }) => {
   context.addSablierMerkleInstant_v1_3(event.params.merkleInstant);

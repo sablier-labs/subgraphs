@@ -1,14 +1,14 @@
 import { type Sablier, sablier } from "@sablier/deployments";
-import { getGraphChainName } from "@src/chains";
-import indexedContracts, { getIndexedContract } from "@src/contracts";
-import { Errors } from "@src/errors";
-import type { GraphManifest } from "@src/graph-manifest/types";
-import { sanitizeContractName } from "@src/helpers";
-import { mergeSchema } from "@src/schema/merger";
-import type { Indexed } from "@src/types";
-import logger, { messages } from "@src/winston";
 import { Kind } from "graphql";
 import _ from "lodash";
+import { getGraphChainName } from "../../chains";
+import indexedContracts, { getIndexedContract } from "../../contracts";
+import { Errors } from "../../errors";
+import { sanitizeContractName } from "../../helpers";
+import { mergeSchema } from "../../schema/merger";
+import type { Indexed } from "../../types";
+import logger, { messages } from "../../winston";
+import type { GraphManifest } from "../manifest-types";
 import { getABIEntries } from "./abi-entries";
 import eventHandlers from "./event-handlers";
 

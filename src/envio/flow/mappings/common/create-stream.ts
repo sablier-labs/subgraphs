@@ -1,12 +1,12 @@
-import { Id } from "@envio-common/id";
-import { CommonStore } from "@envio-common/store";
-import { type Entity } from "@envio-flow/bindings";
+import { Flow as enums } from "../../../../schema/enums";
+import { Id } from "../../../common/id";
+import { CommonStore } from "../../../common/store";
+import { type Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_CreateFlowStream_handler as Handler,
   SablierFlow_v1_0_CreateFlowStream_loader as Loader,
-} from "@envio-flow/bindings/src/Types.gen";
-import { Store } from "@envio-flow/store";
-import { Flow as enums } from "@src/schema/enums";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */

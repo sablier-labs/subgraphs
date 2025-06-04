@@ -1,5 +1,5 @@
-import { getContractVersion } from "@envio-common/deployments";
 import { Version } from "@sablier/deployments";
+import { getContractVersion } from "../../common/deployments";
 
 export function isVersionWithFees(chainId: number, address: string): boolean {
   const version = getContractVersion("airdrops", chainId, address);

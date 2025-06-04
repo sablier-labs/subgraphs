@@ -1,4 +1,4 @@
-import { Contract } from "@envio-flow/bindings";
+import { Contract } from "../../bindings";
 import {
   adjustStream,
   approval,

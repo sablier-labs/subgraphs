@@ -1,8 +1,8 @@
-import { createEnvioConfig } from "@src/envio-config";
-import paths from "@src/paths";
-import type { Indexed } from "@src/types";
-import logger from "@src/winston";
 import * as fs from "fs-extra";
+import { createEnvioConfig } from "../../src/envio-config";
+import paths from "../../src/paths";
+import type { Indexed } from "../../src/types";
+import logger from "../../src/winston";
 import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */

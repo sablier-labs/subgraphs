@@ -1,6 +1,6 @@
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { Context } from "@envio-lockup/bindings";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import type { Context } from "../bindings";
 
 export async function getOrThrow(context: Context.Loader, chainId: number, address: Envio.Address) {
   const id = Id.asset(chainId, address);

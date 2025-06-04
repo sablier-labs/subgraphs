@@ -1,7 +1,7 @@
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import { CommonStore } from "@envio-common/store";
-import type { Context, Entity } from "@envio-flow/bindings";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import { CommonStore } from "../../common/store";
+import type { Context, Entity } from "../bindings";
 
 export async function create(context: Context.Handler, chainId: number, assetAddress: Envio.Address) {
   return CommonStore.Asset.create<typeof context, Entity.Asset>(context, chainId, assetAddress);

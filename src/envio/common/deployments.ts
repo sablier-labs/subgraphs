@@ -1,6 +1,6 @@
 import { type Sablier, sablier } from "@sablier/deployments";
-import { getIndexedContract } from "@src/contracts";
-import type { Indexed } from "@src/types";
+import { getIndexedContract } from "../../contracts";
+import type { Indexed } from "../../types";
 import type { Envio } from "./bindings";
 import { IndexingError } from "./error";
 

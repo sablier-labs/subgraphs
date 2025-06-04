@@ -1,6 +1,7 @@
-import { type Entity } from "@envio-airdrops/bindings";
-import type { Envio } from "@envio-common/bindings";
-import type * as enums from "@src/schema/enums";
+import { type enums } from "../../../schema";
+import type { Envio } from "../../common/bindings";
+import { type Entity } from "../bindings";
+
 export namespace Params {
   export type Action = {
     category: enums.Airdrops.ActionCategory;

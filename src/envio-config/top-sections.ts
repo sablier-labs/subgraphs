@@ -1,5 +1,5 @@
-import type { Indexed } from "@src/types";
-import type { EnvioConfig } from "./types";
+import type { Indexed } from "../types";
+import type { EnvioConfig } from "./config-types";
 
 const topSections: Record<Indexed.Protocol, EnvioConfig.TopSection> = {
   airdrops: get("airdrops"),

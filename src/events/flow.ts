@@ -1,5 +1,5 @@
 import { contracts, type Sablier } from "@sablier/deployments";
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../types";
 import { erc721 } from "./common/erc721";
 
 function get(version: Sablier.Version.Flow, contractName: string, eventName: string): Indexed.Event {

@@ -1,10 +1,10 @@
-import { type Entity } from "@envio-flow/bindings";
+import { Flow as enums } from "../../../../schema/enums";
+import { type Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_ApprovalForAll_handler as Handler,
   SablierFlow_v1_0_ApprovalForAll_loader as Loader,
-} from "@envio-flow/bindings/src/Types.gen";
-import { Store } from "@envio-flow/store";
-import { Flow as enums } from "@src/schema/enums";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */

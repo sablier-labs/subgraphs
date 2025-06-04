@@ -1,4 +1,4 @@
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../../types";
 
 export namespace IndexingError {
   export class AliasNotFound extends Error {

@@ -1,8 +1,8 @@
-import indexedEvents from "@src/events";
-import { resolveEventHandler } from "@src/events/resolver";
-import type { EventHandlersMap } from "@src/graph-manifest/types";
-import type { Indexed, ProtocolMap } from "@src/types";
 import _ from "lodash";
+import indexedEvents from "../../events";
+import { resolveEventHandler } from "../../events/resolver";
+import type { Indexed, ProtocolMap } from "../../types";
+import type { EventHandlersMap } from "../manifest-types";
 
 function get(protocol: Indexed.Protocol): EventHandlersMap {
   return _.mapValues(indexedEvents[protocol], (versions) =>

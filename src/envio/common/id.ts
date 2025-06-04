@@ -39,7 +39,7 @@ export namespace Id {
    * 137-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6-0xe43d1bc5e868da0bd1d80c404ca7f41e823bbea03488f8e3878327375b3aac35
    */
   export function batch(event: Envio.Event, sender: Envio.Address): string {
-    return `${event.chainId}-${sender}-${event.transaction.hash}`;
+    return `${event.chainId}-${sender.toLowerCase()}-${event.transaction.hash}`;
   }
 
   /**
@@ -55,14 +55,14 @@ export namespace Id {
    * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
    */
   export function campaign(chainId: number, campaignAddress: Envio.Address): string {
-    return `${chainId}-${campaignAddress}`;
+    return `${chainId}-${campaignAddress.toLowerCase()}`;
   }
   /**
    * @example
    * 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4-137-42
    */
   export function stream(contractAddress: Envio.Address, chainId: number, tokenId: bigint | string): string {
-    return `${contractAddress}-${chainId}-${tokenId}`;
+    return `${contractAddress.toLowerCase()}-${chainId}-${tokenId}`;
   }
 
   /**

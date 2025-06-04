@@ -1,6 +1,6 @@
 import type { Sablier } from "@sablier/deployments";
 import { sablier } from "@sablier/deployments";
-import type { Indexed } from "@src/types";
+import type { Indexed } from "./types";
 import { formatRelease } from "./winston/helpers";
 
 export namespace Errors {

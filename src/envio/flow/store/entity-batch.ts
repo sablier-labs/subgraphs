@@ -1,6 +1,6 @@
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { Context, Entity } from "@envio-flow/bindings";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import type { Context, Entity } from "../bindings";
 import { updateCounter as updateBatcherCounter } from "./entity-batcher";
 
 export async function create(event: Envio.Event, sender: Envio.Address): Promise<Entity.Batch> {

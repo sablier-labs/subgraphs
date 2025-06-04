@@ -1,6 +1,6 @@
-import { Contract } from "@envio-lockup/bindings";
-import { convertTranches } from "@envio-lockup/helpers";
-import { Lockup as enums } from "@src/schema/enums";
+import { Lockup as enums } from "../../../../../schema/enums";
+import { Contract } from "../../../bindings";
+import { convertTranches } from "../../../helpers";
 import { createTranchedStream } from "../../common/create-stream";
 import { Loader } from "../../common/loader";
 

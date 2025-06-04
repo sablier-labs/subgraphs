@@ -1,4 +1,4 @@
-import { Contract } from "@envio-lockup/bindings";
+import { Contract } from "../../bindings";
 import { approval, approvalForAll, cancelStream, renounceStream, transfer, withdrawStream } from "../common";
 
 Contract.Lockup_v2_0.ApprovalForAll.handlerWithLoader(approvalForAll);

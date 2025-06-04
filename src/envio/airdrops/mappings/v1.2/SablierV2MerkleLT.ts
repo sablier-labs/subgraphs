@@ -1,4 +1,4 @@
-import { Contract } from "@envio-airdrops/bindings";
+import { Contract } from "../../bindings";
 import * as common from "../common";
 
 Contract.Campaign.MerkleLT_v1_2.Clawback.handlerWithLoader(common.clawback);

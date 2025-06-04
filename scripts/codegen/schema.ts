@@ -1,9 +1,9 @@
 import * as fs from "node:fs";
-import paths from "@src/paths";
-import { mergeSchema } from "@src/schema";
-import type { Indexed } from "@src/types";
-import logger from "@src/winston";
 import { print } from "graphql";
+import paths from "../../src/paths";
+import { mergeSchema } from "../../src/schema";
+import type { Indexed } from "../../src/types";
+import logger from "../../src/winston";
 import { AUTOGEN_COMMENT } from "../constants";
 import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
 

@@ -1,4 +1,6 @@
-import { type Entity } from "@envio-airdrops/bindings";
+import { Airdrops as enums } from "../../../../../schema/enums";
+import { ADDRESS_ZERO } from "../../../../common/constants";
+import { type Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_TransferAdmin_handler as Handler_v1_1,
   SablierV2MerkleLL_v1_2_TransferAdmin_handler as Handler_v1_2,
@@ -6,10 +8,8 @@ import type {
   SablierV2MerkleStreamerLL_v1_1_TransferAdmin_loader as Loader_v1_1,
   SablierV2MerkleLL_v1_2_TransferAdmin_loader as Loader_v1_2,
   SablierMerkleInstant_v1_3_TransferAdmin_loader as Loader_v1_3,
-} from "@envio-airdrops/bindings/src/Types.gen";
-import { Store } from "@envio-airdrops/store";
-import { ADDRESS_ZERO } from "@envio-common/constants";
-import { Airdrops as enums } from "@src/schema/enums";
+} from "../../../bindings/src/Types.gen";
+import { Store } from "../../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */

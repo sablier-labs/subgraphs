@@ -1,6 +1,6 @@
-import type { Common, Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { ParamsAction } from "@envio-common/types";
+import type { Common, Envio } from "../bindings";
+import { Id } from "../id";
+import type { ParamsAction } from "../types";
 
 export async function create<
   TContext,

@@ -1,11 +1,10 @@
-import type { Envio } from "@envio-common/bindings";
-import { getContract } from "@envio-common/deployments";
-import { Id } from "@envio-common/id";
-import type { Context, Entity, EnvioEnum } from "@envio-lockup/bindings";
-import { fetchOrReadProxender } from "@envio-lockup/helpers/proxy";
-import type { Segment, Tranche } from "@envio-lockup/helpers/types";
 import { Version } from "@sablier/deployments";
-import type { CreateEntities, Params } from "../helpers/types";
+import type { Envio } from "../../common/bindings";
+import { getContract } from "../../common/deployments";
+import { Id } from "../../common/id";
+import type { Context, Entity, EnvioEnum } from "../bindings";
+import { fetchOrReadProxender } from "../helpers/proxy";
+import type { CreateEntities, Params, Segment, Tranche } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
 
 export async function createDynamic(

@@ -1,8 +1,8 @@
 import { Protocol } from "@sablier/deployments";
-import { type Indexed } from "@src/types";
 import { type DocumentNode } from "graphql";
 import gql from "graphql-tag";
 import _ from "lodash";
+import { type Indexed } from "../types";
 
 export namespace Airdrops {
   export enum ActionCategory {
@@ -57,6 +57,17 @@ export namespace Lockup {
   }
 }
 
+/**
+ * Generates the GraphQL enum definitions for the given protocol.
+ * @example
+ * ```graphql
+ * enum StreamCategory {
+ *   LockupDynamic
+ *   LockupLinear
+ *   LockupTranched
+ * }
+ * ```
+ */
 export function getEnumDefs(protocol: Indexed.Protocol): DocumentNode {
   const enumDefs: string[] = [];
   switch (protocol) {

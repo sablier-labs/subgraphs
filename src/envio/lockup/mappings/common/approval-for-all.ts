@@ -1,4 +1,5 @@
-import { type Entity } from "@envio-lockup/bindings";
+import { Lockup as enums } from "../../../../schema/enums";
+import { type Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_ApprovalForAll_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_ApprovalForAll_handler as Handler_v1_1,
@@ -8,9 +9,8 @@ import type {
   SablierV2LockupLinear_v1_1_ApprovalForAll_loader as Loader_v1_1,
   SablierV2LockupLinear_v1_2_ApprovalForAll_loader as Loader_v1_2,
   SablierLockup_v2_0_ApprovalForAll_loader as Loader_v2_0,
-} from "@envio-lockup/bindings/src/Types.gen";
-import { Store } from "@envio-lockup/store";
-import { Lockup as enums } from "@src/schema/enums";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */

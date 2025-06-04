@@ -1,9 +1,9 @@
-import type { Envio } from "@envio-common/bindings";
-import { getContract } from "@envio-common/deployments";
-import { Id } from "@envio-common/id";
-import type { Context, Entity } from "@envio-flow/bindings";
-import { type CreateEntities, type Params } from "@envio-flow/helpers/types";
-import { Flow as enums } from "@src/schema/enums";
+import { Flow as enums } from "../../../schema/enums";
+import type { Envio } from "../../common/bindings";
+import { getContract } from "../../common/deployments";
+import { Id } from "../../common/id";
+import type { Context, Entity } from "../bindings";
+import { type CreateEntities, type Params } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
 
 export async function create(

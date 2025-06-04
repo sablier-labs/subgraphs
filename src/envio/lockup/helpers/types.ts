@@ -1,6 +1,6 @@
-import type { Envio } from "@envio-common/bindings";
-import type { Entity } from "@envio-lockup/bindings";
-import type { Lockup as enums } from "@src/schema/enums";
+import type { Lockup as enums } from "../../../schema/enums";
+import type { Envio } from "../../common/bindings";
+import type { Entity } from "../bindings";
 export namespace Params {
   export type Cancel = {
     recipient: Envio.Address;

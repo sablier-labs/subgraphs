@@ -1,11 +1,11 @@
+import { Lockup as enums } from "../../../../schema/enums";
 import type {
   SablierV2LockupLinear_v1_0_WithdrawFromLockupStream_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_WithdrawFromLockupStream_handler as Handler_v1_1,
   SablierV2LockupLinear_v1_2_WithdrawFromLockupStream_handler as Handler_v1_2,
   SablierLockup_v2_0_WithdrawFromLockupStream_handler as Handler_v2_0,
-} from "@envio-lockup/bindings/src/Types.gen";
-import { Store } from "@envio-lockup/store";
-import { Lockup as enums } from "@src/schema/enums";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 import { Loader } from "./loader";
 
 /* -------------------------------------------------------------------------- */

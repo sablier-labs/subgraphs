@@ -1,9 +1,9 @@
-import { Errors } from "@src/errors";
-import type { Indexed } from "@src/types";
 import _ from "lodash";
+import { Errors } from "../errors";
+import type { Indexed } from "../types";
+import type { GraphManifest } from "./manifest-types";
 import { createSources } from "./sources";
 import { default as topSections } from "./top-sections";
-import type { GraphManifest } from "./types";
 
 /**
  * Creates a Graph manifest for a given protocol and chain.

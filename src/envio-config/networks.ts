@@ -1,12 +1,12 @@
 import { sablier } from "@sablier/deployments";
-import { envioChains } from "@src/chains";
-import indexedContracts from "@src/contracts";
-import type { EnvioConfig } from "@src/envio-config/types";
-import { Errors } from "@src/errors";
-import { sanitizeContractName } from "@src/helpers";
-import type { Indexed } from "@src/types";
-import logger, { messages } from "@src/winston";
 import _ from "lodash";
+import { envioChains } from "../chains";
+import indexedContracts from "../contracts";
+import { Errors } from "../errors";
+import { sanitizeContractName } from "../helpers";
+import type { Indexed } from "../types";
+import logger, { messages } from "../winston";
+import type { EnvioConfig } from "./config-types";
 
 export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];

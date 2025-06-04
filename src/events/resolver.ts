@@ -1,10 +1,10 @@
-import type { GraphManifest } from "@src/graph-manifest/types";
-import { sanitizeContractName } from "@src/helpers";
-import paths from "@src/paths";
-import type { Indexed } from "@src/types";
-import logger from "@src/winston";
 import * as fs from "fs-extra";
 import _ from "lodash";
+import type { GraphManifest } from "../graph-manifest/manifest-types";
+import { sanitizeContractName } from "../helpers";
+import paths from "../paths";
+import type { Indexed } from "../types";
+import logger from "../winston";
 
 /**
  * Resolves an event handler for The Graph manifest.

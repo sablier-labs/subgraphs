@@ -1,4 +1,4 @@
-import type { Context, Entity } from "@envio-airdrops/bindings";
+import type { Context, Entity } from "../bindings";
 
 export function create(chainId: number): Entity.Watcher {
   const watcher: Entity.Watcher = {

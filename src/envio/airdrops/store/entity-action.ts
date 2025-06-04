@@ -1,7 +1,7 @@
-import type { Context, Entity, EnvioEnum } from "@envio-airdrops/bindings";
-import type { ActionEntities, Params } from "@envio-airdrops/helpers/types";
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import type { Context, Entity, EnvioEnum } from "../bindings";
+import type { ActionEntities, Params } from "../helpers/types";
 
 export async function create(
   context: Context.Handler,

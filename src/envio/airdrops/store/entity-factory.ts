@@ -1,6 +1,6 @@
-import type { Context, Entity } from "@envio-airdrops/bindings";
-import type { Envio } from "@envio-common/bindings";
-import { getContractAlias } from "@envio-common/deployments";
+import type { Envio } from "../../common/bindings";
+import { getContractAlias } from "../../common/deployments";
+import type { Context, Entity } from "../bindings";
 
 export async function create(
   context: Context.Handler,

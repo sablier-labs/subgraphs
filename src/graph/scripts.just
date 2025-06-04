@@ -1,6 +1,7 @@
 mod root "../../justfile"
 
 set allow-duplicate-variables := true
+set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #
@@ -21,27 +22,31 @@ alias b := build
 
 # Remove build files
 clean:
-    rm -rf bindings build
+    pnpm rimraf bindings build
 
 # Codegen the subgraph
 [group("codegen")]
 @codegen:
     just root::codegen-graph {{ PROTOCOL }}
+alias c := codegen
 
 # Codegen the subgraph bindings
 [group("codegen")]
 @codegen-bindings:
     just root::codegen-graph-bindings {{ PROTOCOL }}
+alias cb := codegen-bindings
 
 # Codegen the subgraph manifest
 [group("codegen")]
 @codegen-manifest chain="ethereum":
     just root::codegen-graph-manifest {{ PROTOCOL }} {{ chain }}
+alias cm := codegen-manifest
 
 # Codegen the GraphQL schema
 [group("codegen")]
 @codegen-schema:
     just root::codegen-schema graph {{ PROTOCOL }}
+alias cs := codegen-schema
 
 # Deploy the subgraph
 [group("deploy")]
@@ -50,6 +55,7 @@ deploy chain version: codegen
     --version-label {{ version }} \
     sablier-{{ PROTOCOL }}-{{ chain }} \
     {{ justfile_dir() }}/manifests/{{ chain }}.yaml
+alias d := deploy
 
 # Deploy to experimental subgraph on Ethereum Sepolia
 [group("deploy")]
@@ -58,6 +64,7 @@ deploy-experimental version: codegen
     --version-label {{ version }} \
     sablier-{{ PROTOCOL }}-experimental \
     {{ justfile_dir() }}/manifests/sepolia.yaml
+alias de := deploy-experimental
 
 # Deploy to Lightlink
 [group("deploy")]

@@ -3,10 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "noEmit": false,
-    "paths": {
-      "@src": ["src"],
-      "@src/*": ["src/*"]
-    },
     "rootDir": "./src",
     "removeComments": true,
     "skipLibCheck": true,

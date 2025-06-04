@@ -2,9 +2,9 @@ import * as path from "node:path";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { Protocol } from "@sablier/deployments";
-import { SCHEMA_DIR } from "@src/paths";
-import { type Indexed } from "@src/types";
 import { type DocumentNode } from "graphql";
+import { SCHEMA_DIR } from "../paths";
+import { type Indexed } from "../types";
 import { getAssetDefs, getStreamDefs, getWatcherDefs } from "./common";
 import { getEnumDefs } from "./enums";
 

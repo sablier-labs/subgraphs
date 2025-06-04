@@ -1,9 +1,9 @@
-import type { Context, Entity, EnvioEnum } from "@envio-airdrops/bindings";
-import type { CreateEntities, Params } from "@envio-airdrops/helpers/types";
-import type { Envio } from "@envio-common/bindings";
-import { getContract } from "@envio-common/deployments";
-import { Id } from "@envio-common/id";
+import type { Envio } from "../../common/bindings";
+import { getContract } from "../../common/deployments";
+import { Id } from "../../common/id";
+import type { Context, Entity, EnvioEnum } from "../bindings";
 import { getNickname } from "../helpers/campaign";
+import type { CreateEntities, Params } from "../helpers/types";
 
 export async function createInstant(
   context: Context.Handler,

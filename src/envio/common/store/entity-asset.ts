@@ -1,6 +1,6 @@
-import type { Common, Envio } from "@envio-common/bindings";
-import { readOrFetchERC20Metadata } from "@envio-common/erc20";
-import { Id } from "@envio-common/id";
+import type { Common, Envio } from "../bindings";
+import { readOrFetchERC20Metadata } from "../erc20";
+import { Id } from "../id";
 
 export async function create<
   TContext extends { Asset: { set: (asset: TAsset) => void | Promise<void> } },

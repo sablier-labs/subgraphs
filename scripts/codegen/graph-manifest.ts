@@ -1,10 +1,10 @@
 import * as path from "node:path";
-import { graphChains } from "@src/chains";
-import { createGraphManifest } from "@src/graph-manifest";
-import paths from "@src/paths";
-import type { Indexed } from "@src/types";
-import logger from "@src/winston";
 import * as fs from "fs-extra";
+import { graphChains } from "../../src/chains";
+import { createGraphManifest } from "../../src/graph-manifest";
+import paths from "../../src/paths";
+import type { Indexed } from "../../src/types";
+import logger from "../../src/winston";
 import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
 
 /* -------------------------------------------------------------------------- */

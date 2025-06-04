@@ -1,5 +1,5 @@
-import type { GraphManifest } from "@src/graph-manifest/types";
-import type { Indexed } from "@src/types";
+import type { Indexed } from "../types";
+import type { GraphManifest } from "./manifest-types";
 
 const topSections: Record<Indexed.Protocol, GraphManifest.TopSection> = {
   airdrops: get("Airdrops"),

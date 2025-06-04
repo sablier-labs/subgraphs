@@ -1,6 +1,6 @@
 import type { Sablier } from "@sablier/deployments";
-import type { Indexed, ProtocolMap } from "@src/types";
-import logger from "@src/winston";
+import type { Indexed, ProtocolMap } from "../types";
+import logger from "../winston";
 import airdrops from "./airdrops";
 import flow from "./flow";
 import lockup from "./lockup";

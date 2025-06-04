@@ -1,6 +1,6 @@
-import { Contract } from "@envio-lockup/bindings";
-import { convertSegments } from "@envio-lockup/helpers";
-import { Lockup as enums } from "@src/schema/enums";
+import { Lockup as enums } from "../../../../schema/enums";
+import { Contract } from "../../bindings";
+import { convertSegments } from "../../helpers";
 import { approval, approvalForAll, cancelStream, renounceStream, transfer, withdrawStream } from "../common";
 import { createDynamicStream } from "../common/create-stream";
 import { Loader } from "../common/loader";

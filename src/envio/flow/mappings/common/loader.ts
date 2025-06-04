@@ -2,7 +2,7 @@
  * @file Reusable Envio loaders
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
-import type { Entity } from "@envio-flow/bindings";
+import type { Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_AdjustFlowStream_loader as Adjust_All,
   SablierFlow_v1_0_Approval_loader as Approval_All,
@@ -14,8 +14,8 @@ import type {
   SablierFlow_v1_0_VoidFlowStream_loader as Void_All,
   SablierFlow_v1_0_WithdrawFromFlowStream_loader as Withdraw_v1_0,
   SablierFlow_v1_1_WithdrawFromFlowStream_loader as Withdraw_v1_1_to_v2_0,
-} from "@envio-flow/bindings/src/Types.gen";
-import { Store } from "@envio-flow/store";
+} from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 
 export namespace Loader {
   export type BaseReturn = {

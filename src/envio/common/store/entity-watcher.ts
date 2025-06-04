@@ -1,4 +1,4 @@
-import type { Common } from "@envio-common/bindings";
+import type { Common } from "../bindings";
 
 export async function create<
   TContext extends { Watcher: { set: (watcher: TWatcher) => void | Promise<void> } },

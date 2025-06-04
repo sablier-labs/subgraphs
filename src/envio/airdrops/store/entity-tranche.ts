@@ -1,5 +1,5 @@
-import { type Context, type Entity } from "@envio-airdrops/bindings";
-import { type TrancheWithPercentage } from "@envio-airdrops/helpers/types";
+import { type Context, type Entity } from "../bindings";
+import { type TrancheWithPercentage } from "../helpers/types";
 
 export async function createTranchesWithPercentages(
   context: Context.Handler,

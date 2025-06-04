@@ -1,6 +1,6 @@
-import { Contract } from "@envio-airdrops/bindings";
-import { Store } from "@envio-airdrops/store";
-import { Airdrops as enums } from "@src/schema/enums";
+import { Airdrops as enums } from "../../../../schema/enums";
+import { Contract } from "../../bindings";
+import { Store } from "../../store";
 import * as common from "../common";
 
 Contract.Campaign.MerkleInstant_v1_3.Clawback.handlerWithLoader(common.clawback);

@@ -1,6 +1,6 @@
-import type { SablierFlow_v1_0_WithdrawFromFlowStream_handler as Handler } from "@envio-flow/bindings/src/Types.gen";
-import { Store } from "@envio-flow/store";
-import { Flow as enums } from "@src/schema/enums";
+import { Flow as enums } from "../../../../schema/enums";
+import type { SablierFlow_v1_0_WithdrawFromFlowStream_handler as Handler } from "../../bindings/src/Types.gen";
+import { Store } from "../../store";
 import { Loader } from "./loader";
 
 /* -------------------------------------------------------------------------- */

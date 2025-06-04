@@ -1,6 +1,6 @@
-import type { Envio } from "@envio-common/bindings";
-import { Id } from "@envio-common/id";
-import type { Context, Entity } from "@envio-lockup/bindings";
+import type { Envio } from "../../common/bindings";
+import { Id } from "../../common/id";
+import type { Context, Entity } from "../bindings";
 
 export async function create(
   context: Context.Handler,
