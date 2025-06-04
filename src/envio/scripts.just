@@ -31,3 +31,9 @@ dev: codegen
     --config {{ justfile_dir() }}/config.yaml \
     --directory {{ justfile_dir() }} \
     --output-directory {{ justfile_dir() }}/bindings
+
+start: codegen
+    pnpm envio start \
+    --config {{ justfile_dir() }}/config.yaml \
+    --directory {{ justfile_dir() }} \
+    --output-directory {{ justfile_dir() }}/bindings
