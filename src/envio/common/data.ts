@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { queries } from "@sablier/deployments";
+import { sablier } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import _ from "lodash";
 import type { Envio } from "./bindings";
@@ -35,7 +35,7 @@ export class DataEntry<C extends DataCategory> {
     public readonly category: C,
     public readonly chainId: number,
   ) {
-    const chain = queries.chains.getOrThrow(chainId);
+    const chain = sablier.chains.getOrThrow(chainId);
     this.file = path.join(DataEntry.BASE_DIR, category, `${chain.slug}.json`);
     fs.ensureDirSync(path.dirname(this.file));
     fs.ensureFileSync(this.file);

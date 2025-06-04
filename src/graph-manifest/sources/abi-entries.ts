@@ -19,7 +19,9 @@ export const prbProxy = get("PRBProxy");
 export const prbProxyRegistry = get("PRBProxyRegistry");
 
 export function getABIEntries(protocol: Indexed.Protocol, contractName: string, version: Indexed.Version) {
-  const contract = _.find(indexedContracts[protocol], (c) => c.name === contractName && c.versions.includes(version));
+  const contract = _.find(indexedContracts[protocol], (c) => {
+    return c.name === contractName && c.versions.includes(version);
+  });
   if (!contract) {
     throw new Error(`Contract ${contractName} not found for ABI entries`);
   }

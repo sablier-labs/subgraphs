@@ -1,4 +1,4 @@
-import { lockup as lockupReleases, queries, type Sablier, Version } from "@sablier/deployments";
+import { contracts, type Sablier, sablier, Version } from "@sablier/deployments";
 import type { GraphManifest } from "@src/graph-manifest/types";
 import _ from "lodash";
 import { getSources } from "./helpers";
@@ -23,14 +23,14 @@ export function getAirdropsSources(chainId: number): GraphManifest.Source[] {
  */
 function getLockups(context: GraphManifest.Context): GraphManifest.ContextItem.ListAddress {
   const chainId = Number(context.chainId.data);
-  const contracts = queries.contracts.getAll({ chainId, protocol: "lockup" });
+  const contracts = sablier.contracts.getAll({ chainId, protocol: "lockup" });
   if (_.isEmpty(contracts)) {
     throw new Error(`No Lockup contracts found on chain with ID ${context.chainId.data}`);
   }
 
   const data: GraphManifest.ContextItem.Address[] = [];
 
-  for (const lockupRelease of lockupReleases) {
+  for (const lockupRelease of sablier.releases.getAll({ protocol: "lockup" })) {
     const airdropsVersion = context.version?.data as Sablier.Version.Airdrops;
     const lockupVersion = lockupRelease.version as Sablier.Version.Lockup;
     if (!areVersionsCompatible(airdropsVersion, lockupVersion)) {
@@ -43,7 +43,7 @@ function getLockups(context: GraphManifest.Context): GraphManifest.ContextItem.L
       }
       for (const contract of deployment.contracts) {
         // Look only for Lockup contracts compatible with Merkle factories
-        if (!isLockupContract(contract.name)) {
+        if (!isLockupContractName(contract.name)) {
           continue;
         }
 
@@ -79,7 +79,11 @@ function areVersionsCompatible(airdrops: Sablier.Version.Airdrops, lockup: Sabli
   return compatiblePairs[airdrops]?.includes(lockup) ?? false;
 }
 
-function isLockupContract(name: string): boolean {
-  const supported = ["SablierLockup", "SablierV2LockupLinear", "SablierV2LockupTranched"];
+function isLockupContractName(name: string): boolean {
+  const supported = [
+    contracts.names.SABLIER_LOCKUP,
+    contracts.names.SABLIER_V2_LOCKUP_LINEAR,
+    contracts.names.SABLIER_V2_LOCKUP_TRANCHED,
+  ];
   return supported.includes(name);
 }

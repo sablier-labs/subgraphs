@@ -1,4 +1,4 @@
-import { queries, releasesByProtocol } from "@sablier/deployments";
+import { sablier } from "@sablier/deployments";
 import { envioChains } from "@src/chains";
 import indexedContracts from "@src/contracts";
 import type { EnvioConfig } from "@src/envio-config/types";
@@ -6,6 +6,7 @@ import { Errors } from "@src/errors";
 import { sanitizeContractName } from "@src/helpers";
 import type { Indexed } from "@src/types";
 import logger, { messages } from "@src/winston";
+import _ from "lodash";
 
 export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
@@ -45,12 +46,12 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
   const networkContracts: EnvioConfig.NetworkContract[] = [];
   let startBlock = 0;
 
-  for (const release of releasesByProtocol[protocol]) {
-    const deployment = queries.deployments.get({ chainId, release });
+  for (const release of sablier.releases.getAll({ protocol })) {
+    const deployment = sablier.deployments.get({ chainId, release });
 
     // Some contracts are not deployed on all chains, so we skip them.
     if (!deployment) {
-      const chainName = queries.chains.getName(chainId) ?? "chain";
+      const chainName = sablier.chains.get(chainId)?.name ?? "chain";
       logger.debug(`No deployment found for ${protocol} ${release.version} on ${chainName}`);
       continue;
     }
@@ -67,7 +68,8 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
         });
         continue;
       }
-      const contract = queries.contracts.get({ chainId, contractName, deployments: [deployment] });
+
+      const contract = _.find(deployment.contracts, { name: contractName });
 
       // If it's a deployment that exists, the contract from the contract map must exist.
       if (!contract) {

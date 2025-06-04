@@ -19,7 +19,7 @@
     "@graphql-tools/schema": "^10.0",
     "@graphql-typed-document-node/core": "^3.2",
     "@rescript/react": "^0.13",
-    "@sablier/deployments": "1.0.0-alpha.45",
+    "@sablier/deployments": "1.0.0-alpha.47",
     "@sablier/devkit": "github:sablier-labs/devkit#main",
     "@types/fs-extra": "^11.0",
     "@types/jest": "^29.5",
@@ -60,5 +60,8 @@
     "type": "git",
     "url": "https://github.com/sablier-labs/indexers.git"
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "pino": "^9.7.0"
+  }
 }

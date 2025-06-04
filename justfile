@@ -190,7 +190,7 @@ _codegen-graph-bindings protocol:
 # Print available chain arguments
 [group("print")]
 @print-chains:
-    pnpm tsc scripts/print-chains.ts
+    pnpm tsx scripts/print-chains.ts
 
 # Print available log levels available in Winston
 [group("print")]

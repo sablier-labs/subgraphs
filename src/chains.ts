@@ -1,4 +1,4 @@
-import { chains, queries } from "@sablier/deployments";
+import { chains, sablier } from "@sablier/deployments";
 import _ from "lodash";
 
 type SupportedChain = {
@@ -17,9 +17,10 @@ type GraphChain = SupportedChain & {
   graph: { isEnabled: boolean; name: string };
 };
 
-// Most chains' names on The Graph are the same as the chain's slug, but some are not.
+// ⚠️ IMPORTANT
+// Not all names on The Graph are the same as the chain's slug from the deployments package.
 // See https://thegraph.com/docs/en/supported-networks
-const overrides: { [chainId: number]: string } = {
+const NAME_OVERRIDES: { [chainId: number]: string } = {
   [chains.arbitrum.id]: "arbitrum-one",
   [chains.blast.id]: "blast-mainnet",
   [chains.ethereumSepolia.id]: "sepolia",
@@ -31,7 +32,7 @@ const overrides: { [chainId: number]: string } = {
 const fill = (id: number) => ({
   both: (hypersync?: string) => ({
     envio: { isEnabled: true, ...(hypersync && { hypersync }) },
-    graph: { isEnabled: true, name: overrides[id] || queries.chains.getOrThrow(id).slug },
+    graph: { isEnabled: true, name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug },
     id,
   }),
   envio: (hypersync?: string) => ({
@@ -39,7 +40,7 @@ const fill = (id: number) => ({
     id,
   }),
   graph: () => ({
-    graph: { isEnabled: true, name: overrides[id] || queries.chains.getOrThrow(id).slug },
+    graph: { isEnabled: true, name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug },
     id,
   }),
 });

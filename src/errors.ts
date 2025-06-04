@@ -1,12 +1,12 @@
 import type { Sablier } from "@sablier/deployments";
-import { queries } from "@sablier/deployments";
+import { sablier } from "@sablier/deployments";
 import type { Indexed } from "@src/types";
 import { formatRelease } from "./winston/helpers";
 
 export namespace Errors {
   export class AliasNotFound extends Error {
     constructor(release: Sablier.Release, chainId: number, contractName: string) {
-      const chainName = queries.chains.getName(chainId) ?? "chain";
+      const chainName = sablier.chains.get(chainId)?.name ?? "chain";
       const message = `Alias not found for contract ${contractName} in ${formatRelease(release)} on ${chainName}`;
       super(message);
     }
@@ -14,7 +14,7 @@ export namespace Errors {
 
   export class BlockNotFound extends Error {
     constructor(release: Sablier.Release, chainId: number, contractName: string) {
-      const chainName = queries.chains.getName(chainId) ?? "chain";
+      const chainName = sablier.chains.get(chainId)?.name ?? "chain";
       const message = `Start block not found for contract ${contractName} in ${formatRelease(release)} on ${chainName}`;
       super(message);
     }
@@ -28,7 +28,7 @@ export namespace Errors {
   }
   export class ContractsNotFound extends Error {
     constructor(protocol: Indexed.Protocol, chainId: number) {
-      const chainName = queries.chains.getName(chainId) ?? "chain";
+      const chainName = sablier.chains.get(chainId)?.name ?? "chain";
       const message = `No contracts found for ${protocol} on ${chainName}`;
       super(message);
     }

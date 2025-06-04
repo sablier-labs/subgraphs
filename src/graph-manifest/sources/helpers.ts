@@ -1,4 +1,4 @@
-import { queries, type Sablier } from "@sablier/deployments";
+import { type Sablier, sablier } from "@sablier/deployments";
 import { getGraphChainName } from "@src/chains";
 import indexedContracts, { getIndexedContract } from "@src/contracts";
 import { Errors } from "@src/errors";
@@ -19,7 +19,7 @@ export function getSources(protocol: Indexed.Protocol, chainId: number): GraphMa
   const sources: GraphManifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
-      const release = queries.releases.get({ protocol, version });
+      const release = sablier.releases.get({ protocol, version });
       if (!release) {
         throw new Errors.ReleaseNotFound(protocol, version);
       }
@@ -165,7 +165,7 @@ function extractContract(params: {
 
   // Query contract deployment for this release and chain, skipping if not deployed because not all
   // chains are available for a particular release.
-  const contract = queries.contracts.get({ chainId, contractName, deployments: release.deployments });
+  const contract = sablier.contracts.get({ chainId, contractName, release });
   if (!contract) {
     logger.debug(messages.contractNotFound(release, chainId, contractName));
     return undefined;
