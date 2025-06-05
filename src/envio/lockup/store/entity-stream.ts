@@ -60,7 +60,7 @@ export async function createTranched(
 }
 
 export async function getOrThrow(
-  context: Context.Loader,
+  context: Context.Handler | Context.Loader,
   event: Envio.Event,
   tokenId: bigint | string,
 ): Promise<Entity.Stream> {

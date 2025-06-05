@@ -67,7 +67,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
+/*                                   EXPORT                                   */
 /* -------------------------------------------------------------------------- */
 
 export const createStream = { handler, loader };

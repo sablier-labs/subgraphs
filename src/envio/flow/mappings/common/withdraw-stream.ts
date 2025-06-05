@@ -3,20 +3,16 @@ import type { SablierFlow_v1_0_WithdrawFromFlowStream_handler as Handler } from 
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
-/* -------------------------------------------------------------------------- */
-/*                                   HANDLER                                  */
-/* -------------------------------------------------------------------------- */
-
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   const watcher = loaderReturn.watcher;
   let stream = loaderReturn.stream;
 
   /* --------------------------------- STREAM --------------------------------- */
-
+  const withdrawAmount = event.params.withdrawAmount;
   stream = {
     ...stream,
-    availableAmount: stream.availableAmount - event.params.withdrawAmount,
-    withdrawnAmount: stream.withdrawnAmount + event.params.withdrawAmount,
+    availableAmount: stream.availableAmount - withdrawAmount,
+    withdrawnAmount: stream.withdrawnAmount + withdrawAmount,
   };
   context.Stream.set(stream);
 
@@ -24,14 +20,10 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   await Store.Action.create(context, event, watcher, {
     addressA: event.params.caller,
     addressB: event.params.to,
-    amountA: event.params.withdrawAmount,
+    amountA: withdrawAmount,
     category: enums.ActionCategory.Withdraw,
     streamId: stream.id,
   });
 };
-
-/* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
-/* -------------------------------------------------------------------------- */
 
 export const withdrawStream = { handler, loader: Loader.base };

@@ -1,4 +1,4 @@
-![Sablier Branding](/assets/banner-subgraphs.png)
+![Sablier Branding](./banner.png)
 
 # Sablier Indexers 🚀
 

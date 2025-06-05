@@ -14,6 +14,7 @@ import { Store } from "../../../store";
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */
 /* -------------------------------------------------------------------------- */
+
 type LoaderReturn = {
   activity: Entity.Activity | undefined;
   campaign: Entity.Campaign;

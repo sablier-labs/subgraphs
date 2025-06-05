@@ -8,9 +8,6 @@ import type {
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
-/* -------------------------------------------------------------------------- */
-/*                                   HANDLER                                  */
-/* -------------------------------------------------------------------------- */
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_v2_0<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
@@ -41,9 +38,5 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   };
   await context.Stream.set(stream);
 };
-
-/* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
-/* -------------------------------------------------------------------------- */
 
 export const cancelStream = { handler, loader: Loader.base };

@@ -58,6 +58,7 @@ export async function create(
     voidedTime: undefined,
     withdrawnAmount: 0n,
   };
+  await context.Stream.set(stream);
 
   /* ---------------------------------- BATCH --------------------------------- */
   await updateBatch(context, event, batch, batcher);
@@ -72,15 +73,23 @@ export async function create(
   return stream;
 }
 
-export async function getOrThrow(
-  context: Context.Loader,
+export async function get(
+  context: Context.Handler | Context.Loader,
   event: Envio.Event,
   tokenId: bigint | string,
-): Promise<Entity.Stream> {
+): Promise<Entity.Stream | undefined> {
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);
   const stream = await context.Stream.get(id);
+  return stream;
+}
+
+export function exists(
+  stream: Entity.Stream | undefined,
+  event: Envio.Event,
+  tokenId: bigint | string,
+): asserts stream is Entity.Stream {
   if (!stream) {
+    const id = Id.stream(event.srcAddress, event.chainId, tokenId);
     throw new Error(`Stream not loaded from the entity store: ${id}`);
   }
-  return stream;
 }

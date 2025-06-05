@@ -4,7 +4,7 @@ import { CommonStore } from "../../../../common/store";
 import type { Context } from "../../../bindings";
 import type { CreateEntities, Params } from "../../../helpers/types";
 import { Store } from "../../../store";
-import { type Loader } from "../../loader";
+import { type Loader } from "../loader";
 
 type Input = {
   context: Context.Handler;

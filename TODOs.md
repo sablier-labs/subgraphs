@@ -1,0 +1,1 @@
+- [ ] Add Handler and Loader types for all versions in Envio indexers

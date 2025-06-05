@@ -2,7 +2,7 @@ import { Airdrops as enums } from "../../../../../schema/enums";
 import { Contract } from "../../../bindings";
 import { isOfficialLockup } from "../../../helpers";
 import { createMerkleLL } from "../../common";
-import { Loader } from "../../loader";
+import { Loader } from "../../common/loader";
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleLL.contractRegister(({ context, event }) => {
   const lockupAddress = event.params.lockup;

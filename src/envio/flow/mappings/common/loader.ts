@@ -19,8 +19,8 @@ import { Store } from "../../store";
 
 export namespace Loader {
   export type BaseReturn = {
-    stream: Entity.Stream;
-    watcher: Entity.Watcher;
+    stream?: Entity.Stream;
+    watcher?: Entity.Watcher;
   };
 
   type Base<T> = Adjust_All<T> &
@@ -43,8 +43,8 @@ export namespace Loader {
     } else {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
-    const stream = await Store.Stream.getOrThrow(context, event, tokenId);
-    const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
+    const stream = await Store.Stream.get(context, event, tokenId);
+    const watcher = await Store.Watcher.get(context, event.chainId);
     return {
       stream,
       watcher,

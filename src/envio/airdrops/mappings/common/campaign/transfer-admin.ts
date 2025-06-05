@@ -55,7 +55,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
+/*                                   EXPORT                                   */
 /* -------------------------------------------------------------------------- */
 
 export const transferAdmin = { handler, loader };

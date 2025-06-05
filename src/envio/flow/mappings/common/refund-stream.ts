@@ -4,10 +4,6 @@ import { scale } from "../../helpers";
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
-/* -------------------------------------------------------------------------- */
-/*                                   HANDLER                                  */
-/* -------------------------------------------------------------------------- */
-
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   const watcher = loaderReturn.watcher;
   let stream = loaderReturn.stream;
@@ -49,9 +45,5 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     streamId: stream.id,
   });
 };
-
-/* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
-/* -------------------------------------------------------------------------- */
 
 export const refundStream = { handler, loader: Loader.base };

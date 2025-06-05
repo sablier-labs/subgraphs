@@ -37,7 +37,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                  MAPPINGS                                  */
+/*                                   EXPORT                                   */
 /* -------------------------------------------------------------------------- */
 
 export const approvalForAll = { handler, loader };
