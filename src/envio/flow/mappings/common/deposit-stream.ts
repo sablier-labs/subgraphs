@@ -1,12 +1,18 @@
 import { Flow as enums } from "../../../../schema/enums";
-import type { SablierFlow_v1_0_DepositFlowStream_handler as Handler } from "../../bindings/src/Types.gen";
+import type {
+  SablierFlow_v1_0_DepositFlowStream_handler as Handler_v1_0,
+  SablierFlow_v1_1_DepositFlowStream_handler as Handler_v1_1,
+} from "../../bindings/src/Types.gen";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
+
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   let { stream, watcher } = loaderReturn;
-  Store.Stream.exists(stream, event, event.params.streamId);
+  Store.Stream.exists(event, event.params.streamId, stream);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const depositedAmount = stream.depositedAmount + event.params.amount;

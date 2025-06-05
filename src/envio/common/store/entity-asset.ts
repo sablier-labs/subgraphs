@@ -1,12 +1,11 @@
 import type { Common, Envio } from "../bindings";
-import { readOrFetchERC20Metadata } from "../erc20";
 import { Id } from "../id";
+import type { ERC20Metadata } from "../types";
 
 export async function create<
   TContext extends { Asset: { set: (asset: TAsset) => void | Promise<void> } },
   TAsset extends Common.Asset,
->(context: TContext, chainId: number, assetAddress: Envio.Address): Promise<TAsset> {
-  const metadata = await readOrFetchERC20Metadata(chainId, assetAddress);
+>(context: TContext, chainId: number, assetAddress: Envio.Address, metadata: ERC20Metadata): Promise<TAsset> {
   const asset: Common.Asset = {
     address: assetAddress.toLowerCase(),
     chainId: BigInt(chainId),
@@ -16,6 +15,5 @@ export async function create<
     symbol: metadata.symbol,
   };
   await context.Asset.set(asset as TAsset);
-
   return asset as TAsset;
 }

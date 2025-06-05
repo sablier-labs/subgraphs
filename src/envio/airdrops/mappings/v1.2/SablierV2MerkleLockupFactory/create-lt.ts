@@ -1,6 +1,6 @@
 import { Airdrops as enums } from "../../../../../schema/enums";
 import { Contract } from "../../../bindings";
-import { convertTranches, isOfficialLockup } from "../../../helpers";
+import { convertTranches, isOfficialLockup, type Params } from "../../../helpers";
 import { createMerkleLT } from "../../common";
 import { Loader } from "../../common/loader";
 
@@ -47,14 +47,13 @@ struct ConstructorParams {
 Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLT.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
     const baseParams = event.params.baseParams;
-    const params = {
+    const params: Params.CreateCampaignLT = {
       admin: baseParams[3],
       aggregateAmount: event.params.aggregateAmount,
-      asset: baseParams[0],
       campaignAddress: event.params.merkleLT,
       cancelable: baseParams[1],
       category: enums.CampaignCategory.LockupTranched,
-      cliffPercentage: undefined,
+      entities: loaderReturn,
       expiration: baseParams[2],
       ipfsCID: baseParams[4],
       lockup: event.params.lockupTranched,
@@ -63,7 +62,6 @@ Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLT.handlerWithLoader({
       name: baseParams[6],
       recipientCount: event.params.recipientCount,
       shape: undefined,
-      startPercentage: undefined,
       startTime: undefined, // all v1.2 streams use the claim time as the start time
       totalDuration: event.params.totalDuration,
       tranchesWithPercentages: convertTranches(event.params.tranchesWithPercentages),
@@ -72,7 +70,6 @@ Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLT.handlerWithLoader({
     await createMerkleLT({
       context,
       event,
-      loaderReturn,
       params,
     });
   },

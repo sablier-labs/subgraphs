@@ -4,6 +4,8 @@
  */
 
 import { Version } from "@sablier/deployments";
+import { Effects } from "src/envio/common/effects";
+import { type ERC20Metadata } from "src/envio/common/types";
 import type { Envio } from "../../../common/bindings";
 import { Id } from "../../../common/id";
 import type { Context, Entity } from "../../bindings";
@@ -42,11 +44,6 @@ export namespace Loader {
   /*                                    BASE                                    */
   /* -------------------------------------------------------------------------- */
 
-  export type BaseReturn = {
-    stream: Entity.Stream;
-    watcher: Entity.Watcher;
-  };
-
   type Base<T> = Approval_v1_0<T> &
     Approval_v1_1<T> &
     Approval_v1_2<T> &
@@ -64,6 +61,11 @@ export namespace Loader {
     Withdraw_v1_0<T> &
     Withdraw_v1_1_to_v2_0<T>;
 
+  export type BaseReturn = {
+    stream?: Entity.Stream;
+    watcher?: Entity.Watcher;
+  };
+
   export const base: Base<BaseReturn> = async ({ context, event }): Promise<BaseReturn> => {
     let tokenId: bigint | undefined;
     if ("streamId" in event.params) {
@@ -73,8 +75,8 @@ export namespace Loader {
     } else {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
-    const stream = await Store.Stream.getOrThrow(context, event, tokenId);
-    const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
+    const stream = await Store.Stream.get(context, event, tokenId);
+    const watcher = await Store.Watcher.get(context, event.chainId);
     return {
       stream,
       watcher,
@@ -86,10 +88,11 @@ export namespace Loader {
   /* -------------------------------------------------------------------------- */
 
   export type CreateReturn = {
-    asset: Entity.Asset | undefined;
-    batch: Entity.Batch | undefined;
-    batcher: Entity.Batcher | undefined;
-    watcher: Entity.Watcher | undefined;
+    asset?: Entity.Asset;
+    assetMetadata: ERC20Metadata;
+    batch?: Entity.Batch;
+    batcher?: Entity.Batcher;
+    watcher?: Entity.Watcher;
   };
 
   type EventParams = {
@@ -102,6 +105,10 @@ export namespace Loader {
     event: Envio.Event,
     params: EventParams,
   ): Promise<CreateReturn> {
+    const assetMetadata = await context.effect(Effects.ERC20.readOrFetchMetadata, {
+      address: params.asset,
+      chainId: event.chainId,
+    });
     const assetId = Id.asset(event.chainId, params.asset);
     const asset = await context.Asset.get(assetId);
 
@@ -116,6 +123,7 @@ export namespace Loader {
 
     return {
       asset,
+      assetMetadata,
       batch,
       batcher,
       watcher,

@@ -4,6 +4,8 @@
  */
 
 import { Version } from "@sablier/deployments";
+import { Effects } from "src/envio/common/effects";
+import { type ERC20Metadata } from "src/envio/common/types";
 import type { Envio } from "../../../common/bindings";
 import { Id } from "../../../common/id";
 import type { Context, Entity } from "../../bindings";
@@ -22,9 +24,10 @@ export namespace Loader {
   /* -------------------------------------------------------------------------- */
 
   export type CreateReturn = {
-    asset: Entity.Asset | undefined;
-    factory: Entity.Factory | undefined;
-    watcher: Entity.Watcher | undefined;
+    asset?: Entity.Asset;
+    assetMetadata: ERC20Metadata;
+    factory?: Entity.Factory;
+    watcher?: Entity.Watcher;
   };
 
   async function loaderForCreate(
@@ -32,6 +35,10 @@ export namespace Loader {
     event: Envio.Event,
     assetAddress: Envio.Address,
   ): Promise<CreateReturn> {
+    const assetMetadata = await context.effect(Effects.ERC20.readOrFetchMetadata, {
+      address: assetAddress,
+      chainId: event.chainId,
+    });
     const assetId = Id.asset(event.chainId, assetAddress);
     const asset = await context.Asset.get(assetId);
 
@@ -42,6 +49,7 @@ export namespace Loader {
     const watcher = await context.Watcher.get(watcherId);
     return {
       asset,
+      assetMetadata,
       factory,
       watcher,
     };

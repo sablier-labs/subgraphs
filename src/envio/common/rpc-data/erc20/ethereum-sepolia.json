@@ -1,0 +1,10 @@
+{
+  "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a": { "decimals": 18, "name": "Dai Stablecoin", "symbol": "DAI" },
+  "0x1db995cfe9b9b1168446db9687537b0b555ace88": { "decimals": 18, "name": "MyToken", "symbol": "MTK" },
+  "0xdaba2588db25a47e6209632b3bd85646a8e93c54": { "decimals": 18, "name": "Centuriones", "symbol": "CENT$" },
+  "0x3dcbc355c5b5fdf45d2d2ccc8890d76c5b30394a": { "decimals": 18, "name": "Morph", "symbol": "Morph" },
+  "0x38158d05cb8903f4319841b4a9272be772feea77": { "decimals": 18, "name": "goopsyboopsy", "symbol": "GBP" },
+  "0x1c7d4b196cb0c7b01d743fbc6116a902379c7238": { "decimals": 6, "name": "USDC", "symbol": "USDC" },
+  "0xdfae10143b3010a675da85c26acde63f240a92ed": { "decimals": 18, "name": "Avarik Token", "symbol": "AVRK" },
+  "0xd0aa3a1e6745fade4412757d918543922001c21d": { "decimals": 18, "name": "Butter", "symbol": "🧈🧈" }
+}

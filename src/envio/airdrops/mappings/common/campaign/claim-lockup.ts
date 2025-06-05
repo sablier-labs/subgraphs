@@ -16,16 +16,16 @@ import { Store } from "../../../store";
 /* -------------------------------------------------------------------------- */
 
 type LoaderReturn = {
-  activity: Entity.Activity | undefined;
-  campaign: Entity.Campaign;
-  watcher: Entity.Watcher;
+  activity?: Entity.Activity;
+  campaign?: Entity.Campaign;
+  watcher?: Entity.Watcher;
 };
 
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const activity = await Store.Activity.get(context, event);
-  const campaign = await Store.Campaign.getOrThrow(context, event);
-  const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
+  const campaign = await Store.Campaign.get(context, event);
+  const watcher = await Store.Watcher.get(context, event.chainId);
 
   return {
     activity,
@@ -42,12 +42,14 @@ type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { campaign, watcher } = loaderReturn;
-  const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
+  Store.Campaign.exists(event, campaign);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateClaimed(context, campaign, event.params.amount);
 
   /* -------------------------------- ACTIVITY -------------------------------- */
+  const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
   await Store.Activity.update(context, activity, event.params.amount);
 
   /* --------------------------------- ACTION --------------------------------- */

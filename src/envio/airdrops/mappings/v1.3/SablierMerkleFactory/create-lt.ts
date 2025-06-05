@@ -1,3 +1,4 @@
+import { type Params } from "src/envio/airdrops/helpers/types";
 import { Airdrops as enums } from "../../../../../schema/enums";
 import { Contract } from "../../../bindings";
 import { convertTranches, isOfficialLockup } from "../../../helpers";
@@ -49,13 +50,13 @@ struct ConstructorParams {
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleLT.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
     const baseParams = event.params.baseParams;
-    const params = {
+    const params: Params.CreateCampaignLT = {
       admin: baseParams[2],
       aggregateAmount: event.params.aggregateAmount,
-      asset: baseParams[0],
       campaignAddress: event.params.merkleLT,
       cancelable: event.params.cancelable,
       category: enums.CampaignCategory.LockupTranched,
+      entities: loaderReturn,
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       lockup: event.params.lockup,
@@ -72,7 +73,6 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleLT.handlerWithLoader({
     await createMerkleLT({
       context,
       event,
-      loaderReturn,
       params,
     });
   },

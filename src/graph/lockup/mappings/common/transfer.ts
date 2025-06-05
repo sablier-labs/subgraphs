@@ -5,7 +5,7 @@ import { Params } from "../../helpers/types";
 import { Store } from "../../store";
 
 export function handleTransfer(event: ethereum.Event, params: Params.TransferNFT): void {
-  // Filter out `Transfer` events emitted by the initial mint transaction.
+  // Exclude `Transfer` events emitted by the initial mint transaction.
   // See https://github.com/sablier-labs/indexers/issues/18
   if (params.from.equals(Address.zero())) {
     return;

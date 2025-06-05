@@ -1,12 +1,18 @@
 import { Flow as enums } from "../../../../schema/enums";
-import type { SablierFlow_v1_0_RefundFromFlowStream_handler as Handler } from "../../bindings/src/Types.gen";
+import type {
+  SablierFlow_v1_0_RefundFromFlowStream_handler as Handler_v1_0,
+  SablierFlow_v1_1_RefundFromFlowStream_handler as Handler_v1_1,
+} from "../../bindings/src/Types.gen";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
+
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  const watcher = loaderReturn.watcher;
-  let stream = loaderReturn.stream;
+  let { stream, watcher } = loaderReturn;
+  Store.Stream.exists(event, event.params.streamId, stream);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
 
@@ -25,7 +31,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   // If the entire available amount is refunded, the stream starts accruing now.
   const extraAmount = scaledAvailableAmount - notWithdrawnAmount;
   let depletionTime: bigint = now;
-  if (extraAmount !== 0n || stream.ratePerSecond !== 0n) {
+  if (extraAmount !== 0n && stream.ratePerSecond !== 0n) {
     depletionTime = now + extraAmount / stream.ratePerSecond;
   }
 

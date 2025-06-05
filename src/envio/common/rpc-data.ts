@@ -6,8 +6,8 @@ import type { Envio } from "./bindings";
 import type { ERC20Metadata } from "./types";
 
 export enum DataCategory {
-  Asset = "assets",
   Proxender = "proxenders",
+  ERC20 = "erc20",
 }
 
 type ProxenderInfo = {
@@ -15,7 +15,7 @@ type ProxenderInfo = {
 };
 
 type ShapeMap = {
-  [DataCategory.Asset]: Record<Envio.Address, ERC20Metadata>;
+  [DataCategory.ERC20]: Record<Envio.Address, ERC20Metadata>;
   [DataCategory.Proxender]: Record<Envio.Address, ProxenderInfo>;
 };
 
@@ -26,7 +26,7 @@ export function initDataEntry<C extends DataCategory>(category: C, chainId: numb
 export class DataEntry<C extends DataCategory> {
   public readonly file: string;
 
-  private static readonly BASE_DIR = "./data";
+  private static readonly BASE_DIR = path.join(__dirname, "rpc-data");
   private static readonly ENCODING = "utf8" as const;
 
   private data: ShapeMap[C] = {};
@@ -37,8 +37,7 @@ export class DataEntry<C extends DataCategory> {
   ) {
     const chain = sablier.chains.getOrThrow(chainId);
     this.file = path.join(DataEntry.BASE_DIR, category, `${chain.slug}.json`);
-    fs.ensureDirSync(path.dirname(this.file));
-    fs.ensureFileSync(this.file);
+    this.preflight();
     this.load();
   }
 
@@ -49,6 +48,13 @@ export class DataEntry<C extends DataCategory> {
     } catch (err) {
       console.error(`Failed reading data from ${this.file}`, err);
       this.data = {};
+    }
+  }
+
+  private preflight() {
+    const fileExists = fs.existsSync(this.file);
+    if (!fileExists) {
+      fs.writeFileSync(this.file, "{}", DataEntry.ENCODING);
     }
   }
 

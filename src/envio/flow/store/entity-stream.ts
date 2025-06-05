@@ -3,16 +3,15 @@ import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
 import type { Context, Entity } from "../bindings";
-import { type CreateEntities, type Params } from "../helpers/types";
+import { type Params } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
 
 export async function create(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
   params: Params.Create,
 ): Promise<Entity.Stream> {
-  const { asset, batch, batcher, watcher } = entities;
+  const { asset, batch, batcher, watcher } = params.entities;
 
   const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);
@@ -73,6 +72,17 @@ export async function create(
   return stream;
 }
 
+export function exists(
+  event: Envio.Event,
+  tokenId: bigint | string,
+  stream?: Entity.Stream,
+): asserts stream is Entity.Stream {
+  if (!stream) {
+    const id = Id.stream(event.srcAddress, event.chainId, tokenId);
+    throw new Error(`Stream not loaded from the entity store: ${id}`);
+  }
+}
+
 export async function get(
   context: Context.Handler | Context.Loader,
   event: Envio.Event,
@@ -81,15 +91,4 @@ export async function get(
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);
   const stream = await context.Stream.get(id);
   return stream;
-}
-
-export function exists(
-  stream: Entity.Stream | undefined,
-  event: Envio.Event,
-  tokenId: bigint | string,
-): asserts stream is Entity.Stream {
-  if (!stream) {
-    const id = Id.stream(event.srcAddress, event.chainId, tokenId);
-    throw new Error(`Stream not loaded from the entity store: ${id}`);
-  }
 }

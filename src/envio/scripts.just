@@ -31,13 +31,8 @@ alias cc := codegen-config
     just root::codegen-schema envio $PROTOCOL
 alias cs := codegen-schema
 
-@dev: codegen
-    just _envio dev
-alias d := dev
-
-@start: codegen
-    just _envio dev
-alias s := dev
+@envio command:
+    just _envio {{ command }}
 
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: HELPERS                               #

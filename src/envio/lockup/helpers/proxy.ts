@@ -4,9 +4,9 @@ import PRBProxyABI from "../../../abi/PRBProxy.json";
 import PRBProxyRegistryABI from "../../../abi/PRBProxyRegistry.json";
 import type { Envio } from "../../common/bindings";
 import { PRB_PROXY_REGISTRY } from "../../common/constants";
-import { DataCategory, initDataEntry } from "../../common/data";
 import { getContractVersion } from "../../common/deployments";
 import { getClient } from "../../common/rpc-clients";
+import { DataCategory, initDataEntry } from "../../common/rpc-data";
 
 /**
  * The proxender is the owner of the proxy that is the sender of the stream.

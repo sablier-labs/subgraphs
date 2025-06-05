@@ -102,7 +102,9 @@ contracts:
     handler: "mappings/v2.0/SablierLockup.ts"
     name: "SablierLockup_v2_0"
 networks:
-  - contracts:
+  - id: 421614
+    start_block: 2838657
+    contracts:
       - address: "0x7938c18a59fad2ba11426acfbe8d74f0f598a4d2"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0xa3e36b51b7a456812c92253780f4b15bad56e34c"
@@ -119,9 +121,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x83dd52fca44e069020b58155b761a590f12b59d3"
         name: "SablierLockup_v2_0"
-    id: 421614
-    start_block: 2838657
-  - contracts:
+  - id: 42161
+    start_block: 107508404
+    contracts:
       - address: "0xa9efbef1a35ff80041f567391bdc9813b2d50197"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x197d655f3be03903fd25e7828c3534504bfe525e"
@@ -138,9 +140,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x467d5bf8cfa1a5f99328fbdcb9c751c78934b725"
         name: "SablierLockup_v2_0"
-    id: 42161
-    start_block: 107508404
-  - contracts:
+  - id: 43114
+    start_block: 32164219
+    contracts:
       - address: "0x665d1c8337f1035cfbe13dd94bb669110b975f5f"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x610346e9088afa70d6b03e96a800b3267e75ca19"
@@ -157,9 +159,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82"
         name: "SablierLockup_v2_0"
-    id: 43114
-    start_block: 32164219
-  - contracts:
+  - id: 8453
+    start_block: 1750275
+    contracts:
       - address: "0x645b00960dc352e699f89a81fc845c0c645231cf"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x6b9a46c8377f21517e65fa3899b3a9fab19d17f5"
@@ -176,9 +178,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xb5d78dd3276325f5faf3106cc4acc56e28e0fe3b"
         name: "SablierLockup_v2_0"
-    id: 8453
-    start_block: 1750275
-  - contracts:
+  - id: 84532
+    start_block: 7545175
+    contracts:
       - address: "0xf46d5fa9bfc964e8d06846c8739aec69bc06344d"
         name: "SablierV2LockupDynamic_v1_1"
       - address: "0xbd7aaa2984c0a887e93c66baae222749883763d3"
@@ -191,9 +193,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xa4777ca525d43a7af55d45b11b430606d7416f8d"
         name: "SablierLockup_v2_0"
-    id: 84532
-    start_block: 7545175
-  - contracts:
+  - id: 56
+    start_block: 29646271
+    contracts:
       - address: "0xf2f3fef2454dca59eca929d2d8cd2a8669cc6214"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x3fe4333f62a75c2a85c8211c6aefd1b9bfde6e51"
@@ -210,9 +212,11 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x6e0bad2c077d699841f1929b45bfb93fafbed395"
         name: "SablierLockup_v2_0"
-    id: 56
-    start_block: 29646271
-  - contracts:
+  - id: 88888
+    start_block: 19125587
+    hypersync_config:
+      url: "https://chiliz.hypersync.xyz"
+    contracts:
       - address: "0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0xdf578c2c70a86945999c65961417057363530a1c"
@@ -221,11 +225,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x711900e5f55d427cd88e5e3fcae54ccf02de71f4"
         name: "SablierLockup_v2_0"
-    hypersync_config:
-      url: "https://chiliz.hypersync.xyz"
-    id: 88888
-    start_block: 19125587
-  - contracts:
+  - id: 1
+    start_block: 17613133
+    contracts:
       - address: "0x39efdc3dbb57b2388ccc4bb40ac4cb1226bc9e44"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0xb10daee1fcf62243ae27776d7a92d39dc8740f95"
@@ -242,9 +244,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x7c01aa3783577e15fd7e272443d44b92d5b21056"
         name: "SablierLockup_v2_0"
-    id: 1
-    start_block: 17613133
-  - contracts:
+  - id: 11155111
+    start_block: 4067889
+    contracts:
       - address: "0x421e1e7a53ff360f70a2d02037ee394fa474e035"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0xd4300c5bc0b9e27c73ebabdc747ba990b1b570db"
@@ -261,9 +263,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xd116c275541cdbe7594a202bd6ae4dbca4578462"
         name: "SablierLockup_v2_0"
-    id: 11155111
-    start_block: 4067889
-  - contracts:
+  - id: 100
+    start_block: 28766600
+    contracts:
       - address: "0xeb148e4ec13aaa65328c0ba089a278138e9e53f9"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x685e92c9ca2bb23f1b596d0a7d749c0603e88585"
@@ -280,9 +282,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92"
         name: "SablierLockup_v2_0"
-    id: 100
-    start_block: 28766600
-  - contracts:
+  - id: 59144
+    start_block: 7728316
+    contracts:
       - address: "0xf2e46b249cfe09c2b3a2022dc81e0bb4be3336f1"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0xb5d39049510f47ee7f74c528105d225e42747d63"
@@ -291,9 +293,11 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x6964252561e8762dd10267176eac5078b6291e51"
         name: "SablierLockup_v2_0"
-    id: 59144
-    start_block: 7728316
-  - contracts:
+  - id: 34443
+    start_block: 11343389
+    hypersync_config:
+      url: "https://mode.hypersync.xyz"
+    contracts:
       - address: "0x704552099f5ad679294d337638b9a57fd4726f52"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0xd8c65bd7cb6924ef895b2edca03407c652f5a2c5"
@@ -302,11 +306,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x3aebadfc423fd08be4715986f68d5e9a597ec974"
         name: "SablierLockup_v2_0"
-    hypersync_config:
-      url: "https://mode.hypersync.xyz"
-    id: 34443
-    start_block: 11343389
-  - contracts:
+  - id: 10
+    start_block: 106405061
+    contracts:
       - address: "0x6f68516c21e248cddfaf4898e66b2b0adee0e0d6"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0xb923abdca17aed90eb5ec5e407bd37164f632bfd"
@@ -323,9 +325,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x822e9c4852e978104d82f0f785bfa663c2b700c1"
         name: "SablierLockup_v2_0"
-    id: 10
-    start_block: 106405061
-  - contracts:
+  - id: 11155420
+    start_block: 7451817
+    contracts:
       - address: "0xf9e4095c1dfc058b34135c5c48cae66a8d2b3aa5"
         name: "SablierV2LockupDynamic_v1_1"
       - address: "0xe59d28bef2d37e99b93e734ed1ddcfc4b9c1bf73"
@@ -338,9 +340,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x1f898895eab949ffd34c29cf859c035dc4525df4"
         name: "SablierLockup_v2_0"
-    id: 11155420
-    start_block: 7451817
-  - contracts:
+  - id: 137
+    start_block: 44637127
+    contracts:
       - address: "0x7313addb53f96a4f710d3b91645c62b434190725"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x67422c3e36a908d5c3237e9cffeb40bde7060f6e"
@@ -357,9 +359,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xe0bfe071da104e571298f8b6e0fce44c512c1ff4"
         name: "SablierLockup_v2_0"
-    id: 137
-    start_block: 44637127
-  - contracts:
+  - id: 534352
+    start_block: 500707
+    contracts:
       - address: "0xde6a30d851efd0fc2a9c922f294801cfd5fcb3a1"
         name: "SablierV2LockupDynamic_v1_0"
       - address: "0x80640ca758615ee83801ec43452feea09a202d33"
@@ -376,9 +378,9 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xcb0b1f1d116ed62135848d8c90eb61afda936da8"
         name: "SablierLockup_v2_0"
-    id: 534352
-    start_block: 500707
-  - contracts:
+  - id: 324
+    start_block: 32472581
+    contracts:
       - address: "0xe6c7324bea8474209103e407779eec600c07cf3f"
         name: "SablierV2LockupDynamic_v1_1"
       - address: "0x2fca69fa0a318efdf4c15ee8f13a873347a8a8d4"
@@ -391,9 +393,11 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x7bccb3595aa81dbe8a69dd8c46f5c2a3cf76594a"
         name: "SablierLockup_v2_0"
-    id: 324
-    start_block: 32472581
-  - contracts:
+  - id: 2818
+    start_block: 45825
+    hypersync_config:
+      url: "https://morph.hypersync.xyz/"
+    contracts:
       - address: "0x946654ab30dd6ed10236c89f2c8b2719df653691"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0xac19f4181e58efb7094e0cb4e1bb18c79f6aadf4"
@@ -402,11 +406,11 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xf3cd08105b6745965149ef02b8abdcea0ae51241"
         name: "SablierLockup_v2_0"
+  - id: 5330
+    start_block: 2896160
     hypersync_config:
-      url: "https://morph.hypersync.xyz/"
-    id: 2818
-    start_block: 45825
-  - contracts:
+      url: "https://extrabud.hypersync.xyz"
+    contracts:
       - address: "0x1fa500262b352d821b4e1c933a20f2242b45383d"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0x251fc799344151026d19b959b8f3667416d56b88"
@@ -415,11 +419,11 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0xf46d1f8c85f215a515f6d738ab3e3ba081f6c083"
         name: "SablierLockup_v2_0"
+  - id: 5845
+    start_block: 2515961
     hypersync_config:
-      url: "https://extrabud.hypersync.xyz"
-    id: 5330
-    start_block: 2896160
-  - contracts:
+      url: "https://tangle.hypersync.xyz"
+    contracts:
       - address: "0x946654ab30dd6ed10236c89f2c8b2719df653691"
         name: "SablierV2LockupDynamic_v1_2"
       - address: "0xac19f4181e58efb7094e0cb4e1bb18c79f6aadf4"
@@ -428,7 +432,3 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x1cae76b71913598d7664d16641ccb6037d8ed61a"
         name: "SablierLockup_v2_0"
-    hypersync_config:
-      url: "https://tangle.hypersync.xyz"
-    id: 5845
-    start_block: 2515961

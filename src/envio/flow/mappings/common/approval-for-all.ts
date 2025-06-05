@@ -11,11 +11,11 @@ import { Store } from "../../store";
 /* -------------------------------------------------------------------------- */
 
 type LoaderReturn = {
-  watcher: Entity.Watcher;
+  watcher?: Entity.Watcher;
 };
 
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
+  const watcher = await Store.Watcher.get(context, event.chainId);
   return {
     watcher,
   };
@@ -27,6 +27,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { watcher } = loaderReturn;
+  Store.Watcher.exists(event.chainId, watcher);
 
   await Store.Action.create(context, event, watcher, {
     addressA: event.params.owner,

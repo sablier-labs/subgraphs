@@ -2,15 +2,21 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@sablier/devkit/biome"],
   "files": {
-    "includes": ["**/*.{graphql,js,json,jsonc,ts}", "!src/graph/**/bindings/**/*.ts"]
+    "includes": [
+      "**/*.{graphql,js,json,jsonc,ts}",
+      // "!src/envio/common/rpc-data/**/*.json",
+      "!src/graph/**/bindings/**/*.ts"
+    ]
   },
   "overrides": [
+    /* ------------------------------ YAML CONFIGS ------------------------------ */
     {
       "includes": ["src/envio-config/**/*.ts", "src/graph-manifest/**/*.ts"],
       "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
     },
+    /* ----------------------------- ASSEMBLYSCRIPT ----------------------------- */
     {
-      "includes": ["**/src/graph/**/*.ts"], // AssemblyScript
+      "includes": ["**/src/graph/**/*.ts"],
       "linter": {
         "rules": {
           "style": { "useImportType": "off" },

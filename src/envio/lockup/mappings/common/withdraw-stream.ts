@@ -11,8 +11,9 @@ import { Loader } from "./loader";
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_v2_0<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  const watcher = loaderReturn.watcher;
-  let stream = loaderReturn.stream;
+  let { stream, watcher } = loaderReturn;
+  Store.Stream.exists(event, event.params.streamId, stream);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const withdrawAmount = event.params.amount;

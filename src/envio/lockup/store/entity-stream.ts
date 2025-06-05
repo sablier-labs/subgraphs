@@ -4,16 +4,15 @@ import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
 import type { Context, Entity, EnvioEnum } from "../bindings";
 import { fetchOrReadProxender } from "../helpers/proxy";
-import type { CreateEntities, Params, Segment, Tranche } from "../helpers/types";
+import type { Params, Segment, Tranche } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
 
 export async function createDynamic(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
   params: Params.CreateStreamDynamic,
 ): Promise<Entity.Stream> {
-  const stream = await createBase(context, entities, event, params);
+  const stream = await createBase(context, event, params);
   await context.Stream.set(stream);
   await createSegments(context, stream, params.segments);
   return stream;
@@ -22,10 +21,9 @@ export async function createDynamic(
 export async function createLinear(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
   params: Params.CreateStreamLinear,
 ): Promise<Entity.Stream> {
-  const baseStream = await createBase(context, entities, event, params);
+  const baseStream = await createBase(context, event, params);
 
   let initial: boolean = false;
   let initialAmount: bigint = 0n;
@@ -50,25 +48,32 @@ export async function createLinear(
 export async function createTranched(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
   params: Params.CreateTranche,
 ): Promise<Entity.Stream> {
-  const stream = await createBase(context, entities, event, params);
+  const stream = await createBase(context, event, params);
   await context.Stream.set(stream);
   await createTranches(context, stream, params.tranches);
   return stream;
 }
 
-export async function getOrThrow(
+export function exists(
+  event: Envio.Event,
+  tokenId: bigint | string,
+  stream?: Entity.Stream,
+): asserts stream is Entity.Stream {
+  if (!stream) {
+    const id = Id.stream(event.srcAddress, event.chainId, tokenId);
+    throw new Error(`Stream not loaded from the entity store: ${id}`);
+  }
+}
+
+export async function get(
   context: Context.Handler | Context.Loader,
   event: Envio.Event,
   tokenId: bigint | string,
-): Promise<Entity.Stream> {
+): Promise<Entity.Stream | undefined> {
   const id = Id.stream(event.srcAddress, event.chainId, tokenId);
   const stream = await context.Stream.get(id);
-  if (!stream) {
-    throw new Error(`Stream not loaded from the entity store: ${id}`);
-  }
   return stream;
 }
 
@@ -78,11 +83,10 @@ export async function getOrThrow(
 
 async function createBase(
   context: Context.Handler,
-  entities: CreateEntities,
   event: Envio.Event,
   params: Params.CreateStreamCommon,
 ): Promise<Entity.Stream> {
-  const { asset, batch, batcher, watcher } = entities;
+  const { asset, batch, batcher, watcher } = params.entities;
 
   const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);

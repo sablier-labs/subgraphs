@@ -1,16 +1,14 @@
 import { Airdrops as enums } from "../../../../../schema/enums";
 import type { Envio } from "../../../../common/bindings";
-import { CommonStore } from "../../../../common/store";
 import type { Context } from "../../../bindings";
-import type { CreateEntities, Params } from "../../../helpers/types";
+import { type Entity } from "../../../bindings";
+import type { Params } from "../../../helpers/types";
 import { Store } from "../../../store";
-import { type Loader } from "../loader";
 
 type Input = {
   context: Context.Handler;
   event: Envio.Event;
-  loaderReturn: Loader.CreateReturn;
-  params: Params.CampaignLL | Params.CampaignLT;
+  params: Params.CreateCampaignLL | Params.CreateCampaignLT;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -18,17 +16,17 @@ type Input = {
 /* -------------------------------------------------------------------------- */
 
 export async function createMerkleLL(input: Input): Promise<void> {
-  const { context, event, loaderReturn, params } = input;
+  const { context, event, params } = input;
 
-  const campaignEntities = await loadEntities(context, event, loaderReturn, params.asset);
-  const campaign = await Store.Campaign.createLL(context, event, campaignEntities, params as Params.CampaignLL);
+  const associatedEntities = await createAssociatedEntities(context, event, params.entities);
+  const campaign = await Store.Campaign.createLL(context, event, params as Params.CreateCampaignLL);
 
   const actionEntities = {
     campaign,
-    factory: campaignEntities.factory,
-    watcher: campaignEntities.watcher,
+    factory: associatedEntities.factory,
+    watcher: associatedEntities.watcher,
   };
-  await Store.Action.create(context, event, actionEntities, { category: enums.ActionCategory.Create });
+  await Store.Action.create(context, event, { category: enums.ActionCategory.Create, entities: actionEntities });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -36,32 +34,36 @@ export async function createMerkleLL(input: Input): Promise<void> {
 /* -------------------------------------------------------------------------- */
 
 export async function createMerkleLT(input: Input): Promise<void> {
-  const { context, event, loaderReturn, params } = input;
+  const { context, event, params } = input;
 
-  const campaignEntities = await loadEntities(context, event, loaderReturn, params.asset);
-  const campaign = await Store.Campaign.createLT(context, event, campaignEntities, params as Params.CampaignLT);
+  const associatedEntities = await createAssociatedEntities(context, event, params.entities);
+  const campaign = await Store.Campaign.createLT(context, event, params as Params.CreateCampaignLT);
 
   const actionEntities = {
     campaign,
-    factory: campaignEntities.factory,
-    watcher: campaignEntities.watcher,
+    factory: associatedEntities.factory,
+    watcher: associatedEntities.watcher,
   };
-  await Store.Action.create(context, event, actionEntities, { category: enums.ActionCategory.Create });
+  await Store.Action.create(context, event, { category: enums.ActionCategory.Create, entities: actionEntities });
 }
 
 /* -------------------------------------------------------------------------- */
 /*                                COMMON LOGIC                                */
 /* -------------------------------------------------------------------------- */
 
-async function loadEntities(
+async function createAssociatedEntities(
   context: Context.Handler,
   event: Envio.Event,
-  loaderReturn: Loader.CreateReturn,
-  assetAddress: Envio.Address,
-): Promise<CreateEntities> {
+  entities: {
+    factory?: Entity.Factory;
+    watcher?: Entity.Watcher;
+  },
+): Promise<{
+  factory: Entity.Factory;
+  watcher: Entity.Watcher;
+}> {
   return {
-    asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, assetAddress)),
-    factory: loaderReturn.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
-    watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
+    factory: entities.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
+    watcher: entities.watcher ?? (await Store.Watcher.create(event.chainId)),
   };
 }

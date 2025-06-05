@@ -15,15 +15,15 @@ import { Store } from "../../../store";
 /*                                   LOADER                                   */
 /* -------------------------------------------------------------------------- */
 type LoaderReturn = {
-  campaign: Entity.Campaign;
-  watcher: Entity.Watcher;
+  campaign?: Entity.Campaign;
+  watcher?: Entity.Watcher;
 };
 
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 
 export const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const campaign = await Store.Campaign.getOrThrow(context, event);
-  const watcher = await Store.Watcher.getOrThrow(context, event.chainId);
+  const campaign = await Store.Campaign.get(context, event);
+  const watcher = await Store.Watcher.get(context, event.chainId);
 
   return {
     campaign,
@@ -38,18 +38,24 @@ export const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
-  const { campaign } = loaderReturn;
-
   // Starting with v1.3, the constructor emits a TransferAdmin event.
-  if (event.params.oldAdmin.toLowerCase() === ADDRESS_ZERO.toLowerCase()) {
+  if (event.params.oldAdmin === ADDRESS_ZERO) {
     return;
   }
+
+  const { campaign, watcher } = loaderReturn;
+  Store.Campaign.exists(event, campaign);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateAdmin(context, campaign, event.params.newAdmin);
 
   /* --------------------------------- ACTION --------------------------------- */
-  await Store.Action.create(context, event, loaderReturn, {
+  const entities = {
+    campaign,
+    watcher,
+  };
+  await Store.Action.create(context, event, entities, {
     category: enums.ActionCategory.TransferAdmin,
   });
 };

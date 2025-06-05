@@ -1,6 +1,6 @@
 import { Airdrops as enums } from "../../../../schema/enums";
 import { Contract } from "../../bindings";
-import { isOfficialLockup } from "../../helpers";
+import { isOfficialLockup, type Params } from "../../helpers";
 import { createMerkleLL } from "../common";
 import { Loader } from "../common/loader";
 
@@ -44,15 +44,15 @@ struct Durations {
 
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
-    const params = {
+    const params: Params.CreateCampaignLL = {
       admin: event.params.admin,
       aggregateAmount: event.params.aggregateAmount,
-      asset: event.params.asset,
       campaignAddress: event.params.merkleStreamer,
       cancelable: event.params.cancelable,
       category: enums.CampaignCategory.LockupLinear,
       cliffDuration: event.params.streamDurations[0],
       cliffPercentage: undefined,
+      entities: loaderReturn,
       expiration: event.params.expiration,
       ipfsCID: event.params.ipfsCID,
       lockup: event.params.lockupLinear,
@@ -69,7 +69,6 @@ Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLo
     await createMerkleLL({
       context,
       event,
-      loaderReturn,
       params,
     });
   },

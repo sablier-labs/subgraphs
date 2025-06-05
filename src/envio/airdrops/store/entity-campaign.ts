@@ -1,17 +1,16 @@
 import type { Envio } from "../../common/bindings";
-import { getContract } from "../../common/deployments";
+import { getContractVersion } from "../../common/deployments";
 import { Id } from "../../common/id";
 import type { Context, Entity, EnvioEnum } from "../bindings";
 import { getNickname } from "../helpers/campaign";
-import type { CreateEntities, Params } from "../helpers/types";
+import type { Params } from "../helpers/types";
 
 export async function createInstant(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
-  params: Params.CampaignBase,
+  params: Params.CreateCampaignBase,
 ): Promise<Entity.Campaign> {
-  const campaign = await createBaseCampaign(context, event, entities, params);
+  const campaign = await createBaseCampaign(context, event, params);
   await context.Campaign.set(campaign);
   return campaign;
 }
@@ -19,10 +18,9 @@ export async function createInstant(
 export async function createLL(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
-  params: Params.CampaignLL,
+  params: Params.CreateCampaignLL,
 ): Promise<Entity.Campaign> {
-  let campaign = await createBaseCampaign(context, event, entities, params);
+  let campaign = await createBaseCampaign(context, event, params);
   campaign = {
     ...campaign,
     lockup: params.lockup,
@@ -45,10 +43,9 @@ export async function createLL(
 export async function createLT(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
-  params: Params.CampaignLT,
+  params: Params.CreateCampaignLT,
 ): Promise<Entity.Campaign> {
-  let campaign = await createBaseCampaign(context, event, entities, params);
+  let campaign = await createBaseCampaign(context, event, params);
   campaign = {
     ...campaign,
     lockup: params.lockup,
@@ -63,12 +60,16 @@ export async function createLT(
   return campaign;
 }
 
-export async function getOrThrow(context: Context.Loader, event: Envio.Event) {
-  const id = Id.campaign(event.chainId, event.srcAddress);
-  const campaign = await context.Campaign.get(id);
+export function exists(event: Envio.Event, campaign?: Entity.Campaign): asserts campaign is Entity.Campaign {
   if (!campaign) {
+    const id = Id.campaign(event.chainId, event.srcAddress);
     throw new Error(`Campaign not loaded from the entity store: ${id}`);
   }
+}
+
+export async function get(context: Context.Loader, event: Envio.Event) {
+  const id = Id.campaign(event.chainId, event.srcAddress);
+  const campaign = await context.Campaign.get(id);
   return campaign;
 }
 
@@ -116,11 +117,10 @@ export async function updateClaimed(
 async function createBaseCampaign(
   context: Context.Handler,
   event: Envio.Event,
-  entities: CreateEntities,
-  params: Params.CampaignBase,
+  params: Params.CreateCampaignBase,
 ): Promise<Entity.Campaign> {
-  const campaignId = Id.campaign(event.chainId, params.campaignAddress);
-  const factory = getContract("airdrops", event.chainId, entities.factory.address);
+  const { entities } = params;
+  const factoryVersion = getContractVersion("airdrops", event.chainId, entities.factory.address);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   // Some fields are set to 0/ undefined because they are set later depending on the campaign category.
@@ -140,7 +140,7 @@ async function createBaseCampaign(
     factory_id: entities.factory.address,
     fee: params.minimumFee,
     hash: event.transaction.hash,
-    id: campaignId,
+    id: Id.campaign(event.chainId, params.campaignAddress),
     ipfsCID: params.ipfsCID,
     lockup: undefined,
     name: params.name,
@@ -161,7 +161,7 @@ async function createBaseCampaign(
     subgraphId: entities.watcher.campaignCounter,
     timestamp: BigInt(event.block.timestamp),
     totalRecipients: params.recipientCount,
-    version: factory.version,
+    version: factoryVersion,
   };
 
   /* --------------------------------- FACTORY -------------------------------- */

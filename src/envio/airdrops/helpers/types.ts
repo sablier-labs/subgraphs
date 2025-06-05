@@ -13,15 +13,23 @@ export namespace Params {
     clawbackAmount?: bigint;
     clawbackFrom?: Envio.Address;
     clawbackTo?: Envio.Address;
+    entities: {
+      campaign: Entity.Campaign;
+      watcher: Entity.Watcher;
+    };
     fee?: bigint;
   };
 
-  export type CampaignBase = {
+  export type CreateCampaignBase = {
     admin: Envio.Address;
     aggregateAmount: bigint;
-    asset: Envio.Address;
     campaignAddress: Envio.Address;
     category: enums.Airdrops.CampaignCategory;
+    entities: {
+      asset?: Entity.Asset;
+      factory?: Entity.Factory;
+      watcher?: Entity.Watcher;
+    };
     expiration: bigint;
     merkleRoot: string;
     minimumFee: bigint | undefined;
@@ -30,7 +38,7 @@ export namespace Params {
     recipientCount: bigint;
   };
 
-  type CampaignLockup = CampaignBase & {
+  type CreateCampaignLockup = CreateCampaignBase & {
     cancelable: boolean;
     lockup: Envio.Address;
     shape: string | undefined;
@@ -39,27 +47,16 @@ export namespace Params {
     totalDuration: bigint;
   };
 
-  export type CampaignLL = CampaignLockup & {
+  export type CreateCampaignLL = CreateCampaignLockup & {
     cliffDuration: bigint;
     cliffPercentage: bigint | undefined;
     startPercentage: bigint | undefined;
   };
 
-  export type CampaignLT = CampaignLockup & {
+  export type CreateCampaignLT = CreateCampaignLockup & {
     tranchesWithPercentages: TrancheWithPercentage[];
   };
 }
-
-export type ActionEntities = {
-  campaign: Entity.Campaign;
-  watcher: Entity.Watcher;
-};
-
-export type CreateEntities = {
-  asset: Entity.Asset;
-  factory: Entity.Factory;
-  watcher: Entity.Watcher;
-};
 
 export type TrancheWithPercentage = {
   unlockPercentage: bigint;

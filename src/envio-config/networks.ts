@@ -10,17 +10,18 @@ import type { EnvioConfig } from "./config-types";
 
 export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
+
   for (const chain of envioChains) {
     const { contracts, startBlock } = extractContracts(protocol, chain.id);
-    const hypersyncConfig = chain.envio.hypersync ? { url: chain.envio.hypersync } : undefined;
-    const network: EnvioConfig.Network = {
-      contracts,
-      hypersync_config: hypersyncConfig,
+    const hypersync_config = chain.envio.hypersync ? { url: chain.envio.hypersync } : undefined;
+    networks.push({
       id: chain.id,
       start_block: startBlock,
-    };
-    networks.push(network);
+      hypersync_config,
+      contracts,
+    });
   }
+
   return networks;
 }
 

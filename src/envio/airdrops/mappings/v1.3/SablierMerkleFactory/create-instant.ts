@@ -38,21 +38,22 @@ struct ConstructorParams {
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
+    const { asset, assetMetadata, factory, watcher } = loaderReturn;
+    const baseParams = event.params.baseParams;
     const entities = {
-      asset: loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, event.params.baseParams[0])),
-      factory: loaderReturn.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
-      watcher: loaderReturn.watcher ?? (await Store.Watcher.create(event.chainId)),
+      asset: asset ?? (await CommonStore.Asset.create(context, event.chainId, baseParams[0], assetMetadata)),
+      factory: factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
+      watcher: watcher ?? (await Store.Watcher.create(event.chainId)),
     };
 
     /* -------------------------------- CAMPAIGN -------------------------------- */
     const params = event.params;
-    const baseParams = event.params.baseParams;
-    const campaign = await Store.Campaign.createInstant(context, event, entities, {
+    const campaign = await Store.Campaign.createInstant(context, event, {
       admin: baseParams[2],
       aggregateAmount: params.aggregateAmount,
-      asset: entities.asset.address,
       campaignAddress: params.merkleInstant,
       category: enums.CampaignCategory.Instant,
+      entities,
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       merkleRoot: baseParams[4],
@@ -67,8 +68,9 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
       factory: entities.factory,
       watcher: entities.watcher,
     };
-    await Store.Action.create(context, event, actionEntities, {
+    await Store.Action.create(context, event, {
       category: enums.ActionCategory.Create,
+      entities: actionEntities,
     });
   },
   loader: Loader.create["v1.3"],

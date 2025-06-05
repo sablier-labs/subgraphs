@@ -1,14 +1,15 @@
 import type { Envio } from "../../common/bindings";
 import { Id } from "../../common/id";
 import type { Context, Entity, EnvioEnum } from "../bindings";
-import type { ActionEntities, Params } from "../helpers/types";
+import type { Params } from "../helpers/types";
 
 export async function create(
   context: Context.Handler,
   event: Envio.Event,
-  entities: ActionEntities,
   params: Params.Action,
 ): Promise<Entity.Action> {
+  const { entities } = params;
+
   /* --------------------------------- ACTION --------------------------------- */
   const action: Entity.Action = {
     block: BigInt(event.block.number),

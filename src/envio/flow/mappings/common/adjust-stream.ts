@@ -1,5 +1,8 @@
 import { Flow as enums } from "../../../../schema/enums";
-import type { SablierFlow_v1_0_AdjustFlowStream_handler as Handler } from "../../bindings/src/Types.gen";
+import type {
+  SablierFlow_v1_0_AdjustFlowStream_handler as Handler_v1_0,
+  SablierFlow_v1_1_AdjustFlowStream_handler as Handler_v1_1,
+} from "../../bindings/src/Types.gen";
 import { scale } from "../../helpers";
 import { Store } from "../../store";
 import { Loader } from "./loader";
@@ -8,9 +11,12 @@ import { Loader } from "./loader";
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
 
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
+
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  const watcher = loaderReturn.watcher;
-  let stream = loaderReturn.stream;
+  let { stream, watcher } = loaderReturn;
+  Store.Stream.exists(event, event.params.streamId, stream);
+  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const now = BigInt(event.block.timestamp);

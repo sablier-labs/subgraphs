@@ -10,7 +10,7 @@ for (const envioChain of envioChains) {
   const chain = sablier.chains.getOrThrow(envioChain.id);
 
   // @todo: add multiple RPC URLs
-  const URLs = _.compact([chain.rpcUrls.default.http[0], envioChain.envio.hypersync]).map((url) => http(url));
+  const URLs = _.compact([chain.rpc.default, envioChain.envio.hypersync]).map((url) => http(url));
   const transport = fallback(URLs, {
     rank: false,
     retryCount: 5,
@@ -26,7 +26,7 @@ for (const envioChain of envioChains) {
 }
 
 export function getClient(chainId: number) {
-  const client = clients.find((c) => c?.chain?.id.toString() === chainId.toString());
+  const client = clients.find((c) => c?.chain?.id === chainId);
 
   if (!client) {
     throw new IndexingError.ClientNotFound(chainId);

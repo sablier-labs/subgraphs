@@ -1,11 +1,6 @@
 import type { Envio } from "../../common/bindings";
 import { Id } from "../../common/id";
-import { CommonStore } from "../../common/store";
-import type { Context, Entity } from "../bindings";
-
-export async function create(context: Context.Handler, chainId: number, assetAddress: Envio.Address) {
-  return CommonStore.Asset.create<typeof context, Entity.Asset>(context, chainId, assetAddress);
-}
+import type { Context } from "../bindings";
 
 export async function getOrThrow(context: Context.Loader, chainId: number, address: Envio.Address) {
   const id = Id.asset(chainId, address);

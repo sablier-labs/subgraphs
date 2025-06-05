@@ -10,12 +10,20 @@ export namespace Params {
     streamId: bigint;
   };
 
+  export type CreateEntities = {
+    asset: Entity.Asset;
+    batch: Entity.Batch;
+    batcher: Entity.Batcher;
+    watcher: Entity.Watcher;
+  };
+
   export type CreateStreamCommon = {
     asset: Envio.Address;
     cancelable: boolean;
     category: enums.StreamCategory;
     depositAmount: bigint;
     endTime: bigint;
+    entities: CreateEntities;
     funder: Envio.Address;
     recipient: Envio.Address;
     sender: Envio.Address;
@@ -45,13 +53,6 @@ export namespace Params {
     to: Envio.Address;
   };
 }
-
-export type CreateEntities = {
-  asset: Entity.Asset;
-  batch: Entity.Batch;
-  batcher: Entity.Batcher;
-  watcher: Entity.Watcher;
-};
 
 export type Segment = {
   amount: bigint;
