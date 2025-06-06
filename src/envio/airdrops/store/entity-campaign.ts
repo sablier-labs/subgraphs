@@ -8,9 +8,10 @@ import type { Params } from "../helpers/types";
 export async function createInstant(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateCampaignBase,
 ): Promise<Entity.Campaign> {
-  const campaign = await createBaseCampaign(context, event, params);
+  const campaign = await createBaseCampaign(context, event, entities, params);
   await context.Campaign.set(campaign);
   return campaign;
 }
@@ -18,9 +19,10 @@ export async function createInstant(
 export async function createLL(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateCampaignLL,
 ): Promise<Entity.Campaign> {
-  let campaign = await createBaseCampaign(context, event, params);
+  let campaign = await createBaseCampaign(context, event, entities, params);
   campaign = {
     ...campaign,
     lockup: params.lockup,
@@ -43,9 +45,10 @@ export async function createLL(
 export async function createLT(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateCampaignLT,
 ): Promise<Entity.Campaign> {
-  let campaign = await createBaseCampaign(context, event, params);
+  let campaign = await createBaseCampaign(context, event, entities, params);
   campaign = {
     ...campaign,
     lockup: params.lockup,
@@ -117,9 +120,9 @@ export async function updateClaimed(
 async function createBaseCampaign(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateCampaignBase,
 ): Promise<Entity.Campaign> {
-  const { entities } = params;
   const factoryVersion = getContractVersion("airdrops", event.chainId, entities.factory.address);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */

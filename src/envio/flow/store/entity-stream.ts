@@ -9,9 +9,10 @@ import { update as updateBatch } from "./entity-batch";
 export async function create(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.Create,
 ): Promise<Entity.Stream> {
-  const { asset, batch, batcher, watcher } = params.entities;
+  const { asset, batch, batcher, watcher } = entities;
 
   const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);

@@ -1,16 +1,16 @@
 import { sablier } from "@sablier/deployments";
 import _ from "lodash";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
-import { envioChains } from "../../chains";
+import { ENVIO_CHAINS } from "../../chains";
 import { IndexingError } from "./error";
 
 const clients: PublicClient[] = [];
 
-for (const envioChain of envioChains) {
-  const chain = sablier.chains.getOrThrow(envioChain.id);
+for (const c of ENVIO_CHAINS) {
+  const chain = sablier.chains.getOrThrow(c.id);
 
   // @todo: add multiple RPC URLs
-  const URLs = _.compact([chain.rpc.default, envioChain.envio.hypersync]).map((url) => http(url));
+  const URLs = _.compact([chain.rpc.default, c.envio.hypersync]).map((url) => http(url));
   const transport = fallback(URLs, {
     rank: false,
     retryCount: 5,

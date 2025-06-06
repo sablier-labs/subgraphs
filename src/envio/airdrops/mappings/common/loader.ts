@@ -4,10 +4,10 @@
  */
 
 import { Version } from "@sablier/deployments";
-import { Effects } from "src/envio/common/effects";
-import { type ERC20Metadata } from "src/envio/common/types";
 import type { Envio } from "../../../common/bindings";
+import { Effects } from "../../../common/effects";
 import { Id } from "../../../common/id";
+import { type RPCData } from "../../../common/types";
 import type { Context, Entity } from "../../bindings";
 import type {
   SablierMerkleFactory_v1_3_CreateMerkleInstant_loader as CreateInstant_v1_3,
@@ -25,7 +25,7 @@ export namespace Loader {
 
   export type CreateReturn = {
     asset?: Entity.Asset;
-    assetMetadata: ERC20Metadata;
+    assetMetadata: RPCData.ERC20Metadata;
     factory?: Entity.Factory;
     watcher?: Entity.Watcher;
   };

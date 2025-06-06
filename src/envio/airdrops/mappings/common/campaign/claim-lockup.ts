@@ -53,15 +53,12 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   await Store.Activity.update(context, activity, event.params.amount);
 
   /* --------------------------------- ACTION --------------------------------- */
-  const actionEntities = {
-    campaign,
-    watcher,
-  };
   let fee: bigint | undefined;
   if (isVersionWithFees(event.chainId, campaign.factory_id)) {
     fee = event.transaction.value;
   }
-  await Store.Action.create(context, event, actionEntities, {
+  const entities = { campaign, watcher };
+  await Store.Action.create(context, event, entities, {
     category: enums.ActionCategory.Claim,
     claimAmount: event.params.amount,
     claimIndex: event.params.index,

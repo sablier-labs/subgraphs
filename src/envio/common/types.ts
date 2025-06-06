@@ -1,11 +1,22 @@
 import type * as enums from "../../schema/enums";
-import type { Common } from "./bindings";
+import type { Envio } from "./bindings";
 
-export type ERC20Metadata = {
-  decimals: number;
-  name: string;
-  symbol: string;
-};
+export namespace RPCData {
+  export enum Category {
+    Proxender = "proxenders",
+    ERC20 = "erc20",
+  }
+
+  export type ERC20Metadata = {
+    decimals: number;
+    name: string;
+    symbol: string;
+  };
+
+  export type ProxenderInfo = {
+    owner: Envio.Address;
+  };
+}
 
 export namespace CommonParams {
   export type Action = {
@@ -15,6 +26,5 @@ export namespace CommonParams {
     amountB?: bigint;
     category: enums.Flow.ActionCategory | enums.Lockup.ActionCategory;
     streamId?: string;
-    watcher: Common.StreamWatcher;
   };
 }

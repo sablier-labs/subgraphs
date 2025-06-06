@@ -95,7 +95,6 @@ networks:
         name: "SablierFlow_v1_1"
   - id: 1
     start_block: 21330577
-    rpc: https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}
     contracts:
       - address: "0x2d9221a63e12aa796619cb381ec4a71b201281f5"
         name: "SablierFlow_v1_0"

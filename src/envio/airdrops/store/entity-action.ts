@@ -6,10 +6,9 @@ import type { Params } from "../helpers/types";
 export async function create(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.ActionEntities,
   params: Params.Action,
 ): Promise<Entity.Action> {
-  const { entities } = params;
-
   /* --------------------------------- ACTION --------------------------------- */
   const action: Entity.Action = {
     block: BigInt(event.block.number),

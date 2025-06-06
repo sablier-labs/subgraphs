@@ -2,7 +2,7 @@ import { Flow as enums } from "../../../../schema/enums";
 import { Effects } from "../../../common/effects";
 import { Id } from "../../../common/id";
 import { CommonStore } from "../../../common/store";
-import type { ERC20Metadata } from "../../../common/types";
+import { type RPCData } from "../../../common/types";
 import { type Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_CreateFlowStream_handler as Handler,
@@ -15,7 +15,7 @@ import { Store } from "../../store";
 /* -------------------------------------------------------------------------- */
 type LoaderReturn = {
   asset?: Entity.Asset;
-  assetMetadata: ERC20Metadata;
+  assetMetadata: RPCData.ERC20Metadata;
   batch?: Entity.Batch;
   batcher?: Entity.Batcher;
   watcher?: Entity.Watcher;
@@ -59,8 +59,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
   };
 
-  const stream = await Store.Stream.create(context, event, {
-    entities,
+  const stream = await Store.Stream.create(context, event, entities, {
     ratePerSecond: event.params.ratePerSecond,
     recipient: event.params.recipient,
     sender: event.params.sender,
@@ -68,13 +67,12 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     transferable: event.params.transferable,
   });
 
-  await Store.Action.create(context, event, {
+  await Store.Action.create(context, event, entities.watcher, {
     addressA: event.params.sender,
     addressB: event.params.recipient,
     amountA: event.params.ratePerSecond,
     category: enums.ActionCategory.Create,
     streamId: stream.id,
-    watcher: entities.watcher,
   });
 };
 

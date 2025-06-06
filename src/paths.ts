@@ -7,6 +7,7 @@ export const ABI_DIR = join(SRC_DIR, "abi");
 export const GQL_DIR = join(SRC_DIR, "gql");
 export const ENVIO_DIR = join(SRC_DIR, "envio");
 export const GRAPH_DIR = join(SRC_DIR, "graph");
+export const RPC_DATA_DIR = join(SRC_DIR, "rpc-data");
 export const SCHEMA_DIR = join(SRC_DIR, "schema");
 
 type P = Indexed.Protocol;

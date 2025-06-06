@@ -4,8 +4,9 @@ import paths from "../../src/paths";
 import { mergeSchema } from "../../src/schema";
 import type { Indexed } from "../../src/types";
 import logger from "../../src/winston";
-import { AUTOGEN_COMMENT } from "../constants";
+import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../constants";
 import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
+import { type ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -23,53 +24,51 @@ import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers"
  * @example Generate for Flow with Graph vendor:
  * just codegen-schema flow graph
  *
+ * @param {string} vendor - Required: 'graph', 'envio', or 'all'
  * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} vendor - Optional: 'graph', 'envio', or 'all' (default: 'all')
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const vendorArg = validateVendorArg(args[0]);
   const protocolArg = validateProtocolArg(args[1]);
 
-  function handleAllProtocols(vendor: Indexed.Vendor): void {
-    const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
-
-    for (const p of protocols) {
-      generateSchema(vendor, p);
-    }
-  }
-
-  function handleAllVendors(): void {
-    const vendors: Indexed.Vendor[] = ["envio", "graph"];
-
-    for (const v of vendors) {
-      if (protocolArg === "all") {
-        handleAllProtocols(v);
-      } else {
-        generateSchema(v, protocolArg);
-      }
-    }
-
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
-  }
-
   if (vendorArg === "all") {
-    handleAllVendors();
+    codegenAllVendors(protocolArg);
   } else if (protocolArg === "all") {
-    handleAllProtocols(vendorArg as Indexed.Vendor);
+    codegenAllProtocols(vendorArg as Indexed.Vendor);
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     logger.info("🎉 Successfully generated all GraphQL schemas!\n");
   } else {
-    generateSchema(vendorArg as Indexed.Vendor, protocolArg);
+    codegen(vendorArg as Indexed.Vendor, protocolArg);
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
+
+function codegenAllProtocols(vendor: Indexed.Vendor): void {
+  for (const p of PROTOCOLS) {
+    codegen(vendor, p);
+  }
+}
+
+function codegenAllVendors(protocolArg: ProtocolArg): void {
+  for (const v of VENDORS) {
+    if (protocolArg === "all") {
+      codegenAllProtocols(v);
+    } else {
+      codegen(v, protocolArg);
+    }
+  }
+
+  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+}
 
 /**
  * Generates and writes a GraphQL schema for a specific protocol
@@ -77,7 +76,7 @@ main();
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function generateSchema(vendor: Indexed.Vendor, protocol: Indexed.Protocol): void {
+function codegen(vendor: Indexed.Vendor, protocol: Indexed.Protocol): void {
   const mergedSchema = print(mergeSchema(protocol));
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 

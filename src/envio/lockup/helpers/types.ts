@@ -23,7 +23,6 @@ export namespace Params {
     category: enums.StreamCategory;
     depositAmount: bigint;
     endTime: bigint;
-    entities: CreateEntities;
     funder: Envio.Address;
     recipient: Envio.Address;
     sender: Envio.Address;

@@ -12,6 +12,7 @@ export async function create<
     Watcher: { set: (watcher: TWatcher) => void | Promise<void> };
   },
   event: Envio.Event,
+  watcher: TWatcher,
   params: CommonParams.Action,
 ): Promise<TAction> {
   const id = Id.action(event);
@@ -30,14 +31,14 @@ export async function create<
     hash: event.transaction.hash,
     id,
     stream_id: params.streamId,
-    subgraphId: params.watcher.actionCounter,
+    subgraphId: watcher.actionCounter,
     timestamp: BigInt(event.block.timestamp),
   };
   await context.Action.set(action as TAction);
 
   const updatedWatcher = {
-    ...params.watcher,
-    actionCounter: params.watcher.actionCounter + 1n,
+    ...watcher,
+    actionCounter: watcher.actionCounter + 1n,
   };
   await context.Watcher.set(updatedWatcher as TWatcher);
 

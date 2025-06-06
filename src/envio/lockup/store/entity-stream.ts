@@ -10,9 +10,10 @@ import { update as updateBatch } from "./entity-batch";
 export async function createDynamic(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateStreamDynamic,
 ): Promise<Entity.Stream> {
-  const stream = await createBase(context, event, params);
+  const stream = await createBase(context, event, entities, params);
   await context.Stream.set(stream);
   await createSegments(context, stream, params.segments);
   return stream;
@@ -21,9 +22,10 @@ export async function createDynamic(
 export async function createLinear(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateStreamLinear,
 ): Promise<Entity.Stream> {
-  const baseStream = await createBase(context, event, params);
+  const baseStream = await createBase(context, event, entities, params);
 
   let initial: boolean = false;
   let initialAmount: bigint = 0n;
@@ -48,9 +50,10 @@ export async function createLinear(
 export async function createTranched(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateTranche,
 ): Promise<Entity.Stream> {
-  const stream = await createBase(context, event, params);
+  const stream = await createBase(context, event, entities, params);
   await context.Stream.set(stream);
   await createTranches(context, stream, params.tranches);
   return stream;
@@ -84,9 +87,10 @@ export async function get(
 async function createBase(
   context: Context.Handler,
   event: Envio.Event,
+  entities: Params.CreateEntities,
   params: Params.CreateStreamCommon,
 ): Promise<Entity.Stream> {
-  const { asset, batch, batcher, watcher } = params.entities;
+  const { asset, batch, batcher, watcher } = entities;
 
   const counter = watcher.streamCounter;
   const now = BigInt(event.block.timestamp);

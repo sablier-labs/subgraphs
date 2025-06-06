@@ -51,10 +51,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   await Store.Campaign.updateAdmin(context, campaign, event.params.newAdmin);
 
   /* --------------------------------- ACTION --------------------------------- */
-  const entities = {
-    campaign,
-    watcher,
-  };
+  const entities = { campaign, watcher };
   await Store.Action.create(context, event, entities, {
     category: enums.ActionCategory.TransferAdmin,
   });

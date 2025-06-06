@@ -50,10 +50,10 @@ Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLT.handlerWithLoader({
     const params: Params.CreateCampaignLT = {
       admin: baseParams[3],
       aggregateAmount: event.params.aggregateAmount,
+      asset: baseParams[0],
       campaignAddress: event.params.merkleLT,
       cancelable: baseParams[1],
       category: enums.CampaignCategory.LockupTranched,
-      entities: loaderReturn,
       expiration: baseParams[2],
       ipfsCID: baseParams[4],
       lockup: event.params.lockupTranched,
@@ -70,6 +70,7 @@ Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLT.handlerWithLoader({
     await createMerkleLT({
       context,
       event,
+      loaderReturn,
       params,
     });
   },

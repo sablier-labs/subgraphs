@@ -4,10 +4,10 @@
  */
 
 import { Version } from "@sablier/deployments";
-import { Effects } from "src/envio/common/effects";
-import { type ERC20Metadata } from "src/envio/common/types";
 import type { Envio } from "../../../common/bindings";
+import { Effects } from "../../../common/effects";
 import { Id } from "../../../common/id";
+import { type RPCData } from "../../../common/types";
 import type { Context, Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_Approval_loader as Approval_v1_0,
@@ -89,7 +89,7 @@ export namespace Loader {
 
   export type CreateReturn = {
     asset?: Entity.Asset;
-    assetMetadata: ERC20Metadata;
+    assetMetadata: RPCData.ERC20Metadata;
     batch?: Entity.Batch;
     batcher?: Entity.Batcher;
     watcher?: Entity.Watcher;

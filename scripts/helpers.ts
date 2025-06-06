@@ -1,4 +1,5 @@
 import * as path from "node:path";
+import { type Sablier, sablier } from "@sablier/deployments";
 import * as yaml from "js-yaml";
 import type { EnvioConfig } from "../src/envio-config/config-types";
 import type { GraphManifest } from "../src/graph-manifest/manifest-types";
@@ -13,6 +14,18 @@ export function dumpYAML(input: GraphManifest.TopSection | EnvioConfig.TopSectio
   });
 
   return `${AUTOGEN_COMMENT}${yamlContent}`;
+}
+
+export function getChain(chainArg: string): Sablier.Chain {
+  const chain = sablier.chains.getBySlug(chainArg);
+  if (!chain) {
+    const availableChains = sablier.chains
+      .getAll()
+      .map((c) => c.slug)
+      .join(", ");
+    throw new Error(`Chain "${chainArg}" is not supported.\nAvailable chains: ${availableChains}`);
+  }
+  return chain;
 }
 
 export function getRelative(absolutePath: string): string {
@@ -41,4 +54,18 @@ export function validateVendorArg(vendorArg: string | undefined): VendorArg {
   }
 
   return vendorArg as VendorArg;
+}
+
+export function validateChainArg(chainArg: string | undefined): string {
+  if (!chainArg) {
+    throw new Error("Chain slug argument is required. Use 'all' to generate for all chains.");
+  }
+
+  if (chainArg === "all") {
+    return "all";
+  }
+
+  getChain(chainArg);
+
+  return chainArg;
 }

@@ -1,4 +1,5 @@
 import * as fs from "fs-extra";
+import { PROTOCOLS } from "scripts/constants";
 import { createEnvioConfig } from "../../src/envio-config";
 import paths from "../../src/paths";
 import type { Indexed } from "../../src/types";
@@ -13,39 +14,39 @@ import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
  * CLI for generating Envio config file
  *
  * @example Generate for Flow:
- * pnpm ts-node scripts/codegen/envio-config.ts flow
+ * pnpm tsx scripts/codegen/envio-config.ts flow
  *
- * @param {string} [protocol='all'] - 'flow' or 'lockup'
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const protocolArg = validateProtocolArg(args[0]);
 
-  function handleAll(): void {
-    const protocols: Indexed.Protocol[] = ["airdrops", "flow", "lockup"];
-
-    for (const p of protocols) {
-      generateConfig(p);
-    }
-
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all Envio configs!\n");
-  }
-
   if (protocolArg === "all") {
-    handleAll();
+    codegenAllProtocols();
   } else {
-    generateConfig(protocolArg);
+    codegenSpecificProtocol(protocolArg);
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-function generateConfig(protocol: Indexed.Protocol): void {
+function codegenAllProtocols(): void {
+  for (const p of PROTOCOLS) {
+    codegenSpecificProtocol(p);
+  }
+
+  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  logger.info("🎉 Successfully generated all Envio configs!\n");
+}
+
+function codegenSpecificProtocol(protocol: Indexed.Protocol): void {
   const config = createEnvioConfig(protocol);
   const yaml = dumpYAML(config);
   const configPath = paths.envio.config(protocol);

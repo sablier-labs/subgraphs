@@ -3,27 +3,18 @@ import { sablier } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import _ from "lodash";
 import type { Envio } from "./bindings";
-import type { ERC20Metadata } from "./types";
-
-export enum DataCategory {
-  Proxender = "proxenders",
-  ERC20 = "erc20",
-}
-
-type ProxenderInfo = {
-  owner: Envio.Address;
-};
+import type { RPCData } from "./types";
 
 type ShapeMap = {
-  [DataCategory.ERC20]: Record<Envio.Address, ERC20Metadata>;
-  [DataCategory.Proxender]: Record<Envio.Address, ProxenderInfo>;
+  [RPCData.Category.ERC20]: Record<Envio.Address, RPCData.ERC20Metadata>;
+  [RPCData.Category.Proxender]: Record<Envio.Address, RPCData.ProxenderInfo>;
 };
 
-export function initDataEntry<C extends DataCategory>(category: C, chainId: number): DataEntry<C> {
+export function initDataEntry<C extends RPCData.Category>(category: C, chainId: number): DataEntry<C> {
   return new DataEntry(category, chainId);
 }
 
-export class DataEntry<C extends DataCategory> {
+export class DataEntry<C extends RPCData.Category> {
   public readonly file: string;
 
   private static readonly BASE_DIR = path.join(__dirname, "rpc-data");
@@ -41,7 +32,7 @@ export class DataEntry<C extends DataCategory> {
     this.load();
   }
 
-  private load() {
+  private load(): void {
     try {
       const raw = fs.readFileSync(this.file, DataEntry.ENCODING);
       this.data = JSON.parse(raw);
@@ -58,11 +49,11 @@ export class DataEntry<C extends DataCategory> {
     }
   }
 
-  public read(key: keyof ShapeMap[C]) {
+  public read<K extends keyof ShapeMap[C]>(key: K): ShapeMap[C][K] | undefined {
     return this.data[key];
   }
 
-  public save(newData: Partial<ShapeMap[C]>) {
+  public save(newData: Partial<ShapeMap[C]>): void {
     this.data = _.merge({}, this.data, newData);
     try {
       fs.writeFileSync(this.file, JSON.stringify(this.data), DataEntry.ENCODING);

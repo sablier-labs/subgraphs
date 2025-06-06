@@ -136,15 +136,6 @@ _codegen-envio-bindings protocol:
 @codegen-envio-config protocol="all":
     pnpm tsx scripts/codegen/envio-config.ts {{ protocol }}
 
-# Codegen the GraphQL types
-[group("codegen")]
-[group("gql")]
-codegen-gql vendor protocol: (codegen-schema vendor protocol)
-    #!/usr/bin/env sh
-    pnpm graphql-codegen \
-        --config src/gql/config.js \
-        --project {{ vendor }}_{{ protocol }}
-
 # Codegen everything for the Graph subgraph (order matters):
 # 1. GraphQL schema
 # 2. YAML manifest

@@ -6,7 +6,8 @@ import type { Envio } from "../../common/bindings";
 import { PRB_PROXY_REGISTRY } from "../../common/constants";
 import { getContractVersion } from "../../common/deployments";
 import { getClient } from "../../common/rpc-clients";
-import { DataCategory, initDataEntry } from "../../common/rpc-data";
+import { initDataEntry } from "../../common/rpc-data";
+import { RPCData } from "../../common/types";
 
 /**
  * The proxender is the owner of the proxy that is the sender of the stream.
@@ -23,7 +24,7 @@ export async function fetchOrReadProxender(
   }
 
   const dataKey = streamSender.toLowerCase();
-  const data = initDataEntry(DataCategory.Proxender, chainId);
+  const data = initDataEntry(RPCData.Category.Proxender, chainId);
   const proxender = data.read(dataKey);
 
   // Proxies cannot be transferred, so we can cache proxy owners.

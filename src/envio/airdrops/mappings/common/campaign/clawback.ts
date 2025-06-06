@@ -42,10 +42,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- ACTION --------------------------------- */
-  const entities = {
-    campaign,
-    watcher,
-  };
+  const entities = { campaign, watcher };
   const action = await Store.Action.create(context, event, entities, {
     category: enums.ActionCategory.Clawback,
     clawbackAmount: event.params.amount,

@@ -57,12 +57,12 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleLL.handlerWithLoader({
     const params: Params.CreateCampaignLL = {
       admin: baseParams[2],
       aggregateAmount: event.params.aggregateAmount,
+      asset: baseParams[0],
       campaignAddress: event.params.merkleLL,
       cancelable: event.params.cancelable,
       category: enums.CampaignCategory.LockupLinear,
       cliffDuration: event.params.schedule[2],
       cliffPercentage: event.params.schedule[3],
-      entities: loaderReturn,
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       lockup: event.params.lockup,
@@ -79,6 +79,7 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleLL.handlerWithLoader({
     await createMerkleLL({
       context,
       event,
+      loaderReturn,
       params,
     });
   },

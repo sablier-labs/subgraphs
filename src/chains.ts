@@ -23,6 +23,7 @@ type GraphChain = SupportedChain & {
 const NAME_OVERRIDES: { [chainId: number]: string } = {
   [chains.arbitrum.id]: "arbitrum-one",
   [chains.blast.id]: "blast-mainnet",
+  [chains.ethereum.id]: "mainnet",
   [chains.ethereumSepolia.id]: "sepolia",
   [chains.mode.id]: "mode-mainnet",
   [chains.sei.id]: "sei-mainnet",
@@ -45,8 +46,7 @@ const fill = (id: number) => ({
   }),
 });
 
-const supportedChains: SupportedChain[] = [
-  /* ---------------------------------- BOTH ---------------------------------- */
+const BOTH = [
   fill(chains.arbitrumSepolia.id).both(),
   fill(chains.arbitrum.id).both(),
   fill(chains.avalanche.id).both(),
@@ -69,13 +69,9 @@ const supportedChains: SupportedChain[] = [
   fill(chains.unichain.id).graph(),
   fill(chains.xdc.id).graph(),
   fill(chains.zksync.id).both(),
+];
 
-  /* ------------------------------- ENVIO-ONLY ------------------------------- */
-  fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
-  fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),
-  fill(chains.tangle.id).envio("https://tangle.hypersync.xyz"),
-
-  /* ------------------------------- GRAPH-ONLY ------------------------------- */
+const GRAPH_ONLY = [
   fill(chains.abstract.id).graph(),
   fill(chains.berachain.id).graph(),
   fill(chains.blast.id).graph(),
@@ -83,11 +79,19 @@ const supportedChains: SupportedChain[] = [
   fill(chains.zksyncSepolia.id).graph(),
 ];
 
-export const envioChains: EnvioChain[] = _.filter(supportedChains, (c) => c.envio?.isEnabled) as EnvioChain[];
-export const graphChains: GraphChain[] = _.filter(supportedChains, (c) => c.graph?.isEnabled) as GraphChain[];
+const ENVIO_ONLY = [
+  fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
+  fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),
+  fill(chains.tangle.id).envio("https://tangle.hypersync.xyz"),
+];
+
+const SUPPORTED_CHAINS: SupportedChain[] = [...BOTH, ...GRAPH_ONLY, ...ENVIO_ONLY] as const;
+
+export const ENVIO_CHAINS: EnvioChain[] = _.filter(SUPPORTED_CHAINS, (c) => c.envio?.isEnabled) as EnvioChain[];
+export const GRAPH_CHAINS: GraphChain[] = _.filter(SUPPORTED_CHAINS, (c) => c.graph?.isEnabled) as GraphChain[];
 
 export function getGraphChainName(chainId: number): string {
-  const chain = graphChains.find((chain) => chain.id === chainId);
+  const chain = _.find(GRAPH_CHAINS, { id: chainId });
   if (!chain) {
     throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
   }

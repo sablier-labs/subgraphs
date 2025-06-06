@@ -3,6 +3,11 @@ import type { Envio } from "../../common/bindings";
 import { type Entity } from "../bindings";
 
 export namespace Params {
+  export type ActionEntities = {
+    campaign: Entity.Campaign;
+    watcher: Entity.Watcher;
+  };
+
   export type Action = {
     category: enums.Airdrops.ActionCategory;
     claimAmount?: bigint;
@@ -13,23 +18,21 @@ export namespace Params {
     clawbackAmount?: bigint;
     clawbackFrom?: Envio.Address;
     clawbackTo?: Envio.Address;
-    entities: {
-      campaign: Entity.Campaign;
-      watcher: Entity.Watcher;
-    };
     fee?: bigint;
+  };
+
+  export type CreateEntities = {
+    asset: Entity.Asset;
+    factory: Entity.Factory;
+    watcher: Entity.Watcher;
   };
 
   export type CreateCampaignBase = {
     admin: Envio.Address;
+    asset: Envio.Address;
     aggregateAmount: bigint;
     campaignAddress: Envio.Address;
     category: enums.Airdrops.CampaignCategory;
-    entities: {
-      asset?: Entity.Asset;
-      factory?: Entity.Factory;
-      watcher?: Entity.Watcher;
-    };
     expiration: bigint;
     merkleRoot: string;
     minimumFee: bigint | undefined;
