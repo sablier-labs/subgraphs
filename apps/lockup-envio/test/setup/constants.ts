@@ -26,7 +26,7 @@ export const _configurations = (
         ? `https://indexer.hyperindex.xyz/${ENVIO_ID}/v1/graphql`
         : "http://localhost:8080/v1/graphql",
       TheGraph:
-        "https://api.studio.thegraph.com/query/112500/sablier-lockup-experimental/version/latest",
+        "https://api.studio.thegraph.com/query/112500/sablier-lockup-sepolia/version/latest",
     },
     token: "0x776b6fc2ed15d6bb5fc32e0c89de68683118c62a",
     recipient: "0xf31b00e025584486f7c37cf0ae0073c97c12c634",
