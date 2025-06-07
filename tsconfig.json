@@ -23,5 +23,5 @@
     "target": "ESNext"
   },
   "exclude": ["src/envio/**/bindings.ts", "src/graph/**/*.ts"],
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
+  "include": ["cli/**/*.ts", "src/**/*.ts", "tests/**/*.ts"]
 }

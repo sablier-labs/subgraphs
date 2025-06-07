@@ -5,7 +5,7 @@ import { mergeSchema } from "../../src/schema";
 import type { Types } from "../../src/types";
 import logger from "../../src/winston";
 import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../constants";
-import { getRelative, validateProtocolArg, validateVendorArg } from "../helpers";
+import * as helpers from "../helpers";
 import { type ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
@@ -29,8 +29,8 @@ import { type ProtocolArg } from "../types";
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const vendorArg = validateVendorArg(args[0]);
-  const protocolArg = validateProtocolArg(args[1]);
+  const vendorArg = helpers.validateVendorArg(args[0]);
+  const protocolArg = helpers.validateProtocolArg(args[1]);
 
   if (vendorArg === "all") {
     codegenAllVendors(protocolArg);
@@ -83,7 +83,7 @@ function codegen(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const outputPath = paths.schema(vendor, protocol);
   fs.writeFileSync(outputPath, schema);
 
-  logger.info(`📁 Schema path: ${getRelative(outputPath)}`);
+  logger.info(`📁 Schema path: ${helpers.getRelative(outputPath)}`);
   logger.info(`✅ Successfully generated GraphQL schema for ${vendor} ${protocol}`);
   console.log();
 }

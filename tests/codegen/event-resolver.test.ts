@@ -1,4 +1,4 @@
-import { resolveEventHandler as resolve } from "../../src/events/resolver";
+import { resolveEventHandler as resolve } from "../../src/codegen/graph-manifest/event-resolver";
 
 describe("Event handlers", () => {
   describe("Resolver function", () => {

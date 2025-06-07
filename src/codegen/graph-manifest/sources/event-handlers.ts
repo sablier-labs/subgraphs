@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { indexedEvents } from "../../../events";
-import { resolveEventHandler } from "../../../events/resolver";
 import type { Types } from "../../../types";
+import { resolveEventHandler } from "../event-resolver";
 import type { EventHandlersMap } from "../manifest-types";
 
 function get(protocol: Types.Protocol): EventHandlersMap {

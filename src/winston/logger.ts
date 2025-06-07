@@ -18,7 +18,7 @@ import transports from "./transports";
  * @example
  * Run with file output by setting the LOG_FILE_PATH environment variable:
  *
- * LOG_FILE_PATH=./logs/example.log pnpm tsx scripts/your-script.ts
+ * LOG_FILE_PATH=./logs/example.log pnpm tsx cli/your-script.ts
  *
  * logger.info("Check your logs directory if LOG_FILE_PATH was set");
  *
@@ -26,7 +26,7 @@ import transports from "./transports";
  * Note that log levels are hierarchical, setting LOG_LEVEL=silly will
  * include all levels: error, warn, info, verbose, debug, silly
  *
- * LOG_LEVEL=silly pnpm tsx scripts/your-script.ts
+ * LOG_LEVEL=silly pnpm tsx cli/your-script.ts
  */
 const logger = winston.createLogger({
   format: format.combine(format.timestamp(), format.errors({ stack: true })),

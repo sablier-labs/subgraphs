@@ -6,7 +6,7 @@ import paths from "../../src/paths";
 import type { Types } from "../../src/types";
 import logger from "../../src/winston";
 import { PROTOCOLS } from "../constants";
-import { dumpYAML, getChain, getRelative, validateChainArg, validateProtocolArg } from "../helpers";
+import * as helpers from "../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                    MAIN                                    */
@@ -27,8 +27,8 @@ import { dumpYAML, getChain, getRelative, validateChainArg, validateProtocolArg 
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const protocolArg = validateProtocolArg(args[0]);
-  const chainArg = validateChainArg(args[1]);
+  const protocolArg = helpers.validateProtocolArg(args[0]);
+  const chainArg = helpers.validateChainArg(args[1]);
 
   if (protocolArg === "all") {
     codegenAllProtocols(chainArg);
@@ -57,7 +57,7 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
     logger.verbose("🗑️ Cleared existing manifests directory");
   } else {
     fs.ensureDirSync(manifestsDir);
-    logger.verbose(`📁 Created directory:      ${getRelative(manifestsDir)}`);
+    logger.verbose(`📁 Created directory:      ${helpers.getRelative(manifestsDir)}`);
   }
 
   let filesGenerated = 0;
@@ -75,7 +75,7 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
     logger.info(
       `🎉 Successfully generated ${filesGenerated} subgraph manifest${filesGenerated !== 1 ? "s" : ""} for ${protocol} protocol!`,
     );
-    logger.info(`📁 Output directory: ${getRelative(manifestsDir)}`);
+    logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
   }
 
   return filesGenerated;
@@ -102,7 +102,7 @@ function codegenAllProtocols(chainArg: string) {
 }
 
 function codegenSpecificChain(protocol: Types.Protocol, chainArg: string): void {
-  const chain = getChain(chainArg);
+  const chain = helpers.getChain(chainArg);
   const graphChainName = getGraphChainName(chain.id);
   const manifestsDir = paths.graph.manifests(protocol);
   fs.ensureDirSync(manifestsDir);
@@ -115,10 +115,10 @@ function codegenSpecificChain(protocol: Types.Protocol, chainArg: string): void 
 function writeManifestToFile(protocol: Types.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);
-  const yaml = dumpYAML(manifest);
+  const yaml = helpers.dumpYAML(manifest);
   const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
   fs.writeFileSync(manifestPath, yaml);
 
-  logger.verbose(`✅ Generated manifest: ${getRelative(manifestPath)}`);
-  return getRelative(manifestPath);
+  logger.verbose(`✅ Generated manifest: ${helpers.getRelative(manifestPath)}`);
+  return helpers.getRelative(manifestPath);
 }

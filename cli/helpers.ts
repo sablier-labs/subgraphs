@@ -3,7 +3,7 @@ import { type Sablier, sablier } from "@sablier/deployments";
 import * as yaml from "js-yaml";
 import type { EnvioConfig } from "../src/codegen/envio-config/config-types";
 import type { GraphManifest } from "../src/codegen/graph-manifest/manifest-types";
-import { AUTOGEN_COMMENT } from "./constants";
+import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "./constants";
 import type { ProtocolArg, VendorArg } from "./types";
 
 export function dumpYAML(input: GraphManifest.TopSection | EnvioConfig.TopSection): string {
@@ -32,33 +32,9 @@ export function getRelative(absolutePath: string): string {
   return path.relative(process.cwd(), absolutePath);
 }
 
-export function validateProtocolArg(protocolArg: string | undefined): ProtocolArg {
-  if (!protocolArg) {
-    return "all";
-  }
-
-  if (!["airdrops", "flow", "lockup", "all"].includes(protocolArg)) {
-    throw new Error("Protocol argument must be either 'airdrops', 'flow', 'lockup', or 'all'");
-  }
-
-  return protocolArg as ProtocolArg;
-}
-
-export function validateVendorArg(vendorArg: string | undefined): VendorArg {
-  if (!vendorArg) {
-    return "all";
-  }
-
-  if (!["graph", "envio", "all"].includes(vendorArg)) {
-    throw new Error("Vendor argument must be either 'graph', 'envio', or 'all'");
-  }
-
-  return vendorArg as VendorArg;
-}
-
 export function validateChainArg(chainArg: string | undefined): string {
   if (!chainArg) {
-    throw new Error("Chain slug argument is required. Use 'all' to generate for all chains.");
+    throw new Error("Chain argument is required. Use 'all' to generate for all chains.");
   }
 
   if (chainArg === "all") {
@@ -68,4 +44,28 @@ export function validateChainArg(chainArg: string | undefined): string {
   getChain(chainArg);
 
   return chainArg;
+}
+
+export function validateProtocolArg(protocolArg: string | undefined): ProtocolArg {
+  if (!protocolArg) {
+    throw new Error("Protocol argument is required. Use 'all' to generate for all protocols.");
+  }
+
+  if (![...PROTOCOLS, "all"].includes(protocolArg)) {
+    throw new Error("Protocol argument must be either 'airdrops', 'flow', 'lockup', or 'all'");
+  }
+
+  return protocolArg as ProtocolArg;
+}
+
+export function validateVendorArg(vendorArg: string | undefined): VendorArg {
+  if (!vendorArg) {
+    throw new Error("Vendor argument is required. Use 'all' to generate for all vendors.");
+  }
+
+  if (![...VENDORS, "all"].includes(vendorArg)) {
+    throw new Error("Vendor argument must be either 'graph', 'envio', or 'all'");
+  }
+
+  return vendorArg as VendorArg;
 }

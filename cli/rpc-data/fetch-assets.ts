@@ -7,7 +7,7 @@ import { ENVIO_DIR } from "../../src/paths";
 import { type Types } from "../../src/types";
 import logger from "../../src/winston";
 import { PROTOCOLS } from "../constants";
-import { getChain, getRelative, validateChainArg, validateProtocolArg } from "../helpers";
+import * as helpers from "../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                  CONSTANTS                                 */
@@ -41,7 +41,7 @@ const QUERY = `#graphql
  * CLI for generating Envio config file
  *
  * @example Generate for Flow:
- * pnpm tsx scripts/fetch-assets.ts flow mainnet
+ * pnpm tsx cli/fetch-assets.ts flow ethereum
  *
  * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  * @param {string} [chainSlug] - Required: The chain slug to fetch assets for.
@@ -49,14 +49,14 @@ const QUERY = `#graphql
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const protocolArg = validateProtocolArg(args[0]);
-  const chainArg = validateChainArg(args[1]);
+  const protocolArg = helpers.validateProtocolArg(args[0]);
+  const chainArg = helpers.validateChainArg(args[1]);
 
   if (protocolArg === "all") {
     throw new Error(`Protocol must be one of: ${_.join(PROTOCOLS, ", ")}`);
   }
   if (chainArg !== "ethereum") {
-    throw new Error("Only 'mainnet' chain slug is currently supported");
+    throw new Error("Only 'ethereum' chain slug is currently supported");
   }
 
   logger.info(`📡 Fetching assets for ${protocolArg} protocol on ${chainArg}...`);
@@ -64,7 +64,7 @@ async function main(): Promise<void> {
   const endpoint = ENDPOINTS[protocolArg];
   const assets = await fetchAssets(endpoint);
 
-  const chain = getChain(chainArg);
+  const chain = helpers.getChain(chainArg);
   const filePath = path.join(ENVIO_DIR, "common", "rpc-data", "erc20", `${chain.slug}.json`);
   const existingData = loadExistingData(filePath);
   const mergedData = mergeAssets(existingData, assets);
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
   const totalAssetsCount = _.keys(mergedData).length;
 
   logger.info(`✅ Successfully processed ${newAssetsCount} assets`);
-  logger.info(`📁 Total assets in ${getRelative(filePath)}: ${totalAssetsCount}`);
+  logger.info(`📁 Total assets in ${helpers.getRelative(filePath)}: ${totalAssetsCount}`);
 }
 
 if (require.main === module) {

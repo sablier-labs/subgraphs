@@ -3,11 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "noEmit": false,
-    "rootDir": "./src",
+    "rootDir": "./src/exports",
     "removeComments": true,
     "skipLibCheck": true,
     "stripInternal": true,
     "types": ["node"]
   },
-  "include": ["src/queries/**/*.ts"]
+  "include": ["src/exports/**/*.ts"]
 }

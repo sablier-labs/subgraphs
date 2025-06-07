@@ -134,7 +134,7 @@ _codegen-envio-bindings protocol:
 [group("codegen")]
 [group("envio")]
 @codegen-envio-config protocol="all":
-    pnpm tsx scripts/codegen/envio-config.ts {{ protocol }}
+    pnpm tsx cli/codegen/envio-config.ts {{ protocol }}
 
 # Codegen everything for the Graph subgraph (order matters):
 # 1. GraphQL schema
@@ -169,14 +169,14 @@ _codegen-graph-bindings protocol:
 [group("codegen")]
 [group("graph")]
 @codegen-graph-manifest protocol="all" chain="all":
-    pnpm tsx scripts/codegen/graph-manifest.ts {{ protocol }} {{ chain }}
+    pnpm tsx cli/codegen/graph-manifest.ts {{ protocol }} {{ chain }}
 
 # Codegen the GraphQL schema
 [group("codegen")]
 [group("envio")]
 [group("graph")]
 @codegen-schema vendor="all" protocol="all":
-    pnpm tsx scripts/codegen/schema.ts {{ vendor }} {{ protocol }}
+    pnpm tsx cli/codegen/schema.ts {{ vendor }} {{ protocol }}
 
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: PRINT                                #
@@ -185,7 +185,7 @@ _codegen-graph-bindings protocol:
 # Print available chain arguments
 [group("print")]
 @print-chains:
-    pnpm tsx scripts/print-chains.ts
+    pnpm tsx cli/print-chains.ts
 
 # Print available log levels available in Winston
 [group("print")]

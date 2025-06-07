@@ -1,10 +1,10 @@
 import * as fs from "fs-extra";
 import _ from "lodash";
-import type { GraphManifest } from "../codegen/graph-manifest/manifest-types";
-import { sanitizeContractName } from "../helpers";
-import paths from "../paths";
-import type { Types } from "../types";
-import logger from "../winston";
+import { sanitizeContractName } from "../../helpers";
+import paths from "../../paths";
+import type { Types } from "../../types";
+import logger from "../../winston";
+import type { GraphManifest } from "./manifest-types";
 
 /**
  * Resolves an event handler for The Graph manifest.
