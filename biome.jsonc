@@ -11,7 +11,7 @@
   "overrides": [
     /* ------------------------------ YAML CONFIGS ------------------------------ */
     {
-      "includes": ["src/envio-config/**/*.ts", "src/graph-manifest/**/*.ts"],
+      "includes": ["src/codegen/**/*.ts"],
       "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
     },
     /* ----------------------------- ASSEMBLYSCRIPT ----------------------------- */

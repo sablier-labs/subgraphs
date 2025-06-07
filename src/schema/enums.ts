@@ -2,7 +2,7 @@ import { Protocol } from "@sablier/deployments";
 import { type DocumentNode } from "graphql";
 import gql from "graphql-tag";
 import _ from "lodash";
-import { type Indexed } from "../types";
+import { type Types } from "../types";
 
 export namespace Airdrops {
   export enum ActionCategory {
@@ -68,7 +68,7 @@ export namespace Lockup {
  * }
  * ```
  */
-export function getEnumDefs(protocol: Indexed.Protocol): DocumentNode {
+export function getEnumDefs(protocol: Types.Protocol): DocumentNode {
   const enumDefs: string[] = [];
   switch (protocol) {
     case Protocol.Airdrops:

@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
-import type { Indexed } from "../../types";
+import type { Types } from "../../types";
 
-export function getWatcherDefs(protocol: Indexed.Protocol) {
+export function getWatcherDefs(protocol: Types.Protocol) {
   const counterField = protocol === "airdrops" ? "campaign" : "stream";
 
   return gql`

@@ -1,5 +1,5 @@
 import { gql } from "graphql-tag";
-import type { Indexed } from "../../types";
+import type { Types } from "../../types";
 
 const streams = `#graphql
 """
@@ -15,7 +15,7 @@ Campaigns that rely on this asset.
 campaigns: [Campaign!]! @derivedFrom(field: "asset")
 `;
 
-export function getAssetDefs(protocol: Indexed.Protocol) {
+export function getAssetDefs(protocol: Types.Protocol) {
   const customField = protocol !== "airdrops" ? streams : campaigns;
 
   return gql`

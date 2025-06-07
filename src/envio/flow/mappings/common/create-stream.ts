@@ -5,14 +5,17 @@ import { CommonStore } from "../../../common/store";
 import { type RPCData } from "../../../common/types";
 import { type Entity } from "../../bindings";
 import type {
-  SablierFlow_v1_0_CreateFlowStream_handler as Handler,
-  SablierFlow_v1_0_CreateFlowStream_loader as Loader,
+  SablierFlow_v1_0_CreateFlowStream_handler as Handler_v1_0,
+  SablierFlow_v1_1_CreateFlowStream_handler as Handler_v1_1,
+  SablierFlow_v1_0_CreateFlowStream_loader as Loader_v1_0,
+  SablierFlow_v1_1_CreateFlowStream_loader as Loader_v1_1,
 } from "../../bindings/src/Types.gen";
 import { Store } from "../../store";
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOADER                                   */
 /* -------------------------------------------------------------------------- */
+
 type LoaderReturn = {
   asset?: Entity.Asset;
   assetMetadata: RPCData.ERC20Metadata;
@@ -20,6 +23,8 @@ type LoaderReturn = {
   batcher?: Entity.Batcher;
   watcher?: Entity.Watcher;
 };
+
+type Loader<T> = Loader_v1_0<T> | Loader_v1_1<T>;
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const assetMetadata = await context.effect(Effects.ERC20.readOrFetchMetadata, {
     address: event.params.token,
@@ -49,6 +54,9 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /* -------------------------------------------------------------------------- */
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
+
+type Handler<T> = Handler_v1_0<T> | Handler_v1_1<T>;
+
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { assetMetadata } = loaderReturn;
   const entities = {

@@ -1,10 +1,10 @@
 import type { Sablier } from "@sablier/deployments";
 import { contracts, Version } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 
 const { names } = contracts;
 
-const airdropsContracts: Indexed.ContractSource<Sablier.Version.Airdrops>[] = [
+export const airdropsContracts: Types.ContractSource<Sablier.Version.Airdrops>[] = [
   {
     isTemplate: false,
     name: names.SABLIER_V2_MERKLE_STREAMER_FACTORY,

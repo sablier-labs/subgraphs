@@ -1,7 +1,7 @@
-import type { Indexed } from "../types";
+import type { Types } from "../../types";
 import type { GraphManifest } from "./manifest-types";
 
-const topSections: Record<Indexed.Protocol, GraphManifest.TopSection> = {
+const topSections: Record<Types.Protocol, GraphManifest.TopSection> = {
   airdrops: get("Airdrops"),
   flow: get("Flow"),
   lockup: get("Lockup"),

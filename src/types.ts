@@ -3,30 +3,20 @@
  */
 import type { Sablier } from "@sablier/deployments";
 
-export type ComponentMap<T> = {
-  [contractName: string]: {
-    [version: string]: T;
+export namespace Types {
+  export type ComponentMap<T> = {
+    [contractName: string]: {
+      [version: string]: T;
+    };
   };
-};
 
-export type ProtocolMap<T> = {
-  [protocol in Indexed.Protocol]: T;
-};
-
-export namespace Indexed {
   /**
-   * A variation of the Sablier.Contract type that is used to index contracts. The `alias` is required.
+   * A variation of the Sablier.Contract with the `alias` and `block` fields required.
    * @see Sablier.Contract
    */
-  export type Contract = {
-    /** Address of the contract - MUST be provided in lowercase. */
-    address: string;
-    /** MUST be provided. */
+  export type Contract = Sablier.Contract & {
     alias: string;
     block: number;
-    name: string;
-    protocol: Protocol;
-    version: Version;
   };
 
   export type ContractSource<V extends Version> = {
@@ -56,10 +46,11 @@ export namespace Indexed {
 
   export type EventMap = ComponentMap<Event[]>;
 
-  /**
-   * The Legacy protocol is not indexed.
-   */
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;
+
+  export type ProtocolMap<T> = {
+    [protocol in Types.Protocol]: T;
+  };
 
   export type Vendor = "envio" | "graph";
 

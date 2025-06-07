@@ -14,10 +14,8 @@
     "src/graph/**/*.ts": "assemblyscript"
   },
   "search.exclude": {
-    "**/_generated": true,
-    "**/generated": true,
     "**/bindings": true,
-    "**/deprecated": true,
+    "**/generated": true,
     "**/node_modules": true
   },
   "typescript.tsdk": "node_modules/typescript/lib"

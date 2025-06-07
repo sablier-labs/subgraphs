@@ -4,7 +4,7 @@ import { GraphQLClient } from "graphql-request";
 import _ from "lodash";
 import type { RPCData } from "../../src/envio/common/types";
 import { ENVIO_DIR } from "../../src/paths";
-import { type Indexed } from "../../src/types";
+import { type Types } from "../../src/types";
 import logger from "../../src/winston";
 import { PROTOCOLS } from "../constants";
 import { getChain, getRelative, validateChainArg, validateProtocolArg } from "../helpers";
@@ -13,7 +13,7 @@ import { getChain, getRelative, validateChainArg, validateProtocolArg } from "..
 /*                                  CONSTANTS                                 */
 /* -------------------------------------------------------------------------- */
 
-const ENDPOINTS: Record<Indexed.Protocol, string> = {
+const ENDPOINTS: Record<Types.Protocol, string> = {
   airdrops:
     "https://gateway.thegraph.com/api/5500d776e976ef9fc7edcc92318efbc4/subgraphs/id/DFD73EcSue44R7mpHvXeyvcgaT8tR1iKakZFjBsiFpjs",
   flow: "https://gateway.thegraph.com/api/5500d776e976ef9fc7edcc92318efbc4/subgraphs/id/ECxBJhKceBGaVvK6vqmK3VQAncKwPeAQutEb8TeiUiod",

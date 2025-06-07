@@ -1,9 +1,9 @@
 import { contracts, type Sablier, Version } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 
 const { names } = contracts;
 
-const lockupContracts: Indexed.ContractSource<Sablier.Version.Lockup>[] = [
+export const lockupContracts: Types.ContractSource<Sablier.Version.Lockup>[] = [
   {
     isTemplate: false,
     name: names.SABLIER_V2_LOCKUP_DYNAMIC,
@@ -25,5 +25,3 @@ const lockupContracts: Indexed.ContractSource<Sablier.Version.Lockup>[] = [
     versions: [Version.Lockup.V2_0],
   },
 ];
-
-export default lockupContracts;

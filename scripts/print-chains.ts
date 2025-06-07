@@ -1,10 +1,10 @@
 import _ from "lodash";
-import { GRAPH_CHAINS } from "../src/chains";
+import { graphChains } from "../src/exports/chains";
 
 if (require.main === module) {
   console.log("✨ Available chains:");
   console.log(
-    _.sortBy(GRAPH_CHAINS, (c) => c.graph.name)
+    _.sortBy(graphChains, (c) => c.graph.name)
       .map((c) => `- ${c.graph.name}`)
       .join("\n"),
   );

@@ -1,5 +1,5 @@
 import { gql } from "graphql-tag";
-import type { Indexed } from "../../types";
+import type { Types } from "../../types";
 
 const commonDefs = `#graphql
   # ------------------------------------ IDs ----------------------------------- #
@@ -325,7 +325,7 @@ const flowDefs = gql`
   }
 `;
 
-export function getStreamDefs(protocol: Indexed.Protocol) {
+export function getStreamDefs(protocol: Types.Protocol) {
   if (protocol === "airdrops") {
     throw new Error("Airdrops does not have streams");
   }

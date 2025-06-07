@@ -1,11 +1,11 @@
-import indexedContracts from "../contracts";
-import indexedEvents from "../events";
-import { sanitizeContractName } from "../helpers";
-import paths, { getRelativePath } from "../paths";
-import type { Indexed } from "../types";
+import { indexedContracts } from "../../contracts";
+import { indexedEvents } from "../../events";
+import { sanitizeContractName } from "../../helpers";
+import paths, { getRelativePath } from "../../paths";
+import type { Types } from "../../types";
 import type { EnvioConfig } from "./config-types";
 
-export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contract[] {
+export function createContracts(protocol: Types.Protocol): EnvioConfig.Contract[] {
   const contracts: EnvioConfig.Contract[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
@@ -22,13 +22,13 @@ export function createContracts(protocol: Indexed.Protocol): EnvioConfig.Contrac
   return contracts;
 }
 
-function getRelativeAbiFilePath(protocol: Indexed.Protocol, contractName: string, version: Indexed.Version): string {
+function getRelativeAbiFilePath(protocol: Types.Protocol, contractName: string, version: Types.Version): string {
   const envioConfigDir = paths.envio.config(protocol);
   const abiPath = paths.abi(contractName, protocol, version);
   return getRelativePath(envioConfigDir, abiPath);
 }
 
-function getEvents(indexedEvents: Indexed.Event[]): EnvioConfig.Event[] {
+function getEvents(indexedEvents: Types.Event[]): EnvioConfig.Event[] {
   const events: EnvioConfig.Event[] = [];
   for (const indexedEvent of indexedEvents) {
     events.push({

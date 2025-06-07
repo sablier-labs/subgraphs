@@ -43,6 +43,7 @@ export namespace EnvioConfig {
     ecosystem: "evm";
     unordered_multichain_mode: boolean;
     rollback_on_reorg: boolean;
+    schema: string;
     field_selection: FieldSelection;
     contracts: Contract[];
     networks: Network[];

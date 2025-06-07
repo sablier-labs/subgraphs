@@ -1,25 +1,14 @@
 import { chains, sablier } from "@sablier/deployments";
 import _ from "lodash";
+import type { Indexer } from "./types";
 
-type SupportedChain = {
-  id: number;
-  envio?: { isEnabled: boolean; hypersync?: string };
-  graph?: { isEnabled: boolean; name: string };
-};
-
-type EnvioChain = SupportedChain & {
-  envio: { isEnabled: boolean; hypersync?: string };
-  graph: never;
-};
-
-type GraphChain = SupportedChain & {
-  envio: never;
-  graph: { isEnabled: boolean; name: string };
-};
-
-// ⚠️ IMPORTANT
-// Not all names on The Graph are the same as the chain's slug from the deployments package.
-// See https://thegraph.com/docs/en/supported-networks
+/**
+ *  ⚠️ IMPORTANT
+ * Not all names on The Graph are the same as the chain's slug from the deployments package.
+ *
+ * @see https://github.com/sablierhq/deployments
+ * @see https://thegraph.com/docs/en/supported-networks
+ */
 const NAME_OVERRIDES: { [chainId: number]: string } = {
   [chains.arbitrum.id]: "arbitrum-one",
   [chains.blast.id]: "blast-mainnet",
@@ -30,23 +19,35 @@ const NAME_OVERRIDES: { [chainId: number]: string } = {
 };
 
 // Chain configuration builder
-const fill = (id: number) => ({
-  both: (hypersync?: string) => ({
-    envio: { isEnabled: true, ...(hypersync && { hypersync }) },
-    graph: { isEnabled: true, name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug },
-    id,
-  }),
-  envio: (hypersync?: string) => ({
-    envio: { hypersync, isEnabled: true },
-    id,
-  }),
-  graph: () => ({
-    graph: { isEnabled: true, name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug },
-    id,
-  }),
-});
+const fill = (id: number) => {
+  const envioConfig = (hypersync?: string) => ({
+    isEnabled: true,
+    ...(hypersync && { hypersync }),
+  });
 
-const BOTH = [
+  const graphConfig = () => ({
+    isEnabled: true,
+    name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug,
+  });
+
+  return {
+    both: (hypersync?: string) => ({
+      envio: envioConfig(hypersync),
+      graph: graphConfig(),
+      id,
+    }),
+    envio: (hypersync?: string) => ({
+      envio: envioConfig(hypersync),
+      id,
+    }),
+    graph: () => ({
+      graph: graphConfig(),
+      id,
+    }),
+  };
+};
+
+const both = [
   fill(chains.arbitrumSepolia.id).both(),
   fill(chains.arbitrum.id).both(),
   fill(chains.avalanche.id).both(),
@@ -71,7 +72,7 @@ const BOTH = [
   fill(chains.zksync.id).both(),
 ];
 
-const GRAPH_ONLY = [
+const graphOnly = [
   fill(chains.abstract.id).graph(),
   fill(chains.berachain.id).graph(),
   fill(chains.blast.id).graph(),
@@ -79,19 +80,19 @@ const GRAPH_ONLY = [
   fill(chains.zksyncSepolia.id).graph(),
 ];
 
-const ENVIO_ONLY = [
+const envioOnly = [
   fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
   fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),
   fill(chains.tangle.id).envio("https://tangle.hypersync.xyz"),
 ];
 
-const SUPPORTED_CHAINS: SupportedChain[] = [...BOTH, ...GRAPH_ONLY, ...ENVIO_ONLY] as const;
+const all: Indexer.SupportedChain[] = [...both, ...graphOnly, ...envioOnly] as const;
 
-export const ENVIO_CHAINS: EnvioChain[] = _.filter(SUPPORTED_CHAINS, (c) => c.envio?.isEnabled) as EnvioChain[];
-export const GRAPH_CHAINS: GraphChain[] = _.filter(SUPPORTED_CHAINS, (c) => c.graph?.isEnabled) as GraphChain[];
+export const envioChains: Indexer.Envio.Chain[] = _.filter(all, (c) => c.envio?.isEnabled) as Indexer.Envio.Chain[];
+export const graphChains: Indexer.Graph.Chain[] = _.filter(all, (c) => c.graph?.isEnabled) as Indexer.Graph.Chain[];
 
 export function getGraphChainName(chainId: number): string {
-  const chain = _.find(GRAPH_CHAINS, { id: chainId });
+  const chain = _.find(graphChains, { id: chainId });
   if (!chain) {
     throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
   }

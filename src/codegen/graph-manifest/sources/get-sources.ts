@@ -1,13 +1,13 @@
 import { type Sablier, sablier } from "@sablier/deployments";
 import { Kind } from "graphql";
 import _ from "lodash";
-import { getGraphChainName } from "../../chains";
-import indexedContracts, { getIndexedContract } from "../../contracts";
-import { Errors } from "../../errors";
-import { sanitizeContractName } from "../../helpers";
-import { mergeSchema } from "../../schema/merger";
-import type { Indexed } from "../../types";
-import logger, { messages } from "../../winston";
+import { convertToIndexed, indexedContracts } from "../../../contracts";
+import { getGraphChainName } from "../../../exports/chains";
+import { sanitizeContractName } from "../../../helpers";
+import { mergeSchema } from "../../../schema/merger";
+import type { Types } from "../../../types";
+import logger, { messages } from "../../../winston";
+import { CodegenError } from "../../error";
 import type { GraphManifest } from "../manifest-types";
 import { getABIEntries } from "./abi-entries";
 import eventHandlers from "./event-handlers";
@@ -15,23 +15,23 @@ import eventHandlers from "./event-handlers";
 /**
  * Creates an array of data sources/templates for a subgraph manifest.
  */
-export function getSources(protocol: Indexed.Protocol, chainId: number): GraphManifest.Source[] {
+export function getSources(protocol: Types.Protocol, chainId: number): GraphManifest.Source[] {
   const sources: GraphManifest.Source[] = [];
   for (const indexedContract of indexedContracts[protocol]) {
     for (const version of indexedContract.versions) {
       const release = sablier.releases.get({ protocol, version });
       if (!release) {
-        throw new Errors.ReleaseNotFound(protocol, version);
+        throw new CodegenError.ReleaseNotFound(protocol, version);
       }
 
       const { name: contractName, isTemplate } = indexedContract;
-      const contract = extractContract({ release, chainId, contractName, isTemplate });
+      const contract = extractContract({ chainId, contractName, isTemplate, release });
       if (!contract) {
         continue;
       }
 
-      const common = getCommon({ protocol, chainId, version, contract, isTemplate });
-      const mapping = getMapping({ protocol, version, contractName: contract.name });
+      const common = getCommon({ chainId, contract, isTemplate, protocol, version });
+      const mapping = getMapping({ contractName: contract.name, protocol, version });
       const source = _.merge({}, common, { mapping }) as GraphManifest.Source;
       sources.push(source);
     }
@@ -45,10 +45,10 @@ export function getSources(protocol: Indexed.Protocol, chainId: number): GraphMa
 /* -------------------------------------------------------------------------- */
 
 type CreateSourcesParams = {
-  protocol: Indexed.Protocol;
+  protocol: Types.Protocol;
   chainId: number;
-  version: Indexed.Version;
-  contract: Indexed.Contract;
+  version: Types.Version;
+  contract: Types.Contract;
   isTemplate: boolean;
 };
 
@@ -56,25 +56,25 @@ function getCommon(params: CreateSourcesParams) {
   const { protocol, chainId, version, contract, isTemplate } = params;
   const dataSourceName = sanitizeContractName(contract.name, version);
 
-  const context = getContext({ protocol, chainId, version, contract, isTemplate });
+  const context = getContext({ chainId, contract, isTemplate, protocol, version });
   const contractAddress = contract.address.toLowerCase() as Sablier.Address;
 
   return {
-    kind: "ethereum/contract",
-    name: dataSourceName,
-    network: getGraphChainName(chainId),
+    _type: isTemplate ? "template" : "data-source",
     context,
-    source: {
-      address: isTemplate ? undefined : contractAddress,
-      abi: contract.name,
-      startBlock: isTemplate ? undefined : contract.block,
-    },
+    kind: "ethereum/contract",
     mapping: {
       apiVersion: "0.0.9",
       kind: "ethereum/events",
       language: "wasm/assemblyscript",
     },
-    _type: isTemplate ? "template" : "data-source",
+    name: dataSourceName,
+    network: getGraphChainName(chainId),
+    source: {
+      abi: contract.name,
+      address: isTemplate ? undefined : contractAddress,
+      startBlock: isTemplate ? undefined : contract.block,
+    },
   };
 }
 
@@ -106,7 +106,7 @@ function getContext(params: CreateSourcesParams): GraphManifest.Context | undefi
  * @param protocol - The protocol to extract entities for.
  * @returns An array of entity names available in the merged schema.
  */
-export function getEntities(protocol: Indexed.Protocol): string[] {
+export function getEntities(protocol: Types.Protocol): string[] {
   const schema = mergeSchema(protocol);
 
   const entityNames: string[] = [];
@@ -124,7 +124,7 @@ export function getEntities(protocol: Indexed.Protocol): string[] {
 /**
  * Helper for accessing mapping configuration based on protocol and version.
  */
-function getMapping(params: { protocol: Indexed.Protocol; contractName: string; version: Indexed.Version }) {
+function getMapping(params: { protocol: Types.Protocol; contractName: string; version: Types.Version }) {
   const { protocol, version, contractName } = params;
 
   return {
@@ -147,7 +147,7 @@ function extractContract(params: {
   chainId: number;
   contractName: string;
   isTemplate: boolean;
-}): Indexed.Contract | undefined {
+}): Types.Contract | undefined {
   const { release, chainId, contractName, isTemplate } = params;
 
   // Templates are contract definitions without deployment details
@@ -158,8 +158,8 @@ function extractContract(params: {
       alias: "",
       block: 0,
       name: contractName,
-      protocol: release.protocol as Indexed.Protocol,
-      version: release.version as Indexed.Version,
+      protocol: release.protocol as Types.Protocol,
+      version: release.version as Types.Version,
     };
   }
 
@@ -174,11 +174,11 @@ function extractContract(params: {
   // Validate required indexing fields
   // Both alias and block number are necessary for proper subgraph indexing
   if (!contract.alias) {
-    throw new Errors.AliasNotFound(release, chainId, contractName);
+    throw new CodegenError.AliasNotFound(release, chainId, contractName);
   }
   if (!contract.block) {
-    throw new Errors.BlockNotFound(release, chainId, contractName);
+    throw new CodegenError.BlockNotFound(release, chainId, contractName);
   }
 
-  return getIndexedContract(contract);
+  return convertToIndexed(contract);
 }

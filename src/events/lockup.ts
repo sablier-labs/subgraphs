@@ -1,8 +1,8 @@
 import { contracts, type Sablier } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 import { erc721 } from "./common/erc721";
 
-function get(version: Sablier.Version.Lockup, contractName: string, eventName: string): Indexed.Event {
+function get(version: Sablier.Version.Lockup, contractName: string, eventName: string): Types.Event {
   return {
     contractName,
     eventName,
@@ -11,7 +11,7 @@ function get(version: Sablier.Version.Lockup, contractName: string, eventName: s
   };
 }
 
-function dynamic(version: Sablier.Version.Lockup): Indexed.Event[] {
+function dynamic(version: Sablier.Version.Lockup): Types.Event[] {
   const contractName = contracts.names.SABLIER_V2_LOCKUP_DYNAMIC;
   return [
     ...erc721("lockup", version, contractName),
@@ -22,7 +22,7 @@ function dynamic(version: Sablier.Version.Lockup): Indexed.Event[] {
   ];
 }
 
-function linear(version: Sablier.Version.Lockup): Indexed.Event[] {
+function linear(version: Sablier.Version.Lockup): Types.Event[] {
   const contractName = contracts.names.SABLIER_V2_LOCKUP_LINEAR;
   return [
     ...erc721("lockup", version, contractName),
@@ -33,7 +33,7 @@ function linear(version: Sablier.Version.Lockup): Indexed.Event[] {
   ];
 }
 
-function tranched(version: Sablier.Version.Lockup): Indexed.Event[] {
+function tranched(version: Sablier.Version.Lockup): Types.Event[] {
   const contractName = contracts.names.SABLIER_V2_LOCKUP_TRANCHED;
   return [
     ...erc721("lockup", version, contractName),
@@ -44,7 +44,7 @@ function tranched(version: Sablier.Version.Lockup): Indexed.Event[] {
   ];
 }
 
-function lockup(version: Sablier.Version.Lockup): Indexed.Event[] {
+function lockup(version: Sablier.Version.Lockup): Types.Event[] {
   const contractName = contracts.names.SABLIER_LOCKUP;
   return [
     ...erc721("lockup", version, contractName),
@@ -57,7 +57,7 @@ function lockup(version: Sablier.Version.Lockup): Indexed.Event[] {
   ];
 }
 
-const lockupEvents: Indexed.EventMap = {
+const lockupEvents: Types.EventMap = {
   [contracts.names.SABLIER_V2_LOCKUP_DYNAMIC]: {
     "v1.0": dynamic("v1.0"),
     "v1.1": dynamic("v1.1"),

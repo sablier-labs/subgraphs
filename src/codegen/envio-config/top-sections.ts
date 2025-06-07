@@ -1,13 +1,11 @@
-import type { Indexed } from "../types";
+import type { Types } from "../../types";
 import type { EnvioConfig } from "./config-types";
 
-const topSections: Record<Indexed.Protocol, EnvioConfig.TopSection> = {
+export const topSections: Record<Types.Protocol, EnvioConfig.TopSection> = {
   airdrops: get("airdrops"),
   flow: get("flow"),
   lockup: get("lockup"),
 };
-
-export default topSections;
 
 function get(name: string): EnvioConfig.TopSection {
   return {
@@ -15,6 +13,7 @@ function get(name: string): EnvioConfig.TopSection {
     ecosystem: "evm",
     unordered_multichain_mode: true,
     rollback_on_reorg: false,
+    schema: "../schema.graphql",
     field_selection: {
       transaction_fields: ["from", "hash", "to", "transactionIndex", "value"],
     },

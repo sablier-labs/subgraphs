@@ -1,15 +1,15 @@
 import _ from "lodash";
-import indexedContracts from "../../contracts";
-import paths, { getRelativePath } from "../../paths";
-import type { Indexed } from "../../types";
+import { indexedContracts } from "../../../contracts";
+import paths, { getRelativePath } from "../../../paths";
+import type { Types } from "../../../types";
 import type { GraphManifest } from "../manifest-types";
 
 function get(name: string): GraphManifest.ABI {
   return {
-    name,
     get file() {
       return getFilePath(name);
     },
+    name,
   };
 }
 
@@ -18,7 +18,7 @@ export const erc20Bytes = get("ERC20Bytes");
 export const prbProxy = get("PRBProxy");
 export const prbProxyRegistry = get("PRBProxyRegistry");
 
-export function getABIEntries(protocol: Indexed.Protocol, contractName: string, version: Indexed.Version) {
+export function getABIEntries(protocol: Types.Protocol, contractName: string, version: Types.Version) {
   const contract = _.find(indexedContracts[protocol], (c) => {
     return c.name === contractName && c.versions.includes(version);
   });
@@ -28,8 +28,8 @@ export function getABIEntries(protocol: Indexed.Protocol, contractName: string, 
 
   const contractABIEntries: GraphManifest.ABI[] = [
     {
-      name: contractName,
       file: getFilePath(contractName, protocol, version),
+      name: contractName,
     },
   ];
 
@@ -41,7 +41,7 @@ export function getABIEntries(protocol: Indexed.Protocol, contractName: string, 
   return [...contractABIEntries, ...otherABIEntries];
 }
 
-function getFilePath(contractName: string, protocol?: Indexed.Protocol, version?: Indexed.Version) {
+function getFilePath(contractName: string, protocol?: Types.Protocol, version?: Types.Version) {
   // It doesn't matter what protocol we use here, we just need the path to the manifests.
   const manifestsPath = paths.graph.manifests(protocol ?? "lockup");
   const abiPath = paths.abi(contractName, protocol, version);

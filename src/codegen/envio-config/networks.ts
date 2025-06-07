@@ -1,17 +1,17 @@
 import { sablier } from "@sablier/deployments";
 import _ from "lodash";
-import { ENVIO_CHAINS } from "../chains";
-import indexedContracts from "../contracts";
-import { Errors } from "../errors";
-import { sanitizeContractName } from "../helpers";
-import type { Indexed } from "../types";
-import logger, { messages } from "../winston";
+import { indexedContracts } from "../../contracts";
+import { envioChains } from "../../exports/chains";
+import { sanitizeContractName } from "../../helpers";
+import type { Types } from "../../types";
+import logger, { messages } from "../../winston";
+import { CodegenError } from "../error";
 import type { EnvioConfig } from "./config-types";
 
-export function createNetworks(protocol: Indexed.Protocol): EnvioConfig.Network[] {
+export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
 
-  for (const c of ENVIO_CHAINS) {
+  for (const c of envioChains) {
     const { contracts, startBlock } = extractContracts(protocol, c.id);
     const hypersync_config = c.envio.hypersync ? { url: c.envio.hypersync } : undefined;
     networks.push({
@@ -43,7 +43,7 @@ type ExtractContractsReturn = {
  * 6. Determines the earliest block number to start indexing from
  * 7. Throws errors if required contracts are missing or no contracts found
  */
-function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractContractsReturn {
+function extractContracts(protocol: Types.Protocol, chainId: number): ExtractContractsReturn {
   const networkContracts: EnvioConfig.NetworkContract[] = [];
   let startBlock = 0;
 
@@ -79,10 +79,10 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
       }
       // If a contract is found, it must have an alias and a start block. These are required for indexing.
       if (!contract.alias) {
-        throw new Errors.AliasNotFound(release, chainId, contractName);
+        throw new CodegenError.AliasNotFound(release, chainId, contractName);
       }
       if (!contract.block) {
-        throw new Errors.BlockNotFound(release, chainId, contractName);
+        throw new CodegenError.BlockNotFound(release, chainId, contractName);
       }
 
       networkContracts.push({
@@ -102,7 +102,7 @@ function extractContracts(protocol: Indexed.Protocol, chainId: number): ExtractC
 
   // At least one contract must be found for the indexer to work.
   if (networkContracts.length === 0) {
-    throw new Errors.ContractsNotFound(protocol, chainId);
+    throw new CodegenError.ContractsNotFound(protocol, chainId);
   }
 
   return { contracts: networkContracts, startBlock };

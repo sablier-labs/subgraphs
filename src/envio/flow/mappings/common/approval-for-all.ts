@@ -1,8 +1,10 @@
 import { Flow as enums } from "../../../../schema/enums";
 import { type Entity } from "../../bindings";
 import type {
-  SablierFlow_v1_0_ApprovalForAll_handler as Handler,
-  SablierFlow_v1_0_ApprovalForAll_loader as Loader,
+  SablierFlow_v1_0_ApprovalForAll_handler as Handler_v1_0,
+  SablierFlow_v1_1_ApprovalForAll_handler as Handler_v1_1,
+  SablierFlow_v1_0_ApprovalForAll_loader as Loader_v1_0,
+  SablierFlow_v1_1_ApprovalForAll_loader as Loader_v1_1,
 } from "../../bindings/src/Types.gen";
 import { Store } from "../../store";
 
@@ -14,6 +16,8 @@ type LoaderReturn = {
   watcher?: Entity.Watcher;
 };
 
+type Loader<T> = Loader_v1_0<T> | Loader_v1_1<T>;
+
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const watcher = await Store.Watcher.get(context, event.chainId);
   return {
@@ -24,6 +28,8 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /* -------------------------------------------------------------------------- */
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
+
+type Handler<T> = Handler_v1_0<T> | Handler_v1_1<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { watcher } = loaderReturn;

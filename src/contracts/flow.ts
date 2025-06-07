@@ -1,12 +1,10 @@
 import { contracts, type Sablier, Version } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 
-const flowContracts: Indexed.ContractSource<Sablier.Version.Flow>[] = [
+export const flowContracts: Types.ContractSource<Sablier.Version.Flow>[] = [
   {
     isTemplate: false,
     name: contracts.names.SABLIER_FLOW,
     versions: [Version.Flow.V1_0, Version.Flow.V1_1],
   },
 ];
-
-export default flowContracts;

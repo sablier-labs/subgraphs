@@ -1,9 +1,9 @@
 import { contracts, type Sablier } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 
 const names = contracts.names;
 
-function get(version: Sablier.Version.Airdrops, contractName: string, eventName: string): Indexed.Event {
+function get(version: Sablier.Version.Airdrops, contractName: string, eventName: string): Types.Event {
   return {
     contractName,
     eventName,
@@ -12,7 +12,7 @@ function get(version: Sablier.Version.Airdrops, contractName: string, eventName:
   };
 }
 
-function campaign(version: Sablier.Version.Airdrops, contractName: string): Indexed.Event[] {
+function campaign(version: Sablier.Version.Airdrops, contractName: string): Types.Event[] {
   return [get(version, contractName, "TransferAdmin"), get(version, contractName, "Clawback")];
 }
 
@@ -20,7 +20,7 @@ function campaign(version: Sablier.Version.Airdrops, contractName: string): Inde
 /*                                    V1.1                                    */
 /* -------------------------------------------------------------------------- */
 
-const v1_1: Indexed.EventMap = {
+const v1_1: Types.EventMap = {
   [names.SABLIER_V2_MERKLE_STREAMER_FACTORY]: {
     "v1.1": [get("v1.1", names.SABLIER_V2_MERKLE_STREAMER_FACTORY, "CreateMerkleStreamerLL")],
   },
@@ -36,7 +36,7 @@ const v1_1: Indexed.EventMap = {
 /*                                    V1.2                                    */
 /* -------------------------------------------------------------------------- */
 
-const v1_2: Indexed.EventMap = {
+const v1_2: Types.EventMap = {
   [names.SABLIER_V2_MERKLE_LOCKUP_FACTORY]: {
     "v1.2": [
       get("v1.2", names.SABLIER_V2_MERKLE_LOCKUP_FACTORY, "CreateMerkleLL"),
@@ -55,7 +55,7 @@ const v1_2: Indexed.EventMap = {
 /*                                    V1.3                                    */
 /* -------------------------------------------------------------------------- */
 
-const v1_3: Indexed.EventMap = {
+const v1_3: Types.EventMap = {
   [names.SABLIER_MERKLE_FACTORY]: {
     "v1.3": [
       get("v1.3", names.SABLIER_MERKLE_FACTORY, "CreateMerkleInstant"),
@@ -74,7 +74,7 @@ const v1_3: Indexed.EventMap = {
   },
 };
 
-const airdropHandlers: Indexed.EventMap = {
+const airdropHandlers: Types.EventMap = {
   ...v1_1,
   ...v1_2,
   ...v1_3,

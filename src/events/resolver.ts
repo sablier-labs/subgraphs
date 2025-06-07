@@ -1,19 +1,19 @@
 import * as fs from "fs-extra";
 import _ from "lodash";
-import type { GraphManifest } from "../graph-manifest/manifest-types";
+import type { GraphManifest } from "../codegen/graph-manifest/manifest-types";
 import { sanitizeContractName } from "../helpers";
 import paths from "../paths";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 import logger from "../winston";
 
 /**
  * Resolves an event handler for The Graph manifest.
- * @param event The event object; @see Indexed.Event
+ * @param event The event object; @see Types.Event
  * @returns A GraphManifest.EventHandler object
  * @example SablierLockup_v2_0_Approval
  * @example SablierLockup_v2_0_CreateLockupLinearStream
  */
-export function resolveEventHandler(event: Indexed.Event): GraphManifest.EventHandler {
+export function resolveEventHandler(event: Types.Event): GraphManifest.EventHandler {
   const { contractName, eventName, protocol, version } = event;
   const abiPath = paths.abi(contractName, protocol, version);
 

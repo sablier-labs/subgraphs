@@ -1,8 +1,8 @@
 import { contracts, type Sablier } from "@sablier/deployments";
-import type { Indexed } from "../types";
+import type { Types } from "../types";
 import { erc721 } from "./common/erc721";
 
-function get(version: Sablier.Version.Flow, contractName: string, eventName: string): Indexed.Event {
+function get(version: Sablier.Version.Flow, contractName: string, eventName: string): Types.Event {
   return {
     contractName,
     eventName,
@@ -11,7 +11,7 @@ function get(version: Sablier.Version.Flow, contractName: string, eventName: str
   };
 }
 
-function base(version: Sablier.Version.Flow): Indexed.Event[] {
+function base(version: Sablier.Version.Flow): Types.Event[] {
   const name = contracts.names.SABLIER_FLOW;
   return [
     ...erc721("flow", version, name),
@@ -30,7 +30,7 @@ function base(version: Sablier.Version.Flow): Indexed.Event[] {
 const v1_0Events = base("v1.0");
 const v1_1Events = base("v1.1");
 
-const flowEvents: Indexed.EventMap = {
+const flowEvents: Types.EventMap = {
   [contracts.names.SABLIER_FLOW]: {
     "v1.0": v1_0Events,
     "v1.1": v1_1Events,

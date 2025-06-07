@@ -1,9 +1,9 @@
 import * as path from "node:path";
 import * as fs from "fs-extra";
-import { GRAPH_CHAINS, getGraphChainName } from "../../src/chains";
-import { createGraphManifest } from "../../src/graph-manifest";
+import { createGraphManifest } from "../../src/codegen/graph-manifest";
+import { getGraphChainName, graphChains } from "../../src/exports/chains";
 import paths from "../../src/paths";
-import type { Indexed } from "../../src/types";
+import type { Types } from "../../src/types";
 import logger from "../../src/winston";
 import { PROTOCOLS } from "../constants";
 import { dumpYAML, getChain, getRelative, validateChainArg, validateProtocolArg } from "../helpers";
@@ -49,7 +49,7 @@ if (require.main === module) {
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllChains(protocol: Indexed.Protocol, suppressFinalLog = false): number {
+function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): number {
   const manifestsDir = paths.graph.manifests(protocol);
 
   if (fs.pathExistsSync(manifestsDir)) {
@@ -61,7 +61,7 @@ function codegenAllChains(protocol: Indexed.Protocol, suppressFinalLog = false):
   }
 
   let filesGenerated = 0;
-  for (const chain of GRAPH_CHAINS) {
+  for (const chain of graphChains) {
     writeManifestToFile(protocol, chain.id, chain.graph.name);
     filesGenerated++;
   }
@@ -101,7 +101,7 @@ function codegenAllProtocols(chainArg: string) {
   }
 }
 
-function codegenSpecificChain(protocol: Indexed.Protocol, chainArg: string): void {
+function codegenSpecificChain(protocol: Types.Protocol, chainArg: string): void {
   const chain = getChain(chainArg);
   const graphChainName = getGraphChainName(chain.id);
   const manifestsDir = paths.graph.manifests(protocol);
@@ -112,7 +112,7 @@ function codegenSpecificChain(protocol: Indexed.Protocol, chainArg: string): voi
   logger.info(`📁 Manifest path: ${manifestPath}`);
 }
 
-function writeManifestToFile(protocol: Indexed.Protocol, chainId: number, chainName: string): string {
+function writeManifestToFile(protocol: Types.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);
   const yaml = dumpYAML(manifest);

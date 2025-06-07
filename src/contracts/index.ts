@@ -1,31 +1,27 @@
 import type { Sablier } from "@sablier/deployments";
-import type { Indexed, ProtocolMap } from "../types";
-import logger from "../winston";
-import airdrops from "./airdrops";
-import flow from "./flow";
-import lockup from "./lockup";
+import type { Types } from "../types";
+import { airdropsContracts } from "./airdrops";
+import { flowContracts } from "./flow";
+import { lockupContracts } from "./lockup";
 
-const indexedContracts: ProtocolMap<Indexed.ContractSource<Sablier.Version>[]> = {
-  airdrops,
-  flow,
-  lockup,
+type CS = Types.ContractSource<Sablier.Version>;
+
+export const indexedContracts: Types.ProtocolMap<CS[]> = {
+  airdrops: airdropsContracts,
+  flow: flowContracts,
+  lockup: lockupContracts,
 };
 
-export function getIndexedContract(contract: Sablier.Contract): Indexed.Contract {
-  if (!contract.alias) {
-    logger.debug(`Contract ${contract.name} has no alias`);
-  }
-  if (!contract.block) {
-    logger.debug(`Contract ${contract.name} has no block`);
-  }
+/**
+ * This function is called from the Envio indexer so we should not use the Winston logger.
+ */
+export function convertToIndexed(contract: Sablier.Contract): Types.Contract {
   return {
-    address: contract.address.toLowerCase(),
+    address: contract.address.toLowerCase() as Sablier.Address,
     alias: contract.alias ?? "",
     block: contract.block ?? 0,
     name: contract.name,
-    protocol: contract.protocol as Indexed.Protocol,
+    protocol: contract.protocol as Types.Protocol,
     version: contract.version,
   };
 }
-
-export default indexedContracts;

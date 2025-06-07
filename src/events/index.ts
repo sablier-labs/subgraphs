@@ -1,12 +1,10 @@
-import type { Indexed, ProtocolMap } from "../types";
+import type { Types } from "../types";
 import airdrops from "./airdrops";
 import flow from "./flow";
 import lockup from "./lockup";
 
-const indexedEvents: ProtocolMap<Indexed.EventMap> = {
+export const indexedEvents: Types.ProtocolMap<Types.EventMap> = {
   airdrops,
   flow,
   lockup,
 };
-
-export default indexedEvents;

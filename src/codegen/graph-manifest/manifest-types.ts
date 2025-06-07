@@ -1,9 +1,9 @@
 import type { Sablier } from "@sablier/deployments";
-import type { ComponentMap } from "../types";
+import type { Types } from "../../types";
 
-export type ABIEntriesMap = ComponentMap<GraphManifest.ABI[]>;
-export type EntitiesMap = ComponentMap<string[]>;
-export type EventHandlersMap = ComponentMap<GraphManifest.EventHandler[]>;
+export type ABIEntriesMap = Types.ComponentMap<GraphManifest.ABI[]>;
+export type EntitiesMap = Types.ComponentMap<string[]>;
+export type EventHandlersMap = Types.ComponentMap<GraphManifest.EventHandler[]>;
 
 /**
  * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/

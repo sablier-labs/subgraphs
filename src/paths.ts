@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import path, { join, resolve } from "node:path";
-import type { Indexed } from "./types";
+import type { Types } from "./types";
 
 export const SRC_DIR = resolve(__dirname);
 export const ABI_DIR = join(SRC_DIR, "abi");
@@ -10,11 +10,11 @@ export const GRAPH_DIR = join(SRC_DIR, "graph");
 export const RPC_DATA_DIR = join(SRC_DIR, "rpc-data");
 export const SCHEMA_DIR = join(SRC_DIR, "schema");
 
-type P = Indexed.Protocol;
-type V = Indexed.Vendor;
+type P = Types.Protocol;
+type V = Types.Vendor;
 
 const paths = {
-  abi: (contractName: string, protocol?: Indexed.Protocol, version?: Indexed.Version): string => {
+  abi: (contractName: string, protocol?: Types.Protocol, version?: Types.Version): string => {
     if (protocol && version) {
       return join(ABI_DIR, `${protocol}-${version}`, `${contractName}.json`);
     }

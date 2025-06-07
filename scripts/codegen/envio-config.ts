@@ -1,8 +1,8 @@
 import * as fs from "fs-extra";
 import { PROTOCOLS } from "scripts/constants";
-import { createEnvioConfig } from "../../src/envio-config";
+import { createEnvioConfig } from "../../src/codegen/envio-config";
 import paths from "../../src/paths";
-import type { Indexed } from "../../src/types";
+import type { Types } from "../../src/types";
 import logger from "../../src/winston";
 import { dumpYAML, getRelative, validateProtocolArg } from "../helpers";
 
@@ -46,7 +46,7 @@ function codegenAllProtocols(): void {
   logger.info("🎉 Successfully generated all Envio configs!\n");
 }
 
-function codegenSpecificProtocol(protocol: Indexed.Protocol): void {
+function codegenSpecificProtocol(protocol: Types.Protocol): void {
   const config = createEnvioConfig(protocol);
   const yaml = dumpYAML(config);
   const configPath = paths.envio.config(protocol);
