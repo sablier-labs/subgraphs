@@ -3,7 +3,7 @@ import _ from "lodash";
 import type { Indexer } from "./types";
 
 /**
- *  ⚠️ IMPORTANT
+ * ⚠️ IMPORTANT
  * Not all names on The Graph are the same as the chain's slug from the deployments package.
  *
  * @see https://github.com/sablierhq/deployments
@@ -18,15 +18,12 @@ const NAME_OVERRIDES: { [chainId: number]: string } = {
   [chains.sei.id]: "sei-mainnet",
 };
 
-// Chain configuration builder
 const fill = (id: number) => {
   const envioConfig = (hypersync?: string) => ({
-    isEnabled: true,
-    ...(hypersync && { hypersync }),
+    hypersync,
   });
 
   const graphConfig = () => ({
-    isEnabled: true,
     name: NAME_OVERRIDES[id] || sablier.chains.getOrThrow(id).slug,
   });
 
@@ -47,7 +44,7 @@ const fill = (id: number) => {
   };
 };
 
-const both = [
+const BOTH = [
   fill(chains.arbitrumSepolia.id).both(),
   fill(chains.arbitrum.id).both(),
   fill(chains.avalanche.id).both(),
@@ -72,7 +69,7 @@ const both = [
   fill(chains.zksync.id).both(),
 ];
 
-const graphOnly = [
+const GRAPH_ONLY = [
   fill(chains.abstract.id).graph(),
   fill(chains.berachain.id).graph(),
   fill(chains.blast.id).graph(),
@@ -80,21 +77,32 @@ const graphOnly = [
   fill(chains.zksyncSepolia.id).graph(),
 ];
 
-const envioOnly = [
+const ENVIO_ONLY = [
   fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
   fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),
   fill(chains.tangle.id).envio("https://tangle.hypersync.xyz"),
 ];
 
-const all: Indexer.SupportedChain[] = [...both, ...graphOnly, ...envioOnly] as const;
+const ALL = [...BOTH, ...GRAPH_ONLY, ...ENVIO_ONLY] as const;
 
-export const envioChains: Indexer.Envio.Chain[] = _.filter(all, (c) => c.envio?.isEnabled) as Indexer.Envio.Chain[];
-export const graphChains: Indexer.Graph.Chain[] = _.filter(all, (c) => c.graph?.isEnabled) as Indexer.Graph.Chain[];
+/* -------------------------------------------------------------------------- */
+/*                                   EXPORTS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const ENVIO_CHAINS: Indexer.Envio.Chain[] = ALL.filter((c) => "envio" in c).map((c) => ({
+  hypersync: c.envio.hypersync,
+  id: c.id,
+}));
+
+export const GRAPH_CHAINS: Indexer.Graph.Chain[] = ALL.filter((c) => "graph" in c).map((c) => ({
+  id: c.id,
+  name: c.graph.name,
+}));
 
 export function getGraphChainName(chainId: number): string {
-  const chain = _.find(graphChains, { id: chainId });
+  const chain = _.find(GRAPH_CHAINS, { id: chainId });
   if (!chain) {
     throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
   }
-  return chain.graph.name;
+  return chain.name;
 }

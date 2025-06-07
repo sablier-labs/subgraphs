@@ -2,6 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "dist",
+    "declarationMap": true,
+    "emitDecoratorMetadata": true,
     "noEmit": false,
     "rootDir": "./src/exports",
     "removeComments": true,

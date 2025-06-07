@@ -139,8 +139,10 @@ function getMapping(params: { protocol: Types.Protocol; contractName: string; ve
  * Extracts contract information based on release, chain, name, and template status.
  * @returns The contract object if found, or undefined if not deployed on the specified chain
  *
- * For templates: Returns a stub contract with just the name (templates don't need addresses)
- * For regular contracts: Validates that required fields (alias, block) exist before returning
+ * For regular contracts: Validates that required fields (alias, block) exist before returning.
+ * For templates: Returns a stub contract with just the name (templates don't need deployment details).
+ *
+ * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#data-source-templates
  */
 function extractContract(params: {
   release: Sablier.Release;
@@ -150,13 +152,12 @@ function extractContract(params: {
 }): Types.Contract | undefined {
   const { release, chainId, contractName, isTemplate } = params;
 
-  // Templates are contract definitions without deployment details
-  // Used for contracts created at runtime through factory patterns
   if (isTemplate) {
     return {
       address: "0x",
       alias: "",
       block: 0,
+      chainId,
       name: contractName,
       protocol: release.protocol as Types.Protocol,
       version: release.version as Types.Version,

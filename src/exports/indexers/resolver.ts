@@ -1,6 +1,6 @@
 import { Protocol } from "@sablier/deployments";
-import { getGraphChainName } from "./chains";
-import type { Indexer } from "./types";
+import { getGraphChainName } from "../chains";
+import type { Indexer } from "../types";
 
 export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Indexer.Envio {
   function getURL(id: string) {
@@ -25,14 +25,17 @@ export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Index
 
 export function resolveGraphCustom(protocol: Indexer.Protocol, chainId: number, baseURL: string): Indexer.Graph {
   const name = getSubgraphName(chainId, protocol);
+  const custom: Indexer.Graph.Custom = {
+    explorerURL: `${baseURL}/{${name}}/graphql`,
+    kind: "custom",
+    subgraph: {
+      url: `${baseURL}/${name}`,
+    },
+  };
   return {
     chainId,
-    graph: {
-      explorerURL: `${baseURL}/{${name}}/graphql`,
-      kind: "custom",
-      subgraphURL: `${baseURL}/${name}`,
-    },
     protocol,
+    ...custom,
   };
 }
 
@@ -41,17 +44,19 @@ const GRAPH_STUDIO_ID = 112500;
 
 export function resolveGraphOfficial(protocol: Indexer.Protocol, chainId: number, subgraphId: string): Indexer.Graph {
   const subgraphName = getSubgraphName(chainId, protocol);
-  return {
-    chainId,
-    graph: {
-      explorerURL: `https://thegraph.com/explorer/subgraphs/${subgraphId}`,
-      kind: "official",
-      studioURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
-      subgraph: {
-        id: subgraphId,
-        url: `https://gateway.thegraph.com/api/subgraphs/id/${subgraphId}`,
-      },
+  const official: Indexer.Graph.Official = {
+    explorerURL: `https://thegraph.com/explorer/subgraphs/${subgraphId}`,
+    kind: "official",
+    studioURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
+    subgraph: {
+      id: subgraphId,
+      url: `https://gateway.thegraph.com/api/subgraphs/id/${subgraphId}`,
     },
+  };
+
+  return {
+    ...official,
+    chainId,
     protocol,
   };
 }

@@ -20,6 +20,7 @@ export function convertToIndexed(contract: Sablier.Contract): Types.Contract {
     address: contract.address.toLowerCase() as Sablier.Address,
     alias: contract.alias ?? "",
     block: contract.block ?? 0,
+    chainId: contract.chainId,
     name: contract.name,
     protocol: contract.protocol as Types.Protocol,
     version: contract.version,

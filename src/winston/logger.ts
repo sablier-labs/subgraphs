@@ -1,9 +1,5 @@
-import winston, { format } from "winston";
-import { LOG_LEVEL } from "./constants";
-import transports from "./transports";
-
 /**
- * Winston logger instance with console and optional file transport
+ * @file Winston logger instance with console and optional file transport
  *
  * @example
  * Basic usage of different log levels:
@@ -28,6 +24,10 @@ import transports from "./transports";
  *
  * LOG_LEVEL=silly pnpm tsx cli/your-script.ts
  */
+import winston, { format } from "winston";
+import { LOG_LEVEL } from "./constants";
+import transports from "./transports";
+
 const logger = winston.createLogger({
   format: format.combine(format.timestamp(), format.errors({ stack: true })),
   level: LOG_LEVEL,

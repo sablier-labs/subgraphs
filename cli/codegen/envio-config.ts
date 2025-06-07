@@ -24,9 +24,10 @@ async function main(): Promise<void> {
 
   if (protocolArg === "all") {
     codegenAllProtocols();
-  } else {
-    codegenSpecificProtocol(protocolArg);
+    return;
   }
+
+  codegen(protocolArg);
 }
 
 if (require.main === module) {
@@ -39,14 +40,14 @@ if (require.main === module) {
 
 function codegenAllProtocols(): void {
   for (const p of PROTOCOLS) {
-    codegenSpecificProtocol(p);
+    codegen(p);
   }
 
   logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   logger.info("🎉 Successfully generated all Envio configs!\n");
 }
 
-function codegenSpecificProtocol(protocol: Types.Protocol): void {
+function codegen(protocol: Types.Protocol): void {
   const config = createEnvioConfig(protocol);
   const yaml = helpers.dumpYAML(config);
   const configPath = paths.envio.config(protocol);

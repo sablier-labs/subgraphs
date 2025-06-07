@@ -1,6 +1,6 @@
 import { chains, Protocol } from "@sablier/deployments";
-import { resolveGraphCustom, resolveGraphOfficial } from "../resolver";
 import type { Indexer } from "../types";
+import { resolveGraphCustom, resolveGraphOfficial } from "./resolver";
 
 type SubgraphId = string;
 type SubgraphIdMap = Record<Indexer.Protocol, SubgraphId>;

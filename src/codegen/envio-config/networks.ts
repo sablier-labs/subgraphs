@@ -1,7 +1,7 @@
 import { sablier } from "@sablier/deployments";
 import _ from "lodash";
 import { indexedContracts } from "../../contracts";
-import { envioChains } from "../../exports/chains";
+import { ENVIO_CHAINS } from "../../exports/chains";
 import { sanitizeContractName } from "../../helpers";
 import type { Types } from "../../types";
 import logger, { messages } from "../../winston";
@@ -11,9 +11,9 @@ import type { EnvioConfig } from "./config-types";
 export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
 
-  for (const c of envioChains) {
+  for (const c of ENVIO_CHAINS) {
     const { contracts, startBlock } = extractContracts(protocol, c.id);
-    const hypersync_config = c.envio.hypersync ? { url: c.envio.hypersync } : undefined;
+    const hypersync_config = c.hypersync ? { url: c.hypersync } : undefined;
     networks.push({
       id: c.id,
       start_block: startBlock,

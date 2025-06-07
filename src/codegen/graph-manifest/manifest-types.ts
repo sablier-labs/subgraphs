@@ -48,17 +48,18 @@ export namespace GraphManifest {
     handler: `handle_${string}_${string}`;
   };
 
+  /**
+   * The undefined fields are for templates.
+   * @see https://thegraph.com/docs/en/subgraphs/developing/creating/subgraph-manifest/#data-source-templates
+   */
   export type Source = {
     kind: string;
     name: string;
     network: string;
-    /** Undefined when it's a template. */
     context?: Context;
     source: {
       abi: string;
-      /** Undefined when it's a template. */
       address?: Sablier.Address;
-      /** Undefined when it's a template. */
       startBlock?: number;
     };
     mapping: Mapping;

@@ -1,66 +1,58 @@
 import type { Sablier } from "@sablier/deployments";
 
 export namespace Indexer {
-  type Common = {
+  /* -------------------------------------------------------------------------- */
+  /*                                    TYPES                                   */
+  /* -------------------------------------------------------------------------- */
+  type BaseIndexer = {
     chainId: number;
     protocol: Protocol;
   };
 
-  export namespace Envio {
-    export type Chain = SupportedChain & {
-      envio: { isEnabled: boolean; hypersync?: string };
-      graph: never;
-    };
-  }
-
-  export type Envio = Common & {
+  export type Envio = BaseIndexer & {
     envio: string;
   };
 
+  export type Graph = BaseIndexer & (Graph.Custom | Graph.Official);
+
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;
 
+  export type Vendor = "envio" | "graph";
+
+  /* -------------------------------------------------------------------------- */
+  /*                               SUB-NAMESPACES                               */
+  /* -------------------------------------------------------------------------- */
+  export namespace Envio {
+    export type Chain = {
+      hypersync?: string;
+      id: number;
+    };
+  }
   export namespace Graph {
-    export type Chain = SupportedChain & {
-      envio: never;
-      graph: { isEnabled: boolean; name: string };
+    export type Chain = {
+      name: string;
+      id: number;
     };
 
-    type SubgraphCommon = {
-      /** URL to The Graph explorer. */
-      explorerURL?: string;
-      /** The kind of subgraph. */
+    type Base = {
+      explorerURL: string;
       kind: "custom" | "official";
-      /** URL to The Graph studio. */
-      studioURL?: string;
     };
 
-    export type SubgraphCustom = SubgraphCommon & {
+    export type Custom = Base & {
       kind: "custom";
-      subgraphURL: string;
-      subgraph?: never;
+      subgraph: {
+        url: string;
+      };
     };
 
-    export type SubgraphOfficial = SubgraphCommon & {
+    export type Official = Base & {
       kind: "official";
-      subgraphURL?: never;
+      studioURL: string;
       subgraph: {
         id: string;
         url: string;
       };
     };
-
-    export type Subgraph = SubgraphCustom | SubgraphOfficial;
   }
-
-  export type Graph = Common & {
-    graph: Graph.Subgraph;
-  };
-
-  export type SupportedChain = {
-    id: number;
-    envio?: { isEnabled: boolean; hypersync?: string };
-    graph?: { isEnabled: boolean; name: string };
-  };
-
-  export type Vendor = "envio" | "graph";
 }

@@ -1,7 +1,7 @@
 import * as path from "node:path";
 import * as fs from "fs-extra";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
-import { getGraphChainName, graphChains } from "../../src/exports/chains";
+import { GRAPH_CHAINS, getGraphChainName } from "../../src/exports/chains";
 import paths from "../../src/paths";
 import type { Types } from "../../src/types";
 import logger from "../../src/winston";
@@ -21,8 +21,8 @@ import * as helpers from "../helpers";
  * @example Generate for all protocols on a specific chain:
  * just codegen-manifest all polygon
  *
- * @param {string} [protocol] - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} [chain] - Required: The chain slug to generate manifests for.
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} chain - Required: The chain slug to generate manifests for.
  * Use 'all' to generate for all chains.
  */
 async function main(): Promise<void> {
@@ -32,13 +32,15 @@ async function main(): Promise<void> {
 
   if (protocolArg === "all") {
     codegenAllProtocols(chainArg);
-  } else {
-    if (chainArg === "all") {
-      codegenAllChains(protocolArg);
-    } else {
-      codegenSpecificChain(protocolArg, chainArg);
-    }
+    return;
   }
+
+  if (chainArg === "all") {
+    codegenAllChains(protocolArg);
+    return;
+  }
+
+  codegen(protocolArg, chainArg);
 }
 
 if (require.main === module) {
@@ -49,38 +51,6 @@ if (require.main === module) {
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): number {
-  const manifestsDir = paths.graph.manifests(protocol);
-
-  if (fs.pathExistsSync(manifestsDir)) {
-    fs.emptyDirSync(manifestsDir);
-    logger.verbose("🗑️ Cleared existing manifests directory");
-  } else {
-    fs.ensureDirSync(manifestsDir);
-    logger.verbose(`📁 Created directory:      ${helpers.getRelative(manifestsDir)}`);
-  }
-
-  let filesGenerated = 0;
-  for (const chain of graphChains) {
-    writeManifestToFile(protocol, chain.id, chain.graph.name);
-    filesGenerated++;
-  }
-
-  if (filesGenerated === 0) {
-    throw new Error(`No manifests generated for ${protocol} protocol. This might indicate a configuration issue.`);
-  }
-
-  if (!suppressFinalLog) {
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info(
-      `🎉 Successfully generated ${filesGenerated} subgraph manifest${filesGenerated !== 1 ? "s" : ""} for ${protocol} protocol!`,
-    );
-    logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
-  }
-
-  return filesGenerated;
-}
-
 function codegenAllProtocols(chainArg: string) {
   let totalManifests = 0;
 
@@ -88,11 +58,11 @@ function codegenAllProtocols(chainArg: string) {
     if (chainArg === "all") {
       const filesGenerated = codegenAllChains(p, true);
       totalManifests += filesGenerated;
-      logger.info(`✅ Generated ${filesGenerated} manifest${filesGenerated !== 1 ? "s" : ""} for ${p} protocol`);
+      logger.info(`✅ Generated ${filesGenerated} manifests for ${p} protocol`);
       continue;
     }
 
-    codegenSpecificChain(p, chainArg);
+    codegen(p, chainArg);
   }
 
   if (chainArg === "all") {
@@ -101,7 +71,33 @@ function codegenAllProtocols(chainArg: string) {
   }
 }
 
-function codegenSpecificChain(protocol: Types.Protocol, chainArg: string): void {
+function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): number {
+  const manifestsDir = paths.graph.manifests(protocol);
+
+  if (fs.pathExistsSync(manifestsDir)) {
+    fs.emptyDirSync(manifestsDir);
+    logger.verbose("🗑️ Cleared existing manifests directory");
+  }
+
+  let filesGenerated = 0;
+  for (const c of GRAPH_CHAINS) {
+    writeManifestToFile(protocol, c.id, c.name);
+    filesGenerated++;
+  }
+  if (filesGenerated === 0) {
+    throw new Error(`No manifests generated for ${protocol} protocol. This might be a bug.`);
+  }
+
+  if (!suppressFinalLog) {
+    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    logger.info(`🎉 Successfully generated ${filesGenerated} subgraph manifests for ${protocol} protocol!`);
+    logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
+  }
+
+  return filesGenerated;
+}
+
+function codegen(protocol: Types.Protocol, chainArg: string): void {
   const chain = helpers.getChain(chainArg);
   const graphChainName = getGraphChainName(chain.id);
   const manifestsDir = paths.graph.manifests(protocol);
@@ -112,6 +108,10 @@ function codegenSpecificChain(protocol: Types.Protocol, chainArg: string): void 
   logger.info(`📁 Manifest path: ${manifestPath}`);
 }
 
+/**
+ * Writes the subgraph manifest to a file.
+ * @returns The relative path to the manifest file.
+ */
 function writeManifestToFile(protocol: Types.Protocol, chainId: number, chainName: string): string {
   const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);

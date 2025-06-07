@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@sablier/deployments':
+        specifier: 1.0.0-alpha.48
+        version: 1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.0-beta.5
@@ -23,9 +27,6 @@ importers:
       '@graphql-tools/merge':
         specifier: ^9.0
         version: 9.0.24(graphql@16.11.0)
-      '@sablier/deployments':
-        specifier: 1.0.0-alpha.47
-        version: 1.0.0-alpha.47(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))
       '@sablier/devkit':
         specifier: github:sablier-labs/devkit#main
         version: https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27
@@ -1150,8 +1151,8 @@ packages:
   '@rescript/std@9.0.0':
     resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
 
-  '@sablier/deployments@1.0.0-alpha.47':
-    resolution: {integrity: sha512-Kjm/gpy+RqR/sFq387H6TKU0kz4fjUGpp+Rcvr+naFb55rAcpOAdIaGoa0qpbjhWVC9jxzKFZx4jyC0EqctBWg==}
+  '@sablier/deployments@1.0.0-alpha.48':
+    resolution: {integrity: sha512-+IFNHlAe9QiulmDmQBVERoapLIwzF3rcLplEOS+DV/q2S6PQlxaVUd+JfHSvn7uXrj2NDnUty2bycK+SPdTMyA==}
     engines: {node: '>=20'}
     peerDependencies:
       viem: ^2.30
@@ -4945,7 +4946,7 @@ snapshots:
 
   '@rescript/std@9.0.0': {}
 
-  '@sablier/deployments@1.0.0-alpha.47(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))':
+  '@sablier/deployments@1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))':
     dependencies:
       lodash: 4.17.21
       viem: 2.30.6(typescript@5.8.3)(zod@3.25.51)

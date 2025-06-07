@@ -34,13 +34,15 @@ async function main(): Promise<void> {
 
   if (vendorArg === "all") {
     codegenAllVendors(protocolArg);
-  } else if (protocolArg === "all") {
-    codegenAllProtocols(vendorArg as Types.Vendor);
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
-  } else {
-    codegen(vendorArg as Types.Vendor, protocolArg);
+    return;
   }
+
+  if (protocolArg === "all") {
+    codegenAllProtocols(vendorArg);
+    return;
+  }
+
+  codegen(vendorArg, protocolArg);
 }
 
 if (require.main === module) {
@@ -51,12 +53,6 @@ if (require.main === module) {
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllProtocols(vendor: Types.Vendor): void {
-  for (const p of PROTOCOLS) {
-    codegen(vendor, p);
-  }
-}
-
 function codegenAllVendors(protocolArg: ProtocolArg): void {
   for (const v of VENDORS) {
     if (protocolArg === "all") {
@@ -66,6 +62,14 @@ function codegenAllVendors(protocolArg: ProtocolArg): void {
     }
   }
 
+  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+}
+
+function codegenAllProtocols(vendor: Types.Vendor): void {
+  for (const p of PROTOCOLS) {
+    codegen(vendor, p);
+  }
   logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   logger.info("🎉 Successfully generated all GraphQL schemas!\n");
 }
