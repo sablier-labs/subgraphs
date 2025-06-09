@@ -4,7 +4,7 @@
   "files": {
     "includes": [
       "**/*.{graphql,js,json,jsonc,ts}",
-      // "!src/envio/common/rpc-data/**/*.json",
+      "!src/envio/common/rpc-data/**/*.json",
       "!src/graph/**/bindings/**/*.ts"
     ]
   },

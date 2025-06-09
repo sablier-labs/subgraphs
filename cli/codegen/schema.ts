@@ -1,3 +1,14 @@
+/**
+ * @file CLI for generating GraphQL schema files
+ *
+ * @example
+ * just codegen-schema all all
+ * just codegen-schema all flow
+ * just codegen-schema graph flow
+ *
+ * @param {string} vendor - Required: 'graph', 'envio', or 'all'
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ */
 import * as fs from "node:fs";
 import { print } from "graphql";
 import paths from "../../src/paths";
@@ -12,21 +23,6 @@ import { type ProtocolArg } from "../types";
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-/**
- * CLI for generating GraphQL schema files
- *
- * @example Generate for all protocols:
- * just codegen-schema all
- *
- * @example Generate for Flow:
- * just codegen-schema flow
- *
- * @example Generate for Flow with Graph vendor:
- * just codegen-schema flow graph
- *
- * @param {string} vendor - Required: 'graph', 'envio', or 'all'
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const vendorArg = helpers.validateVendorArg(args[0]);

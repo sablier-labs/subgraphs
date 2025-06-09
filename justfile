@@ -46,6 +46,10 @@ clean:
 clean-modules:
     pnpm dlx rimraf --glob "node_modules" "**/node_modules"
 
+# Fetch assets from The Graph subgraphs and save them to JSON files
+@fetch-assets protocol="all" chain="all":
+    pnpm tsx cli/rpc-data/fetch-assets.ts {{ protocol }} {{ chain }}
+
 # Run all code checks
 full-check: biome-check prettier-check tsc-check
 alias c := full-check

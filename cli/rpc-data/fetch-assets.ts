@@ -1,12 +1,21 @@
+/**
+ * @file This script fetches ERC20 token data from The Graph subgraphs and saves it to JSON files.
+ *
+ * @example Generate for Flow:
+ * just fetch-assets flow ethereum
+ *
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
+ */
 import * as path from "node:path";
 import { type Sablier, sablier } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
 import _ from "lodash";
-import type { RPCData } from "../../src/envio/common/types";
-import { getSablierGraphIndexer, indexers } from "../../src/exports/indexers";
+import { RPCData } from "../../src/envio/common/types";
+import { getSablierSubgraph, indexers } from "../../src/exports/indexers";
 import type { Indexer } from "../../src/exports/types";
-import { ENVIO_DIR } from "../../src/paths";
+import paths from "../../src/paths";
 import { type Types } from "../../src/types";
 import logger from "../../src/winston";
 import { PROTOCOLS } from "../constants";
@@ -51,33 +60,17 @@ const QUERY = `#graphql
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-/**
- * CLI for generating Envio config file
- *
- * @example Generate for Flow:
- * pnpm tsx cli/rpc-data/fetch-assets.ts flow ethereum
- *
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
- */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const protocolArg = helpers.validateProtocolArg(args[0]);
-  const chainArg = helpers.validateChainArg(args[1]);
+  const chainArg = helpers.validateChainArg(args[0]);
+  const protocolArg = helpers.validateProtocolArg(args[1]);
 
-  logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  logger.info("🚀 Starting asset fetching process...");
-  logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-
-  if (protocolArg === "all") {
-    await handleAllProtocols(chainArg);
-  } else {
-    await handleProtocol(protocolArg, chainArg);
+  if (chainArg === "all") {
+    await handleAllChains(protocolArg);
+    return;
   }
 
-  logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  logger.info("🎉 Asset fetching process completed successfully!");
-  logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  await handleChain(chainArg, protocolArg);
 }
 
 if (require.main === module) {
@@ -88,49 +81,93 @@ if (require.main === module) {
 /*                                  HANDLERS                                  */
 /* -------------------------------------------------------------------------- */
 
-async function handleAllProtocols(chainArg: string): Promise<void> {
-  for (const p of PROTOCOLS) {
-    await handleProtocol(p, chainArg);
-  }
-}
-
-async function handleProtocol(protocol: Types.Protocol, chainArg: string): Promise<void> {
-  if (chainArg === "all") {
-    await handleAllChains(protocol);
+async function handleAllChains(protocolArg: string): Promise<void> {
+  // If protocolArg is 'all', aggregate across all protocols and chains
+  if (protocolArg === "all") {
+    const chainIds = _.uniq(
+      Object.values(indexers.graph)
+        .flat()
+        .map((indexer) => indexer.chainId),
+    );
+    for (const chainId of chainIds) {
+      const chain = sablier.chains.getOrThrow(chainId);
+      let totalNew = 0;
+      let totalAssets = 0;
+      for (const protocol of PROTOCOLS) {
+        const indexer = getSablierSubgraph({ chainId, protocol });
+        if (!indexer) continue;
+        const { newCount, totalCount } = await handle(indexer, chain, true);
+        totalNew += newCount;
+        totalAssets += totalCount;
+      }
+      logger.info(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
+    }
     return;
   }
-
-  const chain = helpers.getChain(chainArg);
-  const indexer = getSablierGraphIndexer({ chainId: chain.id, protocol });
-  if (!indexer) {
-    throw new Error(`No indexer found for ${protocol} protocol on ${chainArg} chain`);
-  }
-  await handle(indexer, chain);
-}
-
-async function handleAllChains(protocol: Types.Protocol): Promise<void> {
-  for (const indexer of indexers.graph[protocol]) {
+  // protocolArg is a specific protocol
+  for (const indexer of indexers.graph[protocolArg as Types.Protocol]) {
     const chain = sablier.chains.getOrThrow(indexer.chainId);
     await handle(indexer, chain);
   }
 }
 
-async function handle(indexer: Indexer.Graph, chain: Sablier.Chain): Promise<void> {
+async function handleChain(chainArg: string, protocolArg: string): Promise<void> {
+  if (protocolArg === "all") {
+    const chain = helpers.getChain(chainArg);
+    let totalNew = 0;
+    let totalAssets = 0;
+    for (const protocol of PROTOCOLS) {
+      const indexer = getSablierSubgraph({ chainId: chain.id, protocol });
+      if (!indexer) continue;
+      const { newCount, totalCount } = await handle(indexer, chain, true);
+      totalNew += newCount;
+      totalAssets += totalCount;
+    }
+    logger.info(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
+    return;
+  }
+  // protocolArg is a specific protocol
+  const chain = helpers.getChain(chainArg);
+  const indexer = getSablierSubgraph({ chainId: chain.id, protocol: protocolArg as Types.Protocol });
+  if (!indexer) {
+    throw new Error(`No indexer found for ${protocolArg} protocol on ${chainArg} chain`);
+  }
+  await handle(indexer, chain);
+}
+
+async function handle(
+  indexer: Indexer.Graph,
+  chain: Sablier.Chain,
+  skipLogger = false,
+): Promise<{ newCount: number; totalCount: number }> {
   const endpoint = indexer.subgraph.url;
 
   try {
-    const assets = await fetchAssets(endpoint);
+    const filePath = paths.envio.rpcData(RPCData.Category.ERC20, chain.slug);
+    const currentData = loadCurrentData(filePath);
 
-    const filePath = path.join(ENVIO_DIR, "common", "rpc-data", "erc20", `${chain.slug}.json`);
-    const mergedData = mergeData(filePath, assets);
+    const assets = await fetchAssets(endpoint);
+    const mergedData = mergeData(currentData, assets);
     writeData(filePath, mergedData);
 
-    const newAssetsCount = assets.length;
-    const totalAssetsCount = _.keys(mergedData).length;
-    logger.info(`✅ Successfully fetched ${newAssetsCount} assets for ${indexer.protocol} indexer on ${chain.slug}`);
-    logger.info(`📁 Total assets in ${helpers.getRelative(filePath)}: ${totalAssetsCount}`);
+    const currentCount = _.keys(currentData).length;
+    const totalCount = _.keys(mergedData).length;
+    const newCount = totalCount - currentCount;
+    if (!skipLogger) {
+      if (newCount > 0) {
+        logger.info(`✅ Successfully fetched ${newCount} new assets for ${indexer.protocol} indexer on ${chain.slug}`);
+      } else {
+        logger.info(`✔️  No new assets found for ${indexer.protocol} indexer on ${chain.slug}`);
+      }
+      if (totalCount > 0) {
+        logger.info(`📁 There are ${totalCount} total assets in ${helpers.getRelative(filePath)}`);
+      }
+      console.log("");
+    }
+    return { newCount, totalCount };
   } catch (error) {
     logger.error(`❌ Failed to fetch assets for ${indexer.protocol} on ${chain.slug}: ${error}`);
+    return { newCount: 0, totalCount: 0 };
   }
 }
 
@@ -142,7 +179,12 @@ async function handle(indexer: Indexer.Graph, chain: Sablier.Chain): Promise<voi
  * Fetches asset data from a GraphQL endpoint using The Graph API.
  */
 async function fetchAssets(endpoint: string): Promise<Asset[]> {
-  const client = new GraphQLClient(endpoint);
+  const GRAPH_QUERY_KEY = process.env.GRAPH_QUERY_KEY;
+  if (!GRAPH_QUERY_KEY) {
+    throw new Error("GRAPH_QUERY_KEY is not set");
+  }
+  const headers = { Authorization: `Bearer ${GRAPH_QUERY_KEY}` };
+  const client = new GraphQLClient(endpoint, { headers });
   const result = await client.request<GraphQLResponse["data"]>(QUERY);
   if (!result?.assets) {
     throw new Error("Invalid GraphQL response: missing assets data from The Graph");
@@ -174,8 +216,7 @@ function loadCurrentData(filePath: string): ERC20Data {
 /**
  * Merges new asset data with existing ERC20 token data.
  */
-function mergeData(filePath: string, newAssets: Asset[]): ERC20Data {
-  const currentData = loadCurrentData(filePath);
+function mergeData(currentData: ERC20Data, newAssets: Asset[]): ERC20Data {
   const merged = { ...currentData };
 
   for (const asset of newAssets) {

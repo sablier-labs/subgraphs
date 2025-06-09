@@ -1,5 +1,6 @@
-import * as fs from "node:fs";
 import path, { join, resolve } from "node:path";
+import * as fs from "fs-extra";
+import type { RPCData } from "./envio/common/types";
 import type { Types } from "./types";
 
 export const SRC_DIR = resolve(__dirname);
@@ -10,6 +11,7 @@ export const GRAPH_DIR = join(SRC_DIR, "graph");
 export const RPC_DATA_DIR = join(SRC_DIR, "rpc-data");
 export const SCHEMA_DIR = join(SRC_DIR, "schema");
 
+type C = RPCData.Category;
 type P = Types.Protocol;
 type V = Types.Vendor;
 
@@ -22,6 +24,7 @@ const paths = {
   },
   envio: {
     config: (protocol: P): string => join(ENVIO_DIR, protocol, "config.yaml"),
+    rpcData: (category: C, chain: string): string => join(ENVIO_DIR, "common", "rpc-data", category, `${chain}.json`),
     schema: (protocol: P): string => join(ENVIO_DIR, protocol, "schema.graphql"),
   },
   graph: {

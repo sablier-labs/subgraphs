@@ -1,3 +1,15 @@
+/**
+ * @file CLI for generating subgraph manifests
+ *
+ * @example
+ * just codegen-manifest all all
+ * just codegen-manifest all polygon
+ * just codegen-manifest flow polygon
+ *
+ * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} chain - Required: The chain slug to generate manifests for.
+ * Use 'all' to generate for all chains.
+ */
 import * as path from "node:path";
 import * as fs from "fs-extra";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
@@ -12,19 +24,6 @@ import * as helpers from "../helpers";
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-/**
- * CLI for generating subgraph manifests
- *
- * @example Generate for all protocols on all chains:
- * just codegen-manifest all all
- *
- * @example Generate for all protocols on a specific chain:
- * just codegen-manifest all polygon
- *
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} chain - Required: The chain slug to generate manifests for.
- * Use 'all' to generate for all chains.
- */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const protocolArg = helpers.validateProtocolArg(args[0]);

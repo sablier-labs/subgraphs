@@ -18,7 +18,8 @@ export function getSablierIndexer(vendor: V, opts: { chainId: number; protocol: 
   }
 }
 
-export const getSablierGraphIndexer = (opts: { chainId: number; protocol: P }): G | undefined =>
+export const getSablierIndexerGraph = (opts: { chainId: number; protocol: P }): G | undefined =>
   getSablierIndexer("graph", opts);
-export const getSablierEnvioIndexer = (opts: { chainId: number; protocol: P }): E | undefined =>
+export const getSablierSubgraph = getSablierIndexerGraph;
+export const getSablierIndexerEnvio = (opts: { chainId: number; protocol: P }): E | undefined =>
   getSablierIndexer("envio", opts);
