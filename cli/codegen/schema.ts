@@ -2,12 +2,12 @@
  * @file CLI for generating GraphQL schema files
  *
  * @example
- * just codegen-schema all all
- * just codegen-schema all flow
- * just codegen-schema graph flow
+ * pnpm tsx cli codegen schema --vendor all --protocol all
+ * pnpm tsx cli codegen schema --vendor all --protocol flow
+ * pnpm tsx cli codegen schema --vendor graph --protocol flow
  *
- * @param {string} vendor - Required: 'graph', 'envio', or 'all'
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} --vendor - Required: 'graph', 'envio', or 'all'
+ * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 import * as fs from "node:fs";
 import { print } from "graphql";
@@ -23,10 +23,17 @@ import { type ProtocolArg } from "../types";
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const vendorArg = helpers.validateVendorArg(args[0]);
-  const protocolArg = helpers.validateProtocolArg(args[1]);
+export async function main(): Promise<void> {
+  const program = helpers.createBaseCommand("Generate GraphQL schema files");
+
+  helpers.addVendorOption(program);
+  helpers.addProtocolOption(program);
+
+  program.parse();
+
+  const options = program.opts();
+  const vendorArg = helpers.parseVendorOption(options.vendor);
+  const protocolArg = helpers.parseProtocolOption(options.protocol);
 
   if (vendorArg === "all") {
     codegenAllVendors(protocolArg);

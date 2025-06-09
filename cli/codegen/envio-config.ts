@@ -2,10 +2,10 @@
  * @file CLI for generating Envio config file
  *
  * @example
- * just codegen-envio-config all
- * just codegen-envio-config flow
+ * pnpm tsx cli codegen envio-config --protocol all
+ * pnpm tsx cli codegen envio-config --protocol flow
  *
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 import { PROTOCOLS } from "cli/constants";
 import * as fs from "fs-extra";
@@ -19,9 +19,15 @@ import * as helpers from "../helpers";
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const protocolArg = helpers.validateProtocolArg(args[0]);
+export async function main(): Promise<void> {
+  const program = helpers.createBaseCommand("Generate Envio config file");
+
+  helpers.addProtocolOption(program);
+
+  program.parse();
+
+  const options = program.opts();
+  const protocolArg = helpers.parseProtocolOption(options.protocol);
 
   if (protocolArg === "all") {
     codegenAllProtocols();

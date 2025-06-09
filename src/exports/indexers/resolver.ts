@@ -23,13 +23,18 @@ export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Index
   };
 }
 
-export function resolveGraphCustom(protocol: Indexer.Protocol, chainId: number, baseURL: string): Indexer.Graph {
+const NAME_TEMPLATING_VAR = "{SUBGRAPH_NAME}";
+
+export function resolveGraphCustom(protocol: Indexer.Protocol, chainId: number, templateURL: string): Indexer.Graph {
+  if (templateURL.includes(NAME_TEMPLATING_VAR)) {
+    throw new Error(`Template URL for custom graph must include ${NAME_TEMPLATING_VAR}`);
+  }
+
   const name = getSubgraphName(chainId, protocol);
   const custom: Indexer.Graph.Custom = {
-    explorerURL: `${baseURL}/{${name}}/graphql`,
     kind: "custom",
     subgraph: {
-      url: `${baseURL}/${name}`,
+      url: templateURL.replace(NAME_TEMPLATING_VAR, name),
     },
   };
   return {
@@ -47,7 +52,7 @@ export function resolveGraphOfficial(protocol: Indexer.Protocol, chainId: number
   const official: Indexer.Graph.Official = {
     explorerURL: `https://thegraph.com/explorer/subgraphs/${subgraphId}`,
     kind: "official",
-    studioURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
+    playgroundURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
     subgraph: {
       id: subgraphId,
       url: `https://gateway.thegraph.com/api/subgraphs/id/${subgraphId}`,

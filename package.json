@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@sablier/deployments": "1.0.0-alpha.48",
+    "commander": "^14.0.0",
     "lodash": "^4.17"
   },
   "devDependencies": {

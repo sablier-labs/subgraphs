@@ -11,6 +11,9 @@ importers:
       '@sablier/deployments':
         specifier: 1.0.0-alpha.48
         version: 1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))
+      commander:
+        specifier: ^14.0.0
+        version: 14.0.0
       lodash:
         specifier: ^4.17
         version: 4.17.21

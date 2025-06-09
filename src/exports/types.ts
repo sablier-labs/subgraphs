@@ -35,7 +35,6 @@ export namespace Indexer {
     };
 
     type Base = {
-      explorerURL: string;
       kind: "custom" | "official";
     };
 
@@ -47,8 +46,9 @@ export namespace Indexer {
     };
 
     export type Official = Base & {
+      explorerURL: string;
       kind: "official";
-      studioURL: string;
+      playgroundURL: string;
       subgraph: {
         id: string;
         url: string;

@@ -69,6 +69,7 @@ const BOTH = [
   fill(chains.zksync.id).both(),
 ];
 
+// See https://thegraph.com/docs/en/supported-networks
 const GRAPH_ONLY = [
   fill(chains.abstract.id).graph(),
   fill(chains.berachain.id).graph(),
@@ -77,6 +78,7 @@ const GRAPH_ONLY = [
   fill(chains.zksyncSepolia.id).graph(),
 ];
 
+// See https://docs.envio.dev/docs/HyperSync/hypersync-supported-networks
 const ENVIO_ONLY = [
   fill(chains.morph.id).envio("https://morph.hypersync.xyz/"),
   fill(chains.superseed.id).envio("https://extrabud.hypersync.xyz"),

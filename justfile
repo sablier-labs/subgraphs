@@ -47,8 +47,9 @@ clean-modules:
     pnpm dlx rimraf --glob "node_modules" "**/node_modules"
 
 # Fetch assets from The Graph subgraphs and save them to JSON files
+[group("envio")]
 @fetch-assets protocol="all" chain="all":
-    pnpm tsx cli/rpc-data/fetch-assets.ts {{ protocol }} {{ chain }}
+    just cli fetch-assets --protocol {{ protocol }} --chain {{ chain }}
 
 # Run all code checks
 full-check: biome-check prettier-check tsc-check
@@ -138,7 +139,7 @@ _codegen-envio-bindings protocol:
 [group("codegen")]
 [group("envio")]
 @codegen-envio-config protocol="all":
-    pnpm tsx cli/codegen/envio-config.ts {{ protocol }}
+    just cli codegen envio-config --protocol {{ protocol }}
 
 # Codegen everything for the Graph subgraph (order matters):
 # 1. GraphQL schema
@@ -154,7 +155,6 @@ _codegen-envio-bindings protocol:
     just codegen-schema graph {{ protocol }}
     just codegen-graph-manifest {{ protocol }} all
     just codegen-graph-bindings {{ protocol }}
-
 # Codegen the Graph subgraph bindings
 [group("codegen")]
 [group("graph")]
@@ -173,14 +173,14 @@ _codegen-graph-bindings protocol:
 [group("codegen")]
 [group("graph")]
 @codegen-graph-manifest protocol="all" chain="all":
-    pnpm tsx cli/codegen/graph-manifest.ts {{ protocol }} {{ chain }}
+    just cli codegen graph-manifest --protocol {{ protocol }} --chain {{ chain }}
 
 # Codegen the GraphQL schema
 [group("codegen")]
 [group("envio")]
 [group("graph")]
 @codegen-schema vendor="all" protocol="all":
-    pnpm tsx cli/codegen/schema.ts {{ vendor }} {{ protocol }}
+    just cli codegen schema --vendor {{ vendor }} --protocol {{ protocol }}
 
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: PRINT                                #
@@ -189,7 +189,7 @@ _codegen-graph-bindings protocol:
 # Print available chain arguments
 [group("print")]
 @print-chains:
-    pnpm tsx cli/print-chains.ts
+    just cli print chains
 
 # Print available log levels available in Winston
 [group("print")]
@@ -204,6 +204,11 @@ _codegen-graph-bindings protocol:
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: HELPERS                               #
 # ---------------------------------------------------------------------------- #
+
+# Helper to run CLI commands through the main entry point
+[private]
+cli *args:
+    pnpm tsx cli/index.ts {{ args }}
 
 # Helper to run a recipe for all protocols or a specific one
 [private]

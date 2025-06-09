@@ -2,12 +2,12 @@
  * @file CLI for generating subgraph manifests
  *
  * @example
- * just codegen-manifest all all
- * just codegen-manifest all polygon
- * just codegen-manifest flow polygon
+ * pnpm tsx cli codegen graph-manifest --protocol all --chain all
+ * pnpm tsx cli codegen graph-manifest --protocol all --chain polygon
+ * pnpm tsx cli codegen graph-manifest --protocol flow --chain polygon
  *
- * @param {string} protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} chain - Required: The chain slug to generate manifests for.
+ * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param {string} --chain - Required: The chain slug to generate manifests for.
  * Use 'all' to generate for all chains.
  */
 import * as path from "node:path";
@@ -24,10 +24,15 @@ import * as helpers from "../helpers";
 /*                                    MAIN                                    */
 /* -------------------------------------------------------------------------- */
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const protocolArg = helpers.validateProtocolArg(args[0]);
-  const chainArg = helpers.validateChainArg(args[1]);
+export async function main(): Promise<void> {
+  const program = helpers.createBaseCommand("Generate subgraph manifests");
+  helpers.addProtocolOption(program);
+  helpers.addChainOption(program);
+  program.parse();
+
+  const options = program.opts();
+  const protocolArg = helpers.parseProtocolOption(options.protocol);
+  const chainArg = helpers.parseChainOption(options.chain);
 
   if (protocolArg === "all") {
     codegenAllProtocols(chainArg);

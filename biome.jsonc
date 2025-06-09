@@ -4,6 +4,7 @@
   "files": {
     "includes": [
       "**/*.{graphql,js,json,jsonc,ts}",
+      "!node_modules/**/*",
       "!src/envio/common/rpc-data/**/*.json",
       "!src/graph/**/bindings/**/*.ts"
     ]

@@ -26,17 +26,20 @@ const customs: IndexerGraphMap[] = [
   /* -------------------------------------------------------------------------- */
   /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
-  custom(chains.form.id, "TODO"),
+  custom(
+    chains.form.id,
+    "https://formapi.0xgraph.xyz/api/public/5961fb30-8fdc-45ad-9a35-555dd5e0dd56/subgraphs/{SUBGRAPH_NAME}/2.3_1.0.0/gn",
+  ),
 
   /* -------------------------------------------------------------------------- */
   /*                                  LIGHTLINK                                 */
   /* -------------------------------------------------------------------------- */
-  custom(chains.lightlink.id, "https://graph.phoenix.lightlink.io/query/subgraphs/name/lightlink"),
+  custom(chains.lightlink.id, "https://graph.phoenix.lightlink.io/query/subgraphs/name/lightlink/{SUBGRAPH_NAME}"),
 
   /* -------------------------------------------------------------------------- */
   /*                                    XDC                                     */
   /* -------------------------------------------------------------------------- */
-  custom(chains.xdc.id, "https://graphql.xinfin.network/subgraphs/name/xdc"),
+  custom(chains.xdc.id, "https://graphql.xinfin.network/subgraphs/name/xdc/{SUBGRAPH_NAME}"),
 ];
 
 const officials: IndexerGraphMap[] = [
