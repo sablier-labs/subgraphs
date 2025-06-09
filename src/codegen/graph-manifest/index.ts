@@ -3,7 +3,7 @@ import type { Types } from "../../types";
 import { CodegenError } from "../error";
 import type { GraphManifest } from "./manifest-types";
 import { createSources } from "./sources";
-import { default as topSections } from "./top-sections";
+import { topSections } from "./top-sections";
 
 /**
  * Creates a Graph manifest for a given protocol and chain.

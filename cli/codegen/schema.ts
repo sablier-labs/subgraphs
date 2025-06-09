@@ -81,6 +81,7 @@ function codegen(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 
   const outputPath = paths.schema(vendor, protocol);
+  logger.info(outputPath);
   fs.writeFileSync(outputPath, schema);
 
   logger.info(`📁 Schema path: ${helpers.getRelative(outputPath)}`);

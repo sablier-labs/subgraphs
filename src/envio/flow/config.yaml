@@ -3,6 +3,7 @@ name: "sablier-flow"
 ecosystem: "evm"
 unordered_multichain_mode: true
 rollback_on_reorg: false
+schema: "./schema.graphql"
 field_selection:
   transaction_fields:
     - "from"

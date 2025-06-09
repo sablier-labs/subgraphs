@@ -35,6 +35,19 @@ jobs:
       - name: "Codegen everything"
         run: "just codegen"
 
+      - name: "Generate Envio config files"
+        run: "just codegen-envio-config"
+
+      - name: "Verify Envio config consistency"
+        uses: "tj-actions/verify-changed-files@v20"
+        with:
+          fail-if-changed: true
+          fail-message: "❌ Envio config files are out of sync. Run 'just codegen-envio-config' locally and commit the changes."
+          files: |
+            src/envio/flow/config.yaml
+            src/envio/lockup/config.yaml
+            src/envio/airdrops/config.yaml
+
       - name: "Build all subgraphs"
         run: "just build-graph"
 

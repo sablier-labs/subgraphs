@@ -13,7 +13,7 @@ function get(name: string): EnvioConfig.TopSection {
     ecosystem: "evm",
     unordered_multichain_mode: true,
     rollback_on_reorg: false,
-    schema: "../schema.graphql",
+    schema: "./schema.graphql",
     field_selection: {
       transaction_fields: ["from", "hash", "to", "transactionIndex", "value"],
     },
