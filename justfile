@@ -208,7 +208,7 @@ _codegen-graph-bindings protocol:
 # Helper to run CLI commands through the main entry point
 [private]
 cli *args:
-    pnpm tsx cli/index.ts {{ args }}
+    pnpm tsx cli {{ args }}
 
 # Helper to run a recipe for all protocols or a specific one
 [private]

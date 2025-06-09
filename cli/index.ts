@@ -2,13 +2,13 @@
  * @file Main CLI entry point for Sablier Indexers utilities
  *
  * @example
- * pnpm tsx cli/index.ts fetch-assets --protocol flow --chain ethereum
- * pnpm tsx cli/index.ts codegen schema --vendor graph --protocol flow
- * pnpm tsx cli/index.ts print-chains
+ * pnpm tsx cli fetch-assets --protocol flow --chain ethereum
+ * pnpm tsx cli codegen schema --vendor graph --protocol flow
+ * pnpm tsx cli print-chains
  */
 
 import { Command } from "commander";
-import * as helpers from "./helpers";
+import * as helpers from "./helpers.js";
 
 const program = new Command();
 program.name("indexers-cli").description("CLI for Sablier Indexers utilities");
@@ -65,7 +65,7 @@ helpers.addChainOption(fetchAssetsCmd);
 
 fetchAssetsCmd.action(async (options) => {
   process.argv = ["node", "fetch-assets.ts", "--protocol", options.protocol, "--chain", options.chain];
-  const { main } = await import("./rpc-data/fetch-assets.js");
+  const { main } = await import("./fetch/assets.js");
   await main();
 });
 

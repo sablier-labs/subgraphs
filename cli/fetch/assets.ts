@@ -2,7 +2,7 @@
  * @file This script fetches ERC20 token data from The Graph subgraphs and saves it to JSON files.
  *
  * @example Generate for Flow:
- * pnpm tsx cli/rpc-data/fetch-assets.ts --protocol flow --chain ethereum
+ * pnpm tsx cli fetch-assets --protocol flow --chain ethereum
  *
  * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  * @param {string} --chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
