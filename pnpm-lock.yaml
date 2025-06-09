@@ -11,6 +11,9 @@ importers:
       '@sablier/deployments':
         specifier: 1.0.0-alpha.48
         version: 1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))
+      lodash:
+        specifier: ^4.17
+        version: 4.17.21
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.0-beta.5
@@ -72,9 +75,6 @@ importers:
       lint-staged:
         specifier: ^16.0
         version: 16.1.0
-      lodash:
-        specifier: ^4.17
-        version: 4.17.21
       matchstick-as:
         specifier: ^0.6
         version: 0.6.0
