@@ -33,6 +33,7 @@ export function handleClaimLockup(event: ethereum.Event, params: Params.ClaimLoc
     claimRecipient: params.recipient,
     claimStreamId: streamId,
     claimTokenId: tokenId,
+    claimTo: params.claimTo ? params.claimTo : params.recipient,
     fee: isVersionWithFees() ? event.transaction.value : null,
   } as Params.Action);
 }

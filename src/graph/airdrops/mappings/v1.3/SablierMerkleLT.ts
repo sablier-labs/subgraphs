@@ -13,6 +13,7 @@ export function handle_SablierMerkleLT_v1_3_Claim(event: Claim): void {
     amount: event.params.amount,
     index: event.params.index,
     recipient: event.params.recipient,
+    claimTo: event.params.recipient,
     streamId: event.params.streamId,
   });
 }

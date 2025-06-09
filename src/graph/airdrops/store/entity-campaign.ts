@@ -18,6 +18,19 @@ export function createCampaignInstant(event: ethereum.Event, params: Params.Crea
   return campaign;
 }
 
+export function createCampaignVCA(
+  event: ethereum.Event,
+  params: Params.CreateCampaignBase,
+  paramsVCA: Params.CreateCampaignVCA,
+): Entity.Campaign {
+  const campaign = createBaseCampaign(event, params);
+  campaign.startTime = paramsVCA.startTime;
+  campaign.endTime = paramsVCA.endTime;
+  campaign.unlockPercentage = paramsVCA.unlockPercentage;
+  campaign.save();
+  return campaign;
+}
+
 export function createCampaignLL(
   event: ethereum.Event,
   paramsBase: Params.CreateCampaignBase,

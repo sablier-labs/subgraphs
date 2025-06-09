@@ -90,7 +90,7 @@ tsc-check:
 _build-graph protocol: (codegen-graph protocol)
     pnpm graph build \
         --output-dir src/graph/{{ protocol }}/build \
-        src/graph/{{ protocol }}/manifests/ethereum.yaml
+        src/graph/{{ protocol }}/manifests/experimental.yaml
 
 # Codegen all vendors
 [group("codegen")]
@@ -168,7 +168,7 @@ _codegen-graph-bindings protocol:
     rm -rf $protocol_dir/bindings
     pnpm graph codegen \
         --output-dir $protocol_dir/bindings \
-        $protocol_dir/manifests/ethereum.yaml
+        $protocol_dir/manifests/experimental.yaml
 
 # Codegen the Graph subgraph manifest
 [group("codegen")]

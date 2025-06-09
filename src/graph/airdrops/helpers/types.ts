@@ -8,9 +8,11 @@ export namespace Params {
     claimRecipient: Address | null;
     claimStreamId: string | null;
     claimTokenId: BigInt | null;
+    claimTo: Address | null;
     clawbackAmount: BigInt | null;
     clawbackFrom: Address | null;
     clawbackTo: Address | null;
+    forgoneAmount: BigInt | null;
     fee: BigInt | null;
   }
 
@@ -18,7 +20,8 @@ export namespace Params {
     amount: BigInt;
     index: BigInt;
     recipient: Address;
-    streamId: BigInt;
+    claimTo: Address | null; // Optional field for compatibility with v1.4
+    streamId: BigInt; // Optional field for compatibility with v1.4
   }
 
   export class Clawback {
@@ -39,6 +42,12 @@ export namespace Params {
     merkleRoot: Bytes;
     name: string | null;
     recipientCount: BigInt;
+  }
+
+  export class CreateCampaignVCA {
+    startTime: BigInt | null = null;
+    endTime: BigInt | null = null;
+    unlockPercentage: BigInt | null = null;
   }
 
   export class CreateCampaignLockup {

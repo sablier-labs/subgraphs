@@ -70,6 +70,10 @@ type Action @entity(immutable: true) {
   """
   claimRecipient: Bytes
   """
+  Claim action data: to.
+  """
+  claimTo: Bytes
+  """
   Claim action data: stream ID as provided by the Lockup subgraph: {contractAddress}-{chainId}-{tokenId}.
   """
   claimStreamId: String
@@ -77,6 +81,10 @@ type Action @entity(immutable: true) {
   Claim action data: ERC-721 token id as provided by the Lockup contract.
   """
   claimTokenId: BigInt
+  """
+  Claim action data: forgoneAmount. Specific to VCA's
+  """
+  forgoneAmount: BigInt
 
   # --------------------------------- Clawback --------------------------------- #
 

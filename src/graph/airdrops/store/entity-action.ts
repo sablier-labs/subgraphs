@@ -23,6 +23,8 @@ export function createAction(event: ethereum.Event, campaign: Entity.Campaign, p
   action.claimTokenId = params.claimTokenId;
   action.clawbackAmount = params.clawbackAmount;
   action.clawbackFrom = params.clawbackFrom;
+  action.claimTo = params.claimTo;
+  action.forgoneAmount = params.forgoneAmount;
   action.fee = params.fee;
   action.hash = event.transaction.hash;
   action.subgraphId = watcher.actionCounter;
