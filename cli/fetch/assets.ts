@@ -17,7 +17,7 @@ import { getSablierSubgraph, indexers } from "../../src/exports/indexers";
 import type { Indexer } from "../../src/exports/types";
 import paths from "../../src/paths";
 import { type Types } from "../../src/types";
-import logger from "../../src/winston";
+import { logger } from "../../src/winston";
 import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
@@ -151,22 +151,23 @@ async function handle(
   chain: Sablier.Chain,
   skipLogger = false,
 ): Promise<{ newCount: number; totalCount: number }> {
-  let assets: Asset[] = [];
+  let fetchedAssets: Asset[] = [];
   try {
     const endpoint = indexer.subgraph.url;
-    assets = await fetchAssets(endpoint);
+    fetchedAssets = await fetchAssets(endpoint);
   } catch (error) {
     logger.error(`❌ Failed to fetch assets for ${indexer.protocol} on ${chain.slug}: ${error}`);
     return { newCount: 0, totalCount: 0 };
   }
   const filePath = paths.envio.rpcData(RPCData.Category.ERC20, chain.slug);
   const currentData = loadCurrentData(filePath);
-  const mergedData = mergeData(currentData, assets);
+  const mergedData = mergeData(currentData, fetchedAssets);
   writeData(filePath, mergedData);
 
   const currentCount = _.keys(currentData).length;
   const totalCount = _.keys(mergedData).length;
   const newCount = totalCount - currentCount;
+
   if (!skipLogger) {
     if (newCount > 0) {
       logger.info(`✅ Successfully fetched ${newCount} new assets for ${indexer.protocol} indexer on ${chain.slug}`);
@@ -178,6 +179,7 @@ async function handle(
     }
     console.log("");
   }
+
   return { newCount, totalCount };
 }
 
@@ -196,9 +198,11 @@ async function fetchAssets(endpoint: string): Promise<Asset[]> {
   const headers = { Authorization: `Bearer ${GRAPH_QUERY_KEY}` };
   const client = new GraphQLClient(endpoint, { headers });
   const result = await client.request<GraphQLResponse["data"]>(QUERY);
+
   if (!result?.assets) {
     throw new Error("Invalid GraphQL response: missing assets data from The Graph");
   }
+
   if (result.assets.length === MAX_QUERY_LIMIT) {
     logger.warn(
       `⚠️  Warning: Maximum number of results (${MAX_QUERY_LIMIT}) was returned. You may need to query more data from the indexer.`,

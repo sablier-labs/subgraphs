@@ -9,11 +9,8 @@ importers:
   .:
     dependencies:
       '@sablier/deployments':
-        specifier: 1.0.0-alpha.48
-        version: 1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))
-      commander:
-        specifier: ^14.0.0
-        version: 14.0.0
+        specifier: 1.0.0-beta.1
+        version: 1.0.0-beta.1(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))
       lodash:
         specifier: ^4.17
         version: 4.17.21
@@ -51,6 +48,12 @@ importers:
       '@types/node':
         specifier: ^22.15
         version: 22.15.29
+      chainlist-rpcs:
+        specifier: 0.3.196
+        version: 0.3.196
+      commander:
+        specifier: ^14.0.0
+        version: 14.0.0
       envio:
         specifier: 2.21.5
         version: 2.21.5(typescript@5.8.3)(zod@3.25.51)
@@ -100,8 +103,8 @@ importers:
         specifier: 5.8.3
         version: 5.8.3
       viem:
-        specifier: ^2.30
-        version: 2.30.6(typescript@5.8.3)(zod@3.25.51)
+        specifier: ^2.31
+        version: 2.31.0(typescript@5.8.3)(zod@3.25.51)
       winston:
         specifier: ^3.17
         version: 3.17.0
@@ -1154,11 +1157,11 @@ packages:
   '@rescript/std@9.0.0':
     resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
 
-  '@sablier/deployments@1.0.0-alpha.48':
-    resolution: {integrity: sha512-+IFNHlAe9QiulmDmQBVERoapLIwzF3rcLplEOS+DV/q2S6PQlxaVUd+JfHSvn7uXrj2NDnUty2bycK+SPdTMyA==}
+  '@sablier/deployments@1.0.0-beta.1':
+    resolution: {integrity: sha512-lFVtW0C7doSSe5DKnBMiVmP023p9flnKhNLyG5vpsxD2ggRlHdBUCU8qlZBrsfqU2kijq159TZO/6UOwRmSDQA==}
     engines: {node: '>=20'}
     peerDependencies:
-      viem: ^2.30
+      viem: ^2.31
 
   '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27':
     resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27}
@@ -1579,6 +1582,9 @@ packages:
     resolution: {integrity: sha512-l5IcLv4SaOdL/EGR6BpOF5SEro88VcGJJ6+xbvJb+wXi19YC6UeHE/brv7a4vIcLZopnt3Ys3zWeNnyfB04UPg==}
     engines: {node: '>=10'}
     hasBin: true
+
+  chainlist-rpcs@0.3.196:
+    resolution: {integrity: sha512-S+c9BXbZR2SZjpPrjyWoNKpatyOlaK6zd4q97+6xZWJ7vQ6tjzvcoKcrZH3NQ/re7dXuYnw2l+fVzr0sv+MN9w==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -3815,8 +3821,8 @@ packages:
       typescript:
         optional: true
 
-  viem@2.30.6:
-    resolution: {integrity: sha512-N3vGy3pZ+EVgQRuWqQhZPFXxQE8qMRrBd3uM+KLc1Ub2w6+vkyr7umeWQCM4c+wlsCdByUgh2630MDMLquMtpg==}
+  viem@2.31.0:
+    resolution: {integrity: sha512-U7OMQ6yqK+bRbEIarf2vqxL7unSEQvNxvML/1zG7suAmKuJmipqdVTVJGKBCJiYsm/EremyO2FS4dHIPpGv+eA==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
@@ -4949,10 +4955,10 @@ snapshots:
 
   '@rescript/std@9.0.0': {}
 
-  '@sablier/deployments@1.0.0-alpha.48(viem@2.30.6(typescript@5.8.3)(zod@3.25.51))':
+  '@sablier/deployments@1.0.0-beta.1(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))':
     dependencies:
       lodash: 4.17.21
-      viem: 2.30.6(typescript@5.8.3)(zod@3.25.51)
+      viem: 2.31.0(typescript@5.8.3)(zod@3.25.51)
 
   '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27': {}
 
@@ -5396,6 +5402,8 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       window-size: 1.1.1
+
+  chainlist-rpcs@0.3.196: {}
 
   chalk@2.4.2:
     dependencies:
@@ -7871,7 +7879,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.30.6(typescript@5.8.3)(zod@3.25.51):
+  viem@2.31.0(typescript@5.8.3)(zod@3.25.51):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0

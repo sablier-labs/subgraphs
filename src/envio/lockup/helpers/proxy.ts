@@ -60,6 +60,6 @@ export async function fetchOrReadProxender(
     return undefined;
   }
 
-  data.save({ [dataKey]: { owner } });
+  data.write({ [dataKey]: { owner } });
   return owner;
 }

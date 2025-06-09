@@ -42,7 +42,7 @@ export const readOrFetchMetadata = experimental_createEffect(
     }
     const metadata = await fetch(input.chainId, input.address);
     if (metadata.name !== UNKNOWN_METADATA.name) {
-      data.save({ [dataKey]: metadata });
+      data.write({ [dataKey]: metadata });
     }
     return metadata;
   },

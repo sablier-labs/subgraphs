@@ -89,6 +89,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 42161
+    rpc: "https://arbitrum-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 161026555
     contracts:
       - address: "0x237400ef5a41886a75b0e036228221df075b3b80"
@@ -104,6 +105,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 43114
+    rpc: "https://avalanche-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 41023959
     contracts:
       - address: "0x4849e797d7aab20fcc8f807efafdfff98a83412e"
@@ -119,6 +121,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 8453
+    rpc: "https://base-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 8026894
     contracts:
       - address: "0x5545c8e7c3e1f74adc98e518f2e8d23a002c4412"
@@ -149,6 +152,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 56
+    rpc: "https://bsc-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 34438438
     contracts:
       - address: "0x434d73465aac4125d204a6637eb6c579d8d69f48"
@@ -178,6 +182,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 1
+    rpc: "https://mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 18811605
     contracts:
       - address: "0x1a272b596b10f02931480bc7a3617db4a8d154e3"
@@ -223,6 +228,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 59144
+    rpc: "https://linea-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 8688454
     contracts:
       - address: "0x35e9c3445a039b258eb7112a5eea259a825e8ac0"
@@ -249,6 +255,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 10
+    rpc: "https://optimism-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 113621901
     contracts:
       - address: "0x044ec80fbec40f0ee7e7b3856828170971796c19"
@@ -279,6 +286,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 137
+    rpc: "https://polygon-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 51245836
     contracts:
       - address: "0xf4906225e783fb8977410bdbfb960cabed6c2ef4"
@@ -294,6 +302,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 534352
+    rpc: "https://scroll-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 1675340
     contracts:
       - address: "0xb3ade5463000e6c0d376e7d7570f372ebf98bdaf"
@@ -309,6 +318,7 @@ networks:
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
   - id: 324
+    rpc: "https://zksync-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 33148970
     contracts:
       - address: "0x46de683d20c3575a0381ffd66c10ab6836390140"

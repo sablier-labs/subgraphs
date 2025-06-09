@@ -26,8 +26,8 @@ export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Index
 const NAME_TEMPLATING_VAR = "{SUBGRAPH_NAME}";
 
 export function resolveGraphCustom(protocol: Indexer.Protocol, chainId: number, templateURL: string): Indexer.Graph {
-  if (templateURL.includes(NAME_TEMPLATING_VAR)) {
-    throw new Error(`Template URL for custom graph must include ${NAME_TEMPLATING_VAR}`);
+  if (!templateURL.includes(NAME_TEMPLATING_VAR)) {
+    throw new Error(`Template URL for custom graph does not include ${NAME_TEMPLATING_VAR}`);
   }
 
   const name = getSubgraphName(chainId, protocol);

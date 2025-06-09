@@ -3,7 +3,7 @@ import _ from "lodash";
 import { sanitizeContractName } from "../../helpers";
 import paths from "../../paths";
 import type { Types } from "../../types";
-import logger from "../../winston";
+import { logger } from "../../winston";
 import type { GraphManifest } from "./manifest-types";
 
 /**

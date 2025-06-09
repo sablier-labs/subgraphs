@@ -28,10 +28,8 @@ import winston, { format } from "winston";
 import { LOG_LEVEL } from "./constants";
 import transports from "./transports";
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   format: format.combine(format.timestamp(), format.errors({ stack: true })),
   level: LOG_LEVEL,
   transports,
 });
-
-export default logger;

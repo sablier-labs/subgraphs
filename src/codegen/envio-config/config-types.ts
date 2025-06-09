@@ -26,6 +26,7 @@ export namespace EnvioConfig {
 
   export type Network = {
     id: number;
+    rpc?: string;
     start_block: number;
     hypersync_config?: HypersyncConfig;
     contracts: NetworkContract[];

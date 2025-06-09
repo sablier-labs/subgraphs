@@ -53,7 +53,12 @@ export class DataEntry<C extends RPCData.Category> {
     return this.data[key];
   }
 
-  public save(newData: Partial<ShapeMap[C]>): void {
+  public write(newData: Partial<ShapeMap[C]>): void {
+    // Data is only written in the development environment.
+    const ENVIO_ENVIRONMENT = process.env.ENVIO_ENVIRONMENT;
+    if (ENVIO_ENVIRONMENT !== "development") {
+      return;
+    }
     this.data = _.merge({}, this.data, newData);
     try {
       fs.writeFileSync(this.file, JSON.stringify(this.data), DataEntry.ENCODING);

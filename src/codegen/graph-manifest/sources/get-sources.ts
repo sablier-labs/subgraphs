@@ -6,7 +6,7 @@ import { getGraphChainName } from "../../../exports/chains";
 import { sanitizeContractName } from "../../../helpers";
 import { mergeSchema } from "../../../schema/merger";
 import type { Types } from "../../../types";
-import logger, { messages } from "../../../winston";
+import { logger, messages } from "../../../winston";
 import { CodegenError } from "../../error";
 import type { GraphManifest } from "../manifest-types";
 import { getABIEntries } from "./abi-entries";

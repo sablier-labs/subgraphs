@@ -6,8 +6,5 @@
 /** @internal */
 export * from "../codegen/error";
 export * from "./helpers";
-export { default as messages } from "./messages";
-
-import logger from "./logger";
-
-export default logger;
+export * from "./logger";
+export * from "./messages";

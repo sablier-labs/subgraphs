@@ -1,10 +1,10 @@
 import { Protocol } from "@sablier/deployments";
-import { ENVIO_CHAINS } from "../chains";
+import { ENVIO_CHAIN_CONFIGS } from "../chains";
 import type { Indexer } from "../types";
 import { resolveEnvio } from "./resolver";
 
 const get = (protocol: Indexer.Protocol): Indexer.Envio[] => {
-  return ENVIO_CHAINS.map((c) => resolveEnvio(protocol, c.id));
+  return ENVIO_CHAIN_CONFIGS.map((c) => resolveEnvio(protocol, c.id));
 };
 
 export const envio: Record<Indexer.Protocol, Indexer.Envio[]> = {

@@ -123,6 +123,7 @@ networks:
       - address: "0x83dd52fca44e069020b58155b761a590f12b59d3"
         name: "SablierLockup_v2_0"
   - id: 42161
+    rpc: "https://arbitrum-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 107508404
     contracts:
       - address: "0xa9efbef1a35ff80041f567391bdc9813b2d50197"
@@ -142,6 +143,7 @@ networks:
       - address: "0x467d5bf8cfa1a5f99328fbdcb9c751c78934b725"
         name: "SablierLockup_v2_0"
   - id: 43114
+    rpc: "https://avalanche-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 32164219
     contracts:
       - address: "0x665d1c8337f1035cfbe13dd94bb669110b975f5f"
@@ -161,6 +163,7 @@ networks:
       - address: "0x3c81bbbe72ef8ef3fb1d19b0bd6310ad0dd27e82"
         name: "SablierLockup_v2_0"
   - id: 8453
+    rpc: "https://base-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 1750275
     contracts:
       - address: "0x645b00960dc352e699f89a81fc845c0c645231cf"
@@ -195,6 +198,7 @@ networks:
       - address: "0xa4777ca525d43a7af55d45b11b430606d7416f8d"
         name: "SablierLockup_v2_0"
   - id: 56
+    rpc: "https://bsc-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 29646271
     contracts:
       - address: "0xf2f3fef2454dca59eca929d2d8cd2a8669cc6214"
@@ -227,6 +231,7 @@ networks:
       - address: "0x711900e5f55d427cd88e5e3fcae54ccf02de71f4"
         name: "SablierLockup_v2_0"
   - id: 1
+    rpc: "https://mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 17613133
     contracts:
       - address: "0x39efdc3dbb57b2388ccc4bb40ac4cb1226bc9e44"
@@ -284,6 +289,7 @@ networks:
       - address: "0x007af5dc7b1caa66cf7ebcc01e2e6ba4d55d3e92"
         name: "SablierLockup_v2_0"
   - id: 59144
+    rpc: "https://linea-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 7728316
     contracts:
       - address: "0xf2e46b249cfe09c2b3a2022dc81e0bb4be3336f1"
@@ -308,6 +314,7 @@ networks:
       - address: "0x3aebadfc423fd08be4715986f68d5e9a597ec974"
         name: "SablierLockup_v2_0"
   - id: 10
+    rpc: "https://optimism-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 106405061
     contracts:
       - address: "0x6f68516c21e248cddfaf4898e66b2b0adee0e0d6"
@@ -342,6 +349,7 @@ networks:
       - address: "0x1f898895eab949ffd34c29cf859c035dc4525df4"
         name: "SablierLockup_v2_0"
   - id: 137
+    rpc: "https://polygon-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 44637127
     contracts:
       - address: "0x7313addb53f96a4f710d3b91645c62b434190725"
@@ -361,6 +369,7 @@ networks:
       - address: "0xe0bfe071da104e571298f8b6e0fce44c512c1ff4"
         name: "SablierLockup_v2_0"
   - id: 534352
+    rpc: "https://scroll-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 500707
     contracts:
       - address: "0xde6a30d851efd0fc2a9c922f294801cfd5fcb3a1"
@@ -380,6 +389,7 @@ networks:
       - address: "0xcb0b1f1d116ed62135848d8c90eb61afda936da8"
         name: "SablierLockup_v2_0"
   - id: 324
+    rpc: "https://zksync-mainnet.infura.io/v3/c4dad87e0fa94b6ebd06c221722b7021"
     start_block: 32472581
     contracts:
       - address: "0xe6c7324bea8474209103e407779eec600c07cf3f"

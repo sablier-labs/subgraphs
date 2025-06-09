@@ -8,6 +8,9 @@ const transports: winston.transport[] = [
     format: format.combine(
       format.colorize(),
       format.printf(({ level, message }) => {
+        if (!message) {
+          return "";
+        }
         return `${level}: ${message}`;
       }),
     ),

@@ -13,10 +13,10 @@
 import * as path from "node:path";
 import * as fs from "fs-extra";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
-import { GRAPH_CHAINS, getGraphChainName } from "../../src/exports/chains";
+import { GRAPH_CHAIN_CONFIGS } from "../../src/exports/chains";
 import paths from "../../src/paths";
 import type { Types } from "../../src/types";
-import logger from "../../src/winston";
+import { logger } from "../../src/winston";
 import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
@@ -84,8 +84,8 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
   }
 
   let filesGenerated = 0;
-  for (const c of GRAPH_CHAINS) {
-    writeManifestToFile(protocol, c.id, c.name);
+  for (const config of GRAPH_CHAIN_CONFIGS) {
+    writeManifestToFile(protocol, config.id, config.name);
     filesGenerated++;
   }
   if (filesGenerated === 0) {
@@ -103,11 +103,10 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
 
 function codegen(protocol: Types.Protocol, chainArg: string): void {
   const chain = helpers.getChain(chainArg);
-  const graphChainName = getGraphChainName(chain.id);
   const manifestsDir = paths.graph.manifests(protocol);
   fs.ensureDirSync(manifestsDir);
 
-  const manifestPath = writeManifestToFile(protocol, chain.id, graphChainName);
+  const manifestPath = writeManifestToFile(protocol, chain.id, chain.name);
   logger.info(`🎉 Successfully generated subgraph manifest for ${chainArg}`);
   logger.info(`📁 Manifest path: ${manifestPath}`);
 }

@@ -23,13 +23,13 @@ export namespace Indexer {
   /*                               SUB-NAMESPACES                               */
   /* -------------------------------------------------------------------------- */
   export namespace Envio {
-    export type Chain = {
+    export type ChainConfig = {
       hypersync?: string;
       id: number;
     };
   }
   export namespace Graph {
-    export type Chain = {
+    export type ChainConfig = {
       name: string;
       id: number;
     };

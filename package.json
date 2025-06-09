@@ -7,8 +7,7 @@
     "url": "https://sablier.com"
   },
   "dependencies": {
-    "@sablier/deployments": "1.0.0-alpha.48",
-    "commander": "^14.0.0",
+    "@sablier/deployments": "1.0.0-beta.1",
     "lodash": "^4.17"
   },
   "devDependencies": {
@@ -23,6 +22,8 @@
     "@types/js-yaml": "^4.0",
     "@types/lodash": "^4.17",
     "@types/node": "^22.15",
+    "chainlist-rpcs": "0.3.196",
+    "commander": "^14.0.0",
     "envio": "2.21.5",
     "fs-extra": "^11.3",
     "graphql": "^16.11",
@@ -39,7 +40,7 @@
     "ts-node": "^10.9",
     "tsx": "^4.19",
     "typescript": "5.8.3",
-    "viem": "^2.30",
+    "viem": "^2.31",
     "winston": "^3.17"
   },
   "engines": {
@@ -51,7 +52,7 @@
   "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
   "peerDependencies": {
-    "@sablier/deployments": "1.0.0-alpha.48"
+    "@sablier/deployments": "1.0.0-alpha.49"
   },
   "private": true,
   "repository": {

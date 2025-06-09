@@ -1,21 +1,22 @@
 import { sablier } from "@sablier/deployments";
 import _ from "lodash";
 import { indexedContracts } from "../../contracts";
-import { ENVIO_CHAINS } from "../../exports/chains";
+import { ENVIO_CHAIN_CONFIGS } from "../../exports/chains";
 import { sanitizeContractName } from "../../helpers";
 import type { Types } from "../../types";
-import logger, { messages } from "../../winston";
+import { logger, messages } from "../../winston";
 import { CodegenError } from "../error";
 import type { EnvioConfig } from "./config-types";
 
 export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
 
-  for (const c of ENVIO_CHAINS) {
-    const { contracts, startBlock } = extractContracts(protocol, c.id);
-    const hypersync_config = c.hypersync ? { url: c.hypersync } : undefined;
+  for (const config of ENVIO_CHAIN_CONFIGS) {
+    const { contracts, startBlock } = extractContracts(protocol, config.id);
+    const hypersync_config = config.hypersync ? { url: config.hypersync } : undefined;
     networks.push({
-      id: c.id,
+      id: config.id,
+      rpc: getInfuraURL(config.id),
       start_block: startBlock,
       hypersync_config,
       contracts,
@@ -23,6 +24,17 @@ export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] 
   }
 
   return networks;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               INTERNAL LOGIC                               */
+/* -------------------------------------------------------------------------- */
+
+function getInfuraURL(chainId: number): string | undefined {
+  const chain = sablier.chains.getOrThrow(chainId);
+  if (chain.rpc.infura && process.env.ENVIO_INFURA_API_KEY) {
+    return chain.rpc.infura(process.env.ENVIO_INFURA_API_KEY);
+  }
 }
 
 type ExtractContractsReturn = {
