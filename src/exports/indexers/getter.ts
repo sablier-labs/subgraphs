@@ -2,14 +2,11 @@ import _ from "lodash";
 import type { Indexer } from "../types";
 import { indexers } from "./data";
 
-type E = Indexer.Envio;
-type G = Indexer.Graph;
+type I = Indexer;
 type P = Indexer.Protocol;
 type V = Indexer.Vendor;
 
-export function getSablierIndexer(vendor: "envio", opts: { chainId: number; protocol: P }): E | undefined;
-export function getSablierIndexer(vendor: "graph", opts: { chainId: number; protocol: P }): G | undefined;
-export function getSablierIndexer(vendor: V, opts: { chainId: number; protocol: P }): E | G | undefined {
+export function getSablierIndexer(vendor: V, opts: { chainId: number; protocol: P }): I | undefined {
   const { chainId, protocol } = opts;
   if (vendor === "envio") {
     return _.find(indexers.envio[protocol], { chainId });
@@ -18,8 +15,8 @@ export function getSablierIndexer(vendor: V, opts: { chainId: number; protocol: 
   }
 }
 
-export const getSablierIndexerGraph = (opts: { chainId: number; protocol: P }): G | undefined =>
+export const getSablierIndexerGraph = (opts: { chainId: number; protocol: P }): I | undefined =>
   getSablierIndexer("graph", opts);
 export const getSablierSubgraph = getSablierIndexerGraph;
-export const getSablierIndexerEnvio = (opts: { chainId: number; protocol: P }): E | undefined =>
+export const getSablierIndexerEnvio = (opts: { chainId: number; protocol: P }): I | undefined =>
   getSablierIndexer("envio", opts);

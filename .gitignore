@@ -1,13 +1,14 @@
 # Directories
+dist
 logs
 node_modules
 repomix
-**/airdrops/bindings
-**/flow/bindings
-**/lockup/bindings
-**/build
-**/generated
 **/.bin
+**/airdrops/bindings
+**/build
+**/flow/bindings
+**/generated
+**/lockup/bindings
 
 # Files
 *.log

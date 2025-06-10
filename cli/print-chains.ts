@@ -1,5 +1,5 @@
+import { sablier } from "@sablier/deployments";
 import _ from "lodash";
-import { GRAPH_CHAIN_CONFIGS } from "../src/exports/chains";
 import * as helpers from "./helpers";
 
 export async function main(): Promise<void> {
@@ -9,7 +9,7 @@ export async function main(): Promise<void> {
 
   console.log("✨ Available chains:");
   console.log(
-    _.sortBy(GRAPH_CHAIN_CONFIGS, (c) => c.name)
+    _.sortBy(sablier.chains.getAll(), (c) => c.name)
       .map((c) => `• ${c.name}`)
       .join("\n"),
   );

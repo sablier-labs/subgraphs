@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@sablier/deployments':
-        specifier: 1.0.0-beta.1
-        version: 1.0.0-beta.1(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))
+        specifier: 1.0.0-beta.2
+        version: 1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))
       lodash:
         specifier: ^4.17
         version: 4.17.21
@@ -32,7 +32,7 @@ importers:
         version: 9.0.24(graphql@16.11.0)
       '@sablier/devkit':
         specifier: github:sablier-labs/devkit#main
-        version: https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27
+        version: https://codeload.github.com/sablier-labs/devkit/tar.gz/1676fed6bddfd4fb4c8bcca6d19e527b13d1cc8d
       '@types/fs-extra':
         specifier: ^11.0
         version: 11.0.4
@@ -1157,14 +1157,14 @@ packages:
   '@rescript/std@9.0.0':
     resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
 
-  '@sablier/deployments@1.0.0-beta.1':
-    resolution: {integrity: sha512-lFVtW0C7doSSe5DKnBMiVmP023p9flnKhNLyG5vpsxD2ggRlHdBUCU8qlZBrsfqU2kijq159TZO/6UOwRmSDQA==}
+  '@sablier/deployments@1.0.0-beta.2':
+    resolution: {integrity: sha512-otSDz7QyCxF90izbC1TCfcbJSLcnLPKfx7N6nLGSTcdIIxPEvYbawkFjAcVkSCmoB9cbWDyOZQW300sfUtbs9A==}
     engines: {node: '>=20'}
     peerDependencies:
       viem: ^2.31
 
-  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27':
-    resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27}
+  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/1676fed6bddfd4fb4c8bcca6d19e527b13d1cc8d':
+    resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/1676fed6bddfd4fb4c8bcca6d19e527b13d1cc8d}
     version: 0.0.0
 
   '@scure/base@1.1.9':
@@ -4955,12 +4955,12 @@ snapshots:
 
   '@rescript/std@9.0.0': {}
 
-  '@sablier/deployments@1.0.0-beta.1(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))':
+  '@sablier/deployments@1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))':
     dependencies:
       lodash: 4.17.21
       viem: 2.31.0(typescript@5.8.3)(zod@3.25.51)
 
-  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/f40cb5793e3fae70b264d61ae2be572b35433f27': {}
+  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/1676fed6bddfd4fb4c8bcca6d19e527b13d1cc8d': {}
 
   '@scure/base@1.1.9': {}
 

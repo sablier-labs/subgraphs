@@ -1,5 +1,7 @@
+# See https://github.com/sablier-labs/devkit/blob/main/just/base.just
+import "./node_modules/@sablier/devkit/just/base.just"
+
 set dotenv-load := true
-set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # ---------------------------------------------------------------------------- #
 #                                  ENVIRONMENT                                 #
@@ -12,7 +14,6 @@ export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
 # ---------------------------------------------------------------------------- #
 
 GLOBS_CLEAN := "**/{bindings,build,generated,logs}"
-GLOBS_PRETTIER := "**/*.{md,yaml,yml}"
 
 # ---------------------------------------------------------------------------- #
 #                                 RECIPES: BASE                                #
@@ -26,20 +27,15 @@ default: full-check
 auth:
     pnpm graph auth $GRAPH_DEPLOY_KEY
 
-# Check code with Biome
-biome-check:
-    pnpm biome check .
-alias bc := biome-check
 
-[doc("Fix code with Biome")]
-biome-write:
-    pnpm biome check --write .
-    pnpm biome lint --write --only correctness/noUnusedImports .
-alias bw := biome-write
+# Build the project
+build: (clean "dist")
+    bun tsc -p tsconfig.build.json
+alias b := build
 
 # Remove build files
-clean:
-    pnpm dlx rimraf --glob "{{ GLOBS_CLEAN }}"
+clean globs=GLOBS_CLEAN:
+    pnpm dlx rimraf --glob "{{ globs }}"
 
 # Clear node_modules recursively
 [confirm("Are you sure you want to delete all node_modules?")]
@@ -50,30 +46,6 @@ clean-modules:
 [group("envio")]
 @fetch-assets protocol="all" chain="all":
     just cli fetch-assets --protocol {{ protocol }} --chain {{ chain }}
-
-# Run all code checks
-full-check: biome-check prettier-check tsc-check
-alias c := full-check
-alias fc := full-check
-
-# Run all code fixes
-full-write: biome-write prettier-write
-alias write := full-write
-alias fw := full-write
-
-# Install the Node.js dependencies
-install *args:
-    ni install {{ args }}
-
-# Check code with Prettier
-prettier-check:
-    pnpm prettier --cache --check "{{ GLOBS_PRETTIER }}"
-alias pc := prettier-check
-
-# Format code with Prettier
-prettier-write:
-    pnpm prettier --cache --write "{{ GLOBS_PRETTIER }}"
-alias pw := prettier-write
 
 # Setup Husky
 setup:

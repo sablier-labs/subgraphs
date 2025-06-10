@@ -11,9 +11,10 @@
  * Use 'all' to generate for all chains.
  */
 import * as path from "node:path";
+import { sablier } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
-import { GRAPH_CHAIN_CONFIGS } from "../../src/exports/chains";
+import { GRAPH_CONFIGS } from "../../src/exports/vendors";
 import paths from "../../src/paths";
 import type { Types } from "../../src/types";
 import { logger } from "../../src/winston";
@@ -84,8 +85,8 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
   }
 
   let filesGenerated = 0;
-  for (const config of GRAPH_CHAIN_CONFIGS) {
-    writeManifestToFile(protocol, config.id, config.name);
+  for (const config of GRAPH_CONFIGS) {
+    writeManifestToFile(protocol, config.chainId);
     filesGenerated++;
   }
   if (filesGenerated === 0) {
@@ -106,7 +107,7 @@ function codegen(protocol: Types.Protocol, chainArg: string): void {
   const manifestsDir = paths.graph.manifests(protocol);
   fs.ensureDirSync(manifestsDir);
 
-  const manifestPath = writeManifestToFile(protocol, chain.id, chain.name);
+  const manifestPath = writeManifestToFile(protocol, chain.id);
   logger.info(`🎉 Successfully generated subgraph manifest for ${chainArg}`);
   logger.info(`📁 Manifest path: ${manifestPath}`);
 }
@@ -115,11 +116,12 @@ function codegen(protocol: Types.Protocol, chainArg: string): void {
  * Writes the subgraph manifest to a file.
  * @returns The relative path to the manifest file.
  */
-function writeManifestToFile(protocol: Types.Protocol, chainId: number, chainName: string): string {
+function writeManifestToFile(protocol: Types.Protocol, chainId: number): string {
   const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);
   const yaml = helpers.dumpYAML(manifest);
-  const manifestPath = path.join(manifestsDir, `${chainName}.yaml`);
+  const chain = sablier.chains.getOrThrow(chainId);
+  const manifestPath = path.join(manifestsDir, `${chain.slug}.yaml`);
   fs.writeFileSync(manifestPath, yaml);
 
   logger.verbose(`✅ Generated manifest: ${helpers.getRelative(manifestPath)}`);

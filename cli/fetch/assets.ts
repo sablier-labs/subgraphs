@@ -147,13 +147,13 @@ async function handleChain(chainArg: string, protocolArg: string): Promise<void>
 }
 
 async function handle(
-  indexer: Indexer.Graph,
+  indexer: Indexer,
   chain: Sablier.Chain,
   skipLogger = false,
 ): Promise<{ newCount: number; totalCount: number }> {
   let fetchedAssets: Asset[] = [];
   try {
-    const endpoint = indexer.subgraph.url;
+    const endpoint = indexer.endpoint.url;
     fetchedAssets = await fetchAssets(endpoint);
   } catch (error) {
     logger.error(`❌ Failed to fetch assets for ${indexer.protocol} on ${chain.slug}: ${error}`);

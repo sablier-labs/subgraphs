@@ -4,7 +4,7 @@ import { resolveGraphCustom, resolveGraphOfficial } from "./resolver";
 
 type SubgraphId = string;
 type SubgraphIdMap = Record<Indexer.Protocol, SubgraphId>;
-type IndexerGraphMap = Record<Indexer.Protocol, Indexer.Graph>;
+type IndexerGraphMap = Record<Indexer.Protocol, Indexer>;
 
 function custom(chainId: number, baseURL: string): IndexerGraphMap {
   return {
@@ -250,7 +250,7 @@ const officials: IndexerGraphMap[] = [
 
 const all: IndexerGraphMap[] = [...customs, ...officials];
 
-export const graph: Record<Indexer.Protocol, Indexer.Graph[]> = {
+export const graph: Record<Indexer.Protocol, Indexer[]> = {
   airdrops: all.map((g) => g.airdrops),
   flow: all.map((g) => g.flow),
   lockup: all.map((g) => g.lockup),

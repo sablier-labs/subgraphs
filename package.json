@@ -1,14 +1,17 @@
 {
   "name": "@sablier/indexers",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.1",
   "description": "Data indexers for the Sablier Protocol",
   "author": {
     "name": "Sablier Labs Ltd",
     "url": "https://sablier.com"
   },
   "dependencies": {
-    "@sablier/deployments": "1.0.0-beta.1",
+    "@sablier/deployments": "1.0.0-beta.2",
     "lodash": "^4.17"
+  },
+  "peerDependencies": {
+    "@sablier/deployments": "1.0.0-beta.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0-beta.5",
@@ -51,15 +54,11 @@
   ],
   "homepage": "https://github.com/sablier-labs/indexers#readme",
   "license": "LGPL-3.0",
-  "peerDependencies": {
-    "@sablier/deployments": "1.0.0-alpha.49"
-  },
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sablier-labs/indexers.git"
-  },
+  "repository": "github.com:sablier-labs/deployments",
   "scripts": {
+    "build": "bun rimraf dist && bun tsc -p tsconfig.build.json",
+    "prepack": "bun install --frozen-lockfile && bun run build",
     "start": "ts-node ./src/envio/$PROTOCOL/bindings/src/Index.bs.js"
   },
   "types": "./dist/index.d.ts"

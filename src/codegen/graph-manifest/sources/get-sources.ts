@@ -2,7 +2,7 @@ import { type Sablier, sablier } from "@sablier/deployments";
 import { Kind } from "graphql";
 import _ from "lodash";
 import { convertToIndexed, indexedContracts } from "../../../contracts";
-import { getGraphChainName } from "../../../exports/chains";
+import { getGraphChainName } from "../../../exports/vendors";
 import { sanitizeContractName } from "../../../helpers";
 import { mergeSchema } from "../../../schema/merger";
 import type { Types } from "../../../types";

@@ -2,7 +2,7 @@ import { sablier } from "@sablier/deployments";
 import { get_rpcs_for_chain as getRPCs } from "chainlist-rpcs";
 import _ from "lodash";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
-import { ENVIO_CHAIN_CONFIGS } from "../../exports/chains";
+import { ENVIO_CONFIGS } from "../../exports/vendors";
 import { IndexingError } from "./error";
 
 /**
@@ -12,9 +12,9 @@ import { IndexingError } from "./error";
 const clients: PublicClient[] = [];
 
 // Initialize RPC clients for all supported chains
-for (const config of ENVIO_CHAIN_CONFIGS) {
+for (const config of ENVIO_CONFIGS) {
   // Get chain configuration from Sablier deployments
-  const chain = sablier.chains.getOrThrow(config.id);
+  const chain = sablier.chains.getOrThrow(config.chainId);
 
   // Build priority-ordered list of RPC URLs
   const rpcUrls: string[] = [];

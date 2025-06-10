@@ -1,9 +1,12 @@
-import type { Sablier } from "@sablier/deployments";
-import { getGraphChainName } from "../exports/chains";
+import { type Sablier, sablier } from "@sablier/deployments";
 import { formatRelease } from "./helpers";
 
 export const messages = {
   contractNotFound: (release: Sablier.Release, chainId: number, contractName: string) => {
-    return `Contract ${contractName} not found for ${formatRelease(release)} on ${getGraphChainName(chainId)}`;
+    const chain = sablier.chains.get(chainId);
+    if (!chain) {
+      return `Contract ${contractName} not found for ${formatRelease(release)} on chain ${chainId}`;
+    }
+    return `Contract ${contractName} not found for ${formatRelease(release)} on ${chain.name}`;
   },
 };

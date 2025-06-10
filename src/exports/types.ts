@@ -1,58 +1,32 @@
 import type { Sablier } from "@sablier/deployments";
 
+export type Indexer = {
+  chainId: number;
+  explorerURL?: string;
+  endpoint: {
+    id?: string;
+    url: string;
+  };
+  kind: "custom" | "official";
+  playgroundURL?: string;
+  protocol: Indexer.Protocol;
+  name: Indexer.SubgraphName;
+};
+
 export namespace Indexer {
-  /* -------------------------------------------------------------------------- */
-  /*                                    TYPES                                   */
-  /* -------------------------------------------------------------------------- */
-  type BaseIndexer = {
+  export type EnvioConfig = {
     chainId: number;
-    protocol: Protocol;
+    hypersync?: string;
   };
 
-  export type Envio = BaseIndexer & {
-    envio: string;
+  export type GraphConfig = {
+    chainId: number;
+    name: string;
   };
-
-  export type Graph = BaseIndexer & (Graph.Custom | Graph.Official);
 
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;
 
+  export type SubgraphName = `sablier-${string}`;
+
   export type Vendor = "envio" | "graph";
-
-  /* -------------------------------------------------------------------------- */
-  /*                               SUB-NAMESPACES                               */
-  /* -------------------------------------------------------------------------- */
-  export namespace Envio {
-    export type ChainConfig = {
-      hypersync?: string;
-      id: number;
-    };
-  }
-  export namespace Graph {
-    export type ChainConfig = {
-      name: string;
-      id: number;
-    };
-
-    type Base = {
-      kind: "custom" | "official";
-    };
-
-    export type Custom = Base & {
-      kind: "custom";
-      subgraph: {
-        url: string;
-      };
-    };
-
-    export type Official = Base & {
-      explorerURL: string;
-      kind: "official";
-      playgroundURL: string;
-      subgraph: {
-        id: string;
-        url: string;
-      };
-    };
-  }
 }
