@@ -103,18 +103,18 @@ const ALL = [...COMMON, ...GRAPH_ONLY, ...ENVIO_ONLY] as const;
 /*                                   EXPORTS                                  */
 /* -------------------------------------------------------------------------- */
 
-export const ENVIO_CONFIGS: Indexer.EnvioConfig[] = ALL.filter((c) => "envio" in c).map((c) => ({
+export const envioConfigs: Indexer.EnvioConfig[] = ALL.filter((c) => "envio" in c).map((c) => ({
   chainId: c.chainId,
   hypersync: c.envio.hypersync,
 }));
 
-export const GRAPH_CONFIGS: Indexer.GraphConfig[] = ALL.filter((c) => "graph" in c).map((c) => ({
+export const graphConfigs: Indexer.GraphConfig[] = ALL.filter((c) => "graph" in c).map((c) => ({
   chainId: c.chainId,
   name: c.graph.name,
 }));
 
 export function getGraphChainName(chainId: number): string {
-  const chain = _.find(GRAPH_CONFIGS, { chainId });
+  const chain = _.find(graphConfigs, { chainId });
   if (!chain) {
     throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
   }

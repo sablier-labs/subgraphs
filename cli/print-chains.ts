@@ -1,20 +1,22 @@
 import { sablier } from "@sablier/deployments";
+import { type Command } from "commander";
 import _ from "lodash";
 import * as helpers from "./helpers";
 
-export async function main(): Promise<void> {
-  const program = helpers.createBaseCommand("Print all available blockchain chains");
+export function createPrintChainsCommand(): Command {
+  const command = helpers.createBaseCommand("Print all available blockchain chains");
 
-  program.parse();
+  command.action(async () => {
+    console.log("✨ Available chains:");
+    console.log(
+      _.sortBy(sablier.chains.getAll(), (c) => c.name)
+        .map((c) => `• ${c.name}`)
+        .join("\n"),
+    );
+  });
 
-  console.log("✨ Available chains:");
-  console.log(
-    _.sortBy(sablier.chains.getAll(), (c) => c.name)
-      .map((c) => `• ${c.name}`)
-      .join("\n"),
-  );
+  return command;
 }
 
-if (require.main === module) {
-  main();
-}
+// Export the command
+export const command = createPrintChainsCommand();

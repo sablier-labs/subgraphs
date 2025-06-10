@@ -12,9 +12,10 @@
  */
 import * as path from "node:path";
 import { sablier } from "@sablier/deployments";
+import { type Command } from "commander";
 import * as fs from "fs-extra";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
-import { GRAPH_CONFIGS } from "../../src/exports/vendors";
+import { graphConfigs } from "../../src/exports/vendors";
 import paths from "../../src/paths";
 import type { Types } from "../../src/types";
 import { logger } from "../../src/winston";
@@ -22,52 +23,53 @@ import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
 /* -------------------------------------------------------------------------- */
-/*                                    MAIN                                    */
+/*                                  COMMAND                                   */
 /* -------------------------------------------------------------------------- */
 
-export async function main(): Promise<void> {
-  const program = helpers.createBaseCommand("Generate subgraph manifests");
-  helpers.addProtocolOption(program);
-  helpers.addChainOption(program);
-  program.parse();
+export function createGraphManifestCommand(): Command {
+  const command = helpers.createBaseCommand("Generate subgraph manifests");
+  helpers.addProtocolOption(command);
+  helpers.addChainOption(command);
 
-  const options = program.opts();
-  const protocolArg = helpers.parseProtocolOption(options.protocol);
-  const chainArg = helpers.parseChainOption(options.chain);
+  command.action(async (options) => {
+    const protocolArg = helpers.parseProtocolOption(options.protocol);
+    const chainArg = helpers.parseChainOption(options.chain);
 
-  if (protocolArg === "all") {
-    codegenAllProtocols(chainArg);
-    return;
-  }
+    if (protocolArg === "all") {
+      generateAllProtocolManifests(chainArg);
+      return;
+    }
 
-  if (chainArg === "all") {
-    codegenAllChains(protocolArg);
-    return;
-  }
+    if (chainArg === "all") {
+      generateAllChainManifests(protocolArg);
+      return;
+    }
 
-  codegen(protocolArg, chainArg);
+    generateManifest(protocolArg, chainArg);
+  });
+
+  return command;
 }
 
-if (require.main === module) {
-  main();
-}
+// Export the command
+export const command = createGraphManifestCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllProtocols(chainArg: string) {
+function generateAllProtocolManifests(chainArg: string) {
   let totalManifests = 0;
 
   for (const p of PROTOCOLS) {
     if (chainArg === "all") {
-      const filesGenerated = codegenAllChains(p, true);
+      const filesGenerated = generateAllChainManifests(p, true);
       totalManifests += filesGenerated;
       logger.info(`✅ Generated ${filesGenerated} manifests for ${p} protocol`);
       continue;
     }
 
-    codegen(p, chainArg);
+    generateManifest(p, chainArg);
   }
 
   if (chainArg === "all") {
@@ -76,7 +78,7 @@ function codegenAllProtocols(chainArg: string) {
   }
 }
 
-function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): number {
+function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = false): number {
   const manifestsDir = paths.graph.manifests(protocol);
 
   if (fs.pathExistsSync(manifestsDir)) {
@@ -85,7 +87,7 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
   }
 
   let filesGenerated = 0;
-  for (const config of GRAPH_CONFIGS) {
+  for (const config of graphConfigs) {
     writeManifestToFile(protocol, config.chainId);
     filesGenerated++;
   }
@@ -102,7 +104,7 @@ function codegenAllChains(protocol: Types.Protocol, suppressFinalLog = false): n
   return filesGenerated;
 }
 
-function codegen(protocol: Types.Protocol, chainArg: string): void {
+function generateManifest(protocol: Types.Protocol, chainArg: string): void {
   const chain = helpers.getChain(chainArg);
   const manifestsDir = paths.graph.manifests(protocol);
   fs.ensureDirSync(manifestsDir);

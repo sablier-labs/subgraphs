@@ -30,7 +30,7 @@ auth:
 
 # Build the project
 build: (clean "dist")
-    bun tsc -p tsconfig.build.json
+    pnpm tsc -p tsconfig.build.json
 alias b := build
 
 # Remove build files
@@ -127,6 +127,7 @@ _codegen-envio-bindings protocol:
     just codegen-schema graph {{ protocol }}
     just codegen-graph-manifest {{ protocol }} all
     just codegen-graph-bindings {{ protocol }}
+
 # Codegen the Graph subgraph bindings
 [group("codegen")]
 [group("graph")]
@@ -179,8 +180,8 @@ _codegen-graph-bindings protocol:
 
 # Helper to run CLI commands through the main entry point
 [private]
-cli *args:
-    pnpm tsx cli {{ args }}
+@cli *args:
+    pnpm tsx cli/index.ts {{ args }}
 
 # Helper to run a recipe for all protocols or a specific one
 [private]

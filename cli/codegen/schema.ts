@@ -10,6 +10,7 @@
  * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 import * as fs from "node:fs";
+import { type Command } from "commander";
 import { print } from "graphql";
 import paths from "../../src/paths";
 import { mergeSchema } from "../../src/schema";
@@ -20,48 +21,48 @@ import * as helpers from "../helpers";
 import { type ProtocolArg } from "../types";
 
 /* -------------------------------------------------------------------------- */
-/*                                    MAIN                                    */
+/*                                  COMMAND                                   */
 /* -------------------------------------------------------------------------- */
 
-export async function main(): Promise<void> {
-  const program = helpers.createBaseCommand("Generate GraphQL schema files");
+export function createSchemaCommand(): Command {
+  const command = helpers.createBaseCommand("Generate GraphQL schema files");
 
-  helpers.addVendorOption(program);
-  helpers.addProtocolOption(program);
+  helpers.addVendorOption(command);
+  helpers.addProtocolOption(command);
 
-  program.parse();
+  command.action(async (options) => {
+    const vendorArg = helpers.parseVendorOption(options.vendor);
+    const protocolArg = helpers.parseProtocolOption(options.protocol);
 
-  const options = program.opts();
-  const vendorArg = helpers.parseVendorOption(options.vendor);
-  const protocolArg = helpers.parseProtocolOption(options.protocol);
+    if (vendorArg === "all") {
+      generateAllVendorSchemas(protocolArg);
+      return;
+    }
 
-  if (vendorArg === "all") {
-    codegenAllVendors(protocolArg);
-    return;
-  }
+    if (protocolArg === "all") {
+      generateAllProtocolSchemas(vendorArg);
+      return;
+    }
 
-  if (protocolArg === "all") {
-    codegenAllProtocols(vendorArg);
-    return;
-  }
+    generateSchema(vendorArg, protocolArg);
+  });
 
-  codegen(vendorArg, protocolArg);
+  return command;
 }
 
-if (require.main === module) {
-  main();
-}
+// Export the command
+export const command = createSchemaCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllVendors(protocolArg: ProtocolArg): void {
+function generateAllVendorSchemas(protocolArg: ProtocolArg): void {
   for (const v of VENDORS) {
     if (protocolArg === "all") {
-      codegenAllProtocols(v);
+      generateAllProtocolSchemas(v);
     } else {
-      codegen(v, protocolArg);
+      generateSchema(v, protocolArg);
     }
   }
 
@@ -69,9 +70,9 @@ function codegenAllVendors(protocolArg: ProtocolArg): void {
   logger.info("🎉 Successfully generated all GraphQL schemas!\n");
 }
 
-function codegenAllProtocols(vendor: Types.Vendor): void {
+function generateAllProtocolSchemas(vendor: Types.Vendor): void {
   for (const p of PROTOCOLS) {
-    codegen(vendor, p);
+    generateSchema(vendor, p);
   }
   logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   logger.info("🎉 Successfully generated all GraphQL schemas!\n");
@@ -83,7 +84,7 @@ function codegenAllProtocols(vendor: Types.Vendor): void {
  * @param protocol The protocol to generate a schema for
  * @returns Result of the schema generation
  */
-function codegen(vendor: Types.Vendor, protocol: Types.Protocol): void {
+function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const mergedSchema = print(mergeSchema(protocol));
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 

@@ -7,54 +7,56 @@
  *
  * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
-import { PROTOCOLS } from "cli/constants";
+
+import { type Command } from "commander";
 import * as fs from "fs-extra";
 import { createEnvioConfig } from "../../src/codegen/envio-config";
 import paths from "../../src/paths";
 import type { Types } from "../../src/types";
 import { logger } from "../../src/winston";
+import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
 /* -------------------------------------------------------------------------- */
-/*                                    MAIN                                    */
+/*                                  COMMAND                                   */
 /* -------------------------------------------------------------------------- */
 
-export async function main(): Promise<void> {
-  const program = helpers.createBaseCommand("Generate Envio config file");
+export function createEnvioConfigCommand(): Command {
+  const command = helpers.createBaseCommand("Generate Envio config file");
 
-  helpers.addProtocolOption(program);
+  helpers.addProtocolOption(command);
 
-  program.parse();
+  command.action(async (options) => {
+    const protocolArg = helpers.parseProtocolOption(options.protocol);
 
-  const options = program.opts();
-  const protocolArg = helpers.parseProtocolOption(options.protocol);
+    if (protocolArg === "all") {
+      generateAllProtocolConfigs();
+      return;
+    }
 
-  if (protocolArg === "all") {
-    codegenAllProtocols();
-    return;
-  }
+    generateEnvioConfig(protocolArg);
+  });
 
-  codegen(protocolArg);
+  return command;
 }
 
-if (require.main === module) {
-  main();
-}
+// Export the command
+export const command = createEnvioConfigCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-function codegenAllProtocols(): void {
+function generateAllProtocolConfigs(): void {
   for (const p of PROTOCOLS) {
-    codegen(p);
+    generateEnvioConfig(p);
   }
 
   logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   logger.info("🎉 Successfully generated all Envio configs!\n");
 }
 
-function codegen(protocol: Types.Protocol): void {
+function generateEnvioConfig(protocol: Types.Protocol): void {
   const config = createEnvioConfig(protocol);
   const yaml = helpers.dumpYAML(config);
   const configPath = paths.envio.config(protocol);

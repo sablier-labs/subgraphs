@@ -2,13 +2,14 @@
  * @file This script fetches ERC20 token data from The Graph subgraphs and saves it to JSON files.
  *
  * @example Generate for Flow:
- * pnpm tsx cli fetch-assets --protocol flow --chain ethereum
+ * pnpm tsx cli fetch-assets --chain ethereum --protocol flow
  *
- * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  * @param {string} --chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
+ * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 import * as path from "node:path";
 import { type Sablier, sablier } from "@sablier/deployments";
+import { type Command } from "commander";
 import * as fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
 import _ from "lodash";
@@ -57,32 +58,32 @@ const QUERY = `#graphql
 `;
 
 /* -------------------------------------------------------------------------- */
-/*                                    MAIN                                    */
+/*                                  COMMAND                                   */
 /* -------------------------------------------------------------------------- */
 
-export async function main(): Promise<void> {
-  const program = helpers.createBaseCommand("Fetch ERC20 token data from The Graph subgraphs");
+export function createFetchAssetsCommand(): Command {
+  const command = helpers.createBaseCommand("Fetch ERC20 token data from The Graph subgraphs");
 
-  helpers.addProtocolOption(program);
-  helpers.addChainOption(program);
+  helpers.addChainOption(command);
+  helpers.addProtocolOption(command);
 
-  program.parse();
+  command.action(async (options) => {
+    const chainArg = helpers.parseChainOption(options.chain);
+    const protocolArg = helpers.parseProtocolOption(options.protocol);
 
-  const options = program.opts();
-  const chainArg = helpers.parseChainOption(options.chain);
-  const protocolArg = helpers.parseProtocolOption(options.protocol);
+    if (chainArg === "all") {
+      await handleAllChains(protocolArg);
+      return;
+    }
 
-  if (chainArg === "all") {
-    await handleAllChains(protocolArg);
-    return;
-  }
+    await handleChain(chainArg, protocolArg);
+  });
 
-  await handleChain(chainArg, protocolArg);
+  return command;
 }
 
-if (require.main === module) {
-  main();
-}
+// Export the command
+export const command = createFetchAssetsCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                  HANDLERS                                  */

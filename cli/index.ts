@@ -8,79 +8,43 @@
  */
 
 import { Command } from "commander";
-import * as helpers from "./helpers.js";
 
-const program = new Command();
-program.name("indexers-cli").description("CLI for Sablier Indexers utilities");
+async function main() {
+  const program = new Command();
+  program.name("indexers-cli").description("CLI for Sablier Indexers utilities");
 
-/* -------------------------------------------------------------------------- */
-/*                            CODEGEN ENVIO CONFIG                            */
-/* -------------------------------------------------------------------------- */
-const codegen = program.command("codegen").description("Code generation utilities");
-const envioConfigCmd = codegen.command("envio-config").description("Generate Envio config file");
+  /* -------------------------------------------------------------------------- */
+  /*                            CODEGEN COMMANDS                               */
+  /* -------------------------------------------------------------------------- */
+  const codegen = program.command("codegen").description("Code generation utilities");
 
-helpers.addProtocolOption(envioConfigCmd);
+  // Import and add codegen commands
+  const { command: envioConfigCmd } = await import("./codegen/envio-config.js");
+  const { command: graphManifestCmd } = await import("./codegen/graph-manifest.js");
+  const { command: schemaCmd } = await import("./codegen/schema.js");
 
-envioConfigCmd.action(async (options) => {
-  process.argv = ["node", "envio-config.ts", "--protocol", options.protocol];
-  const { main } = await import("./codegen/envio-config.js");
-  await main();
-});
+  codegen.addCommand(envioConfigCmd.name("envio-config"));
+  codegen.addCommand(graphManifestCmd.name("graph-manifest"));
+  codegen.addCommand(schemaCmd.name("schema"));
 
-/* -------------------------------------------------------------------------- */
-/*                           CODEGEN GRAPH MANIFEST                           */
-/* -------------------------------------------------------------------------- */
-const graphManifestCmd = codegen.command("graph-manifest").description("Generate subgraph manifests");
+  /* -------------------------------------------------------------------------- */
+  /*                               FETCH COMMANDS                               */
+  /* -------------------------------------------------------------------------- */
 
-helpers.addProtocolOption(graphManifestCmd);
-helpers.addChainOption(graphManifestCmd);
+  // Import and add fetch command
+  const { command: fetchAssetsCmd } = await import("./fetch/assets.js");
+  program.addCommand(fetchAssetsCmd.name("fetch-assets"));
 
-graphManifestCmd.action(async (options) => {
-  process.argv = ["node", "graph-manifest.ts", "--protocol", options.protocol, "--chain", options.chain];
-  const { main } = await import("./codegen/graph-manifest.js");
-  await main();
-});
+  /* -------------------------------------------------------------------------- */
+  /*                               PRINT COMMANDS                               */
+  /* -------------------------------------------------------------------------- */
+  const print = program.command("print").description("Print information utilities");
 
-/* -------------------------------------------------------------------------- */
-/*                               CODEGEN SCHEMA                               */
-/* -------------------------------------------------------------------------- */
-const schemaCmd = codegen.command("schema").description("Generate GraphQL schema files");
+  // Import and add print command
+  const { command: printChainsCmd } = await import("./print-chains.js");
+  print.addCommand(printChainsCmd.name("chains"));
 
-helpers.addVendorOption(schemaCmd);
-helpers.addProtocolOption(schemaCmd);
+  program.parse();
+}
 
-schemaCmd.action(async (options) => {
-  process.argv = ["node", "schema.ts", "--vendor", options.vendor, "--protocol", options.protocol];
-  const { main } = await import("./codegen/schema.js");
-  await main();
-});
-
-/* -------------------------------------------------------------------------- */
-/*                                FETCH ASSETS                                */
-/* -------------------------------------------------------------------------- */
-const fetchAssetsCmd = program.command("fetch-assets").description("Fetch ERC20 token data from The Graph subgraphs");
-
-helpers.addProtocolOption(fetchAssetsCmd);
-helpers.addChainOption(fetchAssetsCmd);
-
-fetchAssetsCmd.action(async (options) => {
-  process.argv = ["node", "fetch-assets.ts", "--protocol", options.protocol, "--chain", options.chain];
-  const { main } = await import("./fetch/assets.js");
-  await main();
-});
-
-/* -------------------------------------------------------------------------- */
-/*                                    PRINT                                   */
-/* -------------------------------------------------------------------------- */
-const print = program.command("print").description("Print information utilities");
-
-print
-  .command("chains")
-  .description("Print all available blockchain chains")
-  .action(async () => {
-    process.argv = ["node", "print-chains.ts"];
-    const { main } = await import("./print-chains.js");
-    await main();
-  });
-
-program.parse();
+main().catch(console.error);

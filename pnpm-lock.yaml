@@ -52,7 +52,7 @@ importers:
         specifier: 0.3.196
         version: 0.3.196
       commander:
-        specifier: ^14.0.0
+        specifier: ^14.0
         version: 14.0.0
       envio:
         specifier: 2.21.5
@@ -64,7 +64,7 @@ importers:
         specifier: ^16.11
         version: 16.11.0
       graphql-request:
-        specifier: ^7.2.0
+        specifier: ^7.2
         version: 7.2.0(graphql@16.11.0)
       graphql-tag:
         specifier: ^2.12
