@@ -1,0 +1,35 @@
+import { type Sablier, sablier } from "@sablier/deployments";
+import { type Envio } from "../../common/bindings";
+import { type Entity } from "../bindings";
+
+/**
+ * Generates a nickname by using the asset symbol and the admin address.
+ * If the name is not provided, it will use the first 6 and last 4 characters of the admin address.
+ * @example "USDC by 0xcafe..beef"
+ */
+export function getNickname(
+  campaignAdmin: Envio.Address,
+  campaignName: string | undefined,
+  asset: Entity.Asset | undefined,
+): string {
+  const symbol = asset?.symbol ?? "UNKNOWN";
+  if (!campaignName) {
+    const prefix = campaignAdmin.slice(0, 6);
+    const suffix = campaignAdmin.slice(-4);
+    return `${symbol} by ${prefix}..${suffix}`;
+  }
+  return `${symbol} in ${campaignName}`;
+}
+
+/**
+ * Checks if the given address is an official Lockup contract. This check is needed because the Lockup contract
+ * is a user-provided parameter when deploying an airdrop campaign.
+ */
+export function isOfficialLockup(chainId: number, address: Envio.Address): boolean {
+  const lowercasedAddress = address.toLowerCase() as Sablier.Address;
+  const contract = sablier.contracts.get({ chainId, contractAddress: lowercasedAddress, protocol: "lockup" });
+  if (!contract) {
+    return false;
+  }
+  return true;
+}

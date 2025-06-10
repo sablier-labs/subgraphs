@@ -1,36 +1,65 @@
-![Sablier Branding](/assets/banner-subgraphs.png)
+![Sablier Branding](./banner.png)
 
-# Sablier Subgraphs and Indexers
+# Sablier Indexers 🚀
 
-Sablier uses a combination of The Graph subgraphs and Envio indexers as a data API.
+[Sablier](https://sablier.com) is a protocol for onchain token distribution. This repository contains a suite of data
+indexers that monitor Sablier smart contract events and transform them into structured, queryable data via GraphQL. The
+data powers the [Sablier Interface](https://app.sablier.com).
 
-In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). For the list of
-endpoints, see the docs for each large feature:
+We support two indexing vendors: [The Graph](https://thegraph.com) and [Envio](https://envio.dev).
 
-- [Lockup](https://docs.sablier.com/api/lockup/endpoints)
-- [Flow](https://docs.sablier.com/api/flow/endpoints)
-- [Merkle / Airdrops](https://docs.sablier.com/api/airdrops/endpoints)
+## Documentation 📚
 
-## For contributors
+In-depth documentation is available at [docs.sablier.com](https://docs.sablier.com/api/overview). We provide a separate
+indexer for each protocol:
 
-### Adding a new chain
+- [Sablier Airdrops](https://docs.sablier.com/api/airdrops/indexers) - Airdrop distribution data
+- [Sablier Flow](https://docs.sablier.com/api/flow/indexers) - Payment streams data
+- [Sablier Lockup](https://docs.sablier.com/api/lockup/indexers) - Vesting streams data
 
-Create a dedicated configuration, and add it in the [Envio bundles](./packages/constants/src/bundles/) and provide a
-deployment script for the subgraphs.
+## Contributing 🤝
 
-### Tracking a new address
+Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion, or submit a PR.
+For any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
 
-See the [`constants`](./packages/constants) folder. Specify the chain, append the contract, and run the codegen steps to
-make sure everything runs smoothly.
+### Pre Requisites 🧰
 
-### Corepack
+You will need the following software on your machine:
 
-Some versions of Node.js may enforce the usage of [corepack](https://nodejs.org/api/corepack.html). Because this
-repository leverages both `yarn` (for the root workspace and in the Graph packages) and `pnpm` (for Envio), Node.js may
-throw a warning due to a missing **exact** `packageManager` entry for `pnpm`. However, this entry should not be added
-because it will mess with Envio's hosted service. We suggest
-[disabling Corepack](https://stackoverflow.com/a/78822612/3873510) to avoid the warning.
+- [Git](https://git-scm.com/downloads)
+- [Just](https://github.com/casey/just)
+- [Node.Js](https://nodejs.org/en/download)
+- [Pnpm](https://pnpm.io)
+- [Docker](https://docker.com)
 
-## License
+### Set Up ⚙️
+
+Clone this repository:
+
+```shell
+$ git clone git@github.com:sablier-labs/indexers.git && cd indexers
+```
+
+Then, run this command to install the Node.js dependencies:
+
+```shell
+$ just install
+```
+
+And run the setup recipe:
+
+```shell
+$ just setup
+```
+
+Now you can start making changes.
+
+To see a list of all available scripts, run this command:
+
+```shell
+$ just --list
+```
+
+## License 📄
 
 This repo is licensed under GPL 3-0 or later.

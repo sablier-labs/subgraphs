@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "dist",
+    "declarationMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "./src/exports",
+    "removeComments": true,
+    "skipLibCheck": true,
+    "stripInternal": true,
+    "types": ["node"]
+  },
+  "include": ["src/exports/**/*.ts"]
+}

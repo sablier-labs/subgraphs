@@ -1,0 +1,4 @@
+packages:
+  - "src/envio/airdrops/bindings"
+  - "src/envio/flow/bindings"
+  - "src/envio/lockup/bindings"

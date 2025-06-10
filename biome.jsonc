@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@sablier/devkit/biome"],
+  "files": {
+    "includes": [
+      "**/*.{graphql,js,json,jsonc,ts}",
+      "!node_modules/**/*",
+      "!src/envio/common/rpc-data/**/*.json",
+      "!src/graph/**/bindings/**/*.ts"
+    ]
+  },
+  "overrides": [
+    /* ------------------------------ YAML CONFIGS ------------------------------ */
+    {
+      "includes": ["src/codegen/**/*.ts"],
+      "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
+    },
+    /* ----------------------------- ASSEMBLYSCRIPT ----------------------------- */
+    {
+      "includes": ["**/src/graph/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": { "useImportType": "off" },
+          "suspicious": { "noDoubleEquals": "off", "noShadowRestrictedNames": "off" }
+        }
+      }
+    }
+  ]
+}

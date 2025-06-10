@@ -1,0 +1,55 @@
+name: "CI"
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{github.workflow}}-${{github.ref}}
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  ci:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v4"
+
+      - name: "Set up devkit"
+        uses: "sablier-labs/devkit/actions/setup@main"
+
+      - name: "Install Pnpm"
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: "Install the Node.js dependencies"
+        run: "pnpm install --frozen-lockfile"
+
+      - name: "Codegen everything"
+        run: "just codegen"
+
+      - name: "Verify Envio configs haven't changed"
+        uses: "tj-actions/verify-changed-files@v20"
+        with:
+          fail-if-changed: true
+          fail-message: "❌ Envio config files are out of sync. Run 'just codegen-envio-config' locally and commit the changes."
+          files: |
+            src/envio/flow/config.yaml
+            src/envio/lockup/config.yaml
+            src/envio/airdrops/config.yaml
+
+      - name: "Build all subgraphs to check that they can be built"
+        run: "just build-graph"
+
+      - name: "Run the full check"
+        run: "just full-check"
+
+      - name: "Run the tests"
+        run: "just test"
+
+      - name: "Add summary"
+        run: | # shell
+          echo "## CI result" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
