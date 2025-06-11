@@ -1,4 +1,4 @@
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 import type { Types } from "../types";
 import { airdropsContracts } from "./airdrops";
 import { flowContracts } from "./flow";

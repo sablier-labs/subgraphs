@@ -8,11 +8,11 @@
  * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 import * as path from "node:path";
-import { type Sablier, sablier } from "@sablier/deployments";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
 import _ from "lodash";
+import { type Sablier, sablier } from "sablier";
 import { RPCData } from "../../src/envio/common/types";
 import { getSablierSubgraph, indexers } from "../../src/exports/indexers";
 import type { Indexer } from "../../src/exports/types";

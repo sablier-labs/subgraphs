@@ -1,4 +1,4 @@
-import { Version } from "@sablier/deployments";
+import { Version } from "sablier";
 import { getContractVersion } from "../../common/deployments";
 
 export function isVersionWithFees(chainId: number, address: string): boolean {

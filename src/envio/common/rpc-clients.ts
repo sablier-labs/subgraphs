@@ -1,6 +1,6 @@
-import { sablier } from "@sablier/deployments";
 import { get_rpcs_for_chain as getRPCs } from "chainlist-rpcs";
 import _ from "lodash";
+import { sablier } from "sablier";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
 import { envioConfigs } from "../../exports/vendors";
 import { IndexingError } from "./error";

@@ -1,5 +1,5 @@
-import { chains, sablier } from "@sablier/deployments";
 import _ from "lodash";
+import { chains, sablier } from "sablier";
 import type { Indexer } from "./types";
 
 /**

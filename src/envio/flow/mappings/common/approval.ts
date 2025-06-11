@@ -6,7 +6,7 @@ import type {
 import { Store } from "../../store";
 import { Loader } from "./loader";
 
-type Handler<T> = Handler_v1_0<T> | Handler_v1_1<T>;
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   const { stream, watcher } = loaderReturn;

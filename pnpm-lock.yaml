@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
-      '@sablier/deployments':
-        specifier: 1.0.0-beta.2
-        version: 1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))
       lodash:
         specifier: ^4.17
         version: 4.17.21
+      sablier:
+        specifier: 1.0.0-beta.2
+        version: 1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.0-beta.5
@@ -1208,12 +1208,6 @@ packages:
 
   '@rescript/std@9.0.0':
     resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
-
-  '@sablier/deployments@1.0.0-beta.2':
-    resolution: {integrity: sha512-otSDz7QyCxF90izbC1TCfcbJSLcnLPKfx7N6nLGSTcdIIxPEvYbawkFjAcVkSCmoB9cbWDyOZQW300sfUtbs9A==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      viem: ^2.31
 
   '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/7cda8e59a71ef084c0f1a7d1ca765db0067bf579':
     resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/7cda8e59a71ef084c0f1a7d1ca765db0067bf579}
@@ -3615,6 +3609,12 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
+  sablier@1.0.0-beta.2:
+    resolution: {integrity: sha512-sQEwP4oOQoLzlaSfPNzgg0veOOriQRZFqRs/BLA+WkAsnaJYraeNYq8LKICQcPCggVNxhWwWAZBDR7Lh56F4ew==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      viem: ^2.31
+
   safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
 
@@ -5244,11 +5244,6 @@ snapshots:
       react-dom: 19.1.0(react@18.2.0)
 
   '@rescript/std@9.0.0': {}
-
-  '@sablier/deployments@1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51))':
-    dependencies:
-      lodash: 4.17.21
-      viem: 2.31.0(typescript@5.8.3)(zod@3.25.51)
 
   '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/7cda8e59a71ef084c0f1a7d1ca765db0067bf579': {}
 
@@ -7929,6 +7924,11 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
+
+  sablier@1.0.0-beta.2(viem@2.31.0(typescript@5.8.3)(zod@3.25.51)):
+    dependencies:
+      lodash: 4.17.21
+      viem: 2.31.0(typescript@5.8.3)(zod@3.25.51)
 
   safe-buffer@5.2.1: {}
 

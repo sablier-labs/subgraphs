@@ -1,7 +1,7 @@
 import * as path from "node:path";
-import { sablier } from "@sablier/deployments";
 import * as fs from "fs-extra";
 import _ from "lodash";
+import { sablier } from "sablier";
 import type { Envio } from "./bindings";
 import type { RPCData } from "./types";
 

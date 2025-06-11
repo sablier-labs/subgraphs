@@ -1,4 +1,4 @@
-import { type Sablier, sablier } from "@sablier/deployments";
+import { type Sablier, sablier } from "sablier";
 import { type Envio } from "../../common/bindings";
 import { type Entity } from "../bindings";
 

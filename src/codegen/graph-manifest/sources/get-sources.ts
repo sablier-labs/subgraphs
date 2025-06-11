@@ -1,6 +1,6 @@
-import { type Sablier, sablier } from "@sablier/deployments";
 import { Kind } from "graphql";
 import _ from "lodash";
+import { type Sablier, sablier } from "sablier";
 import { convertToIndexed, indexedContracts } from "../../../contracts";
 import { getGraphChainName } from "../../../exports/vendors";
 import { sanitizeContractName } from "../../../helpers";

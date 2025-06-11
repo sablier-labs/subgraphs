@@ -1,4 +1,4 @@
-import { chains, Protocol } from "@sablier/deployments";
+import { chains, Protocol } from "sablier";
 import type { Indexer } from "../types";
 import { resolveGraphCustom, resolveGraphOfficial } from "./resolver";
 

@@ -3,7 +3,7 @@
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
 
-import { Version } from "@sablier/deployments";
+import { Version } from "sablier";
 import type { Envio } from "../../../common/bindings";
 import { Effects } from "../../../common/effects";
 import { Id } from "../../../common/id";

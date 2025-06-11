@@ -1,4 +1,4 @@
-import { contracts, type Sablier } from "@sablier/deployments";
+import { contracts, type Sablier } from "sablier";
 import type { Types } from "../types";
 
 const names = contracts.names;

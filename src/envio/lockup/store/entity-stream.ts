@@ -1,4 +1,4 @@
-import { Version } from "@sablier/deployments";
+import { Version } from "sablier";
 import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";

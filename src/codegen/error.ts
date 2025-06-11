@@ -1,5 +1,5 @@
-import type { Sablier } from "@sablier/deployments";
-import { sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
+import { sablier } from "sablier";
 import type { Types } from "../types";
 import { formatRelease } from "../winston/helpers";
 

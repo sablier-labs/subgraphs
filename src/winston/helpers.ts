@@ -1,4 +1,4 @@
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 
 export function formatRelease(release: Sablier.Release) {
   return `${release.protocol} ${release.version}`;

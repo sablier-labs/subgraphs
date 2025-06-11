@@ -1,4 +1,4 @@
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 
 /**
  * @see https://docs.envio.dev/docs/HyperIndex/configuration-file#interactive-schema-explorer

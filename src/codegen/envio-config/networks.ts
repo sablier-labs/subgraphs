@@ -1,5 +1,5 @@
-import { sablier } from "@sablier/deployments";
 import _ from "lodash";
+import { sablier } from "sablier";
 import { indexedContracts } from "../../contracts";
 import { envioConfigs } from "../../exports/vendors";
 import { sanitizeContractName } from "../../helpers";

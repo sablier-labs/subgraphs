@@ -1,4 +1,4 @@
-import { type Sablier, sablier } from "@sablier/deployments";
+import { type Sablier, sablier } from "sablier";
 import { formatRelease } from "./helpers";
 
 export const messages = {

@@ -24,7 +24,8 @@ type LoaderReturn = {
   watcher?: Entity.Watcher;
 };
 
-type Loader<T> = Loader_v1_0<T> | Loader_v1_1<T>;
+type Loader<T> = Loader_v1_0<T> & Loader_v1_1<T>;
+
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const assetMetadata = await context.effect(Effects.ERC20.readOrFetchMetadata, {
     address: event.params.token,
@@ -55,7 +56,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
 
-type Handler<T> = Handler_v1_0<T> | Handler_v1_1<T>;
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { assetMetadata } = loaderReturn;

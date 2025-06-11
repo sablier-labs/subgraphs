@@ -11,9 +11,9 @@
  * Use 'all' to generate for all chains.
  */
 import * as path from "node:path";
-import { sablier } from "@sablier/deployments";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
+import { sablier } from "sablier";
 import { createGraphManifest } from "../../src/codegen/graph-manifest";
 import { graphConfigs } from "../../src/exports/vendors";
 import paths from "../../src/paths";

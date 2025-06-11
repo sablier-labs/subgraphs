@@ -1,8 +1,8 @@
 import * as path from "node:path";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
-import { Protocol } from "@sablier/deployments";
 import { type DocumentNode } from "graphql";
+import { Protocol } from "sablier";
 import { SCHEMA_DIR } from "../paths";
 import { type Types } from "../types";
 import { getAssetDefs, getStreamDefs, getWatcherDefs } from "./common";

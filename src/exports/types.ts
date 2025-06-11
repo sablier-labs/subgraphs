@@ -1,4 +1,4 @@
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 
 export type Indexer = {
   chainId: number;

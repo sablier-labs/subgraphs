@@ -1,6 +1,6 @@
-import { sablier } from "@sablier/deployments";
 import { type Command } from "commander";
 import _ from "lodash";
+import { sablier } from "sablier";
 import * as helpers from "./helpers";
 
 export function createPrintChainsCommand(): Command {

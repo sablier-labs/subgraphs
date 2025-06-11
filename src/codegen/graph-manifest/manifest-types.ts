@@ -1,4 +1,4 @@
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 import type { Types } from "../../types";
 
 export type ABIEntriesMap = Types.ComponentMap<GraphManifest.ABI[]>;

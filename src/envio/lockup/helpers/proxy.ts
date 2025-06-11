@@ -1,5 +1,5 @@
-import { Version } from "@sablier/deployments";
 import _ from "lodash";
+import { Version } from "sablier";
 import PRBProxyABI from "../../../abi/PRBProxy.json";
 import PRBProxyRegistryABI from "../../../abi/PRBProxyRegistry.json";
 import type { Envio } from "../../common/bindings";

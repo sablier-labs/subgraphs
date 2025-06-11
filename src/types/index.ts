@@ -1,7 +1,7 @@
 /**
  * Types needed for all indexers: Envio and The Graph.
  */
-import type { Sablier } from "@sablier/deployments";
+import type { Sablier } from "sablier";
 
 export namespace Types {
   export type ComponentMap<T> = {

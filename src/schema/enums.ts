@@ -1,7 +1,7 @@
-import { Protocol } from "@sablier/deployments";
 import { type DocumentNode } from "graphql";
 import gql from "graphql-tag";
 import _ from "lodash";
+import { Protocol } from "sablier";
 import { type Types } from "../types";
 
 export namespace Airdrops {

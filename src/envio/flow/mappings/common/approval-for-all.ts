@@ -16,7 +16,7 @@ type LoaderReturn = {
   watcher?: Entity.Watcher;
 };
 
-type Loader<T> = Loader_v1_0<T> | Loader_v1_1<T>;
+type Loader<T> = Loader_v1_0<T> & Loader_v1_1<T>;
 
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const watcher = await Store.Watcher.get(context, event.chainId);
@@ -29,7 +29,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 /*                                   HANDLER                                  */
 /* -------------------------------------------------------------------------- */
 
-type Handler<T> = Handler_v1_0<T> | Handler_v1_1<T>;
+type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { watcher } = loaderReturn;

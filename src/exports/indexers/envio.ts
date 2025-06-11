@@ -1,4 +1,4 @@
-import { Protocol } from "@sablier/deployments";
+import { Protocol } from "sablier";
 import type { Indexer } from "../types";
 import { envioConfigs } from "../vendors";
 import { resolveEnvio } from "./resolver";

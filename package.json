@@ -7,11 +7,11 @@
     "url": "https://sablier.com"
   },
   "dependencies": {
-    "@sablier/deployments": "1.0.0-beta.2",
-    "lodash": "^4.17"
+    "lodash": "^4.17",
+    "sablier": "1.0.0-beta.2"
   },
   "peerDependencies": {
-    "@sablier/deployments": "1.0.0-beta.2"
+    "sablier": "1.0.0-beta.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0-beta.5",
@@ -57,7 +57,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "sablier-labs/indexers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sablier-labs/indexers.git"
+  },
   "scripts": {
     "build": "pnpm rimraf dist && pnpm tsc -p tsconfig.build.json",
     "prepack": "pnpm install --frozen-lockfile && pnpm run build",
