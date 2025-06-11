@@ -6,9 +6,10 @@
  * pnpm tsx cli codegen schema --vendor all --protocol flow
  * pnpm tsx cli codegen schema --vendor graph --protocol flow
  *
- * @param {string} --vendor - Required: 'graph', 'envio', or 'all'
- * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param --vendor - Required: 'graph', 'envio', or 'all'
+ * @param --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
+
 import * as fs from "node:fs";
 import { type Command } from "commander";
 import { print } from "graphql";
@@ -60,7 +61,7 @@ export const command = createSchemaCommand();
 function generateAllVendorSchemas(protocolArg: ProtocolArg): void {
   for (const v of VENDORS) {
     if (protocolArg === "all") {
-      generateAllProtocolSchemas(v);
+      generateAllProtocolSchemas(v, true);
     } else {
       generateSchema(v, protocolArg);
     }
@@ -70,12 +71,14 @@ function generateAllVendorSchemas(protocolArg: ProtocolArg): void {
   logger.info("🎉 Successfully generated all GraphQL schemas!\n");
 }
 
-function generateAllProtocolSchemas(vendor: Types.Vendor): void {
+function generateAllProtocolSchemas(vendor: Types.Vendor, skipLogs: boolean = false): void {
   for (const p of PROTOCOLS) {
     generateSchema(vendor, p);
   }
-  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+  if (!skipLogs) {
+    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+  }
 }
 
 /**
@@ -89,10 +92,9 @@ function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 
   const outputPath = paths.schema(vendor, protocol);
-  logger.info(outputPath);
   fs.writeFileSync(outputPath, schema);
 
   logger.info(`📁 Schema path: ${helpers.getRelative(outputPath)}`);
-  logger.info(`✅ Successfully generated GraphQL schema for ${vendor} ${protocol}`);
-  console.log();
+  logger.info(`✅ Generated GraphQL schema for vendor ${vendor} and protocol ${protocol}`);
+  logger.info("");
 }

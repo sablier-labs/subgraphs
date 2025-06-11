@@ -5,7 +5,7 @@
  * pnpm tsx cli codegen envio-config --protocol all
  * pnpm tsx cli codegen envio-config --protocol flow
  *
- * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 
 import { type Command } from "commander";
@@ -34,7 +34,7 @@ export function createEnvioConfigCommand(): Command {
       return;
     }
 
-    generateEnvioConfig(protocolArg);
+    generateConfig(protocolArg);
   });
 
   return command;
@@ -49,19 +49,18 @@ export const command = createEnvioConfigCommand();
 
 function generateAllProtocolConfigs(): void {
   for (const p of PROTOCOLS) {
-    generateEnvioConfig(p);
+    generateConfig(p);
   }
 
-  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   logger.info("🎉 Successfully generated all Envio configs!\n");
 }
 
-function generateEnvioConfig(protocol: Types.Protocol): void {
+function generateConfig(protocol: Types.Protocol): void {
   const config = createEnvioConfig(protocol);
   const yaml = helpers.dumpYAML(config);
   const configPath = paths.envio.config(protocol);
   fs.writeFileSync(configPath, yaml);
 
-  logger.info(`✅ Successfully generated the Envio config for ${protocol} protocol`);
-  logger.info(`📁 Envio config path: ${helpers.getRelative(configPath)}\n`);
+  logger.info(`📁 Envio config path: ${helpers.getRelative(configPath)}`);
+  logger.info(`✅ Generated the Envio config for protocol ${protocol}\n`);
 }

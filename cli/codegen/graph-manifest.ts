@@ -6,10 +6,11 @@
  * pnpm tsx cli codegen graph-manifest --protocol all --chain polygon
  * pnpm tsx cli codegen graph-manifest --protocol flow --chain polygon
  *
- * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
- * @param {string} --chain - Required: The chain slug to generate manifests for.
+ * @param --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param --chain - Required: The chain slug to generate manifests for.
  * Use 'all' to generate for all chains.
  */
+
 import * as path from "node:path";
 import { type Command } from "commander";
 import * as fs from "fs-extra";

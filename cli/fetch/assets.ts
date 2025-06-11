@@ -4,9 +4,10 @@
  * @example Generate for Flow:
  * pnpm tsx cli fetch-assets --chain ethereum --protocol flow
  *
- * @param {string} --chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
- * @param {string} --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
+ * @param --chain - Required: The chain slug to fetch assets for. Use 'all' to fetch for all chains.
+ * @param --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
+
 import * as path from "node:path";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
