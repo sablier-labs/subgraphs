@@ -1,23 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "lib": ["ESNext"],
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "noEmit": true,
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "rootDir": ".",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "ESNext"
-  },
+  "extends": "./node_modules/@sablier/devkit/tsconfigs/base.json",
   "exclude": ["node_modules", "src/envio/**/bindings.ts", "src/graph/**/*.ts"],
   "include": ["cli/**/*.ts", "src/**/*.ts", "tests/**/*.ts"]
 }

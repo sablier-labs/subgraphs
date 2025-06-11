@@ -169,6 +169,7 @@ async function createBase(
   return stream;
 }
 
+// TODO: add `satisfies` here
 function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
@@ -210,6 +211,7 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
       throw new Error(`Unknown Lockup version: ${stream.version}`);
     }
   }
+  return undefined;
 }
 
 async function createSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {

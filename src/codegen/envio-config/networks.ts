@@ -35,6 +35,7 @@ function getInfuraURL(chainId: number): string | undefined {
   if (chain.rpc.infura && process.env.ENVIO_INFURA_API_KEY) {
     return chain.rpc.infura(process.env.ENVIO_INFURA_API_KEY);
   }
+  return undefined;
 }
 
 type ExtractContractsReturn = {

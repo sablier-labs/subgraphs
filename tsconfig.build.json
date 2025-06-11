@@ -1,18 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./node_modules/@sablier/devkit/tsconfigs/build.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "declaration": true,
-    "declarationDir": "dist",
-    "declarationMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "noEmit": false,
-    "outDir": "dist",
-    "rootDir": "./src/exports",
-    "removeComments": true,
-    "skipLibCheck": true,
-    "stripInternal": true
+    "outDir": "./dist",
+    "rootDir": "./src/exports"
   },
+  "exclude": ["./node_modules"],
   "include": ["src/exports/**/*.ts"]
 }
