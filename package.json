@@ -1,6 +1,6 @@
 {
   "name": "@sablier/indexers",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Data indexers for the Sablier Protocol",
   "author": {
     "name": "Sablier Labs Ltd",
@@ -62,8 +62,7 @@
   },
   "scripts": {
     "build": "pnpm rimraf dist && pnpm tsc -p tsconfig.build.json",
-    "prepack": "pnpm install --frozen-lockfile && pnpm run build",
-    "start": "ts-node ./src/envio/$PROTOCOL/bindings/src/Index.bs.js"
+    "prepack": "pnpm install --frozen-lockfile && pnpm run build"
   },
   "types": "./dist/index.d.ts"
 }

@@ -15,13 +15,13 @@ import * as path from "node:path";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
 import { sablier } from "sablier";
-import { createGraphManifest } from "../../src/codegen/graph-manifest";
-import { graphConfigs } from "../../src/exports/vendors";
-import paths from "../../src/paths";
-import type { Types } from "../../src/types";
-import { logger } from "../../src/winston";
-import { PROTOCOLS } from "../constants";
-import * as helpers from "../helpers";
+import { createGraphManifest } from "../../../src/codegen/graph-manifest";
+import { graphConfigs } from "../../../src/exports/vendors";
+import paths from "../../../src/paths";
+import type { Types } from "../../../src/types";
+import { logger } from "../../../src/winston";
+import { PROTOCOLS } from "../../constants";
+import * as helpers from "../../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMMAND                                   */

@@ -1,7 +1,7 @@
 import { type Command } from "commander";
 import _ from "lodash";
 import { sablier } from "sablier";
-import * as helpers from "./helpers";
+import * as helpers from "../helpers";
 
 export function createPrintChainsCommand(): Command {
   const command = helpers.createBaseCommand("Print all available blockchain chains");

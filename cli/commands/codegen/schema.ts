@@ -13,13 +13,13 @@
 import * as fs from "node:fs";
 import { type Command } from "commander";
 import { print } from "graphql";
-import paths from "../../src/paths";
-import { mergeSchema } from "../../src/schema";
-import type { Types } from "../../src/types";
-import { logger } from "../../src/winston";
-import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../constants";
-import * as helpers from "../helpers";
-import { type ProtocolArg } from "../types";
+import paths from "../../../src/paths";
+import { mergeSchema } from "../../../src/schema";
+import type { Types } from "../../../src/types";
+import { logger } from "../../../src/winston";
+import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../../constants";
+import * as helpers from "../../helpers";
+import { type ProtocolArg } from "../../types";
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMMAND                                   */

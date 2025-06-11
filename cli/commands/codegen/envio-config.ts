@@ -10,12 +10,12 @@
 
 import { type Command } from "commander";
 import * as fs from "fs-extra";
-import { createEnvioConfig } from "../../src/codegen/envio-config";
-import paths from "../../src/paths";
-import type { Types } from "../../src/types";
-import { logger } from "../../src/winston";
-import { PROTOCOLS } from "../constants";
-import * as helpers from "../helpers";
+import { createEnvioConfig } from "../../../src/codegen/envio-config";
+import paths from "../../../src/paths";
+import type { Types } from "../../../src/types";
+import { logger } from "../../../src/winston";
+import { PROTOCOLS } from "../../constants";
+import * as helpers from "../../helpers";
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMMAND                                   */

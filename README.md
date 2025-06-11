@@ -2,9 +2,9 @@
 
 # Sablier Indexers 🚀
 
-[Sablier](https://sablier.com) is a protocol for onchain token distribution. This repository contains a suite of data
-indexers that monitor Sablier smart contract events and transform them into structured, queryable data via GraphQL. The
-data powers the [Sablier Interface](https://app.sablier.com).
+Data indexers for [Sablier](https://sablier.com) protocol for onchain token distribution. The indexers monitor Sablier's
+smart contract events and transform them into structured, queryable data via GraphQL. The data is used to power the
+[Sablier Interface](https://app.sablier.com).
 
 We support two indexing vendors: [The Graph](https://thegraph.com) and [Envio](https://envio.dev).
 

@@ -19,9 +19,9 @@ async function main() {
   const codegen = program.command("codegen").description("Code generation utilities");
 
   // Import and add codegen commands
-  const { command: envioConfigCmd } = await import("./codegen/envio-config.js");
-  const { command: graphManifestCmd } = await import("./codegen/graph-manifest.js");
-  const { command: schemaCmd } = await import("./codegen/schema.js");
+  const { command: envioConfigCmd } = await import("./commands/codegen/envio-config.js");
+  const { command: graphManifestCmd } = await import("./commands/codegen/graph-manifest.js");
+  const { command: schemaCmd } = await import("./commands/codegen/schema.js");
 
   codegen.addCommand(envioConfigCmd.name("envio-config"));
   codegen.addCommand(graphManifestCmd.name("graph-manifest"));
@@ -32,7 +32,7 @@ async function main() {
   /* -------------------------------------------------------------------------- */
 
   // Import and add fetch command
-  const { command: fetchAssetsCmd } = await import("./fetch/assets.js");
+  const { command: fetchAssetsCmd } = await import("./commands/fetch-assets.js");
   program.addCommand(fetchAssetsCmd.name("fetch-assets"));
 
   /* -------------------------------------------------------------------------- */
@@ -41,7 +41,7 @@ async function main() {
   const print = program.command("print").description("Print information utilities");
 
   // Import and add print command
-  const { command: printChainsCmd } = await import("./print-chains.js");
+  const { command: printChainsCmd } = await import("./commands/print-chains.js");
   print.addCommand(printChainsCmd.name("chains"));
 
   program.parse();
