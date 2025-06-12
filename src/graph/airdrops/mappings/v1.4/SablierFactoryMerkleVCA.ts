@@ -21,7 +21,7 @@ export function handle_SablierFactoryMerkleVCA_v1_4_CreateMerkleVCA(event: Creat
       aggregateAmount: params.aggregateAmount,
       asset: baseParams.token,
       campaignAddress: params.merkleVCA,
-      category: "Instant",
+      category: "VCA",
       expiration: baseParams.expiration,
       ipfsCID: baseParams.ipfsCID,
       merkleRoot: baseParams.merkleRoot,
