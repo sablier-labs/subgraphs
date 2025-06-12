@@ -117,7 +117,7 @@ export const graphConfigs: Indexer.GraphConfig[] = ALL.filter((c) => "graph" in 
 export function getGraphChainName(chainId: number): string {
   const chain = _.find(graphConfigs, { chainId });
   if (!chain) {
-    throw new Error(`Chain with ID ${chainId} not supported on The Graph`);
+    throw new Error(`Chain with ID ${chainId} not supported by The Graph`);
   }
   return chain.name;
 }

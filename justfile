@@ -7,7 +7,7 @@ set dotenv-load := true
 #                                  ENVIRONMENT                                 #
 # ---------------------------------------------------------------------------- #
 
-export LOG_LEVEL := env_var_or_default("LOG_LEVEL", "info")
+export LOG_LEVEL := env("LOG_LEVEL", "info")
 
 # ---------------------------------------------------------------------------- #
 #                                   CONSTANTS                                  #

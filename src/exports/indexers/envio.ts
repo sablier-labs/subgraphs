@@ -4,7 +4,7 @@ import { envioConfigs } from "../vendors";
 import { resolveEnvio } from "./resolver";
 
 const get = (protocol: Indexer.Protocol): Indexer[] => {
-  return envioConfigs.map((c) => resolveEnvio(protocol, c.chainId));
+  return envioConfigs.map((c) => resolveEnvio(envioIds[protocol].id, protocol, c.chainId));
 };
 
 export const envio: Record<Indexer.Protocol, Indexer[]> = {
@@ -12,3 +12,24 @@ export const envio: Record<Indexer.Protocol, Indexer[]> = {
   flow: get(Protocol.Flow),
   lockup: get(Protocol.Lockup),
 } as const;
+
+export const envioIds: Record<Indexer.Protocol, Indexer.EnvioId> = {
+  airdrops: {
+    createdOn: 1_712_673_343, // April 8, 2024
+    id: "508d217",
+    isLatest: true,
+    protocol: Protocol.Airdrops,
+  },
+  flow: {
+    createdOn: 1_731_318_958, // November 1, 2024
+    id: "3b4ea6b",
+    isLatest: true,
+    protocol: Protocol.Flow,
+  },
+  lockup: {
+    createdOn: 1_712_673_343, // April 8, 2024
+    id: "53b7e25",
+    isLatest: true,
+    protocol: Protocol.Lockup,
+  },
+};

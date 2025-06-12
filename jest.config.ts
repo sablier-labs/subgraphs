@@ -6,7 +6,15 @@ const config: Config = {
   testMatch: ["<rootDir>/tests/**/*.test.ts"],
   testPathIgnorePatterns: ["node_modules", "src"],
   transform: {
-    "^.+.ts$": ["ts-jest", {}],
+    "^.+.ts$": [
+      "ts-jest",
+      {
+        // See https://github.com/kulshekhar/ts-jest/issues/4198
+        tsconfig: {
+          isolatedModules: true,
+        },
+      },
+    ],
   },
 };
 

@@ -1,17 +1,7 @@
-import { Protocol } from "sablier";
 import type { Indexer } from "../types";
 import { getGraphChainName } from "../vendors";
 
-export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Indexer {
-  let id: string | undefined;
-  if (protocol === Protocol.Airdrops) {
-    id = "508d217";
-  } else if (protocol === Protocol.Flow) {
-    id = "3b4ea6b";
-  } else {
-    id = "53b7e25";
-  }
-
+export function resolveEnvio(id: string, protocol: Indexer.Protocol, chainId: number): Indexer {
   return {
     chainId,
     endpoint: {
