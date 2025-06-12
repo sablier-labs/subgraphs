@@ -1,4 +1,4 @@
-import { chains, Protocol } from "sablier";
+import { chains, Protocol, sablier } from "sablier";
 import type { Indexer } from "../types";
 import { resolveGraphCustom, resolveGraphOfficial } from "./resolver";
 
@@ -250,8 +250,21 @@ const officials: IndexerGraphMap[] = [
 
 const all: IndexerGraphMap[] = [...customs, ...officials];
 
+/**
+ * Sort indexers alphabetically by chain name.
+ */
+function mapAndSort(indexerMaps: IndexerGraphMap[], protocol: Indexer.Protocol): Indexer[] {
+  return indexerMaps
+    .map((indexerMap) => indexerMap[protocol])
+    .sort((a, b) => {
+      const chainNameA = sablier.chains.getOrThrow(a.chainId).name;
+      const chainNameB = sablier.chains.getOrThrow(b.chainId).name;
+      return chainNameA.localeCompare(chainNameB);
+    });
+}
+
 export const graph: Record<Indexer.Protocol, Indexer[]> = {
-  airdrops: all.map((g) => g.airdrops),
-  flow: all.map((g) => g.flow),
-  lockup: all.map((g) => g.lockup),
+  airdrops: mapAndSort(all, Protocol.Airdrops),
+  flow: mapAndSort(all, Protocol.Flow),
+  lockup: mapAndSort(all, Protocol.Lockup),
 };

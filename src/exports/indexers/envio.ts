@@ -3,16 +3,6 @@ import type { Indexer } from "../types";
 import { envioConfigs } from "../vendors";
 import { resolveEnvio } from "./resolver";
 
-const get = (protocol: Indexer.Protocol): Indexer[] => {
-  return envioConfigs.map((c) => resolveEnvio(envioIds[protocol].id, protocol, c.chainId));
-};
-
-export const envio: Record<Indexer.Protocol, Indexer[]> = {
-  airdrops: get(Protocol.Airdrops),
-  flow: get(Protocol.Flow),
-  lockup: get(Protocol.Lockup),
-} as const;
-
 export const envioIds: Record<Indexer.Protocol, Indexer.EnvioId> = {
   airdrops: {
     createdOn: 1_712_673_343, // April 8, 2024
@@ -33,3 +23,15 @@ export const envioIds: Record<Indexer.Protocol, Indexer.EnvioId> = {
     protocol: Protocol.Lockup,
   },
 };
+
+function get(protocol: Indexer.Protocol): Indexer[] {
+  return envioConfigs.map((c) => {
+    return resolveEnvio(envioIds[protocol].id, protocol, c.chainId);
+  });
+}
+
+export const envio: Record<Indexer.Protocol, Indexer[]> = {
+  airdrops: get(Protocol.Airdrops),
+  flow: get(Protocol.Flow),
+  lockup: get(Protocol.Lockup),
+} as const;
