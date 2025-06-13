@@ -10,9 +10,10 @@
  * @param --protocol - Required: 'airdrops', 'flow', 'lockup', or 'all'
  */
 
-import * as fs from "node:fs";
 import { type Command } from "commander";
+import * as fs from "fs-extra";
 import { print } from "graphql";
+import _ from "lodash";
 import paths from "../../../src/paths";
 import { mergeSchema } from "../../../src/schema";
 import type { Types } from "../../../src/types";
@@ -95,6 +96,6 @@ function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
   fs.writeFileSync(outputPath, schema);
 
   logger.info(`📁 Schema path: ${helpers.getRelative(outputPath)}`);
-  logger.info(`✅ Generated GraphQL schema for vendor ${vendor} and protocol ${protocol}`);
+  logger.info(`✅ Generated GraphQL schema for vendor ${_.capitalize(vendor)} and protocol ${_.capitalize(protocol)}`);
   logger.info("");
 }

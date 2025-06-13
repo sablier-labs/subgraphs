@@ -10,6 +10,7 @@
 
 import { type Command } from "commander";
 import * as fs from "fs-extra";
+import _ from "lodash";
 import { createEnvioConfig } from "../../../src/codegen/envio-config";
 import paths from "../../../src/paths";
 import type { Types } from "../../../src/types";
@@ -62,5 +63,5 @@ function generateConfig(protocol: Types.Protocol): void {
   fs.writeFileSync(configPath, yaml);
 
   logger.info(`📁 Envio config path: ${helpers.getRelative(configPath)}`);
-  logger.info(`✅ Generated the Envio config for protocol ${protocol}\n`);
+  logger.info(`✅ Generated the Envio config for ${_.capitalize(protocol)} protocol\n`);
 }

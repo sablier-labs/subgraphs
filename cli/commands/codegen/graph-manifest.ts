@@ -14,6 +14,7 @@
 import * as path from "node:path";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
+import _ from "lodash";
 import { sablier } from "sablier";
 import { createGraphManifest } from "../../../src/codegen/graph-manifest";
 import { graphConfigs } from "../../../src/exports/vendors";
@@ -66,7 +67,7 @@ function generateAllProtocolManifests(chainArg: string) {
     if (chainArg === "all") {
       const filesGenerated = generateAllChainManifests(p, true);
       totalManifests += filesGenerated;
-      logger.info(`✅ Generated ${filesGenerated} manifests for ${p} protocol`);
+      logger.info(`✅ Generated ${filesGenerated} manifests for ${_.capitalize(p)} protocol`);
       continue;
     }
 
@@ -93,12 +94,14 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
     filesGenerated++;
   }
   if (filesGenerated === 0) {
-    throw new Error(`No manifests generated for ${protocol} protocol. This might be a bug.`);
+    throw new Error(`No manifests generated for ${_.capitalize(protocol)} protocol. This might be a bug.`);
   }
 
   if (!suppressFinalLog) {
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info(`🎉 Successfully generated ${filesGenerated} subgraph manifests for ${protocol} protocol!`);
+    logger.info(
+      `🎉 Successfully generated ${filesGenerated} subgraph manifests for ${_.capitalize(protocol)} protocol!`,
+    );
     logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
   }
 
