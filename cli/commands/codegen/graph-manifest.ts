@@ -61,13 +61,13 @@ export const command = createGraphManifestCommand();
 /* -------------------------------------------------------------------------- */
 
 function generateAllProtocolManifests(chainArg: string) {
-  let totalManifests = 0;
+  let totalCount = 0;
 
   for (const p of PROTOCOLS) {
     if (chainArg === "all") {
       const filesGenerated = generateAllChainManifests(p, true);
-      totalManifests += filesGenerated;
-      logger.info(`✅ Generated ${filesGenerated} manifests for ${_.capitalize(p)} protocol`);
+      totalCount += filesGenerated;
+      logger.info(`✅ Generated ${filesGenerated} manifests for protocol ${_.capitalize(p)}`);
       continue;
     }
 
@@ -76,7 +76,7 @@ function generateAllProtocolManifests(chainArg: string) {
 
   if (chainArg === "all") {
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info(`🎉 Successfully generated ${totalManifests} manifests in total!\n`);
+    logger.info(`🎉 Successfully generated ${totalCount} manifests in total!\n`);
   }
 }
 
@@ -94,13 +94,13 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
     filesGenerated++;
   }
   if (filesGenerated === 0) {
-    throw new Error(`No manifests generated for ${_.capitalize(protocol)} protocol. This might be a bug.`);
+    throw new Error(`No manifests generated for protocol ${_.capitalize(protocol)}. This might be a bug.`);
   }
 
   if (!suppressFinalLog) {
     logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     logger.info(
-      `🎉 Successfully generated ${filesGenerated} subgraph manifests for ${_.capitalize(protocol)} protocol!`,
+      `🎉 Successfully generated ${filesGenerated} subgraph manifests for protocol ${_.capitalize(protocol)}!`,
     );
     logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
   }

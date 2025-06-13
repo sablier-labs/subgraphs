@@ -8,9 +8,10 @@ export type Indexer = {
     url: string;
   };
   kind: "custom" | "official";
-  playgroundURL?: string;
-  protocol: Indexer.Protocol;
   name: Indexer.SubgraphName;
+  protocol: Indexer.Protocol;
+  /** GraphQL endpoint that doesn't require an API key. Opening it in the browser may open a GraphiQL playground.*/
+  testingURL?: string;
 };
 
 export namespace Indexer {

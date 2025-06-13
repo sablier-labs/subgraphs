@@ -63,5 +63,5 @@ function generateConfig(protocol: Types.Protocol): void {
   fs.writeFileSync(configPath, yaml);
 
   logger.info(`📁 Envio config path: ${helpers.getRelative(configPath)}`);
-  logger.info(`✅ Generated the Envio config for ${_.capitalize(protocol)} protocol\n`);
+  logger.info(`✅ Generated the Envio config for protocol ${_.capitalize(protocol)}\n`);
 }

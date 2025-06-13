@@ -46,8 +46,8 @@ export function resolveGraphOfficial(protocol: Indexer.Protocol, chainId: number
     explorerURL: `https://thegraph.com/explorer/subgraphs/${subgraphId}`,
     kind: "official",
     name: subgraphName,
-    playgroundURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
     protocol,
+    testingURL: `https://api.studio.thegraph.com/query/${GRAPH_STUDIO_ID}/${subgraphName}/version/latest`,
   };
 }
 
