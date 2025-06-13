@@ -38,11 +38,6 @@ alias b := build
 clean globs=GLOBS_CLEAN:
     pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
 
-# Clear node_modules recursively
-[confirm("Are you sure you want to delete all node_modules?")]
-clean-modules:
-    pnpm dlx del-cli "node_modules" "**/node_modules"
-
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
 @fetch-assets protocol="all" chain="all":
@@ -56,10 +51,6 @@ setup:
 test:
     pnpm jest
 alias t := test
-
-# Type check with TypeScript
-tsc-check:
-    pnpm tsc --noEmit
 
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: CODEGEN                               #

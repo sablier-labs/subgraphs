@@ -5,6 +5,7 @@
 - [Node.js](https://nodejs.org) (v20+)
 - [Just](https://github.com/casey/just) (command runner)
 - [Pnpm](https://pnpm.io/) (package manager)
+- [Ni](https://github.com/antfu-collective/ni) (package manager resolver)
 
 ### Setup
 

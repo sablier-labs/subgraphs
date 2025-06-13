@@ -32,7 +32,7 @@ importers:
         version: 9.0.24(graphql@16.11.0)
       '@sablier/devkit':
         specifier: github:sablier-labs/devkit#main
-        version: https://codeload.github.com/sablier-labs/devkit/tar.gz/eb798d43fca374c70d63a8235f9a785bbd778cdb
+        version: https://codeload.github.com/sablier-labs/devkit/tar.gz/52f1d0f367def933fe0b20a5297dc8aa88e8d62a
       '@types/fs-extra':
         specifier: ^11.0
         version: 11.0.4
@@ -1151,8 +1151,8 @@ packages:
   '@rescript/std@9.0.0':
     resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
 
-  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/eb798d43fca374c70d63a8235f9a785bbd778cdb':
-    resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/eb798d43fca374c70d63a8235f9a785bbd778cdb}
+  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/52f1d0f367def933fe0b20a5297dc8aa88e8d62a':
+    resolution: {tarball: https://codeload.github.com/sablier-labs/devkit/tar.gz/52f1d0f367def933fe0b20a5297dc8aa88e8d62a}
     version: 0.0.0
 
   '@scure/base@1.1.9':
@@ -4946,7 +4946,7 @@ snapshots:
 
   '@rescript/std@9.0.0': {}
 
-  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/eb798d43fca374c70d63a8235f9a785bbd778cdb': {}
+  '@sablier/devkit@https://codeload.github.com/sablier-labs/devkit/tar.gz/52f1d0f367def933fe0b20a5297dc8aa88e8d62a': {}
 
   '@scure/base@1.1.9': {}
 

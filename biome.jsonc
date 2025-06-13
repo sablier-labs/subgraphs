@@ -4,13 +4,13 @@
   "files": {
     "includes": [
       "**/*.{graphql,js,json,jsonc,ts}",
-      "!node_modules/**/*",
+      "!node_modules",
       "!src/envio/common/rpc-data/**/*.json",
       "!src/graph/**/bindings/**/*.ts"
     ]
   },
   "overrides": [
-    /* ------------------------------ YAML CONFIGS ------------------------------ */
+    /* ------------------------------ YAML CODEGEN ------------------------------ */
     {
       "includes": ["src/codegen/**/*.ts"],
       "assist": { "actions": { "source": { "useSortedKeys": "off" } } }
