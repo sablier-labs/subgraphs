@@ -14,6 +14,7 @@ export LOG_LEVEL := env("LOG_LEVEL", "info")
 # ---------------------------------------------------------------------------- #
 
 GLOBS_CLEAN := "**/{bindings,build,generated,logs}"
+GLOBS_CLEAN_IGNORE := "!src/graph/common/bindings"
 
 # ---------------------------------------------------------------------------- #
 #                                 RECIPES: BASE                                #
@@ -35,12 +36,12 @@ alias b := build
 
 # Remove build files
 clean globs=GLOBS_CLEAN:
-    pnpm dlx rimraf --glob "{{ globs }}"
+    pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
 
 # Clear node_modules recursively
 [confirm("Are you sure you want to delete all node_modules?")]
 clean-modules:
-    pnpm dlx rimraf --glob "node_modules" "**/node_modules"
+    pnpm dlx del-cli "node_modules" "**/node_modules"
 
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
@@ -137,7 +138,7 @@ _codegen-envio-bindings protocol:
 _codegen-graph-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/graph/{{ protocol }}"
-    pnpm rimraf $protocol_dir/bindings
+    pnpm dlx del-cli $protocol_dir/bindings
     pnpm graph codegen \
         --output-dir $protocol_dir/bindings \
         $protocol_dir/manifests/ethereum.yaml

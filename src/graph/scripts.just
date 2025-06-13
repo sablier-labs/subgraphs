@@ -22,7 +22,7 @@ alias b := build
 
 # Remove build files
 clean:
-    pnpm rimraf bindings build
+    pnpm dlx del-cli bindings build
 
 # Codegen the subgraph
 [group("codegen")]
@@ -69,7 +69,7 @@ alias de := deploy-experimental
 # Deploy to Lightlink
 [group("deploy")]
 deploy-lightlink version:
-    _deploy-custom lightlink \
+    deploy-custom lightlink \
     {{ version }} \
     {{ NODE_LIGHTLINK }} \
     {{ IPFS_URL }}
@@ -77,7 +77,7 @@ deploy-lightlink version:
 # Deploy to XDC
 [group("deploy")]
 deploy-xdc version:
-    _deploy-custom xdc \
+    deploy-custom xdc \
     {{ version }} \
     {{ NODE_XDC }} \
     {{ IPFS_URL }}
@@ -87,7 +87,8 @@ deploy-xdc version:
 # ---------------------------------------------------------------------------- #
 
 # Deploy to a custom The Graph endpoint
-_deploy-custom chain version node_url ipfs_url=IPFS_URL: codegen
+[private]
+deploy-custom chain version node_url ipfs_url=IPFS_URL: codegen
     #!/usr/bin/env sh
     subgraph_name="{{ chain }}/sablier-{{ PROTOCOL }}-{{ chain }}"
     pnpm graph deploy \

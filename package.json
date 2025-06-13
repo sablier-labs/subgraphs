@@ -38,7 +38,6 @@
     "lint-staged": "^16.0",
     "matchstick-as": "^0.6",
     "prettier": "^3.5",
-    "rimraf": "^6.0",
     "ts-jest": "^29.3",
     "tsx": "^4.19",
     "typescript": "5.8.3",
@@ -62,7 +61,7 @@
     "url": "git+https://github.com/sablier-labs/indexers.git"
   },
   "scripts": {
-    "build": "pnpm rimraf dist && pnpm tsc -p tsconfig.build.json",
+    "build": "pnpm dlx del-cli dist && pnpm tsc -p tsconfig.build.json",
     "prepack": "pnpm install --frozen-lockfile && pnpm run build"
   },
   "types": "./dist/index.d.ts"

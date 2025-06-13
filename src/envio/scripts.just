@@ -9,7 +9,7 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # Remove build files
 clean:
-    pnpm rimraf bindings build
+    pnpm dlx del-cli bindings build
 
 # Codegen everything for the Envio indexer
 @codegen:
