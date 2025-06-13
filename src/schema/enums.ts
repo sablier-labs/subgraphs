@@ -16,6 +16,7 @@ export namespace Airdrops {
     Instant = "Instant",
     LockupLinear = "LockupLinear",
     LockupTranched = "LockupTranched",
+    VCA = "VCA",
   }
 }
 

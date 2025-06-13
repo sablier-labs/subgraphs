@@ -5,6 +5,7 @@ import {
   createCampaignInstant,
   createCampaignLL,
   createCampaignLT,
+  createCampaignVCA,
   getCampaign,
   updateCampaignAdmin,
   updateCampaignClaimed,
@@ -26,6 +27,7 @@ export namespace Store {
   }
   export namespace Campaign {
     export const createInstant = createCampaignInstant;
+    export const createVCA = createCampaignVCA;
     export const createLL = createCampaignLL;
     export const createLT = createCampaignLT;
     export const get = getCampaign;

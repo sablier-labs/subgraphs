@@ -128,6 +128,23 @@ type Campaign @entity(immutable: false) {
   """
   version: String!
 
+  # ------------------------------- AVCA Config ------------------------------ #
+
+  """
+  Unix timestamp when the campaign funds become available.
+  """
+  startTime: BigInt
+
+  """
+  Unix timestamp when the campaign funds become fully available.
+  """
+  endTime: BigInt
+
+  """
+  The initial unlocked amount at the specified start time of the campaign.
+  """
+  unlockPercentage: BigInt
+
   # ------------------------------- Lockup Config ------------------------------ #
 
   """

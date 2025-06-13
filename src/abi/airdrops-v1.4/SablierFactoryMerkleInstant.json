@@ -1,0 +1,353 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "initialAdmin", "type": "address", "internalType": "address" },
+      { "name": "initialMinFeeUSD", "type": "uint256", "internalType": "uint256" },
+      { "name": "initialOracle", "type": "address", "internalType": "address" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "FEE_COLLECTOR_ROLE",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "FEE_MANAGEMENT_ROLE",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MAX_FEE_USD",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "admin",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "collectFees",
+    "inputs": [
+      { "name": "campaign", "type": "address", "internalType": "contract ISablierMerkleBase" },
+      { "name": "feeRecipient", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createMerkleInstant",
+    "inputs": [
+      {
+        "name": "params",
+        "type": "tuple",
+        "internalType": "struct MerkleInstant.ConstructorParams",
+        "components": [
+          { "name": "campaignName", "type": "string", "internalType": "string" },
+          { "name": "expiration", "type": "uint40", "internalType": "uint40" },
+          { "name": "initialAdmin", "type": "address", "internalType": "address" },
+          { "name": "ipfsCID", "type": "string", "internalType": "string" },
+          { "name": "merkleRoot", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "token", "type": "address", "internalType": "contract IERC20" }
+        ]
+      },
+      { "name": "aggregateAmount", "type": "uint256", "internalType": "uint256" },
+      { "name": "recipientCount", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "merkleInstant", "type": "address", "internalType": "contract ISablierMerkleInstant" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "disableCustomFeeUSD",
+    "inputs": [{ "name": "campaignCreator", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "grantRole",
+    "inputs": [
+      { "name": "role", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "account", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "hasRoleOrIsAdmin",
+    "inputs": [
+      { "name": "role", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "account", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "minFeeUSD",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "minFeeUSDFor",
+    "inputs": [{ "name": "campaignCreator", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "nativeToken",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "oracle",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "revokeRole",
+    "inputs": [
+      { "name": "role", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "account", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setCustomFeeUSD",
+    "inputs": [
+      { "name": "campaignCreator", "type": "address", "internalType": "address" },
+      { "name": "customFeeUSD", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setMinFeeUSD",
+    "inputs": [{ "name": "newMinFeeUSD", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setNativeToken",
+    "inputs": [{ "name": "newNativeToken", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setOracle",
+    "inputs": [{ "name": "newOracle", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "transferAdmin",
+    "inputs": [{ "name": "newAdmin", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "CollectFees",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "campaign", "type": "address", "indexed": true, "internalType": "contract ISablierMerkleBase" },
+      { "name": "feeRecipient", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "feeAmount", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "CreateMerkleInstant",
+    "inputs": [
+      {
+        "name": "merkleInstant",
+        "type": "address",
+        "indexed": true,
+        "internalType": "contract ISablierMerkleInstant"
+      },
+      {
+        "name": "params",
+        "type": "tuple",
+        "indexed": false,
+        "internalType": "struct MerkleInstant.ConstructorParams",
+        "components": [
+          { "name": "campaignName", "type": "string", "internalType": "string" },
+          { "name": "expiration", "type": "uint40", "internalType": "uint40" },
+          { "name": "initialAdmin", "type": "address", "internalType": "address" },
+          { "name": "ipfsCID", "type": "string", "internalType": "string" },
+          { "name": "merkleRoot", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "token", "type": "address", "internalType": "contract IERC20" }
+        ]
+      },
+      { "name": "aggregateAmount", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "recipientCount", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "minFeeUSD", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "oracle", "type": "address", "indexed": false, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "DisableCustomFeeUSD",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "campaignCreator", "type": "address", "indexed": true, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RoleGranted",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "account", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "role", "type": "bytes32", "indexed": true, "internalType": "bytes32" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RoleRevoked",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "account", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "role", "type": "bytes32", "indexed": true, "internalType": "bytes32" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SetCustomFeeUSD",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "campaignCreator", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "customFeeUSD", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SetMinFeeUSD",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "newMinFeeUSD", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "previousMinFeeUSD", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SetNativeToken",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "nativeToken", "type": "address", "indexed": false, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "SetOracle",
+    "inputs": [
+      { "name": "admin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "newOracle", "type": "address", "indexed": false, "internalType": "address" },
+      { "name": "previousOracle", "type": "address", "indexed": false, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "TransferAdmin",
+    "inputs": [
+      { "name": "oldAdmin", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "newAdmin", "type": "address", "indexed": true, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "AccountAlreadyHasRole",
+    "inputs": [
+      { "name": "role", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "account", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "AccountDoesNotHaveRole",
+    "inputs": [
+      { "name": "role", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "account", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "CallerNotAdmin",
+    "inputs": [
+      { "name": "admin", "type": "address", "internalType": "address" },
+      { "name": "caller", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "SablierFactoryMerkleBase_ForbidNativeToken",
+    "inputs": [{ "name": "nativeToken", "type": "address", "internalType": "address" }]
+  },
+  {
+    "type": "error",
+    "name": "SablierFactoryMerkleBase_MaxFeeUSDExceeded",
+    "inputs": [
+      { "name": "newFeeUSD", "type": "uint256", "internalType": "uint256" },
+      { "name": "maxFeeUSD", "type": "uint256", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "SablierFactoryMerkleBase_NativeTokenAlreadySet",
+    "inputs": [{ "name": "nativeToken", "type": "address", "internalType": "address" }]
+  },
+  { "type": "error", "name": "SablierFactoryMerkleBase_NativeTokenZeroAddress", "inputs": [] },
+  {
+    "type": "error",
+    "name": "SablierMerkleFactoryBase_FeeRecipientNotAdmin",
+    "inputs": [
+      { "name": "feeRecipient", "type": "address", "internalType": "address" },
+      { "name": "admin", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "UnauthorizedAccess",
+    "inputs": [
+      { "name": "caller", "type": "address", "internalType": "address" },
+      { "name": "neededRole", "type": "bytes32", "internalType": "bytes32" }
+    ]
+  }
+]
