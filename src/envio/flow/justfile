@@ -1,0 +1,9 @@
+import "../scripts.just"
+
+# Set protocol name
+
+export PROTOCOL := "flow"
+
+# Show available commands
+default:
+    @just --list
