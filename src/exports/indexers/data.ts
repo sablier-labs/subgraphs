@@ -1,8 +1,7 @@
-import { envio, envioIds } from "./envio";
+import { envio } from "./envio";
 import { graph } from "./graph";
 
 export const indexers = {
   envio,
-  envioIds,
   graph,
 };

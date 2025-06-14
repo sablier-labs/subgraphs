@@ -21,8 +21,8 @@ jobs:
         with:
           package-manager: "pnpm"
 
-      - name: "Codegen everything"
-        run: "just codegen"
+      - name: "Codegen Envio indexers"
+        run: "just codegen-envio"
 
       - name: "Verify Envio configs haven't changed"
         uses: "tj-actions/verify-changed-files@v20"
@@ -33,6 +33,9 @@ jobs:
             src/envio/flow/config.yaml
             src/envio/lockup/config.yaml
             src/envio/airdrops/config.yaml
+
+      - name: "Codegen The Graph indexers"
+        run: "just codegen-graph"
 
       - name: "Build all subgraphs to check that they can be built"
         run: "just build-graph"

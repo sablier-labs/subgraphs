@@ -1,13 +1,16 @@
 import type { Indexer } from "../types";
 import { getGraphChainName } from "../vendors";
+import { envioRecords } from "./envio-records";
 
-export function resolveEnvio(id: string, protocol: Indexer.Protocol, chainId: number): Indexer {
+export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Indexer {
+  const record = envioRecords[protocol];
   return {
     chainId,
     endpoint: {
-      id,
-      url: `https://indexer.hyperindex.xyz/${id}/v1/graphql`,
+      id: record.endpoint.id,
+      url: record.endpoint.url,
     },
+    explorerURL: record.explorerURL,
     kind: "official",
     name: `sablier-${protocol}`,
     protocol,
