@@ -1,5 +1,6 @@
 {
   "biome.enabled": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
@@ -9,6 +10,5 @@
   },
   "[md][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  }
 }

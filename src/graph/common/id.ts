@@ -39,12 +39,12 @@ export namespace Id {
 
   /**
    * @example
-   * 137-0xf50760d8ead9ff322631a1f3ebf26cc7891b3708
+   * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
    */
   export function campaign(campaignAddress: Address): string {
     const chainId = readChainId().toString();
     const address = campaignAddress.toHexString();
-    return `${chainId}-${address}`;
+    return `${address}-${chainId}`;
   }
 
   /**
