@@ -116,7 +116,8 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   stream.funder = params.funder;
   stream.hash = event.transaction.hash;
   stream.intactAmount = params.depositAmount;
-  stream.parties = [params.recipient, params.sender];
+  stream.parties.push(params.recipient);
+  stream.parties.push(params.sender);
   stream.recipient = params.recipient;
   stream.sender = params.sender;
   stream.shape = params.shape;

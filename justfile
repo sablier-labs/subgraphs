@@ -33,6 +33,7 @@ clean globs=GLOBS_CLEAN:
     pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
 
 # Generate the schemas in the ./src/exports directory
+# lint-staged will pass the globs to this recipe
 export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
     just biome-write "{{ globs }}"
