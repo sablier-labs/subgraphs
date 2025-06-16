@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import { CommonStore } from "../../../../common/store";
 import { Contract } from "../../../bindings";
 import { Store } from "../../../store";
@@ -55,7 +54,7 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
       aggregateAmount: params.aggregateAmount,
       asset: assetAddress,
       campaignAddress: params.merkleInstant,
-      category: enums.CampaignCategory.Instant,
+      category: "Instant",
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       merkleRoot: baseParams[4],
@@ -71,7 +70,7 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
       watcher: entities.watcher,
     };
     await Store.Action.create(context, event, actionEntities, {
-      category: enums.ActionCategory.Create,
+      category: "Create",
     });
   },
   loader: Loader.create["v1.3"],

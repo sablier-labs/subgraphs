@@ -1,4 +1,3 @@
-import { Lockup as enums } from "../../../../schema/enums";
 import type {
   SablierV2LockupLinear_v1_0_RenounceLockupStream_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_RenounceLockupStream_handler as Handler_v1_1,
@@ -16,7 +15,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   Store.Watcher.exists(event.chainId, watcher);
 
   await Store.Action.create(context, event, watcher, {
-    category: enums.ActionCategory.Renounce,
+    category: "Renounce",
     streamId: stream.id,
   });
 };

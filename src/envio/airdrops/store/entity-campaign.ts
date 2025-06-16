@@ -1,7 +1,7 @@
 import type { Envio } from "../../common/bindings";
 import { getContractVersion } from "../../common/deployments";
 import { Id } from "../../common/id";
-import type { Context, Entity, EnvioEnum } from "../bindings";
+import type { Context, Entity, Enum } from "../bindings";
 import { getNickname } from "../helpers/campaign";
 import type { Params } from "../helpers/types";
 
@@ -132,7 +132,7 @@ async function createBaseCampaign(
     admin: params.admin,
     aggregateAmount: params.aggregateAmount,
     asset_id: entities.asset.address,
-    category: params.category as EnvioEnum.CampaignCategory,
+    category: params.category as Enum.CampaignCategory,
     chainId: BigInt(event.chainId),
     claimedAmount: 0n,
     claimedCount: 0n,

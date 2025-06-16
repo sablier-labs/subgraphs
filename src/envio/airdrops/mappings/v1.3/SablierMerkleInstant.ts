@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../schema/enums";
 import { Contract } from "../../bindings";
 import { Store } from "../../store";
 import * as common from "../common";
@@ -38,7 +37,7 @@ Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
       watcher,
     };
     await Store.Action.create(context, event, actionEntities, {
-      category: enums.ActionCategory.Claim,
+      category: "Claim",
       claimAmount: event.params.amount,
       claimIndex: event.params.index,
       claimRecipient: event.params.recipient,

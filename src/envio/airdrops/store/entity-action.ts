@@ -1,6 +1,6 @@
 import type { Envio } from "../../common/bindings";
 import { Id } from "../../common/id";
-import type { Context, Entity, EnvioEnum } from "../bindings";
+import type { Context, Entity, Enum } from "../bindings";
 import type { Params } from "../helpers/types";
 
 export async function create(
@@ -13,7 +13,7 @@ export async function create(
   const action: Entity.Action = {
     block: BigInt(event.block.number),
     campaign_id: entities.campaign.id,
-    category: params.category as EnvioEnum.ActionCategory,
+    category: params.category as Enum.ActionCategory,
     chainId: BigInt(event.chainId),
     claimAmount: params.claimAmount,
     claimIndex: params.claimIndex,

@@ -1,6 +1,5 @@
-import type { Lockup as enums } from "../../../schema/enums";
 import type { Envio } from "../../common/bindings";
-import type { Entity } from "../bindings";
+import type { Entity, Enum } from "../bindings";
 export namespace Params {
   export type Cancel = {
     recipient: Envio.Address;
@@ -20,7 +19,7 @@ export namespace Params {
   export type CreateStreamCommon = {
     asset: Envio.Address;
     cancelable: boolean;
-    category: enums.StreamCategory;
+    category: Enum.StreamCategory;
     depositAmount: bigint;
     endTime: bigint;
     funder: Envio.Address;

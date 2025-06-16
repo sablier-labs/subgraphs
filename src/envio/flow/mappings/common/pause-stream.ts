@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../../schema/enums";
 import type {
   SablierFlow_v1_0_PauseFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_PauseFlowStream_handler as Handler_v1_1,
@@ -36,7 +35,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     addressA: event.params.recipient,
     addressB: event.params.sender,
     amountA: event.params.totalDebt,
-    category: enums.ActionCategory.Pause,
+    category: "Pause",
     streamId: stream.id,
   });
   stream = {

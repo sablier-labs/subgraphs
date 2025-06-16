@@ -16,7 +16,8 @@ repomix
 *.tsbuildinfo
 .env*
 !.env.example
-schema.graphql
 subgraph.yaml
-**/graph/**/manifests/**/*.yaml
-**/graph/**/tests/**/*.latest.json
+src/envio/**/schema.graphql
+src/graph/**/schema.graphql
+src/graph/**/manifests/**/*.yaml
+src/graph/**/tests/**/*.latest.json

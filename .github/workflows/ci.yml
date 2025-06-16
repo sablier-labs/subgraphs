@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: ["main"]
+    branches: ["main", "release"]
 
 jobs:
   ci:
@@ -37,8 +37,21 @@ jobs:
       - name: "Codegen The Graph indexers"
         run: "just codegen-graph"
 
-      - name: "Build all subgraphs to check that they can be built"
-        run: "just build-graph"
+      - name: "Build all The Graph indexers as a check"
+        run: "just build-graph-indexers"
+
+      - name: "Build all GraphQL schemas"
+        run: "just build-schemas"
+
+      - name: "Verify GraphQL schemas haven't changed"
+        uses: "tj-actions/verify-changed-files@v20"
+        with:
+          fail-if-changed: true
+          fail-message: "❌ GraphQL schemas are out of sync. Run 'just build-schemas' locally and commit the changes."
+          files: |
+            src/exports/schemas/airdrops.graphql
+            src/exports/schemas/flow.graphql
+            src/exports/schemas/lockup.graphql
 
       - name: "Run the code checks"
         run: "just full-check"

@@ -2,7 +2,7 @@ import { Version } from "sablier";
 import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
-import type { Context, Entity, EnvioEnum } from "../bindings";
+import type { Context, Entity, Enum } from "../bindings";
 import { fetchOrReadProxender } from "../helpers/proxy";
 import type { Params, Segment, Tranche } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
@@ -123,7 +123,7 @@ async function createBase(
     canceled: false,
     canceledAction_id: undefined,
     canceledTime: undefined,
-    category: params.category as EnvioEnum.StreamCategory,
+    category: params.category as Enum.StreamCategory,
     chainId: BigInt(event.chainId),
     cliff: false,
     cliffAmount: 0n,

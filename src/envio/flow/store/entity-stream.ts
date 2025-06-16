@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../schema/enums";
 import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
@@ -27,7 +26,7 @@ export async function create(
     assetDecimals: asset.decimals,
     availableAmount: 0n,
     batch_id: batch.id,
-    category: enums.StreamCategory.Flow,
+    category: "Flow",
     chainId: BigInt(event.chainId),
     contract: event.srcAddress,
     creator: event.transaction.from?.toLowerCase() || "",

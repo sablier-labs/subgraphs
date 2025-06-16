@@ -5,7 +5,7 @@ type Campaign @entity(immutable: false) {
   # ------------------------------------ IDs ----------------------------------- #
 
   """
-  Unique identifier: {contractAddress}-{chainId}
+  Unique identifier: `{contractAddress}-{chainId}`
   """
   id: String!
   """

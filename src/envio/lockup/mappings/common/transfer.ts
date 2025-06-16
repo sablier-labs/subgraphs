@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { Lockup as enums } from "../../../../schema/enums";
 import { ADDRESS_ZERO } from "../../../common/constants";
 import type {
   SablierV2LockupLinear_v1_0_Transfer_handler as Handler_v1_0,
@@ -44,7 +43,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   await Store.Action.create(context, event, watcher, {
     addressA: event.params.from,
     addressB: event.params.to,
-    category: enums.ActionCategory.Transfer,
+    category: "Transfer",
     streamId: stream.id,
   });
 };

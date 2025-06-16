@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../../schema/enums";
 import { type Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_ApprovalForAll_handler as Handler_v1_0,
@@ -39,7 +38,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     addressA: event.params.owner,
     addressB: event.params.operator,
     amountA: event.params.approved ? 1n : 0n,
-    category: enums.ActionCategory.Approval,
+    category: "ApprovalForAll",
   });
 };
 

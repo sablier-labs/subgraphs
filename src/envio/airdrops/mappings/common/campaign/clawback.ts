@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import type { Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_Clawback_handler as Handler_v1_1,
@@ -44,7 +43,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   /* --------------------------------- ACTION --------------------------------- */
   const entities = { campaign, watcher };
   const action = await Store.Action.create(context, event, entities, {
-    category: enums.ActionCategory.Clawback,
+    category: "Clawback",
     clawbackAmount: event.params.amount,
     clawbackFrom: event.params.admin,
     clawbackTo: event.params.to,

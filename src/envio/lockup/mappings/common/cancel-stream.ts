@@ -1,4 +1,3 @@
-import { Lockup as enums } from "../../../../schema/enums";
 import type {
   SablierV2LockupLinear_v1_0_CancelLockupStream_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_CancelLockupStream_handler as Handler_v1_1,
@@ -30,7 +29,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     addressB: event.params.recipient,
     amountA: event.params.senderAmount,
     amountB: event.params.recipientAmount,
-    category: enums.ActionCategory.Cancel,
+    category: "Cancel",
     streamId: stream.id,
   });
   stream = {

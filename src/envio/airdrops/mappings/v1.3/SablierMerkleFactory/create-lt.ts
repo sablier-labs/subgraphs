@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import { Contract } from "../../../bindings";
 import { convertTranches, isOfficialLockup } from "../../../helpers";
 import { type Params } from "../../../helpers/types";
@@ -56,7 +55,7 @@ Contract.Factory.MerkleFactory_v1_3.CreateMerkleLT.handlerWithLoader({
       asset: baseParams[0],
       campaignAddress: event.params.merkleLT,
       cancelable: event.params.cancelable,
-      category: enums.CampaignCategory.LockupTranched,
+      category: "LockupTranched",
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       lockup: event.params.lockup,

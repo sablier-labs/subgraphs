@@ -5,6 +5,13 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
+  "search.exclude": {
+    "**/airdrops/bindings": true,
+    "**/flow/bindings": true,
+    "**/lockup/bindings": true,
+    "dist": true,
+    "node_modules": true
+  },
   "[graphql][javascript][json][jsonc][typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },

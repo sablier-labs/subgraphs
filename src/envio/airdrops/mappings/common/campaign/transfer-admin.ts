@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import { ADDRESS_ZERO } from "../../../../common/constants";
 import { type Entity } from "../../../bindings";
 import type {
@@ -53,7 +52,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   /* --------------------------------- ACTION --------------------------------- */
   const entities = { campaign, watcher };
   await Store.Action.create(context, event, entities, {
-    category: enums.ActionCategory.TransferAdmin,
+    category: "TransferAdmin",
   });
 };
 

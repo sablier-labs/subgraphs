@@ -5,4 +5,5 @@ module.exports = {
   "*.{graphql,js,json,jsonc,ts}": "pnpm biome check --write",
   "*.{js,ts}": "pnpm biome lint --write --only correctness/noUnusedImports",
   "*.{md,yaml,yml}": "pnpm prettier --cache --write",
+  "src/exports/schemas/*.graphql": "just export-schemas",
 };

@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../../schema/enums";
 import { Effects } from "../../../common/effects";
 import { Id } from "../../../common/id";
 import { CommonStore } from "../../../common/store";
@@ -80,7 +79,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     addressA: event.params.sender,
     addressB: event.params.recipient,
     amountA: event.params.ratePerSecond,
-    category: enums.ActionCategory.Create,
+    category: "Create",
     streamId: stream.id,
   });
 };

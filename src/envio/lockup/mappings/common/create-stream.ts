@@ -2,7 +2,6 @@
  * @file Processors are reusable logic that is used in multiple event handlers.
  */
 
-import { Lockup as enums } from "../../../../schema/enums";
 import type { Envio } from "../../../common/bindings";
 import { CommonStore } from "../../../common/store";
 import { type Context, type Entity } from "../../bindings";
@@ -76,7 +75,7 @@ async function createAction(
     addressA: params.sender,
     addressB: params.recipient,
     amountA: params.depositAmount,
-    category: enums.ActionCategory.Create,
+    category: "Create",
     streamId: streamId,
   });
 }

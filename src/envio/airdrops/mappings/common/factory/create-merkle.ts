@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import type { Envio } from "../../../../common/bindings";
 import { CommonStore } from "../../../../common/store";
 import type { Context } from "../../../bindings";
@@ -28,7 +27,7 @@ export async function createMerkleLL(input: Input): Promise<void> {
     factory: createEntities.factory,
     watcher: createEntities.watcher,
   };
-  await Store.Action.create(context, event, actionEntities, { category: enums.ActionCategory.Create });
+  await Store.Action.create(context, event, actionEntities, { category: "Create" });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -46,7 +45,7 @@ export async function createMerkleLT(input: Input): Promise<void> {
     factory: createEntities.factory,
     watcher: createEntities.watcher,
   };
-  await Store.Action.create(context, event, actionEntities, { category: enums.ActionCategory.Create });
+  await Store.Action.create(context, event, actionEntities, { category: "Create" });
 }
 
 /* -------------------------------------------------------------------------- */

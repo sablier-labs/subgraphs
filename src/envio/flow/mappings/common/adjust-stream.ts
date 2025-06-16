@@ -1,4 +1,4 @@
-import { Flow as enums } from "../../../../schema/enums";
+import { Enum } from "../../bindings";
 import type {
   SablierFlow_v1_0_AdjustFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_AdjustFlowStream_handler as Handler_v1_1,
@@ -46,7 +46,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const action = await Store.Action.create(context, event, watcher, {
     amountA: event.params.oldRatePerSecond,
     amountB: event.params.newRatePerSecond,
-    category: enums.ActionCategory.Adjust,
+    category: Enum.ActionCategory.Adjust,
     streamId: stream.id,
   });
   stream = {

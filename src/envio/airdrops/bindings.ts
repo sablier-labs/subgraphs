@@ -35,9 +35,9 @@ export namespace Contract {
   }
 }
 
-// Enums
+// Enum
 import type { ActionCategory_t, CampaignCategory_t } from "./bindings/src/db/Enums.gen";
-export namespace EnvioEnum {
+export namespace Enum {
   export type ActionCategory = ActionCategory_t;
   export type CampaignCategory = CampaignCategory_t;
 }

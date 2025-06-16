@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../../schema/enums";
 import type {
   SablierFlow_v1_0_WithdrawFromFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_WithdrawFromFlowStream_handler as Handler_v1_1,
@@ -27,7 +26,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     addressA: event.params.caller,
     addressB: event.params.to,
     amountA: withdrawAmount,
-    category: enums.ActionCategory.Withdraw,
+    category: "Withdraw",
     streamId: stream.id,
   });
 };

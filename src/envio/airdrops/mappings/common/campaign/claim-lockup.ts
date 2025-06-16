@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../../schema/enums";
 import type { Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_Claim_handler as Handler_v1_1,
@@ -59,7 +58,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   }
   const entities = { campaign, watcher };
   await Store.Action.create(context, event, entities, {
-    category: enums.ActionCategory.Claim,
+    category: "Claim",
     claimAmount: event.params.amount,
     claimIndex: event.params.index,
     claimRecipient: event.params.recipient,

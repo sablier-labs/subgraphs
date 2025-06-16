@@ -14,13 +14,6 @@ export async function main() {
   program.name("indexers-cli").description("CLI for Sablier Indexers utilities");
 
   /* -------------------------------------------------------------------------- */
-  /*                               BUILD COMMANDS                               */
-  /* -------------------------------------------------------------------------- */
-  const build = program.command("build").description("Build commands");
-  const { command: buildSchemasCmd } = await import("./commands/build/schema.js");
-  build.addCommand(buildSchemasCmd.name("schema"));
-
-  /* -------------------------------------------------------------------------- */
   /*                            CODEGEN COMMANDS                               */
   /* -------------------------------------------------------------------------- */
   const codegen = program.command("codegen").description("Code generation commands");
@@ -35,14 +28,6 @@ export async function main() {
   codegen.addCommand(schemaCmd.name("schema"));
 
   /* -------------------------------------------------------------------------- */
-  /*                               FETCH COMMANDS                               */
-  /* -------------------------------------------------------------------------- */
-
-  // Import and add fetch command
-  const { command: fetchAssetsCmd } = await import("./commands/fetch-assets.js");
-  program.addCommand(fetchAssetsCmd.name("fetch-assets"));
-
-  /* -------------------------------------------------------------------------- */
   /*                               PRINT COMMANDS                               */
   /* -------------------------------------------------------------------------- */
   const print = program.command("print").description("Print information commands");
@@ -50,6 +35,18 @@ export async function main() {
   // Import and add print command
   const { command: printChainsCmd } = await import("./commands/print-chains.js");
   print.addCommand(printChainsCmd.name("chains"));
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    OTHER                                   */
+  /* -------------------------------------------------------------------------- */
+
+  // Import and add export schemas command
+  const { command: exportSchemasCmd } = await import("./commands/export-schemas.js");
+  program.addCommand(exportSchemasCmd.name("export-schemas"));
+
+  // Import and add fetch command
+  const { command: fetchAssetsCmd } = await import("./commands/fetch-assets.js");
+  program.addCommand(fetchAssetsCmd.name("fetch-assets"));
 
   program.parse();
 }

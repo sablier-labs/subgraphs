@@ -4,12 +4,12 @@ import type { Types } from "../../types";
 const commonDefs = `#graphql
   # ------------------------------------ IDs ----------------------------------- #
   """
-  Unique identifier: {contractAddress}-{chainId}-{tokenId}
+  Unique identifier: \`{contractAddress}-{chainId}-{tokenId}\`
   """
   id: String!
 
   """
-  Like the id: {contractAlias}-{chainId}-{tokenId}
+  Like the id: \`{contractAlias}-{chainId}-{tokenId}\`
   """
   alias: String!
 

@@ -24,23 +24,18 @@ GLOBS_CLEAN_IGNORE := "!src/graph/common/bindings"
 default: full-check
 
 # Build the project
-build: (clean "dist") build-schemas
+build: (clean "dist")
     pnpm tsc -p tsconfig.build.json
-    just cli build schema
 alias b := build
-
-# Codegen the GraphQL schemas and copy them to the dist directory
-build-schemas:
-    #!/usr/bin/env sh
-    LOG_LEVEL=error just codegen-schema
-    mkdir -p ./dist/schemas
-    cp ./src/graph/airdrops/schema.graphql ./dist/schemas/airdrops.graphql
-    cp ./src/graph/flow/schema.graphql ./dist/schemas/flow.graphql
-    cp ./src/graph/lockup/schema.graphql ./dist/schemas/lockup.graphql
 
 # Remove build files
 clean globs=GLOBS_CLEAN:
     pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
+
+# Generate the schemas in the ./src/exports directory
+export-schemas +globs="src/exports/schemas/*.graphql":
+    just cli export-schemas
+    just biome-write "{{ globs }}"
 
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
@@ -62,10 +57,10 @@ alias t := test
 
 # Build all subgraphs
 [group("graph")]
-@build-graph protocol="all":
+@build-graph-indexers protocol="all":
     just for-each _build-graph {{ protocol }}
 
-_build-graph protocol: (codegen-graph protocol)
+_build-graph-indexer protocol: (codegen-graph protocol)
     pnpm graph build \
         --output-dir src/graph/{{ protocol }}/build \
         src/graph/{{ protocol }}/manifests/ethereum.yaml

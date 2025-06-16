@@ -1,4 +1,3 @@
-import { Lockup as enums } from "../../../../schema/enums";
 import type {
   SablierV2LockupLinear_v1_0_Approval_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_Approval_handler as Handler_v1_1,
@@ -18,7 +17,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   await Store.Action.create(context, event, watcher, {
     addressA: event.params.owner,
     addressB: event.params.approved,
-    category: enums.ActionCategory.Approval,
+    category: "Approval",
     streamId: stream.id,
   });
 };

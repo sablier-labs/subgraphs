@@ -30,7 +30,7 @@ export namespace Contract {
 
 // Enums
 import type { ActionCategory_t, StreamCategory_t } from "./bindings/src/db/Enums.gen";
-export namespace EnvioEnum {
+export namespace Enum {
   export type ActionCategory = ActionCategory_t;
   export type StreamCategory = StreamCategory_t;
 }

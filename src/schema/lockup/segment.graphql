@@ -3,7 +3,7 @@ See https://docs.sablier.com/concepts/lockup/segments
 """
 type Segment @entity(immutable: true) {
   """
-  Unique identifier: {streamId}-{position}
+  Unique identifier: `{streamId}-{position}`
   """
   id: String!
 
@@ -24,7 +24,7 @@ type Segment @entity(immutable: true) {
 
   """
   Exponent used for the streamed amount calculations.
-  See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/types/DataTypes.sol#L279-L288
+  See https://github.com/sablier-labs/lockup/blob/v2.0/src/types/DataTypes.sol#L279-L288
   """
   exponent: BigInt!
 

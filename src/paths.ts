@@ -10,8 +10,8 @@ if (!fs.existsSync(join(ROOT_DIR, "package.json"))) {
 
 export const SRC_DIR = resolve(__dirname);
 export const ABI_DIR = join(SRC_DIR, "abi");
-export const GQL_DIR = join(SRC_DIR, "gql");
 export const ENVIO_DIR = join(SRC_DIR, "envio");
+export const EXPORTS_DIR = join(SRC_DIR, "exports");
 export const GRAPH_DIR = join(SRC_DIR, "graph");
 export const RPC_DATA_DIR = join(SRC_DIR, "rpc-data");
 export const SCHEMA_DIR = join(SRC_DIR, "schema");
@@ -27,13 +27,13 @@ const paths = {
     }
     return join(ABI_DIR, `${contractName}.json`);
   },
-  dist: {
-    schemas: (protocol?: P): string => join(ROOT_DIR, "dist", "schemas", protocol ? `${protocol}.graphql` : ""),
-  },
   envio: {
     config: (protocol: P): string => join(ENVIO_DIR, protocol, "config.yaml"),
     rpcData: (category: C, chain: string): string => join(ENVIO_DIR, "common", "rpc-data", category, `${chain}.json`),
     schema: (protocol: P): string => join(ENVIO_DIR, protocol, "schema.graphql"),
+  },
+  exports: {
+    schemas: (protocol?: P): string => join(EXPORTS_DIR, "schemas", protocol ? `${protocol}.graphql` : ""),
   },
   graph: {
     manifests: (protocol: P): string => join(GRAPH_DIR, protocol, "manifests"),

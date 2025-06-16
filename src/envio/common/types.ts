@@ -1,4 +1,5 @@
-import type * as enums from "../../schema/enums";
+import type { Enum as FlowEnum } from "../flow/bindings";
+import type { Enum as LockupEnum } from "../lockup/bindings";
 import type { Envio } from "./bindings";
 
 export namespace RPCData {
@@ -24,7 +25,7 @@ export namespace CommonParams {
     addressB?: string;
     amountA?: bigint;
     amountB?: bigint;
-    category: enums.Flow.ActionCategory | enums.Lockup.ActionCategory;
+    category: FlowEnum.ActionCategory | LockupEnum.ActionCategory;
     streamId?: string;
   };
 }

@@ -1,4 +1,3 @@
-import { Flow as enums } from "../../../../schema/enums";
 import { ADDRESS_ZERO } from "../../../common/constants";
 import type {
   SablierFlow_v1_0_Transfer_handler as Handler_v1_0,
@@ -37,7 +36,7 @@ export const handler: Handler<Loader.BaseReturn> = async ({ context, event, load
   await Store.Action.create(context, event, watcher, {
     addressA: currentRecipient,
     addressB: newRecipient,
-    category: enums.ActionCategory.Transfer,
+    category: "Transfer",
     streamId: stream.id,
   });
 };

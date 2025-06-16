@@ -1,13 +1,13 @@
 """
 Creating streams in bulk is possible using the SablierBatchLockup contract.
-See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/SablierBatchLockup.sol
+See https://github.com/sablier-labs/lockup/blob/v2.0/src/SablierBatchLockup.sol
 
 The entity can be immutable because a batch is only updated in the same block.
 See https://thegraph.com/docs/en/subgraphs/developing/creating/ql-schema/#defining-entities
 """
 type Batch @entity(immutable: true) {
   """
-  Unique identifier: {chainId}-{txHash}-{batcher}
+  Unique identifier: `{chainId}-{txHash}-{batcher}`
   """
   id: String!
 
@@ -44,7 +44,7 @@ Sender address that created batches.
 """
 type Batcher @entity(immutable: false) {
   """
-  Unique identifier: {chainId}-{sender}
+  Unique identifier: `{chainId}-{sender}`
   """
   id: String!
 

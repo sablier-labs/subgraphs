@@ -1,6 +1,5 @@
-import { type enums } from "../../../schema";
 import type { Envio } from "../../common/bindings";
-import { type Entity } from "../bindings";
+import type { Entity, Enum } from "../bindings";
 
 export namespace Params {
   export type ActionEntities = {
@@ -9,7 +8,7 @@ export namespace Params {
   };
 
   export type Action = {
-    category: enums.Airdrops.ActionCategory;
+    category: Enum.ActionCategory;
     claimAmount?: bigint;
     claimIndex?: bigint;
     claimRecipient?: Envio.Address;
@@ -32,7 +31,7 @@ export namespace Params {
     asset: Envio.Address;
     aggregateAmount: bigint;
     campaignAddress: Envio.Address;
-    category: enums.Airdrops.CampaignCategory;
+    category: Enum.CampaignCategory;
     expiration: bigint;
     merkleRoot: string;
     minimumFee: bigint | undefined;

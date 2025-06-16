@@ -1,4 +1,3 @@
-import { Airdrops as enums } from "../../../../schema/enums";
 import { Contract } from "../../bindings";
 import { isOfficialLockup, type Params } from "../../helpers";
 import { createMerkleLL } from "../common";
@@ -50,7 +49,7 @@ Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLo
       asset: event.params.asset,
       campaignAddress: event.params.merkleStreamer,
       cancelable: event.params.cancelable,
-      category: enums.CampaignCategory.LockupLinear,
+      category: "LockupLinear",
       cliffDuration: event.params.streamDurations[0],
       cliffPercentage: undefined,
       expiration: event.params.expiration,
