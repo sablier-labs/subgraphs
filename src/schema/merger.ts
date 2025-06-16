@@ -14,7 +14,7 @@ import { getEnumDefs } from "./enums";
  * @param protocol - The protocol to generate a schema for.
  * @returns A merged schema for the given protocol.
  */
-export function mergeSchema(protocol: Types.Protocol): DocumentNode {
+export function getMergedSchema(protocol: Types.Protocol): DocumentNode {
   const gqlDefs: string[] = [];
 
   // Defs common to all protocols

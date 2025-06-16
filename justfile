@@ -23,16 +23,20 @@ GLOBS_CLEAN_IGNORE := "!src/graph/common/bindings"
 # Show available commands
 default: full-check
 
-# Authenticate with Graph hosted service
-[group("graph")]
-auth:
-    pnpm graph auth $GRAPH_DEPLOY_KEY
-
-
 # Build the project
-build: (clean "dist")
+build: (clean "dist") build-schemas
     pnpm tsc -p tsconfig.build.json
+    just cli build schema
 alias b := build
+
+# Codegen the GraphQL schemas and copy them to the dist directory
+build-schemas:
+    #!/usr/bin/env sh
+    LOG_LEVEL=error just codegen-schema
+    mkdir -p ./dist/schemas
+    cp ./src/graph/airdrops/schema.graphql ./dist/schemas/airdrops.graphql
+    cp ./src/graph/flow/schema.graphql ./dist/schemas/flow.graphql
+    cp ./src/graph/lockup/schema.graphql ./dist/schemas/lockup.graphql
 
 # Remove build files
 clean globs=GLOBS_CLEAN:
@@ -145,7 +149,9 @@ _codegen-graph-bindings protocol:
 [group("envio")]
 [group("graph")]
 @codegen-schema vendor="all" protocol="all":
-    just cli codegen schema --vendor {{ vendor }} --protocol {{ protocol }}
+    just cli codegen schema \
+        --vendor {{ vendor }} \
+        --protocol {{ protocol }}
 
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: PRINT                                #

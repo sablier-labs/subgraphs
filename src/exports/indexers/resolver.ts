@@ -14,6 +14,7 @@ export function resolveEnvio(protocol: Indexer.Protocol, chainId: number): Index
     kind: "official",
     name: `sablier-${protocol}`,
     protocol,
+    testingURL: `https://cloud.hasura.io/public/graphiql?endpoint=${encodeURIComponent(record.endpoint.url)}`,
   };
 }
 

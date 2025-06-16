@@ -1,4 +1,4 @@
-import "../scripts.just"
+import "../graph.just"
 
 # Set protocol name
 

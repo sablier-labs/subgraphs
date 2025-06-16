@@ -3,6 +3,11 @@ import * as fs from "fs-extra";
 import type { RPCData } from "./envio/common/types";
 import type { Types } from "./types";
 
+const ROOT_DIR = join(__dirname, "..");
+if (!fs.existsSync(join(ROOT_DIR, "package.json"))) {
+  throw new Error("ROOT_DIR is not set correctly");
+}
+
 export const SRC_DIR = resolve(__dirname);
 export const ABI_DIR = join(SRC_DIR, "abi");
 export const GQL_DIR = join(SRC_DIR, "gql");
@@ -21,6 +26,9 @@ const paths = {
       return join(ABI_DIR, `${protocol}-${version}`, `${contractName}.json`);
     }
     return join(ABI_DIR, `${contractName}.json`);
+  },
+  dist: {
+    schemas: (protocol?: P): string => join(ROOT_DIR, "dist", "schemas", protocol ? `${protocol}.graphql` : ""),
   },
   envio: {
     config: (protocol: P): string => join(ENVIO_DIR, protocol, "config.yaml"),

@@ -1,4 +1,4 @@
-import "../scripts.just"
+import "../envio.just"
 
 # Set protocol name
 export PROTOCOL := "airdrops"

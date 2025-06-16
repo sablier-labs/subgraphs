@@ -4,7 +4,7 @@ import { type Sablier, sablier } from "sablier";
 import { convertToIndexed, indexedContracts } from "../../../contracts";
 import { getGraphChainName } from "../../../exports/vendors";
 import { sanitizeContractName } from "../../../helpers";
-import { mergeSchema } from "../../../schema/merger";
+import { getMergedSchema } from "../../../schema/merger";
 import type { Types } from "../../../types";
 import { logger, messages } from "../../../winston";
 import { CodegenError } from "../../error";
@@ -107,7 +107,7 @@ function getContext(params: CreateSourcesParams): GraphManifest.Context | undefi
  * @returns An array of entity names available in the merged schema.
  */
 export function getEntities(protocol: Types.Protocol): string[] {
-  const schema = mergeSchema(protocol);
+  const schema = getMergedSchema(protocol);
 
   const entityNames: string[] = [];
 

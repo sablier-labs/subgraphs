@@ -15,6 +15,11 @@ NODE_XDC := "https://graph.xinfin.network"
 #                                    RECIPES                                   #
 # ---------------------------------------------------------------------------- #
 
+# Authenticate with Graph hosted service
+[group("graph")]
+auth:
+    pnpm graph auth $GRAPH_DEPLOY_KEY
+
 # Build the subgraph
 @build:
     just root::build-graph {{ PROTOCOL }}

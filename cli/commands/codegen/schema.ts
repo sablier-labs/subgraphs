@@ -15,7 +15,7 @@ import * as fs from "fs-extra";
 import { print } from "graphql";
 import _ from "lodash";
 import paths from "../../../src/paths";
-import { mergeSchema } from "../../../src/schema";
+import { getMergedSchema } from "../../../src/schema";
 import type { Types } from "../../../src/types";
 import { logger } from "../../../src/winston";
 import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../../constants";
@@ -52,7 +52,6 @@ export function createSchemaCommand(): Command {
   return command;
 }
 
-// Export the command
 export const command = createSchemaCommand();
 
 /* -------------------------------------------------------------------------- */
@@ -89,7 +88,7 @@ function generateAllProtocolSchemas(vendor: Types.Vendor, skipLogs: boolean = fa
  * @returns Result of the schema generation
  */
 function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
-  const mergedSchema = print(mergeSchema(protocol));
+  const mergedSchema = print(getMergedSchema(protocol));
   const schema = `${AUTOGEN_COMMENT}${mergedSchema}`;
 
   const outputPath = paths.schema(vendor, protocol);

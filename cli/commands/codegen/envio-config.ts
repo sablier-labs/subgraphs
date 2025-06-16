@@ -41,7 +41,6 @@ export function createEnvioConfigCommand(): Command {
   return command;
 }
 
-// Export the command
 export const command = createEnvioConfigCommand();
 
 /* -------------------------------------------------------------------------- */

@@ -9,14 +9,21 @@
 
 import { Command } from "commander";
 
-async function main() {
+export async function main() {
   const program = new Command();
   program.name("indexers-cli").description("CLI for Sablier Indexers utilities");
 
   /* -------------------------------------------------------------------------- */
+  /*                               BUILD COMMANDS                               */
+  /* -------------------------------------------------------------------------- */
+  const build = program.command("build").description("Build commands");
+  const { command: buildSchemasCmd } = await import("./commands/build/schema.js");
+  build.addCommand(buildSchemasCmd.name("schema"));
+
+  /* -------------------------------------------------------------------------- */
   /*                            CODEGEN COMMANDS                               */
   /* -------------------------------------------------------------------------- */
-  const codegen = program.command("codegen").description("Code generation utilities");
+  const codegen = program.command("codegen").description("Code generation commands");
 
   // Import and add codegen commands
   const { command: envioConfigCmd } = await import("./commands/codegen/envio-config.js");
@@ -38,7 +45,7 @@ async function main() {
   /* -------------------------------------------------------------------------- */
   /*                               PRINT COMMANDS                               */
   /* -------------------------------------------------------------------------- */
-  const print = program.command("print").description("Print information utilities");
+  const print = program.command("print").description("Print information commands");
 
   // Import and add print command
   const { command: printChainsCmd } = await import("./commands/print-chains.js");
@@ -47,4 +54,6 @@ async function main() {
   program.parse();
 }
 
-main().catch(console.error);
+if (require.main === module) {
+  main().catch(console.error);
+}

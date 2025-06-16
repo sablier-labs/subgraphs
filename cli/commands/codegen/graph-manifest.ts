@@ -53,7 +53,6 @@ export function createGraphManifestCommand(): Command {
   return command;
 }
 
-// Export the command
 export const command = createGraphManifestCommand();
 
 /* -------------------------------------------------------------------------- */
