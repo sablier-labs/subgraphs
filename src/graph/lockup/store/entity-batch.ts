@@ -7,7 +7,7 @@ import { getOrCreateBatcher } from "./entity-batcher";
 /**
  * This function may be run multiple times within the same transaction:
  *
- * 1. For the 1st stream, the Batch entity is created with a size of zero and all other fields null.
+ * 1. For the 1st stream, the Batch entity is created with a size of one and all other fields null.
  * 2. For the 2nd stream, all fields are set.
  * 3. For the 3rd stream and later, only the size is updated.
  *

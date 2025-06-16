@@ -1,5 +1,5 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { ONE, TWO, ZERO } from "../../common/constants";
+import { ONE, TWO } from "../../common/constants";
 import { Id } from "../../common/id";
 import * as Entity from "../bindings/schema";
 import { getOrCreateBatcher } from "./entity-batcher";
@@ -7,7 +7,7 @@ import { getOrCreateBatcher } from "./entity-batcher";
 /**
  * This function may be run multiple times within the same transaction:
  *
- * 1. For the 1st stream, the Batch entity is created with a size of zero and all other fields null.
+ * 1. For the 1st stream, the Batch entity is created with a size of one and all other fields null.
  * 2. For the 2nd stream, all fields are set.
  * 3. For the 3rd stream and later, only the size is updated.
  *
@@ -20,7 +20,7 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
   let batch = Entity.Batch.load(id);
   if (batch === null) {
     batch = new Entity.Batch(id);
-    batch.size = ZERO;
+    batch.size = ONE;
   } else {
     const hash = batch.hash;
     if (hash === null) {
