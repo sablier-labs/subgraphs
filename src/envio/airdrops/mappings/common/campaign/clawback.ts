@@ -1,3 +1,4 @@
+import { Id } from "../../../../common/id";
 import type { Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_Clawback_handler as Handler_v1_1,
@@ -13,15 +14,18 @@ import { Store } from "../../../store";
 /*                                   LOADER                                   */
 /* -------------------------------------------------------------------------- */
 type LoaderReturn = {
-  campaign?: Entity.Campaign;
-  watcher?: Entity.Watcher;
+  campaign: Entity.Campaign;
+  watcher: Entity.Watcher;
 };
 
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const campaign = await Store.Campaign.get(context, event);
-  const watcher = await Store.Watcher.get(context, event.chainId);
+  const campaignId = Id.campaign(event.chainId, event.srcAddress);
+  const campaign = await context.Campaign.getOrThrow(campaignId);
+
+  const watcherId = event.chainId.toString();
+  const watcher = await context.Watcher.getOrThrow(watcherId);
 
   return {
     campaign,
@@ -37,8 +41,6 @@ type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { campaign, watcher } = loaderReturn;
-  Store.Campaign.exists(event, campaign);
-  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- ACTION --------------------------------- */
   const entities = { campaign, watcher };

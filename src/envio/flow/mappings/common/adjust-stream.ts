@@ -1,4 +1,3 @@
-import { Enum } from "../../bindings";
 import type {
   SablierFlow_v1_0_AdjustFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_AdjustFlowStream_handler as Handler_v1_1,
@@ -15,8 +14,6 @@ type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   let { stream, watcher } = loaderReturn;
-  Store.Stream.exists(event, event.params.streamId, stream);
-  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const now = BigInt(event.block.timestamp);
@@ -46,7 +43,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const action = await Store.Action.create(context, event, watcher, {
     amountA: event.params.oldRatePerSecond,
     amountB: event.params.newRatePerSecond,
-    category: Enum.ActionCategory.Adjust,
+    category: "Adjust",
     streamId: stream.id,
   });
   stream = {

@@ -63,19 +63,6 @@ export async function createLT(
   return campaign;
 }
 
-export function exists(event: Envio.Event, campaign?: Entity.Campaign): asserts campaign is Entity.Campaign {
-  if (!campaign) {
-    const id = Id.campaign(event.chainId, event.srcAddress);
-    throw new Error(`Campaign not loaded from the entity store: ${id}`);
-  }
-}
-
-export async function get(context: Context.Loader, event: Envio.Event) {
-  const id = Id.campaign(event.chainId, event.srcAddress);
-  const campaign = await context.Campaign.get(id);
-  return campaign;
-}
-
 export async function updateAdmin(
   context: Context.Handler,
   campaign: Entity.Campaign,

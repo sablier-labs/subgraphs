@@ -1,5 +1,4 @@
 import type { Envio } from "../../common/bindings";
-import { Id } from "../../common/id";
 import type { Context, Entity } from "../bindings";
 
 export async function create(
@@ -21,10 +20,6 @@ export async function create(
 
   await context.Activity.set(activity);
   return activity;
-}
-
-export async function get(context: Context.Loader, event: Envio.Event): Promise<Entity.Activity | undefined> {
-  return await context.Activity.get(Id.activity(event));
 }
 
 export async function update(

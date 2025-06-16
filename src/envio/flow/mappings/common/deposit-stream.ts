@@ -10,8 +10,6 @@ type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   let { stream, watcher } = loaderReturn;
-  Store.Stream.exists(event, event.params.streamId, stream);
-  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const depositedAmount = stream.depositedAmount + event.params.amount;

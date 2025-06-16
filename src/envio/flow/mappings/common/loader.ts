@@ -2,6 +2,7 @@
  * @file Reusable Envio loaders
  * @see https://docs.envio.dev/docs/HyperIndex/loaders
  */
+import { Id } from "../../../common/id";
 import type { Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_AdjustFlowStream_loader as Adjust_v1_0,
@@ -23,7 +24,6 @@ import type {
   SablierFlow_v1_0_WithdrawFromFlowStream_loader as Withdraw_v1_0,
   SablierFlow_v1_1_WithdrawFromFlowStream_loader as Withdraw_v1_1,
 } from "../../bindings/src/Types.gen";
-import { Store } from "../../store";
 
 export namespace Loader {
   type Base<T> = Adjust_v1_0<T> &
@@ -46,8 +46,8 @@ export namespace Loader {
     Withdraw_v1_1<T>;
 
   export type BaseReturn = {
-    stream?: Entity.Stream;
-    watcher?: Entity.Watcher;
+    stream: Entity.Stream;
+    watcher: Entity.Watcher;
   };
 
   export const base: Base<BaseReturn> = async ({ context, event }): Promise<BaseReturn> => {
@@ -59,8 +59,9 @@ export namespace Loader {
     } else {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
-    const stream = await Store.Stream.get(context, event, tokenId);
-    const watcher = await Store.Watcher.get(context, event.chainId);
+    const streamId = Id.stream(event.srcAddress, event.chainId, tokenId);
+    const stream = await context.Stream.getOrThrow(streamId);
+    const watcher = await context.Watcher.getOrThrow(event.chainId.toString());
     return {
       stream,
       watcher,

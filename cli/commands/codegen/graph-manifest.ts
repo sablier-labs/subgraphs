@@ -84,6 +84,7 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
 
   if (fs.pathExistsSync(manifestsDir)) {
     fs.emptyDirSync(manifestsDir);
+    fs.ensureFileSync(path.join(manifestsDir, ".gitkeep"));
     logger.verbose("🗑️ Cleared existing manifests directory");
   }
 
@@ -93,7 +94,7 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
     filesGenerated++;
   }
   if (filesGenerated === 0) {
-    throw new Error(`No manifests generated for protocol ${_.capitalize(protocol)}. This might be a bug.`);
+    throw new Error(`No manifests generated for protocol ${_.capitalize(protocol)}. This is a bug.`);
   }
 
   if (!suppressFinalLog) {

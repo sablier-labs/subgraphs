@@ -37,7 +37,6 @@ import type {
   SablierV2LockupLinear_v1_0_WithdrawFromLockupStream_loader as Withdraw_v1_0,
   SablierV2LockupLinear_v1_1_WithdrawFromLockupStream_loader as Withdraw_v1_1_to_v2_0,
 } from "../../bindings/src/Types.gen";
-import { Store } from "../../store";
 
 export namespace Loader {
   /* -------------------------------------------------------------------------- */
@@ -62,8 +61,8 @@ export namespace Loader {
     Withdraw_v1_1_to_v2_0<T>;
 
   export type BaseReturn = {
-    stream?: Entity.Stream;
-    watcher?: Entity.Watcher;
+    stream: Entity.Stream;
+    watcher: Entity.Watcher;
   };
 
   export const base: Base<BaseReturn> = async ({ context, event }): Promise<BaseReturn> => {
@@ -75,8 +74,9 @@ export namespace Loader {
     } else {
       throw new Error("Neither tokenId nor streamId found in event params");
     }
-    const stream = await Store.Stream.get(context, event, tokenId);
-    const watcher = await Store.Watcher.get(context, event.chainId);
+    const streamId = Id.stream(event.srcAddress, event.chainId, tokenId);
+    const stream = await context.Stream.getOrThrow(streamId);
+    const watcher = await context.Watcher.getOrThrow(event.chainId.toString());
     return {
       stream,
       watcher,

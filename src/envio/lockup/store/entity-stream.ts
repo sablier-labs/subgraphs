@@ -59,27 +59,6 @@ export async function createTranched(
   return stream;
 }
 
-export function exists(
-  event: Envio.Event,
-  tokenId: bigint | string,
-  stream?: Entity.Stream,
-): asserts stream is Entity.Stream {
-  if (!stream) {
-    const id = Id.stream(event.srcAddress, event.chainId, tokenId);
-    throw new Error(`Stream not loaded from the entity store: ${id}`);
-  }
-}
-
-export async function get(
-  context: Context.Handler | Context.Loader,
-  event: Envio.Event,
-  tokenId: bigint | string,
-): Promise<Entity.Stream | undefined> {
-  const id = Id.stream(event.srcAddress, event.chainId, tokenId);
-  const stream = await context.Stream.get(id);
-  return stream;
-}
-
 /* -------------------------------------------------------------------------- */
 /*                                COMMON LOGIC                                */
 /* -------------------------------------------------------------------------- */

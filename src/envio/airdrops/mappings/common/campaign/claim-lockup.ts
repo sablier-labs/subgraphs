@@ -1,3 +1,4 @@
+import { Id } from "../../../../common/id";
 import type { Entity } from "../../../bindings";
 import type {
   SablierV2MerkleStreamerLL_v1_1_Claim_handler as Handler_v1_1,
@@ -15,16 +16,21 @@ import { Store } from "../../../store";
 /* -------------------------------------------------------------------------- */
 
 type LoaderReturn = {
-  activity?: Entity.Activity;
-  campaign?: Entity.Campaign;
-  watcher?: Entity.Watcher;
+  activity: Entity.Activity;
+  campaign: Entity.Campaign;
+  watcher: Entity.Watcher;
 };
 
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const activity = await Store.Activity.get(context, event);
-  const campaign = await Store.Campaign.get(context, event);
-  const watcher = await Store.Watcher.get(context, event.chainId);
+  const activityId = Id.activity(event);
+  const activity = await context.Activity.getOrThrow(activityId);
+
+  const campaignId = Id.campaign(event.chainId, event.srcAddress);
+  const campaign = await context.Campaign.getOrThrow(campaignId);
+
+  const watcherId = event.chainId.toString();
+  const watcher = await context.Watcher.getOrThrow(watcherId);
 
   return {
     activity,
@@ -41,8 +47,6 @@ type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
   const { campaign, watcher } = loaderReturn;
-  Store.Campaign.exists(event, campaign);
-  Store.Watcher.exists(event.chainId, watcher);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateClaimed(context, campaign, event.params.amount);

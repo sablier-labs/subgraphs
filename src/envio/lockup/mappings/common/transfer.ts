@@ -22,8 +22,6 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   }
 
   let { stream, watcher } = loaderReturn;
-  Store.Stream.exists(event, event.params.tokenId, stream);
-  Store.Watcher.exists(event.chainId, watcher);
 
   /* --------------------------------- STREAM --------------------------------- */
   const currentRecipient = event.params.from.toLowerCase();
