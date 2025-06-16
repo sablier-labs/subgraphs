@@ -169,7 +169,7 @@ _codegen-graph-bindings protocol:
     echo "Available protocol arguments: all, flow, lockup, airdrops"
 
 # ---------------------------------------------------------------------------- #
-#                               RECIPES: HELPERS                               #
+#                           RECIPES: PRIVATE HELPERS                           #
 # ---------------------------------------------------------------------------- #
 
 # Helper to run CLI commands through the main entry point

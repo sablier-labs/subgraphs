@@ -15,5 +15,8 @@ export function createSources(protocol: Types.Protocol, chainId: number): GraphM
     case "lockup": {
       return getLockupSources(chainId);
     }
+    default: {
+      throw new Error(`Unknown protocol: ${protocol}`);
+    }
   }
 }

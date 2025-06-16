@@ -1,4 +1,3 @@
-import { get_rpcs_for_chain as getRPCs } from "chainlist-rpcs";
 import _ from "lodash";
 import { sablier } from "sablier";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
@@ -39,15 +38,16 @@ for (const config of envioConfigs) {
     rpcUrls.push(chain.rpc.default);
   }
 
+  // TODO: add chainlist-rpcs package back when this is merged
+  // https://github.com/actuallymentor/chainlist-rpcs/pull/4
   // 4. Add public RPCs from chainlist as fallbacks
-  const publicRpcUrls = getRPCs({ chain_id: chain.id })
-    .map((rpc) => {
-      const url = typeof rpc === "string" ? rpc : rpc.url;
-      return url.startsWith("http") ? url : undefined;
-    })
-    .filter(Boolean) as string[];
-
-  rpcUrls.push(...publicRpcUrls);
+  // const publicRpcUrls = getRPCs({ chain_id: chain.id })
+  //   .map((rpc) => {
+  //     const url = typeof rpc === "string" ? rpc : rpc.url;
+  //     return url.startsWith("http") ? url : undefined;
+  //   })
+  //   .filter(Boolean) as string[];
+  // rpcUrls.push(...publicRpcUrls);
 
   // Remove duplicates while preserving order
   const uniqueRpcUrls = _.uniq(rpcUrls);
