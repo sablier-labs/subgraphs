@@ -24,11 +24,16 @@ export namespace EnvioConfig {
     address?: Sablier.Address | Sablier.Address[];
   };
 
+  export type NetworkRPC = {
+    url: string;
+    for: "fallback";
+  };
+
   export type Network = {
     id: number;
-    rpc?: string;
     start_block: number;
     hypersync_config?: HypersyncConfig;
+    rpc?: NetworkRPC[];
     contracts: NetworkContract[];
   };
 

@@ -17,7 +17,7 @@ import * as fs from "fs-extra";
 import _ from "lodash";
 import { sablier } from "sablier";
 import { createGraphManifest } from "../../../src/codegen/graph-manifest";
-import { graphConfigs } from "../../../src/exports/vendors";
+import { graphChains } from "../../../src/exports/indexers/graph";
 import paths from "../../../src/paths";
 import type { Types } from "../../../src/types";
 import { logger } from "../../../src/winston";
@@ -89,8 +89,8 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
   }
 
   let filesGenerated = 0;
-  for (const config of graphConfigs) {
-    writeManifestToFile(protocol, config.chainId);
+  for (const chainId of graphChains) {
+    writeManifestToFile(protocol, chainId);
     filesGenerated++;
   }
   if (filesGenerated === 0) {

@@ -17,7 +17,7 @@ export type Indexer = {
 export namespace Indexer {
   export type EnvioConfig = {
     chainId: number;
-    hypersync?: string;
+    hypersyncURL?: string;
   };
 
   export type EnvioDeployment = {
@@ -44,7 +44,6 @@ export namespace Indexer {
 
   export type GraphConfig = {
     chainId: number;
-    name: string;
   };
 
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;

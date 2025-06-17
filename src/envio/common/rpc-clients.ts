@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { sablier } from "sablier";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
-import { envioConfigs } from "../../exports/vendors";
+import { envioChains } from "../../exports/indexers/envio";
 import { IndexingError } from "./error";
 
 /**
@@ -11,19 +11,14 @@ import { IndexingError } from "./error";
 const clients: PublicClient[] = [];
 
 // Initialize RPC clients for all supported chains
-for (const config of envioConfigs) {
+for (const chainId of envioChains) {
   // Get chain configuration from Sablier deployments
-  const chain = sablier.chains.getOrThrow(config.chainId);
+  const chain = sablier.chains.getOrThrow(chainId);
 
   // Build priority-ordered list of RPC URLs
   const rpcUrls: string[] = [];
 
-  // 1. Add HyperSync endpoint (highest priority for indexing)
-  if (config.hypersync) {
-    rpcUrls.push(config.hypersync);
-  }
-
-  // 2. Add Infura and Alchemy endpoints if keys are available
+  // Add Infura and Alchemy endpoints if keys are available
   if (chain.rpc.infura && process.env.ENVIO_INFURA_API_KEY) {
     const infuraURL = chain.rpc.infura(process.env.ENVIO_INFURA_API_KEY);
     rpcUrls.push(infuraURL);
@@ -33,10 +28,8 @@ for (const config of envioConfigs) {
     rpcUrls.push(alchemyURL);
   }
 
-  // 3. Add default chain RPC as provided by the Sablier deployments package, which sources it from Viem.
-  if (chain.rpc.default) {
-    rpcUrls.push(chain.rpc.default);
-  }
+  // Add default chain RPC as provided by the Sablier deployments package, which sources it from Viem.
+  rpcUrls.push(chain.rpc.default);
 
   // TODO: add chainlist-rpcs package back when this is merged
   // https://github.com/actuallymentor/chainlist-rpcs/pull/4

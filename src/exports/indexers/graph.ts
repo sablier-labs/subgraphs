@@ -1,6 +1,80 @@
 import { chains, Protocol, sablier } from "sablier";
+import { SUBGRAPH_STUDIO_USER_ID } from "../constants";
 import type { Indexer } from "../types";
-import { resolveGraphCustom, resolveGraphOfficial } from "./resolver";
+
+/* -------------------------------------------------------------------------- */
+/*                                  CONSTANTS                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ⚠️ IMPORTANT
+ * Not all names on The Graph are the same as the chain's slug defined in the Sablier SDK.
+ *
+ * @see https://github.com/sablierhq/deployments
+ * @see https://thegraph.com/docs/en/supported-networks
+ */
+const CHAIN_SLUG_OVERRIDES: { [chainId: number]: string } = {
+  [chains.arbitrum.id]: "arbitrum-one",
+  [chains.blast.id]: "blast-mainnet",
+  [chains.ethereum.id]: "mainnet",
+  [chains.ethereumSepolia.id]: "sepolia",
+  [chains.mode.id]: "mode-mainnet",
+  [chains.sei.id]: "sei-mainnet",
+};
+
+const NAME_TEMPLATING_VAR = "{SUBGRAPH_NAME}";
+
+/* -------------------------------------------------------------------------- */
+/*                                   HELPERS                                  */
+/* -------------------------------------------------------------------------- */
+
+export function getGraphChainSlug(chainId: number): string {
+  return CHAIN_SLUG_OVERRIDES[chainId] ?? sablier.chains.getOrThrow(chainId).slug;
+}
+
+function getSubgraphName(chainId: number, protocol: Indexer.Protocol): Indexer.SubgraphName {
+  const graphChainName = getGraphChainSlug(chainId);
+  return `sablier-${protocol}-${graphChainName}`;
+}
+
+/**
+ * Sort indexers alphabetically by chain name.
+ */
+function resolveCustom(protocol: Indexer.Protocol, chainId: number, templateURL: string): Indexer {
+  if (!templateURL.includes(NAME_TEMPLATING_VAR)) {
+    throw new Error(`Template URL for custom Graph indexer does not include ${NAME_TEMPLATING_VAR}`);
+  }
+  const subgraphName = getSubgraphName(chainId, protocol);
+  return {
+    chainId,
+    endpoint: {
+      url: templateURL.replace(NAME_TEMPLATING_VAR, subgraphName),
+    },
+    kind: "custom",
+    name: subgraphName,
+    protocol,
+  };
+}
+
+function resolveOfficial(protocol: Indexer.Protocol, chainId: number, subgraphId: string): Indexer {
+  const subgraphName = getSubgraphName(chainId, protocol);
+  return {
+    chainId,
+    endpoint: {
+      id: subgraphId,
+      url: `https://gateway.thegraph.com/api/subgraphs/id/${subgraphId}`,
+    },
+    explorerURL: `https://thegraph.com/explorer/subgraphs/${subgraphId}`,
+    kind: "official",
+    name: subgraphName,
+    protocol,
+    testingURL: `https://api.studio.thegraph.com/query/${SUBGRAPH_STUDIO_USER_ID}/${subgraphName}/version/latest`,
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 DEFINITIONS                                */
+/* -------------------------------------------------------------------------- */
 
 type SubgraphId = string;
 type SubgraphIdMap = Record<Indexer.Protocol, SubgraphId>;
@@ -8,21 +82,21 @@ type IndexerGraphMap = Record<Indexer.Protocol, Indexer>;
 
 function custom(chainId: number, baseURL: string): IndexerGraphMap {
   return {
-    airdrops: resolveGraphCustom(Protocol.Airdrops, chainId, baseURL),
-    flow: resolveGraphCustom(Protocol.Flow, chainId, baseURL),
-    lockup: resolveGraphCustom(Protocol.Lockup, chainId, baseURL),
+    airdrops: resolveCustom(Protocol.Airdrops, chainId, baseURL),
+    flow: resolveCustom(Protocol.Flow, chainId, baseURL),
+    lockup: resolveCustom(Protocol.Lockup, chainId, baseURL),
   };
 }
 
 function official(chainId: number, idMap: SubgraphIdMap): IndexerGraphMap {
   return {
-    airdrops: resolveGraphOfficial(Protocol.Airdrops, chainId, idMap.airdrops),
-    flow: resolveGraphOfficial(Protocol.Flow, chainId, idMap.flow),
-    lockup: resolveGraphOfficial(Protocol.Lockup, chainId, idMap.lockup),
+    airdrops: resolveOfficial(Protocol.Airdrops, chainId, idMap.airdrops),
+    flow: resolveOfficial(Protocol.Flow, chainId, idMap.flow),
+    lockup: resolveOfficial(Protocol.Lockup, chainId, idMap.lockup),
   };
 }
 
-const customs: IndexerGraphMap[] = [
+const CUSTOMS: IndexerGraphMap[] = [
   /* -------------------------------------------------------------------------- */
   /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
@@ -30,19 +104,17 @@ const customs: IndexerGraphMap[] = [
     chains.form.id,
     "https://formapi.0xgraph.xyz/api/public/5961fb30-8fdc-45ad-9a35-555dd5e0dd56/subgraphs/{SUBGRAPH_NAME}/2.3_1.0.0/gn",
   ),
-
   /* -------------------------------------------------------------------------- */
   /*                                  LIGHTLINK                                 */
   /* -------------------------------------------------------------------------- */
   custom(chains.lightlink.id, "https://graph.phoenix.lightlink.io/query/subgraphs/name/lightlink/{SUBGRAPH_NAME}"),
-
   /* -------------------------------------------------------------------------- */
   /*                                    XDC                                     */
   /* -------------------------------------------------------------------------- */
   custom(chains.xdc.id, "https://graphql.xinfin.network/subgraphs/name/xdc/{SUBGRAPH_NAME}"),
 ];
 
-const officials: IndexerGraphMap[] = [
+const OFFICIALS: IndexerGraphMap[] = [
   /* -------------------------------------------------------------------------- */
   /*                                  ABSTRACT                                  */
   /* -------------------------------------------------------------------------- */
@@ -75,7 +147,6 @@ const officials: IndexerGraphMap[] = [
     flow: "6PAizjTALVqLLB7Ycq6XnpTeck8Z8QUpDFnVznMnisUh",
     lockup: "FTDmonvFEm1VGkzECcnDY2CPHcW5dSmHRurSjEEfTkCX",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    BASE                                    */
   /* -------------------------------------------------------------------------- */
@@ -84,7 +155,6 @@ const officials: IndexerGraphMap[] = [
     flow: "4XSxXh8ZgkzaA35nrbQG9Ry3FYz3ZFD8QBdWwVg5pF9W",
     lockup: "778GfecD9tsyB4xNnz4wfuAyfHU6rqGr79VCPZKu3t2F",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                BASE SEPOLIA                                */
   /* -------------------------------------------------------------------------- */
@@ -93,7 +163,6 @@ const officials: IndexerGraphMap[] = [
     flow: "AsnKT1waQMvuQxZAqfFuYwtRtAfN8uekDu75jPttfyLh",
     lockup: "DdiYENuyh5ztSybRJnBnCZuUgESkFasjGFHZUbURpKHz",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                  BERACHAIN                                 */
   /* -------------------------------------------------------------------------- */
@@ -102,7 +171,6 @@ const officials: IndexerGraphMap[] = [
     flow: "J87eaBLfTe7kKWgUGqe5TxntNCzA4pyWmqJowMddehuh",
     lockup: "C2r13APcUemQtVdPFm7p7T3aJkU2rH2EvdZzrQ53zi14",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    BLAST                                   */
   /* -------------------------------------------------------------------------- */
@@ -111,7 +179,6 @@ const officials: IndexerGraphMap[] = [
     flow: "8joiC9LpUbSV6eGRr3RWXDArM8p9Q65FKiFekAakkyia",
     lockup: "8MBBc6ET4izgJRrybgWzPjokhZKSjk43BNY1q3xcb8Es",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    BSC                                     */
   /* -------------------------------------------------------------------------- */
@@ -120,7 +187,6 @@ const officials: IndexerGraphMap[] = [
     flow: "2vU8KF4yWh3vvFjtg7MrRXMnYF3hPX2T3cvVBdaiXhNb",
     lockup: "A8Vc9hi7j45u7P8Uw5dg4uqYJgPo4x1rB4oZtTVaiccK",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                  CHILIZ                                   */
   /* -------------------------------------------------------------------------- */
@@ -129,7 +195,6 @@ const officials: IndexerGraphMap[] = [
     flow: "7QX7tJsANNFpxFLLjqzmXRzfY1wPGp3Lty5xGbhgADa6",
     lockup: "4KsXUFvsKFHH7Q8k3BPgEv2NhCJJGwG78gCPAUpncYb",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                  ETHEREUM                                  */
   /* -------------------------------------------------------------------------- */
@@ -138,7 +203,6 @@ const officials: IndexerGraphMap[] = [
     flow: "ECxBJhKceBGaVvK6vqmK3VQAncKwPeAQutEb8TeiUiod",
     lockup: "AvDAMYYHGaEwn9F9585uqq6MM5CfvRtYcb7KjK7LKPCt",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                              ETHEREUM SEPOLIA                              */
   /* -------------------------------------------------------------------------- */
@@ -147,7 +211,6 @@ const officials: IndexerGraphMap[] = [
     flow: "EU9AWmJjrjMRkjxcdHfuWPZvPTNAL3hiXfNGN5MwUpvm",
     lockup: "5yDtFSxyRuqyjvGJyyuQhMEW3Uah7Ddy2KFSKVhy9VMa",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                   GNOSIS                                   */
   /* -------------------------------------------------------------------------- */
@@ -156,7 +219,6 @@ const officials: IndexerGraphMap[] = [
     flow: "4KiJ53cTNKdFWPBPmDNQ55tYj8hn1WQg8R4UcTY2STLL",
     lockup: "DtKniy1RvB19q1r2g1WLN4reMNKDacEnuAjh284rW2iK",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    IOTEX                                   */
   /* -------------------------------------------------------------------------- */
@@ -165,7 +227,6 @@ const officials: IndexerGraphMap[] = [
     flow: "6No3QmRiC8HXLEerDFoBpF47jUPRjhntmv28HHEMxcA2",
     lockup: "2P3sxwmcWBjMUv1C79Jh4h6VopBaBZeTocYWDUQqwWFV",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    LINEA                                   */
   /* -------------------------------------------------------------------------- */
@@ -174,7 +235,6 @@ const officials: IndexerGraphMap[] = [
     flow: "DV9XgcCCPKzUn6pgetg4yPetpW2fNoRKBUQC43aNeLG6",
     lockup: "GvpecytqVzLzuwuQB3enozXoaZRFoVx8Kr7qrfMiE9bs",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    MODE                                    */
   /* -------------------------------------------------------------------------- */
@@ -183,7 +243,6 @@ const officials: IndexerGraphMap[] = [
     flow: "9TwfoUZoxYUyxzDgspCPyxW6uMUKetWQDaTGsZjY1qJZ",
     lockup: "oSBvUM371as1pJh8HQ72NMRMb3foV3wuheULfkNf5vy",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                  OPTIMISM                                  */
   /* -------------------------------------------------------------------------- */
@@ -192,7 +251,6 @@ const officials: IndexerGraphMap[] = [
     flow: "AygPgsehNGSB4K7DYYtvBPhTpEiU4dCu3nt95bh9FhRf",
     lockup: "NZHzd2JNFKhHP5EWUiDxa5TaxGCFbSD4g6YnYr8JGi6",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                              OPTIMISM SEPOLIA                              */
   /* -------------------------------------------------------------------------- */
@@ -201,7 +259,6 @@ const officials: IndexerGraphMap[] = [
     flow: "EFKqBB6TeH6etGuHCffnbMbETEgDZ6U29Lgpc4gpYvdB",
     lockup: "2LFYyhMVMUMYA2q7XMMnBvCs6v6awWxBeMuMk3tMtmiT",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                   POLYGON                                  */
   /* -------------------------------------------------------------------------- */
@@ -210,7 +267,6 @@ const officials: IndexerGraphMap[] = [
     flow: "ykp38sLarwz3cpmjSSPqo7UuTjYtkZ1KiL4PM2qwmT8",
     lockup: "8fgeQMEQ8sskVeWE5nvtsVL2VpezDrAkx2d1VeiHiheu",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                   SCROLL                                   */
   /* -------------------------------------------------------------------------- */
@@ -219,7 +275,6 @@ const officials: IndexerGraphMap[] = [
     flow: "HFpTrPzJyrHKWZ9ebb4VFRQSxRwpepyfz5wd138daFkF",
     lockup: "GycpYx8c9eRqxvEAfqnpNd1ZfXeuLzjRhnG7vvYaqEE1",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                    SEI                                     */
   /* -------------------------------------------------------------------------- */
@@ -228,7 +283,6 @@ const officials: IndexerGraphMap[] = [
     flow: "41ZGYcFgL2N7L5ng78S4sD6NHDNYEYcNFxnz4T8Zh3iU",
     lockup: "AJU5rBfbuApuJpeZeaz6NYuYnnhAhEy4gFkqsSdAT6xb",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                  UNICHAIN                                  */
   /* -------------------------------------------------------------------------- */
@@ -237,7 +291,6 @@ const officials: IndexerGraphMap[] = [
     flow: "Cb5uDYfy4ukN9fjhQ3PQZgDzyo6G66ztn1e847rS7Xa8",
     lockup: "3MUG4H3gZcp9fpGLiJMTMeUFcQQ6QdT317P4wYKyns9M",
   }),
-
   /* -------------------------------------------------------------------------- */
   /*                                   ZKSYNC                                   */
   /* -------------------------------------------------------------------------- */
@@ -248,12 +301,9 @@ const officials: IndexerGraphMap[] = [
   }),
 ];
 
-const all: IndexerGraphMap[] = [...customs, ...officials];
+const ALL: IndexerGraphMap[] = [...CUSTOMS, ...OFFICIALS];
 
-/**
- * Sort indexers alphabetically by chain name.
- */
-function mapAndSort(indexerMaps: IndexerGraphMap[], protocol: Indexer.Protocol): Indexer[] {
+function toSortedArray(indexerMaps: IndexerGraphMap[], protocol: Indexer.Protocol): Indexer[] {
   return indexerMaps
     .map((indexerMap) => indexerMap[protocol])
     .sort((a, b) => {
@@ -264,7 +314,10 @@ function mapAndSort(indexerMaps: IndexerGraphMap[], protocol: Indexer.Protocol):
 }
 
 export const graph: Record<Indexer.Protocol, Indexer[]> = {
-  airdrops: mapAndSort(all, Protocol.Airdrops),
-  flow: mapAndSort(all, Protocol.Flow),
-  lockup: mapAndSort(all, Protocol.Lockup),
+  airdrops: toSortedArray(ALL, Protocol.Airdrops),
+  flow: toSortedArray(ALL, Protocol.Flow),
+  lockup: toSortedArray(ALL, Protocol.Lockup),
 };
+
+// It doesn't matter what protocol we are using since each chain supports all protocols.
+export const graphChains = graph.lockup.map((c) => c.chainId);

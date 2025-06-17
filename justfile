@@ -47,9 +47,9 @@ export-schemas +globs="src/exports/schemas/*.graphql":
 setup:
     pnpm husky
 
-# Run Jest tests
-test:
-    pnpm jest
+# Run tests
+test args="--silent":
+    pnpm vitest run {{ args }}
 alias t := test
 
 # ---------------------------------------------------------------------------- #

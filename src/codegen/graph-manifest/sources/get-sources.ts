@@ -2,12 +2,13 @@ import { Kind } from "graphql";
 import _ from "lodash";
 import { type Sablier, sablier } from "sablier";
 import { convertToIndexed, indexedContracts } from "../../../contracts";
-import { getGraphChainName } from "../../../exports/vendors";
+import { getGraphChainSlug } from "../../../exports/indexers/graph";
 import { sanitizeContractName } from "../../../helpers";
 import { getMergedSchema } from "../../../schema/merger";
 import type { Types } from "../../../types";
 import { logger, messages } from "../../../winston";
 import { CodegenError } from "../../error";
+import { GRAPH_API_VERSION } from "../constants";
 import type { GraphManifest } from "../manifest-types";
 import { getABIEntries } from "./abi-entries";
 import eventHandlers from "./event-handlers";
@@ -64,12 +65,12 @@ function getCommon(params: CreateSourcesParams) {
     context,
     kind: "ethereum/contract",
     mapping: {
-      apiVersion: "0.0.9",
+      apiVersion: GRAPH_API_VERSION,
       kind: "ethereum/events",
       language: "wasm/assemblyscript",
     },
     name: dataSourceName,
-    network: getGraphChainName(chainId),
+    network: getGraphChainSlug(chainId),
     source: {
       abi: contract.name,
       address: isTemplate ? undefined : contractAddress,

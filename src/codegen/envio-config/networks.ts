@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { sablier } from "sablier";
 import { indexedContracts } from "../../contracts";
-import { envioConfigs } from "../../exports/vendors";
+import { envioChains, envioHypersync } from "../../exports/indexers/envio";
 import { sanitizeContractName } from "../../helpers";
 import type { Types } from "../../types";
 import { logger, messages } from "../../winston";
@@ -11,14 +11,15 @@ import type { EnvioConfig } from "./config-types";
 export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] {
   const networks: EnvioConfig.Network[] = [];
 
-  for (const config of envioConfigs) {
-    const { contracts, startBlock } = extractContracts(protocol, config.chainId);
-    const hypersync_config = config.hypersync ? { url: config.hypersync } : undefined;
+  for (const chainId of envioChains) {
+    const { contracts, startBlock } = extractContracts(protocol, chainId);
+    const hypersyncURL = envioHypersync[chainId];
+    const hypersync_config = hypersyncURL ? { url: hypersyncURL } : undefined;
     networks.push({
-      id: config.chainId,
-      rpc: getInfuraURL(config.chainId),
+      id: chainId,
       start_block: startBlock,
       hypersync_config,
+      rpc: getFallbackRPCs(chainId),
       contracts,
     });
   }
@@ -30,12 +31,34 @@ export function createNetworks(protocol: Types.Protocol): EnvioConfig.Network[] 
 /*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
-function getInfuraURL(chainId: number): string | undefined {
+/**
+ * Will return an URL like this: https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}
+ * The API key will be loaded from the .env file.
+ */
+function getFallbackRPCs(chainId: number): EnvioConfig.NetworkRPC[] {
+  const fallbackRPCs: EnvioConfig.NetworkRPC[] = [];
   const chain = sablier.chains.getOrThrow(chainId);
+
+  fallbackRPCs.push({
+    url: chain.rpc.default,
+    for: "fallback",
+  });
+
   if (chain.rpc.infura && process.env.ENVIO_INFURA_API_KEY) {
-    return chain.rpc.infura(process.env.ENVIO_INFURA_API_KEY);
+    fallbackRPCs.push({
+      url: chain.rpc.infura("{ENVIO_INFURA_API_KEY}"),
+      for: "fallback",
+    });
   }
-  return undefined;
+
+  if (chain.rpc.alchemy && process.env.ENVIO_ALCHEMY_API_KEY) {
+    fallbackRPCs.push({
+      url: chain.rpc.alchemy("{ENVIO_ALCHEMY_API_KEY}"),
+      for: "fallback",
+    });
+  }
+
+  return fallbackRPCs;
 }
 
 type ExtractContractsReturn = {
