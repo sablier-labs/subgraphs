@@ -31,6 +31,7 @@ alias cc := codegen-config
     just root::codegen-schema envio $PROTOCOL
 alias cs := codegen-schema
 
+# Envio CLI: dev, start, stop
 @envio command:
     just _envio {{ command }}
 
@@ -38,7 +39,7 @@ alias cs := codegen-schema
 #                               RECIPES: HELPERS                               #
 # ---------------------------------------------------------------------------- #
 
-_envio command:
-    pnpm envio {{ command }} \
+_envio command tui_off="false":
+    TUI_OFF={{ tui_off }} pnpm envio {{ command }} \
     --config {{ justfile_dir() }}/config.yaml \
     --output-directory {{ justfile_dir() }}/bindings

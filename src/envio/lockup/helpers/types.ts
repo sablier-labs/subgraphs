@@ -1,5 +1,6 @@
 import type { Envio } from "../../common/bindings";
 import type { Entity, Enum } from "../bindings";
+
 export namespace Params {
   export type Cancel = {
     recipient: Envio.Address;
@@ -23,6 +24,7 @@ export namespace Params {
     depositAmount: bigint;
     endTime: bigint;
     funder: Envio.Address;
+    proxender?: Envio.Address;
     recipient: Envio.Address;
     sender: Envio.Address;
     shape?: string;

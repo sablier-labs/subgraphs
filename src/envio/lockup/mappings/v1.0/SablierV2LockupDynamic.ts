@@ -54,6 +54,7 @@ Contract.LockupDynamic_v1_0.CreateLockupDynamicStream.handlerWithLoader({
       depositAmount: event.params.amounts[0],
       endTime: event.params.range[1],
       funder: event.params.funder,
+      proxender: loaderReturn.rpcData.proxender,
       recipient: event.params.recipient,
       segments: convertSegments(event.params.segments),
       sender: event.params.sender,

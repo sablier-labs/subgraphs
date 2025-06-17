@@ -48,6 +48,7 @@ Contract.LockupLinear_v1_0.CreateLockupLinearStream.handlerWithLoader({
       depositAmount: event.params.amounts[0],
       endTime: event.params.range[2],
       funder: event.params.funder,
+      proxender: loaderReturn.rpcData.proxender,
       recipient: event.params.recipient,
       sender: event.params.sender,
       startTime: event.params.range[0],

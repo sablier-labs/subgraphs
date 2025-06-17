@@ -8,6 +8,6 @@ Contract.Lockup_v2_0.RenounceLockupStream.handlerWithLoader(renounceStream);
 Contract.Lockup_v2_0.Transfer.handlerWithLoader(transfer);
 Contract.Lockup_v2_0.WithdrawFromLockupStream.handlerWithLoader(withdrawStream);
 
-import "./SablierLockup/CreateDynamicStream_handler";
-import "./SablierLockup/CreateLinearStream_handler";
-import "./SablierLockup/CreateTranchedStream_handler";
+import "./SablierLockup/create-dynamic";
+import "./SablierLockup/create-linear";
+import "./SablierLockup/create-tranched";

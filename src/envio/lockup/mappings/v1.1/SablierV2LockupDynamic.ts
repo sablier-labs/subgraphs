@@ -5,12 +5,12 @@ import { approval, approvalForAll, cancelStream, renounceStream, transfer, withd
 import { createDynamicStream } from "../common/create-stream";
 import { Loader } from "../common/loader";
 
-Contract.LockupLinear_v1_1.ApprovalForAll.handlerWithLoader(approvalForAll);
-Contract.LockupLinear_v1_2.Approval.handlerWithLoader(approval);
-Contract.LockupLinear_v1_1.CancelLockupStream.handlerWithLoader(cancelStream);
-Contract.LockupLinear_v1_1.RenounceLockupStream.handlerWithLoader(renounceStream);
-Contract.LockupLinear_v1_1.Transfer.handlerWithLoader(transfer);
-Contract.LockupLinear_v1_1.WithdrawFromLockupStream.handlerWithLoader(withdrawStream);
+Contract.LockupDynamic_v1_1.ApprovalForAll.handlerWithLoader(approvalForAll);
+Contract.LockupDynamic_v1_1.Approval.handlerWithLoader(approval);
+Contract.LockupDynamic_v1_1.CancelLockupStream.handlerWithLoader(cancelStream);
+Contract.LockupDynamic_v1_1.RenounceLockupStream.handlerWithLoader(renounceStream);
+Contract.LockupDynamic_v1_1.Transfer.handlerWithLoader(transfer);
+Contract.LockupDynamic_v1_1.WithdrawFromLockupStream.handlerWithLoader(withdrawStream);
 
 /*
 ──────────────────────────────────────────────────────────────

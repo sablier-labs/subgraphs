@@ -1,9 +1,10 @@
+import _ from "lodash";
 import { Version } from "sablier";
 import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
+import { sanitizeString } from "../../common/strings";
 import type { Context, Entity, Enum } from "../bindings";
-import { fetchOrReadProxender } from "../helpers/proxy";
 import type { Params, Segment, Tranche } from "../helpers/types";
 import { update as updateBatch } from "./entity-batch";
 
@@ -27,21 +28,22 @@ export async function createLinear(
 ): Promise<Entity.Stream> {
   const baseStream = await createBase(context, event, entities, params);
 
-  let initial: boolean = false;
-  let initialAmount: bigint = 0n;
-  if (params.unlockAmountStart) {
-    if (params.unlockAmountStart && params.unlockAmountStart > 0n) {
-      initial = true;
-      initialAmount = params.unlockAmountStart;
-    }
+  let initial = {
+    initial: false,
+    initialAmount: 0n,
+  };
+  if (params.unlockAmountStart && params.unlockAmountStart > 0n) {
+    initial = {
+      initial: true,
+      initialAmount: params.unlockAmountStart,
+    };
   }
   const cliff = createCliff(baseStream, params);
 
   const stream: Entity.Stream = {
     ...baseStream,
     ...cliff,
-    initial,
-    initialAmount,
+    ...initial,
   };
   await context.Stream.set(stream);
   return stream;
@@ -81,16 +83,6 @@ async function createBase(
   const funder = event.transaction.from?.toLowerCase() || "";
   const recipient = params.recipient.toLowerCase();
   const sender = params.sender.toLowerCase();
-  const parties = [recipient, sender];
-
-  // PRBProxy was only used in Lockup v1.0
-  let proxender: Envio.Address | undefined;
-  if (lockup.version === Version.Lockup.V1_0) {
-    proxender = await fetchOrReadProxender(event.chainId, event.srcAddress, sender);
-    if (proxender) {
-      parties.push(proxender);
-    }
-  }
 
   // Some fields are set to 0/ undefined because they are set later depending on the stream category.
   const stream: Entity.Stream = {
@@ -108,24 +100,24 @@ async function createBase(
     cliffAmount: 0n,
     cliffTime: 0n,
     contract: event.srcAddress,
-    depositAmount: 0n,
-    duration: 0n,
-    endTime: 0n,
+    depositAmount: params.depositAmount,
+    duration: params.endTime - params.startTime,
+    endTime: params.endTime,
     funder,
     hash: event.transaction.hash,
     id: streamId,
     initial: false,
     initialAmount: 0n,
-    intactAmount: 0n,
-    parties,
+    intactAmount: params.depositAmount,
+    parties: _.compact([recipient, sender, params.proxender]),
     position: batch.size,
-    proxender: proxender,
-    proxied: Boolean(proxender),
+    proxender: params.proxender,
+    proxied: Boolean(params.proxender),
     recipient,
     renounceAction_id: undefined,
     renounceTime: undefined,
     sender,
-    shape: params.shape,
+    shape: params.shape ? sanitizeString(params.shape) : undefined,
     startTime: now,
     subgraphId: counter,
     timestamp: now,
@@ -148,8 +140,7 @@ async function createBase(
   return stream;
 }
 
-// TODO: add `satisfies` here
-function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
+function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Partial<Entity.Stream> {
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
   if (stream.version === Version.Lockup.V2_0) {
@@ -190,7 +181,7 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear) {
       throw new Error(`Unknown Lockup version: ${stream.version}`);
     }
   }
-  return undefined;
+  return {};
 }
 
 async function createSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {

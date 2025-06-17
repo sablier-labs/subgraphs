@@ -75,7 +75,7 @@ for (const chainId of envioChains) {
  * @throws IndexingError.ClientNotFound if no client exists for the chain
  */
 export function getClient(chainId: number): PublicClient {
-  const client = clients.find((c) => c?.chain?.id === chainId);
+  const client = _.find(clients, (c) => c?.chain?.id === chainId);
 
   if (!client) {
     throw new IndexingError.ClientNotFound(chainId);

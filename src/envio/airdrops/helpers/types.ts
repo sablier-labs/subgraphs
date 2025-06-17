@@ -40,7 +40,7 @@ export namespace Params {
     recipientCount: bigint;
   };
 
-  type CreateCampaignLockup = CreateCampaignBase & {
+  export type CreateCampaignLockup = CreateCampaignBase & {
     cancelable: boolean;
     lockup: Envio.Address;
     shape: string | undefined;

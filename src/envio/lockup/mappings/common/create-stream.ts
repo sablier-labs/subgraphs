@@ -55,12 +55,13 @@ async function createAssociatedEntities(
     sender: string;
   },
 ): Promise<Params.CreateEntities> {
-  const { asset, assetMetadata, batch, batcher, watcher } = loaderReturn;
+  const { entities, rpcData } = loaderReturn;
   return {
-    asset: asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, assetMetadata)),
-    batch: batch ?? (await Store.Batch.create(event, params.sender)),
-    batcher: batcher ?? (await Store.Batcher.create(context, event, params.sender)),
-    watcher: watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
+    asset:
+      entities.asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, rpcData.assetMetadata)),
+    batch: entities.batch ?? (await Store.Batch.create(event, params.sender)),
+    batcher: entities.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
+    watcher: entities.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
   };
 }
 

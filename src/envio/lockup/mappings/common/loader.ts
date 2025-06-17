@@ -88,11 +88,16 @@ export namespace Loader {
   /* -------------------------------------------------------------------------- */
 
   export type CreateReturn = {
-    asset?: Entity.Asset;
-    assetMetadata: RPCData.ERC20Metadata;
-    batch?: Entity.Batch;
-    batcher?: Entity.Batcher;
-    watcher?: Entity.Watcher;
+    entities: {
+      asset?: Entity.Asset;
+      batch?: Entity.Batch;
+      batcher?: Entity.Batcher;
+      watcher?: Entity.Watcher;
+    };
+    rpcData: {
+      assetMetadata: RPCData.ERC20Metadata;
+      proxender?: Envio.Address;
+    };
   };
 
   type EventParams = {
@@ -117,16 +122,26 @@ export namespace Loader {
 
     const batcherId = Id.batcher(event.chainId, params.sender);
     const batcher = await context.Batcher.get(batcherId);
+    const proxender = await context.effect(Effects.PRBProxy.readOrFetchProxender, {
+      chainId: event.chainId,
+      lockupAddress: event.srcAddress,
+      streamSender: params.sender,
+    });
 
     const watcherId = event.chainId.toString();
     const watcher = await context.Watcher.get(watcherId);
 
     return {
-      asset,
-      assetMetadata,
-      batch,
-      batcher,
-      watcher,
+      entities: {
+        asset,
+        batch,
+        batcher,
+        watcher,
+      },
+      rpcData: {
+        assetMetadata,
+        proxender,
+      },
     };
   }
 

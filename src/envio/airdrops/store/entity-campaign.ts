@@ -1,6 +1,7 @@
 import type { Envio } from "../../common/bindings";
 import { getContractVersion } from "../../common/deployments";
 import { Id } from "../../common/id";
+import { sanitizeString } from "../../common/strings";
 import type { Context, Entity, Enum } from "../bindings";
 import { getNickname } from "../helpers/campaign";
 import type { Params } from "../helpers/types";
@@ -23,20 +24,15 @@ export async function createLL(
   params: Params.CreateCampaignLL,
 ): Promise<Entity.Campaign> {
   let campaign = await createBaseCampaign(context, event, entities, params);
+  const lockupCampaign = createLockupCampaign(params);
   campaign = {
     ...campaign,
-    lockup: params.lockup,
-    streamCancelable: params.cancelable,
+    ...lockupCampaign,
     streamCliff: params.cliffDuration > 0n,
     streamCliffDuration: params.cliffDuration,
     streamCliffPercentage: params.cliffPercentage,
     streamInitial: params.startPercentage ? params.startPercentage > 0n : undefined,
     streamInitialPercentage: params.startPercentage,
-    streamShape: params.shape,
-    streamStart: params.startTime ? params.startTime > 0n : undefined,
-    streamStartTime: params.startTime,
-    streamTotalDuration: params.totalDuration,
-    streamTransferable: params.transferable,
   };
   await context.Campaign.set(campaign);
   return campaign;
@@ -49,15 +45,10 @@ export async function createLT(
   params: Params.CreateCampaignLT,
 ): Promise<Entity.Campaign> {
   let campaign = await createBaseCampaign(context, event, entities, params);
+  const lockupCampaign = createLockupCampaign(params);
   campaign = {
     ...campaign,
-    lockup: params.lockup,
-    streamCancelable: params.cancelable,
-    streamShape: params.shape,
-    streamStart: params.startTime ? params.startTime > 0n : undefined,
-    streamStartTime: params.startTime,
-    streamTotalDuration: params.totalDuration,
-    streamTransferable: params.transferable,
+    ...lockupCampaign,
   };
   await context.Campaign.set(campaign);
   return campaign;
@@ -77,6 +68,19 @@ export async function updateAdmin(
   await context.Campaign.set(updatedCampaign);
 }
 
+export async function updateClaimed(
+  context: Context.Handler,
+  campaign: Entity.Campaign,
+  amount: bigint,
+): Promise<void> {
+  const updatedCampaign: Entity.Campaign = {
+    ...campaign,
+    claimedAmount: campaign.claimedAmount + amount,
+    claimedCount: campaign.claimedCount + 1n,
+  };
+  await context.Campaign.set(updatedCampaign);
+}
+
 export async function updateClawback(
   context: Context.Handler,
   event: Envio.Event,
@@ -91,18 +95,9 @@ export async function updateClawback(
   await context.Campaign.set(updatedCampaign);
 }
 
-export async function updateClaimed(
-  context: Context.Handler,
-  campaign: Entity.Campaign,
-  amount: bigint,
-): Promise<void> {
-  const updatedCampaign: Entity.Campaign = {
-    ...campaign,
-    claimedAmount: campaign.claimedAmount + amount,
-    claimedCount: campaign.claimedCount + 1n,
-  };
-  await context.Campaign.set(updatedCampaign);
-}
+/* -------------------------------------------------------------------------- */
+/*                               INTERNAL LOGIC                               */
+/* -------------------------------------------------------------------------- */
 
 async function createBaseCampaign(
   context: Context.Handler,
@@ -169,4 +164,16 @@ async function createBaseCampaign(
   await context.Watcher.set(updatedWatcher);
 
   return campaign;
+}
+
+function createLockupCampaign(params: Params.CreateCampaignLockup): Partial<Entity.Campaign> {
+  return {
+    lockup: params.lockup,
+    streamCancelable: params.cancelable,
+    streamShape: params.shape ? sanitizeString(params.shape) : undefined,
+    streamStart: params.startTime ? params.startTime > 0n : undefined,
+    streamStartTime: params.startTime,
+    streamTotalDuration: params.totalDuration,
+    streamTransferable: params.transferable,
+  };
 }
