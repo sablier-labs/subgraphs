@@ -2,6 +2,7 @@ import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export namespace Params {
   export class Action {
+    campaign: string;
     category: string;
     claimAmount: BigInt | null;
     claimIndex: BigInt | null;

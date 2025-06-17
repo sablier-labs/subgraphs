@@ -17,5 +17,5 @@ export function handleTransferAdmin(event: ethereum.Event, params: Params.Transf
   Store.Campaign.updateAdmin(campaign, params.newAdmin);
 
   /* --------------------------------- ACTION --------------------------------- */
-  Store.Action.create(event, campaign, { category: "TransferAdmin" } as Params.Action);
+  Store.Action.create(event, { campaign: campaign.id, category: "TransferAdmin" } as Params.Action);
 }

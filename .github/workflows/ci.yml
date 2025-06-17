@@ -30,9 +30,9 @@ jobs:
           fail-if-changed: true
           fail-message: "❌ Envio config files are out of sync. Run 'just codegen-envio-config' locally and commit the changes."
           files: |
-            src/envio/flow/config.yaml
-            src/envio/lockup/config.yaml
-            src/envio/airdrops/config.yaml
+            ./src/envio/flow/config.yaml
+            ./src/envio/lockup/config.yaml
+            ./src/envio/airdrops/config.yaml
 
       - name: "Codegen The Graph indexers"
         run: "just codegen-graph"
@@ -49,9 +49,9 @@ jobs:
           fail-if-changed: true
           fail-message: "❌ GraphQL schemas are out of sync. Run 'just build-schemas' locally and commit the changes."
           files: |
-            src/exports/schemas/airdrops.graphql
-            src/exports/schemas/flow.graphql
-            src/exports/schemas/lockup.graphql
+            ./src/exports/schemas/airdrops.graphql
+            ./src/exports/schemas/flow.graphql
+            ./src/exports/schemas/lockup.graphql
 
       - name: "Run the code checks"
         run: "just full-check"

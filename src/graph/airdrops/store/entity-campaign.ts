@@ -126,7 +126,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaign
   factory.save();
 
   /* --------------------------------- ACTION --------------------------------- */
-  createAction(event, campaign, { category: "Create" } as Params.Action);
+  createAction(event, { campaign: campaign.id, category: "Create" } as Params.Action);
 
   return campaign;
 }

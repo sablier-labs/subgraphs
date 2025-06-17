@@ -9,7 +9,8 @@ export function handleClawback(event: ethereum.Event, params: Params.Clawback): 
   }
 
   /* --------------------------------- ACTION --------------------------------- */
-  const action = Store.Action.create(event, campaign, {
+  const action = Store.Action.create(event, {
+    campaign: campaign.id,
     category: "Clawback",
     clawbackAmount: params.amount,
     clawbackFrom: params.admin,

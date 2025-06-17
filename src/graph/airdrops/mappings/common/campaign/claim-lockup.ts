@@ -26,7 +26,8 @@ export function handleClaimLockup(event: ethereum.Event, params: Params.ClaimLoc
   /* --------------------------------- ACTION --------------------------------- */
   const tokenId = params.streamId;
   const streamId = Id.stream(Address.fromBytes(lockup), tokenId);
-  Store.Action.create(event, campaign, {
+  Store.Action.create(event, {
+    campaign: campaign.id,
     category: "Claim",
     claimAmount: claimAmount,
     claimIndex: params.index,
