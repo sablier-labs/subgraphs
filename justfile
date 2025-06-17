@@ -81,7 +81,7 @@ _build-graph-indexer protocol: (codegen-graph protocol)
 # Codegen everything for the Envio indexer (order matters):
 # 1. GraphQL schema
 # 2. Envio config YAML
-[doc("Codegen everything needed for building the Envio indexer")]
+[doc("Codegen everything for the Envio indexer")]
 [group("codegen")]
 [group("envio")]
 @codegen-envio protocol="all":
@@ -111,11 +111,11 @@ _codegen-envio-bindings protocol:
 @codegen-envio-config protocol="all":
     just cli codegen envio-config --protocol {{ protocol }}
 
-# Codegen everything for the Graph subgraph (order matters):
+# Codegen everything for the Graph indexer (order matters):
 # 1. GraphQL schema
 # 2. YAML manifest
 # 3. AssemblyScript bindings
-[doc("Codegen everything needed for building the Graph subgraph")]
+[doc("Codegen everything for the Graph indexer")]
 [group("codegen")]
 [group("graph")]
 @codegen-graph protocol="all":
