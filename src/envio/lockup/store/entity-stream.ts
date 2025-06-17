@@ -142,7 +142,7 @@ async function createBase(
 
 function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Partial<Entity.Stream> {
   // In v2.0, the cliff time is set to zero if there is no cliff.
-  // See https://github.com/sablier-labs/lockup/blob/v2.0.1/src/libraries/Helpers.sol#L204-L219
+  // See https://github.com/sablier-labs/lockup/blob/v2.0/src/libraries/Helpers.sol#L204-L219
   if (stream.version === Version.Lockup.V2_0) {
     if (params.cliffTime !== 0n) {
       return {
@@ -156,7 +156,7 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): 
     const totalDuration = stream.duration;
 
     // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
-    // See https://github.com/sablier-labs/lockup/blob/v1.2.0/src/libraries/Helpers.sol#L157-L168
+    // See https://github.com/sablier-labs/lockup/blob/v1.2/src/libraries/Helpers.sol#L157-L168
     if (stream.version === Version.Lockup.V1_2) {
       if (params.cliffTime !== 0n) {
         return {
@@ -167,8 +167,8 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): 
       }
     }
     // In v1.0 and v1.1, no cliff means the cliff time is equal to the start time.
-    // See https://github.com/sablier-labs/lockup/blob/v1.1.2/src/libraries/Helpers.sol#L88-L103
-    // See https://github.com/sablier-labs/lockup/blob/v1.0.2/src/libraries/Helpers.sol#L88-L103
+    // See https://github.com/sablier-labs/lockup/blob/v1.1/src/libraries/Helpers.sol#L88-L103
+    // See https://github.com/sablier-labs/lockup/blob/v1.0/src/libraries/Helpers.sol#L88-L103
     else if (stream.version === Version.Lockup.V1_0 || stream.version === Version.Lockup.V1_1) {
       if (cliffDuration !== 0n) {
         return {
@@ -181,7 +181,7 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): 
       throw new Error(`Unknown Lockup version: ${stream.version}`);
     }
   }
-  return {};
+  return { cliff: false };
 }
 
 async function createSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {

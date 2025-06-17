@@ -41,6 +41,7 @@ function getFallbackRPCs(chainId: number): EnvioConfig.NetworkRPC[] {
 
   fallbackRPCs.push({
     url: chain.rpc.default,
+    interval_ceiling: 5000, // https://github.com/enviodev/hyperindex/issues/603
     for: "fallback",
   });
 

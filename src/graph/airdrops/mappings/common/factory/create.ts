@@ -1,6 +1,5 @@
 import { Address, DataSourceContext, ethereum } from "@graphprotocol/graph-ts";
 import { readChainId, readContractVersion } from "../../../../common/context";
-import { logInfo } from "../../../../common/logger";
 import { isOfficialLockup } from "../../../helpers";
 import { Params } from "../../../helpers/types";
 import { Store } from "../../../store";
@@ -16,7 +15,6 @@ export function handleCreateMerkleLL(
 ): void {
   const lockup = paramsLL.lockup;
   if (!isOfficialLockup(lockup)) {
-    logInfo("Unknown deployment of LockupLinear {} used in airdrop campaign", [lockup.toHexString()]);
     return;
   }
 
@@ -35,7 +33,6 @@ export function handleCreateMerkleLT(
 ): void {
   const lockup = paramsLT.lockup;
   if (!isOfficialLockup(lockup)) {
-    logInfo("Unknown deployment of LockupTranched {} used in airdrop campaign", [lockup.toHexString()]);
     return;
   }
 

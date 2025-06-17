@@ -1,5 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { readLockups } from "../../common/context";
+import { logInfo } from "../../common/logger";
 import * as Entity from "../bindings/schema";
 
 /**
@@ -33,5 +34,6 @@ export function isOfficialLockup(address: Address): boolean {
       return true;
     }
   }
+  logInfo("Unknown deployment of Lockup contract {} used in airdrop campaign", [address.toHexString()]);
   return false;
 }

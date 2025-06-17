@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "lodash": "^4.17",
-    "sablier": "1.0.0-beta.5"
+    "sablier": "1.0.0-beta.6"
   },
   "peerDependencies": {
-    "sablier": "1.0.0-beta.5"
+    "sablier": "1.0.0-beta.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0-beta.5",

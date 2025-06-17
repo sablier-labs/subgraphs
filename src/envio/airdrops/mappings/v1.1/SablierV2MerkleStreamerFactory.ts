@@ -6,7 +6,7 @@ import { Loader } from "../common/loader";
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.contractRegister(({ context, event }) => {
   const lockupAddress = event.params.merkleStreamer;
   if (!isOfficialLockup(event.chainId, lockupAddress)) {
-    throw new Error(`Unknown deployment of LockupLinear ${lockupAddress} used in airdrop campaign`);
+    return;
   }
   context.addSablierV2MerkleStreamerLL_v1_1(lockupAddress);
 });

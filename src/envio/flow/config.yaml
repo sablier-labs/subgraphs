@@ -47,6 +47,7 @@ networks:
     start_block: 73630
     rpc:
       - url: "https://api.mainnet.abs.xyz"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://abstract-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
@@ -59,6 +60,7 @@ networks:
     start_block: 281305357
     rpc:
       - url: "https://arb1.arbitrum.io/rpc"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://arbitrum-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -73,6 +75,7 @@ networks:
     start_block: 53922039
     rpc:
       - url: "https://api.avax.network/ext/bc/C/rpc"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://avalanche-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -87,6 +90,7 @@ networks:
     start_block: 23269999
     rpc:
       - url: "https://mainnet.base.org"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://base-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -101,6 +105,7 @@ networks:
     start_block: 780382
     rpc:
       - url: "https://rpc.berachain.com"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://berachain-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
@@ -111,6 +116,7 @@ networks:
     start_block: 44582847
     rpc:
       - url: "https://56.rpc.thirdweb.com"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://bsc-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -127,6 +133,7 @@ networks:
       url: "https://chiliz.hypersync.xyz"
     rpc:
       - url: "https://rpc.chiliz.com"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0x9efc8663cab0e2d97ad17c9fbfc8392445517e94"
@@ -137,6 +144,7 @@ networks:
     start_block: 21330577
     rpc:
       - url: "https://eth.merkle.io"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -151,6 +159,7 @@ networks:
     start_block: 37356094
     rpc:
       - url: "https://rpc.gnosischain.com"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://gnosis-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
@@ -163,6 +172,7 @@ networks:
     start_block: 12929891
     rpc:
       - url: "https://rpc.linea.build"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://linea-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -177,6 +187,7 @@ networks:
     start_block: 16616938
     rpc:
       - url: "https://mainnet.mode.network"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0x75970dde488431fc4961494569def3269f20d6b3"
@@ -187,6 +198,7 @@ networks:
     start_block: 980797
     rpc:
       - url: "https://rpc.morphl2.io"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0xfe6972d0ae797fae343e5a58d0c7d8513937f092"
@@ -197,6 +209,7 @@ networks:
     start_block: 128865315
     rpc:
       - url: "https://mainnet.optimism.io"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://optimism-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -211,6 +224,7 @@ networks:
     start_block: 65079319
     rpc:
       - url: "https://polygon-rpc.com"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://polygon-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -225,6 +239,7 @@ networks:
     start_block: 11643209
     rpc:
       - url: "https://rpc.scroll.io"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://scroll-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -239,6 +254,7 @@ networks:
     start_block: 11341394
     rpc:
       - url: "https://rpc.sophon.xyz"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0x20c9a3e27322fc2b21ced430d1b2e12d90804db6"
@@ -247,6 +263,7 @@ networks:
     start_block: 3610744
     rpc:
       - url: "https://mainnet.superseed.xyz"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://superseed-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
@@ -261,6 +278,7 @@ networks:
       url: "https://tangle.hypersync.xyz"
     rpc:
       - url: "https://rpc.tangle.tools"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2"
@@ -271,6 +289,9 @@ networks:
     start_block: 13883575
     rpc:
       - url: "https://mainnet.unichain.org/"
+        interval_ceiling: 5000
+        for: "fallback"
+      - url: "https://unichain-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://unichain-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
@@ -281,6 +302,7 @@ networks:
     start_block: 85226840
     rpc:
       - url: "https://rpc.xdcrpc.com"
+        interval_ceiling: 5000
         for: "fallback"
     contracts:
       - address: "0xd6482334242862951da3e730f818c3f6e3f45a30"
@@ -289,6 +311,7 @@ networks:
     start_block: 50572220
     rpc:
       - url: "https://mainnet.era.zksync.io"
+        interval_ceiling: 5000
         for: "fallback"
       - url: "https://zksync-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
@@ -303,6 +326,9 @@ networks:
     start_block: 103460016
     rpc:
       - url: "https://sepolia-rollup.arbitrum.io/rpc"
+        interval_ceiling: 5000
+        for: "fallback"
+      - url: "https://arbitrum-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
     contracts:
       - address: "0x781b3b2527f2a0a1e6b429161f2717a8a28b9f46"
@@ -313,6 +339,11 @@ networks:
     start_block: 18780695
     rpc:
       - url: "https://sepolia.base.org"
+        interval_ceiling: 5000
+        for: "fallback"
+      - url: "https://base-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://base-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
     contracts:
       - address: "0xd5f78708d83ac2bc8734a8cdf2d112c1bb3b62a2"
@@ -323,6 +354,11 @@ networks:
     start_block: 20763576
     rpc:
       - url: "https://sepolia.optimism.io"
+        interval_ceiling: 5000
+        for: "fallback"
+      - url: "https://optimism-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://opt-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
     contracts:
       - address: "0x417db0f2bd020fc4d6bccea6b2bb6be0c541862e"
@@ -333,6 +369,11 @@ networks:
     start_block: 7210716
     rpc:
       - url: "https://sepolia.drpc.org"
+        interval_ceiling: 5000
+        for: "fallback"
+      - url: "https://sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://eth-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
     contracts:
       - address: "0x5ae8c13f6ae094887322012425b34b0919097d8a"

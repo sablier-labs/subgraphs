@@ -1,10 +1,11 @@
+import type { Logger } from "envio";
 import { experimental_createEffect, S } from "envio";
 import _ from "lodash";
 import { Version } from "sablier";
 import PRBProxyABI from "../../../abi/PRBProxy.json";
 import PRBProxyRegistryABI from "../../../abi/PRBProxyRegistry.json";
 import type { Envio } from "../bindings";
-import { PRB_PROXY_REGISTRY_v4_0_0, PRB_PROXY_REGISTRY_v4_0_1 } from "../constants";
+import { ADDRESS_ZERO, PRB_PROXY_REGISTRY_v4_0_0, PRB_PROXY_REGISTRY_v4_0_1 } from "../constants";
 import { getContractVersion } from "../deployments";
 import { getClient } from "../rpc-clients";
 import { initDataEntry } from "../rpc-data";
@@ -30,7 +31,7 @@ export const readOrFetchProxender = experimental_createEffect(
     name: "readOrFetchProxender",
     output: S.optional(output),
   },
-  async ({ input }) => {
+  async ({ context, input }) => {
     // PRBProxy was only used in Lockup v1.0
     const version = getContractVersion("lockup", input.chainId, input.lockupAddress as Envio.Address);
     if (version !== Version.Lockup.V1_0) {
@@ -38,7 +39,7 @@ export const readOrFetchProxender = experimental_createEffect(
     }
 
     const dataKey = input.streamSender.toLowerCase();
-    const data = initDataEntry(RPCData.Category.Proxender, input.chainId);
+    const data = initDataEntry(RPCData.Category.Proxender, input.chainId, context.log);
     const cachedProxender = data.read(dataKey);
 
     // Proxies cannot be transferred, so we can cache proxy owners.
@@ -46,7 +47,7 @@ export const readOrFetchProxender = experimental_createEffect(
       return cachedProxender.owner;
     }
 
-    const owner = await fetchProxyOwner(input.chainId, input.streamSender as Envio.Address);
+    const owner = await fetchProxyOwner(context.log, input.chainId, input.streamSender as Envio.Address);
     if (!owner) {
       return undefined;
     }
@@ -60,32 +61,39 @@ export const readOrFetchProxender = experimental_createEffect(
 /*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
-async function fetchProxyOwner(chainId: number, streamSender: Envio.Address): Promise<Envio.Address | undefined> {
+async function fetchProxyOwner(
+  logger: Logger,
+  chainId: number,
+  streamSender: Envio.Address,
+): Promise<Envio.Address | undefined> {
   const client = getClient(chainId);
 
-  const proxyAddress = streamSender.toLowerCase() as `0x${string}`;
+  const proxy = streamSender.toLowerCase() as `0x${string}`;
   try {
     const ownerResult = await client.readContract({
       abi: PRBProxyABI,
-      address: proxyAddress,
+      address: proxy,
       functionName: "owner",
     });
     if (!ownerResult) {
       return undefined;
     }
-    const owner = ownerResult as Envio.Address;
+    const owner = (ownerResult as Envio.Address).toLowerCase();
 
     // See https://github.com/sablier-labs/indexers/issues/148
     let reverse = await fetchReverse(chainId, PRB_PROXY_REGISTRY_v4_0_1, owner);
-    if (!reverse) {
+    if (!reverse || reverse === ADDRESS_ZERO) {
       reverse = await fetchReverse(chainId, PRB_PROXY_REGISTRY_v4_0_0, owner);
     }
 
-    // Double check that the registry has the same owner for the proxy.
-    if (reverse !== proxyAddress) {
-      console.error(
-        `Chain ID ${chainId}: could not verify owner for proxy ${proxyAddress} and owner ${owner}. Got reverse address ${reverse}`,
-      );
+    // Double-checking that the registry has the same owner for the proxy.
+    if (reverse !== proxy) {
+      logger.error("Could not verify owner for proxy", {
+        chainId,
+        owner,
+        proxy,
+        reverse,
+      });
       return undefined;
     }
 
@@ -103,16 +111,16 @@ async function fetchReverse(
 ): Promise<Envio.Address | undefined> {
   const client = getClient(chainId);
 
-  const reverseResult = await client.readContract({
+  const reverse = await client.readContract({
     abi: PRBProxyRegistryABI,
     address: registry as `0x${string}`,
     args: [owner],
     functionName: "getProxy",
   });
 
-  if (!reverseResult) {
+  if (!reverse) {
     return undefined;
   }
 
-  return (reverseResult as Envio.Address).toLowerCase();
+  return (reverse as Envio.Address).toLowerCase();
 }

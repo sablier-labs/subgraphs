@@ -29,6 +29,7 @@ export function isOfficialLockup(chainId: number, address: Envio.Address): boole
   const lowercasedAddress = address.toLowerCase() as Sablier.Address;
   const contract = sablier.contracts.get({ chainId, contractAddress: lowercasedAddress, protocol: "lockup" });
   if (!contract) {
+    console.info(`Unknown deployment of Lockup contract ${address} used in airdrop campaign`);
     return false;
   }
   return true;

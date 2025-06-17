@@ -7,7 +7,7 @@ import { Loader } from "../../common/loader";
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleLT.contractRegister(({ context, event }) => {
   const lockupAddress = event.params.lockup;
   if (!isOfficialLockup(event.chainId, lockupAddress)) {
-    throw new Error(`Unknown deployment of LockupTranched ${lockupAddress} used in airdrop campaign`);
+    return;
   }
   context.addSablierMerkleLT_v1_3(event.params.merkleLT);
 });

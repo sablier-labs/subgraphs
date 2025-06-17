@@ -1,3 +1,4 @@
+import type { Logger } from "envio";
 import { experimental_createEffect, S } from "envio";
 import _ from "lodash";
 import { erc20Abi, erc20Abi_bytes32, hexToString, trim } from "viem";
@@ -33,14 +34,14 @@ export const readOrFetchMetadata = experimental_createEffect(
     name: "readOrFetchMetadata",
     output,
   },
-  async ({ input }) => {
+  async ({ context, input }) => {
     const dataKey = input.address.toLowerCase();
-    const data = initDataEntry(RPCData.Category.ERC20, input.chainId);
+    const data = initDataEntry(RPCData.Category.ERC20, input.chainId, context.log);
     const cachedMetadata = data.read(dataKey);
     if (!_.isEmpty(cachedMetadata)) {
       return cachedMetadata;
     }
-    const metadata = await fetch(input.chainId, input.address);
+    const metadata = await fetch(context.log, input.chainId, input.address);
     if (metadata.name !== UNKNOWN_METADATA.name) {
       data.write({ [dataKey]: metadata });
     }
@@ -52,18 +53,18 @@ export const readOrFetchMetadata = experimental_createEffect(
 /*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
-async function fetch(chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
+async function fetch(logger: Logger, chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
   // Try standard ERC20 ABI first
   try {
     const result = await fetchStandard(chainId, address);
     return result;
-  } catch (err1) {
+  } catch (error1) {
     // Try bytes32 ERC20 ABI as fallback
     try {
       const result = await fetchBytes32(chainId, address);
       return result;
-    } catch (err2) {
-      console.error("Failed to fetch ERC20 metadata", err1, err2);
+    } catch (error2) {
+      logger.error("Failed to fetch ERC20 metadata", { error1, error2 });
       return UNKNOWN_METADATA;
     }
   }

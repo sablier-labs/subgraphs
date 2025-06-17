@@ -32,14 +32,14 @@ alias cc := codegen-config
 alias cs := codegen-schema
 
 # Envio CLI: dev, start, stop
-@envio command:
-    just _envio {{ command }}
+@envio command tui_off="false":
+    just _envio {{ command }} {{ tui_off }}
 
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: HELPERS                               #
 # ---------------------------------------------------------------------------- #
 
-_envio command tui_off="false":
+_envio command tui_off:
     TUI_OFF={{ tui_off }} pnpm envio {{ command }} \
     --config {{ justfile_dir() }}/config.yaml \
     --output-directory {{ justfile_dir() }}/bindings

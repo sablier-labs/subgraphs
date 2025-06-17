@@ -62,7 +62,10 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     };
     context.Stream.set(stream);
   } else {
-    console.error("Current recipient not found in parties: {}", [currentRecipient]);
+    context.log.error("Current recipient not found in parties array", {
+      currentRecipient,
+      parties: stream.parties,
+    });
   }
 
   /* --------------------------------- ACTION --------------------------------- */
