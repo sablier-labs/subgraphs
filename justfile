@@ -28,20 +28,25 @@ build: (clean "dist")
     pnpm tsc -p tsconfig.build.json
 alias b := build
 
+# Fetch assets from The Graph subgraphs and save them to JSON files
+[group("envio")]
+@check-vendors chain_id="1":
+    just cli check-vendors --chain-id {{ chain_id }}
+
 # Remove build files
 clean globs=GLOBS_CLEAN:
     pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
+
+# Fetch assets from The Graph subgraphs and save them to JSON files
+[group("envio")]
+@fetch-assets protocol="all" chain="all":
+    just cli fetch-assets --protocol {{ protocol }} --chain {{ chain }}
 
 # Generate the schemas in the ./src/exports directory
 # lint-staged will pass the globs to this recipe
 export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
     just biome-write "{{ globs }}"
-
-# Fetch assets from The Graph subgraphs and save them to JSON files
-[group("envio")]
-@fetch-assets protocol="all" chain="all":
-    just cli fetch-assets --protocol {{ protocol }} --chain {{ chain }}
 
 # Setup Husky
 setup:
@@ -51,6 +56,7 @@ setup:
 test args="--silent":
     pnpm vitest run {{ args }}
 alias t := test
+
 
 # ---------------------------------------------------------------------------- #
 #                               RECIPES: CODEGEN                               #

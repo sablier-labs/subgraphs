@@ -2,8 +2,9 @@
  * @file Main CLI entry point for Sablier Indexers utilities
  *
  * @example
- * pnpm tsx cli fetch-assets --protocol flow --chain ethereum
+ * pnpm tsx cli check-vendors --chain-id 1
  * pnpm tsx cli codegen schema --vendor graph --protocol flow
+ * pnpm tsx cli fetch-assets --protocol flow --chain ethereum
  * pnpm tsx cli print-chains
  */
 
@@ -47,6 +48,10 @@ export async function main() {
   // Import and add fetch command
   const { command: fetchAssetsCmd } = await import("./commands/fetch-assets.js");
   program.addCommand(fetchAssetsCmd.name("fetch-assets"));
+
+  // Import and add check-vendors command
+  const { command: checkVendorsCmd } = await import("./commands/check-vendors.js");
+  program.addCommand(checkVendorsCmd.name("check-vendors"));
 
   program.parse();
 }

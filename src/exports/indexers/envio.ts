@@ -1,25 +1,29 @@
+/**
+ * @file Use this file to define new indexers for Envio.
+ *
+ * @see https://docs.envio.dev/docs/HyperSync/hypersync-supported-networks
+ */
 import { chains, Protocol } from "sablier";
 import type { Indexer } from "../types";
 import { envioRecords } from "./envio-records";
 
 const SUPPORTED_CHAINS = [
+  /* -------------------------------------------------------------------------- */
+  /*                                  MAINNETS                                  */
+  /* -------------------------------------------------------------------------- */
   chains.abstract.id,
-  chains.arbitrumSepolia.id,
   chains.arbitrum.id,
   chains.avalanche.id,
   chains.base.id,
-  chains.baseSepolia.id,
   chains.berachain.id,
   chains.bsc.id,
   chains.chiliz.id,
   chains.ethereum.id,
-  chains.ethereumSepolia.id,
   chains.gnosis.id,
   chains.linea.id,
   chains.mode.id,
   chains.morph.id,
   chains.optimism.id,
-  chains.optimismSepolia.id,
   chains.polygon.id,
   chains.scroll.id,
   chains.sophon.id,
@@ -28,6 +32,13 @@ const SUPPORTED_CHAINS = [
   chains.unichain.id,
   chains.xdc.id,
   chains.zksync.id,
+  /* -------------------------------------------------------------------------- */
+  /*                                  TESTNETS                                  */
+  /* -------------------------------------------------------------------------- */
+  chains.arbitrumSepolia.id,
+  chains.baseSepolia.id,
+  chains.optimismSepolia.id,
+  chains.ethereumSepolia.id,
 ] as const;
 
 function get(protocol: Indexer.Protocol): Indexer[] {
@@ -58,6 +69,7 @@ export const envioChains = SUPPORTED_CHAINS;
 
 /**
  * @see https://github.com/sablier-labs/indexers/discussions/147
+ * @see @see https://github.com/enviodev/hyperindex/issues/599
  */
 export const envioHypersync: Record<number, string> = {
   [chains.chiliz.id]: "https://chiliz.hypersync.xyz",
