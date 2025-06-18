@@ -2,7 +2,7 @@ import _ from "lodash";
 import { sablier } from "sablier";
 import { createPublicClient, fallback, http, type PublicClient } from "viem";
 import { envioChains } from "../../exports/indexers/envio";
-import { IndexingError } from "./error";
+import { CriticalError } from "./errors";
 
 /**
  * Global array of pre-configured public clients for all supported chains.
@@ -72,13 +72,13 @@ for (const chainId of envioChains) {
  *
  * @param chainId - The chain ID to get the client for
  * @returns PublicClient configured with multiple RPC endpoints for the chain
- * @throws IndexingError.ClientNotFound if no client exists for the chain
+ * @throws CriticalError.ClientNotFound if no client exists for the chain
  */
 export function getClient(chainId: number): PublicClient {
   const client = _.find(clients, (c) => c?.chain?.id === chainId);
 
   if (!client) {
-    throw new IndexingError.ClientNotFound(chainId);
+    throw new CriticalError.ClientNotFound(chainId);
   }
 
   return client;

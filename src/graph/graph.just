@@ -68,7 +68,7 @@ deploy-experimental version: codegen
     pnpm graph deploy \
     --version-label {{ version }} \
     sablier-{{ PROTOCOL }}-experimental \
-    {{ justfile_dir() }}/manifests/sepolia.yaml
+    {{ justfile_dir() }}/manifests/ethereum-sepolia.yaml
 alias de := deploy-experimental
 
 # Deploy to Lightlink

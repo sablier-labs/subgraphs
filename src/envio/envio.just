@@ -40,6 +40,7 @@ alias cs := codegen-schema
 # ---------------------------------------------------------------------------- #
 
 _envio command tui_off:
-    TUI_OFF={{ tui_off }} pnpm envio {{ command }} \
+    TUI_OFF={{ tui_off }} \
+    pnpm envio {{ command }} \
     --config {{ justfile_dir() }}/config.yaml \
     --output-directory {{ justfile_dir() }}/bindings

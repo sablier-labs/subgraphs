@@ -3,6 +3,7 @@ import { experimental_createEffect, S } from "envio";
 import _ from "lodash";
 import { erc20Abi, erc20Abi_bytes32, hexToString, trim } from "viem";
 import type { Envio } from "../bindings";
+import { isDecimalsRevertedError } from "../errors";
 import { getClient } from "../rpc-clients";
 import { initDataEntry } from "../rpc-data";
 import { RPCData } from "../types";
@@ -53,50 +54,40 @@ export const readOrFetchMetadata = experimental_createEffect(
 /*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Fetches the ERC-20 metadata from the RPC. The flow of the function is:
+ *
+ * 1. Try standard ERC20 ABI first
+ * 2. If the decimals call reverts, the token might be an ERC-721. We return UNKNOWN_METADATA.
+ * 3. If the revert is due to a different reason, we try the bytes32 ABI.
+ * 4. If the bytes32 ABI call reverts, we return UNKNOWN_METADATA.
+ *
+ * @see https://github.com/sablier-labs/indexers/issues/150
+ */
 async function fetch(logger: Logger, chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
-  // Try standard ERC20 ABI first
   try {
     const result = await fetchStandard(chainId, address);
     return result;
   } catch (error1) {
-    // Try bytes32 ERC20 ABI as fallback
     try {
+      if (isDecimalsRevertedError(error1)) {
+        logger.info("Decimals reverted, token might be an ERC-721", { assetAddress: address, chainId });
+        return UNKNOWN_METADATA;
+      }
       const result = await fetchBytes32(chainId, address);
       return result;
     } catch (error2) {
-      logger.error("Failed to fetch ERC20 metadata", { error1, error2 });
+      const sanitizedError1 = error1 instanceof Error ? _.omit(error1, "abi") : error1;
+      const sanitizedError2 = error2 instanceof Error ? _.omit(error2, "abi") : error2;
+      logger.error("Failed to fetch ERC20 metadata", {
+        assetAddress: address,
+        chainId,
+        error1: sanitizedError1,
+        error2: sanitizedError2,
+      });
       return UNKNOWN_METADATA;
     }
   }
-}
-
-async function fetchStandard(chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
-  const client = getClient(chainId);
-  const erc20Contract = { abi: erc20Abi, address: address as `0x${string}` };
-
-  const results = await client.multicall({
-    allowFailure: false,
-    contracts: [
-      {
-        ...erc20Contract,
-        functionName: "decimals",
-      },
-      {
-        ...erc20Contract,
-        functionName: "name",
-      },
-      {
-        ...erc20Contract,
-        functionName: "symbol",
-      },
-    ],
-  });
-
-  return {
-    decimals: results[0],
-    name: results[1],
-    symbol: results[2],
-  };
 }
 
 async function fetchBytes32(chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
@@ -127,8 +118,37 @@ async function fetchBytes32(chainId: number, address: Envio.Address): Promise<RP
   };
 
   return {
-    decimals: results[0],
+    decimals: Number(results[0]),
     name: fromHex(results[1]),
     symbol: fromHex(results[2]),
+  };
+}
+
+async function fetchStandard(chainId: number, address: Envio.Address): Promise<RPCData.ERC20Metadata> {
+  const client = getClient(chainId);
+  const erc20Contract = { abi: erc20Abi, address: address as `0x${string}` };
+
+  const results = await client.multicall({
+    allowFailure: false,
+    contracts: [
+      {
+        ...erc20Contract,
+        functionName: "name",
+      },
+      {
+        ...erc20Contract,
+        functionName: "symbol",
+      },
+      {
+        ...erc20Contract,
+        functionName: "decimals",
+      },
+    ],
+  });
+
+  return {
+    decimals: Number(results[2]),
+    name: String(results[0]),
+    symbol: String(results[1]),
   };
 }

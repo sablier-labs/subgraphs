@@ -22,7 +22,7 @@ export namespace Id {
   export function activity(event: Envio.Event): string {
     const campaignId = campaign(event.chainId, event.srcAddress);
     const timestamp = event.block.timestamp;
-    const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
+    const day = BigInt(timestamp) / (60n * 60n * 24n); // 60 seconds * 60 minutes * 24 hours
     return `activity-${campaignId}-${day}`;
   }
 

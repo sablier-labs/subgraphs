@@ -10,7 +10,7 @@ Contract.Campaign.MerkleInstant_v1_3.TransferAdmin.handlerWithLoader(common.tran
 Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
   loader: async ({ context, event }) => {
     const activityId = Id.activity(event);
-    const activity = await context.Activity.getOrThrow(activityId);
+    const activity = await context.Activity.get(activityId);
 
     const campaignId = Id.campaign(event.chainId, event.srcAddress);
     const campaign = await context.Campaign.getOrThrow(campaignId);
@@ -26,7 +26,6 @@ Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
   },
   handler: async ({ context, event, loaderReturn }) => {
     const { campaign, watcher } = loaderReturn;
-
     const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
 
     /* -------------------------------- CAMPAIGN -------------------------------- */

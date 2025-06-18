@@ -4,10 +4,10 @@ import { CommonParams } from "../../../common/types";
 import { Store } from "../../store";
 
 export function handleApproval(event: ethereum.Event, params: CommonParams.Approval): void {
-  const id = params.tokenId;
-  const stream = Store.Stream.get(id);
+  const tokenId = params.tokenId;
+  const stream = Store.Stream.get(tokenId);
   if (stream === null) {
-    logInfo("Stream not saved before this Approval event: {}", [id.toHexString()]);
+    logInfo("Stream not saved before this Approval event: {}", [tokenId.toHexString()]);
     return;
   }
 

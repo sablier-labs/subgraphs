@@ -46,6 +46,26 @@ export async function createTranchedStream(input: Input): Promise<Entity.Stream>
   return stream;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                               INTERNAL LOGIC                               */
+/* -------------------------------------------------------------------------- */
+
+async function createAction(
+  context: Context.Handler,
+  event: Envio.Event,
+  watcher: Entity.Watcher,
+  params: Params.CreateStreamCommon,
+  streamId: string,
+): Promise<void> {
+  await Store.Action.create(context, event, watcher, {
+    addressA: params.sender,
+    addressB: params.recipient,
+    amountA: params.depositAmount,
+    category: "Create",
+    streamId: streamId,
+  });
+}
+
 async function createAssociatedEntities(
   context: Context.Handler,
   event: Envio.Event,
@@ -63,20 +83,4 @@ async function createAssociatedEntities(
     batcher: entities.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
     watcher: entities.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
   };
-}
-
-async function createAction(
-  context: Context.Handler,
-  event: Envio.Event,
-  watcher: Entity.Watcher,
-  params: Params.CreateStreamCommon,
-  streamId: string,
-): Promise<void> {
-  await Store.Action.create(context, event, watcher, {
-    addressA: params.sender,
-    addressB: params.recipient,
-    amountA: params.depositAmount,
-    category: "Create",
-    streamId: streamId,
-  });
 }

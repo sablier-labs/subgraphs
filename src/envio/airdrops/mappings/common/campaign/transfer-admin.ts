@@ -15,13 +15,18 @@ import { Store } from "../../../store";
 /*                                   LOADER                                   */
 /* -------------------------------------------------------------------------- */
 type LoaderReturn = {
-  campaign: Entity.Campaign;
-  watcher: Entity.Watcher;
+  campaign?: Entity.Campaign;
+  watcher?: Entity.Watcher;
 };
 
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 
 export const loader: Loader<LoaderReturn> = async ({ context, event }) => {
+  // Starting with v1.3, the constructor emits a TransferAdmin event.
+  if (event.params.oldAdmin === ADDRESS_ZERO) {
+    return { campaign: undefined, watcher: undefined };
+  }
+
   const campaignId = Id.campaign(event.chainId, event.srcAddress);
   const campaign = await context.Campaign.getOrThrow(campaignId);
 
@@ -41,12 +46,10 @@ export const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 type Handler<T> = Handler_v1_1<T> & Handler_v1_2<T> & Handler_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
-  // Starting with v1.3, the constructor emits a TransferAdmin event.
-  if (event.params.oldAdmin === ADDRESS_ZERO) {
+  const { campaign, watcher } = loaderReturn;
+  if (!campaign || !watcher) {
     return;
   }
-
-  const { campaign, watcher } = loaderReturn;
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateAdmin(context, campaign, event.params.newAdmin);

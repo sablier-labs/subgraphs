@@ -1,4 +1,5 @@
 import type { Envio } from "../../common/bindings";
+import { getDay } from "../../common/helpers";
 import type { Context, Entity } from "../bindings";
 
 export async function create(
@@ -7,7 +8,7 @@ export async function create(
   campaignId: string,
 ): Promise<Entity.Activity> {
   const timestamp = event.block.timestamp;
-  const day = timestamp / (60 * 60 * 24); // 60 seconds * 60 minutes * 24 hours
+  const day = getDay(timestamp);
 
   const activity: Entity.Activity = {
     amount: 0n,

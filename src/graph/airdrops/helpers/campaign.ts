@@ -34,6 +34,6 @@ export function isOfficialLockup(address: Address): boolean {
       return true;
     }
   }
-  logInfo("Unknown deployment of Lockup contract {} used in airdrop campaign", [address.toHexString()]);
+  logInfo("Unknown or incorrect Lockup address used in airdrop campaign: {}", [address.toHexString()]);
   return false;
 }

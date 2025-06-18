@@ -5,10 +5,11 @@ import { Loader } from "../../common/loader";
 
 Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLL.contractRegister(({ context, event }) => {
   const lockupAddress = event.params.lockupLinear;
-  if (!isOfficialLockup(event.chainId, lockupAddress)) {
+  if (!isOfficialLockup(event, lockupAddress)) {
     return;
   }
-  context.addSablierV2MerkleLL_v1_2(lockupAddress);
+  const campaignAddress = event.params.merkleLL;
+  context.addSablierV2MerkleLL_v1_2(campaignAddress);
 });
 
 /*

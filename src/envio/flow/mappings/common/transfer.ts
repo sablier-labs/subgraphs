@@ -29,10 +29,8 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
       watcher: undefined,
     };
   }
-  return LoaderBase.base({ context, event }).then((base) => ({
-    stream: base.stream,
-    watcher: base.watcher,
-  }));
+  const { stream, watcher } = await LoaderBase.base({ context, event });
+  return { stream, watcher };
 };
 
 /* -------------------------------------------------------------------------- */

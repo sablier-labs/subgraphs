@@ -39,12 +39,6 @@ function getFallbackRPCs(chainId: number): EnvioConfig.NetworkRPC[] {
   const fallbackRPCs: EnvioConfig.NetworkRPC[] = [];
   const chain = sablier.chains.getOrThrow(chainId);
 
-  fallbackRPCs.push({
-    url: chain.rpc.default,
-    interval_ceiling: 5000, // https://github.com/enviodev/hyperindex/issues/603
-    for: "fallback",
-  });
-
   if (chain.rpc.infura && process.env.ENVIO_INFURA_API_KEY) {
     fallbackRPCs.push({
       url: chain.rpc.infura("{ENVIO_INFURA_API_KEY}"),
@@ -58,6 +52,12 @@ function getFallbackRPCs(chainId: number): EnvioConfig.NetworkRPC[] {
       for: "fallback",
     });
   }
+
+  fallbackRPCs.push({
+    url: chain.rpc.default,
+    for: "fallback",
+    interval_ceiling: 5000, // https://github.com/enviodev/hyperindex/issues/603
+  });
 
   return fallbackRPCs;
 }

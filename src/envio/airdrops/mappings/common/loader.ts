@@ -57,7 +57,7 @@ export namespace Loader {
 
   type CreateV1_1<T> = CreateLL_v1_1<T>;
   const createV1_1: CreateV1_1<CreateReturn> = async ({ context, event }): Promise<CreateReturn> => {
-    return loaderForCreate(context, event, event.params.merkleStreamer);
+    return loaderForCreate(context, event, event.params.asset);
   };
 
   type CreateV1_2<T> = CreateLL_v1_2<T> & CreateLT_v1_2<T>;

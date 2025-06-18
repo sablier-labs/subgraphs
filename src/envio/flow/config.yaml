@@ -46,11 +46,11 @@ networks:
   - id: 2741
     start_block: 73630
     rpc:
-      - url: "https://api.mainnet.abs.xyz"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://abstract-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://api.mainnet.abs.xyz"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x001f1408515ccd5c1a19a682455ed4efa39dadd6"
         name: "SablierFlow_v1_0"
@@ -59,13 +59,13 @@ networks:
   - id: 42161
     start_block: 281305357
     rpc:
-      - url: "https://arb1.arbitrum.io/rpc"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://arbitrum-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://arb-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://arb1.arbitrum.io/rpc"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x18a12a7035aa56240bcd236bc019aa245dcc015a"
         name: "SablierFlow_v1_0"
@@ -74,13 +74,13 @@ networks:
   - id: 43114
     start_block: 53922039
     rpc:
-      - url: "https://api.avax.network/ext/bc/C/rpc"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://avalanche-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://avax-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://api.avax.network/ext/bc/C/rpc"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x8c172e42c06302e3cfe555dc4d6b71a756ee186b"
         name: "SablierFlow_v1_0"
@@ -89,13 +89,13 @@ networks:
   - id: 8453
     start_block: 23269999
     rpc:
-      - url: "https://mainnet.base.org"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://base-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://base-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://mainnet.base.org"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x1a9adc0e2114c8407cc31669baafeee031d15dd2"
         name: "SablierFlow_v1_0"
@@ -104,24 +104,24 @@ networks:
   - id: 80094
     start_block: 780382
     rpc:
-      - url: "https://rpc.berachain.com"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://berachain-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://rpc.berachain.com"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xa031544946ed769377128fbd961c9d621c4b4179"
         name: "SablierFlow_v1_1"
   - id: 56
     start_block: 44582847
     rpc:
-      - url: "https://56.rpc.thirdweb.com"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://bsc-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://bnb-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://56.rpc.thirdweb.com"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xfce01f79247cf450062545e7155d7bd568551d0e"
         name: "SablierFlow_v1_0"
@@ -133,8 +133,8 @@ networks:
       url: "https://chiliz.hypersync.xyz"
     rpc:
       - url: "https://rpc.chiliz.com"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x9efc8663cab0e2d97ad17c9fbfc8392445517e94"
         name: "SablierFlow_v1_0"
@@ -143,13 +143,13 @@ networks:
   - id: 1
     start_block: 21330577
     rpc:
-      - url: "https://eth.merkle.io"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://eth.merkle.io"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x2d9221a63e12aa796619cb381ec4a71b201281f5"
         name: "SablierFlow_v1_0"
@@ -158,11 +158,11 @@ networks:
   - id: 100
     start_block: 37356094
     rpc:
-      - url: "https://rpc.gnosischain.com"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://gnosis-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://rpc.gnosischain.com"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x5515f774a4db42820802333ba575f68a6e85bd13"
         name: "SablierFlow_v1_0"
@@ -171,13 +171,13 @@ networks:
   - id: 59144
     start_block: 12929891
     rpc:
-      - url: "https://rpc.linea.build"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://linea-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://linea-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://rpc.linea.build"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x949bfa08f1632432a2656a9db17ca34d54da8296"
         name: "SablierFlow_v1_0"
@@ -187,8 +187,8 @@ networks:
     start_block: 16616938
     rpc:
       - url: "https://mainnet.mode.network"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x75970dde488431fc4961494569def3269f20d6b3"
         name: "SablierFlow_v1_0"
@@ -198,8 +198,8 @@ networks:
     start_block: 980797
     rpc:
       - url: "https://rpc.morphl2.io"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xfe6972d0ae797fae343e5a58d0c7d8513937f092"
         name: "SablierFlow_v1_0"
@@ -208,13 +208,13 @@ networks:
   - id: 10
     start_block: 128865315
     rpc:
-      - url: "https://mainnet.optimism.io"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://optimism-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://opt-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://mainnet.optimism.io"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x906356e4e6410ea0a97dbc5b071cf394ab0dcd69"
         name: "SablierFlow_v1_0"
@@ -223,13 +223,13 @@ networks:
   - id: 137
     start_block: 65079319
     rpc:
-      - url: "https://polygon-rpc.com"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://polygon-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://polygon-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://polygon-rpc.com"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xcf2d812d5aad4e6fec3b05850ff056b21159d496"
         name: "SablierFlow_v1_0"
@@ -238,13 +238,13 @@ networks:
   - id: 534352
     start_block: 11643209
     rpc:
-      - url: "https://rpc.scroll.io"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://scroll-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://scroll-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://rpc.scroll.io"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x66826f53bffeaab71adc7fe1a77e86f8268848d8"
         name: "SablierFlow_v1_0"
@@ -254,19 +254,19 @@ networks:
     start_block: 11341394
     rpc:
       - url: "https://rpc.sophon.xyz"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x20c9a3e27322fc2b21ced430d1b2e12d90804db6"
         name: "SablierFlow_v1_1"
   - id: 5330
     start_block: 3610744
     rpc:
-      - url: "https://mainnet.superseed.xyz"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://superseed-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://mainnet.superseed.xyz"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x4f5f9b3fb57bba43aaf90e3f71d8f8f384e88e20"
         name: "SablierFlow_v1_0"
@@ -278,8 +278,8 @@ networks:
       url: "https://tangle.hypersync.xyz"
     rpc:
       - url: "https://rpc.tangle.tools"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xcff4a803b0bf55dd1be38fb96088478f3d2eecf2"
         name: "SablierFlow_v1_0"
@@ -288,13 +288,13 @@ networks:
   - id: 130
     start_block: 13883575
     rpc:
-      - url: "https://mainnet.unichain.org/"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://unichain-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://unichain-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://mainnet.unichain.org/"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x9797b40340be0bfc9ec0dbb8712627bcdd17e771"
         name: "SablierFlow_v1_1"
@@ -302,21 +302,21 @@ networks:
     start_block: 85226840
     rpc:
       - url: "https://rpc.xdcrpc.com"
-        interval_ceiling: 5000
         for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xd6482334242862951da3e730f818c3f6e3f45a30"
         name: "SablierFlow_v1_1"
   - id: 324
     start_block: 50572220
     rpc:
-      - url: "https://mainnet.era.zksync.io"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://zksync-mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://zksync-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://mainnet.era.zksync.io"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x015899a075b7c181e357cd0ed000683dbb4f1fce"
         name: "SablierFlow_v1_0"
@@ -325,11 +325,11 @@ networks:
   - id: 421614
     start_block: 103460016
     rpc:
-      - url: "https://sepolia-rollup.arbitrum.io/rpc"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://arbitrum-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
+      - url: "https://sepolia-rollup.arbitrum.io/rpc"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x781b3b2527f2a0a1e6b429161f2717a8a28b9f46"
         name: "SablierFlow_v1_0"
@@ -338,13 +338,13 @@ networks:
   - id: 84532
     start_block: 18780695
     rpc:
-      - url: "https://sepolia.base.org"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://base-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://base-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://sepolia.base.org"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0xd5f78708d83ac2bc8734a8cdf2d112c1bb3b62a2"
         name: "SablierFlow_v1_0"
@@ -353,13 +353,13 @@ networks:
   - id: 11155420
     start_block: 20763576
     rpc:
-      - url: "https://sepolia.optimism.io"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://optimism-sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://opt-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://sepolia.optimism.io"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x417db0f2bd020fc4d6bccea6b2bb6be0c541862e"
         name: "SablierFlow_v1_0"
@@ -368,13 +368,13 @@ networks:
   - id: 11155111
     start_block: 7210716
     rpc:
-      - url: "https://sepolia.drpc.org"
-        interval_ceiling: 5000
-        for: "fallback"
       - url: "https://sepolia.infura.io/v3/{ENVIO_INFURA_API_KEY}"
         for: "fallback"
       - url: "https://eth-sepolia.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
         for: "fallback"
+      - url: "https://sepolia.drpc.org"
+        for: "fallback"
+        interval_ceiling: 5000
     contracts:
       - address: "0x5ae8c13f6ae094887322012425b34b0919097d8a"
         name: "SablierFlow_v1_0"

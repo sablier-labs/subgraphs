@@ -26,8 +26,8 @@ export namespace EnvioConfig {
 
   export type NetworkRPC = {
     url: string;
-    interval_ceiling?: number;
     for: "fallback";
+    interval_ceiling?: number;
   };
 
   export type Network = {

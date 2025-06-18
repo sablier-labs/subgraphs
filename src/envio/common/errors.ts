@@ -1,6 +1,7 @@
+import { ContractFunctionExecutionError } from "viem";
 import type { Types } from "../../types";
 
-export namespace IndexingError {
+export namespace CriticalError {
   export class AliasNotFound extends Error {
     constructor(protocol: Types.Protocol, chainId: number, contractAddress: string) {
       super(
@@ -23,4 +24,14 @@ export namespace IndexingError {
       this.name = "ClientNotFoundError";
     }
   }
+}
+
+/**
+ * @see https://github.com/sablier-labs/indexers/issues/150
+ */
+export function isDecimalsRevertedError(error: unknown): error is ContractFunctionExecutionError {
+  return (
+    error instanceof ContractFunctionExecutionError &&
+    error.message.includes('The contract function "decimals" reverted')
+  );
 }

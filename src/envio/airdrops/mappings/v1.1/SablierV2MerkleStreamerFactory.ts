@@ -4,11 +4,12 @@ import { createMerkleLL } from "../common";
 import { Loader } from "../common/loader";
 
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.contractRegister(({ context, event }) => {
-  const lockupAddress = event.params.merkleStreamer;
-  if (!isOfficialLockup(event.chainId, lockupAddress)) {
+  const lockupAddress = event.params.lockupLinear;
+  if (!isOfficialLockup(event, lockupAddress)) {
     return;
   }
-  context.addSablierV2MerkleStreamerLL_v1_1(lockupAddress);
+  const campaignAddress = event.params.merkleStreamer;
+  context.addSablierV2MerkleStreamerLL_v1_1(campaignAddress);
 });
 
 /*
