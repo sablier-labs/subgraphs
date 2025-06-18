@@ -93,6 +93,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   /* ---------------------------------- PROXY --------------------------------- */
   const contractVersion = readContractVersion();
   // PRBProxy was only used in Lockup v1.0
+  stream.parties = [];
   stream.proxied = false;
   if (areStringsEqual(contractVersion, LOCKUP_V1_0)) {
     const proxender = loadProxender(params.sender);

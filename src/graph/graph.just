@@ -22,7 +22,7 @@ auth:
 
 # Build the subgraph
 @build:
-    just root::build-subgraph {{ PROTOCOL }}
+    just root::build-graph-indexer {{ PROTOCOL }}
 alias b := build
 
 # Remove build files

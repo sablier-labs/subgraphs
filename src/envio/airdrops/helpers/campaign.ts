@@ -12,7 +12,7 @@ export function getNickname(
   campaignName: string | undefined,
   asset: Entity.Asset | undefined,
 ): string {
-  const symbol = asset?.symbol ?? "UNKNOWN";
+  const symbol = asset?.symbol ?? "Unknown";
   if (!campaignName) {
     const prefix = campaignAdmin.slice(0, 6);
     const suffix = campaignAdmin.slice(-4);

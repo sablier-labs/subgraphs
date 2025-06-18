@@ -64,7 +64,7 @@ alias t := test
 
 # Build all subgraphs
 [group("graph")]
-@build-graph-indexers protocol="all":
+@build-graph-indexer protocol="all":
     just for-each _build-graph-indexer {{ protocol }}
 
 _build-graph-indexer protocol: (codegen-graph protocol)

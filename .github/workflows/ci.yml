@@ -42,7 +42,7 @@ jobs:
         run: "just codegen-graph"
 
       - name: "Build all The Graph indexers as a check"
-        run: "just build-graph-indexers"
+        run: "just build-graph-indexer"
 
       - name: "Export all GraphQL schemas"
         run: "just export-schemas"

@@ -1,2 +1,2 @@
 export * from "./bindings";
-export * from "./getters";
+export * from "./fetch";

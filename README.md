@@ -1,12 +1,21 @@
 ![Sablier Branding](./banner.png)
 
+# Sablier Indexers [![Github Actions][gha-badge]][gha] [![Discord][discord-badge]][discord] [![Twitter][twitter-badge]][twitter]
+
+[gha]: https://github.com/sablier-labs/indexers/actions
+[gha-badge]: https://github.com/sablier-labs/indexers/actions/workflows/ci.yml/badge.svg
+[discord]: https://discord.gg/bSwRCwWRsT
+[discord-badge]: https://img.shields.io/discord/659709894315868191
+[twitter-badge]: https://img.shields.io/twitter/follow/Sablier
+[twitter]: https://x.com/Sablier
+
 # Sablier Indexers 🚀
 
 Data indexers for [Sablier](https://sablier.com) protocol for onchain token distribution. The indexers monitor Sablier's
 smart contract events and transform them into structured, queryable data via GraphQL. The data is used to power the
 [Sablier Interface](https://app.sablier.com).
 
-We support two indexing vendors: [The Graph](https://thegraph.com) and [Envio](https://envio.dev).
+We support two indexing services: [The Graph](https://thegraph.com) and [Envio](https://envio.dev).
 
 ## Documentation 📚
 
@@ -19,46 +28,11 @@ indexer for each protocol:
 
 ## Contributing 🤝
 
-Feel free to dive in! [Open](../../issues/new) an issue, [start](../../discussions/new) a discussion, or submit a PR.
-For any informal concerns or feedback, please join our [Discord server](https://discord.gg/bSwRCwWRsT).
+We welcome contributions! [Open an issue](../../issues/new), [start a discussion](../../discussions/new), or submit a
+PR.
 
-### Pre Requisites 🧰
-
-You will need the following software on your machine:
-
-- [Git](https://git-scm.com/downloads)
-- [Just](https://github.com/casey/just)
-- [Node.Js](https://nodejs.org/en/download)
-- [Pnpm](https://pnpm.io)
-- [Docker](https://docker.com)
-
-### Set Up ⚙️
-
-Clone this repository:
-
-```shell
-$ git clone git@github.com:sablier-labs/indexers.git && cd indexers
-```
-
-Then, run this command to install the Node.js dependencies:
-
-```shell
-$ just install
-```
-
-And run the setup recipe:
-
-```shell
-$ just setup
-```
-
-Now you can start making changes.
-
-To see a list of all available scripts, run this command:
-
-```shell
-$ just --list
-```
+Read our [CONTRIBUTING](./CONTRIBUTING.md) guide to get started. Join our [Discord server][discord] for questions and
+feedback.
 
 ## License 📄
 

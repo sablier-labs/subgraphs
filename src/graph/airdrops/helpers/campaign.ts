@@ -13,7 +13,7 @@ export function getNickname(campaignAdmin: Address, campaignName: string | null,
   if (asset !== null) {
     symbol = asset.symbol;
   } else {
-    symbol = "UNKNOWN";
+    symbol = "Unknown";
   }
   if (campaignName === null) {
     const prefix = campaignAdmin.toHexString().slice(0, 6);
