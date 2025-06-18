@@ -33,10 +33,11 @@ export function isOfficialLockup(event: Envio.Event, address: Envio.Address): bo
     protocol: "lockup",
   });
   if (!contract) {
-    console.info("Unknown or incorrect Lockup address used in airdrop campaign", {
+    console.info("Unknown or incorrect Lockup address used for creating airdrop campaign", {
       chainId: event.chainId,
       factory: event.srcAddress,
       lockup: address,
+      txHash: event.transaction.hash,
     });
     return false;
   }
