@@ -25,7 +25,8 @@ export function handle_SablierMerkleLT_v1_4_Claim(event: Claim): void {
   Store.Activity.createOrUpdate(event, campaign, claimAmount);
 
   /* --------------------------------- ACTION --------------------------------- */
-  Store.Action.create(event, campaign, {
+  Store.Action.create(event, {
+    campaign: campaign.id,
     category: "Claim",
     claimAmount: claimAmount,
     claimIndex: event.params.index,
