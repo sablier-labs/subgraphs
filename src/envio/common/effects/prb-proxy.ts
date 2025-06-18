@@ -75,9 +75,6 @@ async function fetchProxyOwner(
       address: proxy,
       functionName: "owner",
     });
-    if (!ownerResult) {
-      return undefined;
-    }
     const owner = (ownerResult as Envio.Address).toLowerCase();
 
     // See https://github.com/sablier-labs/indexers/issues/148
@@ -86,8 +83,8 @@ async function fetchProxyOwner(
       reverse = await fetchReverse(chainId, PRB_PROXY_REGISTRY_v4_0_0, owner);
     }
 
-    // Double-checking that the registry has the same owner for the proxy.
-    if (reverse !== proxy) {
+    // Check that the registry knows about the proxy.
+    if (!reverse || reverse === ADDRESS_ZERO) {
       logger.error("Could not verify owner for proxy", {
         chainId,
         owner,
@@ -99,7 +96,7 @@ async function fetchProxyOwner(
 
     return owner;
   } catch {
-    // If we got an error here, it means that the stream sender is not a proxy.
+    // If the call reverted, it means that the stream sender is not a proxy.
     return undefined;
   }
 }
