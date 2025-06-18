@@ -19,6 +19,8 @@ export async function create(
     claimIndex: params.claimIndex,
     claimRecipient: params.claimRecipient,
     claimStreamId: params.claimStreamId,
+    claimTo: params.claimTo,
+    forgoneAmount: params.forgoneAmount,
     claimTokenId: params.claimTokenId,
     clawbackAmount: params.clawbackAmount,
     clawbackFrom: params.clawbackFrom,

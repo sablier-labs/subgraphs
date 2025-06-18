@@ -72,6 +72,54 @@ contracts:
       - event: "Claim"
     handler: "mappings/v1.3/SablierMerkleLT.ts"
     name: "SablierMerkleLT_v1_3"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierFactoryMerkleInstant.json"
+    events:
+      - event: "CreateMerkleInstant"
+    handler: "mappings/v1.4/SablierFactoryMerkleInstant.ts"
+    name: "SablierFactoryMerkleInstant_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierFactoryMerkleLL.json"
+    events:
+      - event: "CreateMerkleLL"
+    handler: "mappings/v1.4/SablierFactoryMerkleLL.ts"
+    name: "SablierFactoryMerkleLL_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierFactoryMerkleLT.json"
+    events:
+      - event: "CreateMerkleLT"
+    handler: "mappings/v1.4/SablierFactoryMerkleLT.ts"
+    name: "SablierFactoryMerkleLT_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierFactoryMerkleVCA.json"
+    events:
+      - event: "CreateMerkleVCA"
+    handler: "mappings/v1.4/SablierFactoryMerkleVCA.ts"
+    name: "SablierFactoryMerkleVCA_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierMerkleInstant.json"
+    events:
+      - event: "TransferAdmin"
+      - event: "Clawback"
+      - event: "Claim"
+    handler: "mappings/v1.4/SablierMerkleInstant.ts"
+    name: "SablierMerkleInstant_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierMerkleLL.json"
+    events:
+      - event: "TransferAdmin"
+      - event: "Clawback"
+      - event: "Claim"
+    handler: "mappings/v1.4/SablierMerkleLL.ts"
+    name: "SablierMerkleLL_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierMerkleLT.json"
+    events:
+      - event: "TransferAdmin"
+      - event: "Clawback"
+      - event: "Claim"
+    handler: "mappings/v1.4/SablierMerkleLT.ts"
+    name: "SablierMerkleLT_v1_4"
+  - abi_file_path: "../../abi/airdrops-v1.4/SablierMerkleVCA.json"
+    events:
+      - event: "TransferAdmin"
+      - event: "Clawback"
+      - event: "Claim"
+    handler: "mappings/v1.4/SablierMerkleVCA.ts"
+    name: "SablierMerkleVCA_v1_4"
 networks:
   - id: 2741
     start_block: 73620
@@ -238,6 +286,33 @@ networks:
       - name: "SablierMerkleInstant_v1_3"
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
+  - id: 11155111
+    start_block: 4904900
+    contracts:
+      - address: "0xbacc1d151a78eed71d504f701c25e8739dc0262d"
+        name: "SablierV2MerkleStreamerFactory_v1_1"
+      - name: "SablierV2MerkleStreamerLL_v1_1"
+      - address: "0x56e9180a8d2c35c99f2f8a1a5ab8abe79e876e8c"
+        name: "SablierV2MerkleLockupFactory_v1_2"
+      - name: "SablierV2MerkleLL_v1_2"
+      - name: "SablierV2MerkleLT_v1_2"
+      - address: "0xf642751d1271c88bbb8786067de808b32a016fd4"
+        name: "SablierMerkleFactory_v1_3"
+      - name: "SablierMerkleInstant_v1_3"
+      - name: "SablierMerkleLL_v1_3"
+      - name: "SablierMerkleLT_v1_3"
+      - address: "0xc93ff52cdd08f5daf314bdfbdd5eec236f5b1512"
+        name: "SablierFactoryMerkleInstant_v1_4"
+      - name: "SablierMerkleInstant_v1_4"
+      - address: "0x0aacbaf13e043449151624267d57f621c8b826b3"
+        name: "SablierFactoryMerkleLL_v1_4"
+      - name: "SablierMerkleLL_v1_4"
+      - address: "0x302a388c08450265418c9a7afca5389404705441"
+        name: "SablierFactoryMerkleLT_v1_4"
+      - name: "SablierMerkleLT_v1_4"
+      - address: "0x29ecb562de4037c793ce6c1c862026b3c6b7fb6a"
+        name: "SablierFactoryMerkleVCA_v1_4"
+      - name: "SablierMerkleVCA_v1_4"
   - id: 100
     start_block: 31491795
     rpc:

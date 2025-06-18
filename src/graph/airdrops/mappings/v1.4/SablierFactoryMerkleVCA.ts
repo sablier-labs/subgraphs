@@ -1,7 +1,7 @@
 import { DataSourceContext } from "@graphprotocol/graph-ts";
 import { readChainId } from "../../../common/context";
 import { CreateMerkleVCA } from "../../bindings/SablierFactoryMerkleVCA_v1_4/SablierFactoryMerkleVCA";
-import { SablierMerkleInstant_v1_4 as TemplateInstant_v1_4 } from "../../bindings/templates";
+import { SablierMerkleVCA_v1_4 as TemplateVCA_v1_4 } from "../../bindings/templates";
 import { Store } from "../../store";
 
 export function handle_SablierFactoryMerkleVCA_v1_4_CreateMerkleVCA(event: CreateMerkleVCA): void {
@@ -11,7 +11,7 @@ export function handle_SablierFactoryMerkleVCA_v1_4_CreateMerkleVCA(event: Creat
   /* -------------------------------- TEMPLATE -------------------------------- */
   const context = new DataSourceContext();
   context.setBigInt("chainId", readChainId());
-  TemplateInstant_v1_4.createWithContext(params.merkleVCA, context);
+  TemplateVCA_v1_4.createWithContext(params.merkleVCA, context);
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   Store.Campaign.createVCA(

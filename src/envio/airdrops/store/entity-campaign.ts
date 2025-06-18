@@ -1,3 +1,4 @@
+import { start } from "repl";
 import type { Envio } from "../../common/bindings";
 import { getContractVersion } from "../../common/deployments";
 import { sanitizeString } from "../../common/helpers";
@@ -13,6 +14,23 @@ export async function createInstant(
   params: Params.CreateCampaignBase,
 ): Promise<Entity.Campaign> {
   const campaign = await createBaseCampaign(context, event, entities, params);
+  await context.Campaign.set(campaign);
+  return campaign;
+}
+
+export async function createVCA(
+  context: Context.Handler,
+  event: Envio.Event,
+  entities: Params.CreateEntities,
+  params: Params.CreateCampaignVCA,
+): Promise<Entity.Campaign> {
+  let campaign = await createBaseCampaign(context, event, entities, params);
+  campaign = {
+    ...campaign,
+    startTime: params.startTime,
+    endTime: params.endTime,
+    unlockPercentage: params.unlockPercentage,
+  };
   await context.Campaign.set(campaign);
   return campaign;
 }
@@ -120,6 +138,9 @@ async function createBaseCampaign(
     claimedCount: 0n,
     clawbackAction_id: undefined,
     clawbackTime: undefined,
+    endTime: undefined,
+    startTime: undefined,
+    unlockPercentage: undefined,
     expiration: params.expiration,
     expires: params.expiration > 0n,
     factory_id: entities.factory.address,
