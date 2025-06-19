@@ -87,7 +87,7 @@ export function getChain(chainArg: string): Sablier.Chain {
 }
 
 export function getRelative(absolutePath: string): string {
-  return path.relative(process.cwd(), absolutePath);
+  return `./${path.relative(process.cwd(), absolutePath)}`;
 }
 
 export function extractDeploymentId(stdout: string): string | undefined {

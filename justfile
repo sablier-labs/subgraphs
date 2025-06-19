@@ -82,13 +82,18 @@ alias t := test
 @build-graph-indexer protocol="all":
     just for-each _build-graph-indexer {{ protocol }}
 
-_build-graph-indexer protocol: (codegen-schema "graph" protocol) (codegen-graph-manifest protocol)
+_build-graph-indexer protocol: (codegen-graph protocol)
     #!/usr/bin/env sh
     manifest_path=src/graph/{{ protocol }}/manifests/mainnet.yaml
-    pnpm graph build \
+    if ! pnpm graph build \
         $manifest_path \
         --output-dir src/graph/{{ protocol }}/build \
-    2>/dev/null || { echo "❌ Build failed — comment this line or run the 'graph build' command directly to see the output"; exit 1; }
+        &>/dev/null
+    then
+        echo "❌ Build failed — comment this line or run the 'graph build' command directly to see the output"
+        exit 1
+    fi
+    echo "✅ Built Graph indexer"
 
 # Codegen everything for the Graph indexer (order matters):
 # 1. GraphQL schema
@@ -116,11 +121,15 @@ _codegen-graph-bindings protocol:
     protocol_dir="src/graph/{{ protocol }}"
     bindings_dir=$protocol_dir/bindings
     pnpm dlx del-cli $bindings_dir
-    pnpm graph codegen \
+    if ! pnpm graph codegen \
         --output-dir $bindings_dir \
         $protocol_dir/manifests/mainnet.yaml \
-    &>/dev/null || { echo "❌ Codegen failed — comment this line or run the 'graph codegen' command directly to see the output"; exit 1; }
-    echo "✅ Generated Graph bindings\n"
+        &>/dev/null
+    then
+        echo "❌ Codegen failed — comment this line or run the 'graph codegen' command directly to see the output"
+        exit 1
+    fi
+    echo "✅ Generated Graph bindings"
 
 # Codegen the Graph subgraph manifest
 [group("codegen")]
@@ -157,11 +166,15 @@ _codegen-graph-bindings protocol:
 _codegen-envio-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/envio/{{ protocol }}"
-    pnpm envio codegen \
+    if ! pnpm envio codegen \
         --config $protocol_dir/config.yaml \
         --output-directory $protocol_dir/bindings \
-    &>/dev/null || { echo "❌ Codegen failed — comment this line or run the 'envio codegen' command directly to see the output"; exit 1; }
-    echo "✅ Generated Envio bindings\n"
+        &>/dev/null
+    then
+        echo "❌ Codegen failed — comment this line or run the 'envio codegen' command directly to see the output"
+        exit 1
+    fi
+    echo "✅ Generated Envio bindings"
 
 # Codegen the Envio config YAML
 [group("codegen")]

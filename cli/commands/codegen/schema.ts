@@ -91,7 +91,7 @@ function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const outputPath = paths.schema(vendor, protocol);
   fs.writeFileSync(outputPath, schema);
 
-  console.log(`✅ Generated GraphQL schema for vendor ${_.capitalize(vendor)} and protocol ${_.capitalize(protocol)}`);
+  console.log(`✅ Generated GraphQL schema for ${_.capitalize(vendor)} vendor and ${_.capitalize(protocol)} protocol`);
   console.log(`📁 Output path: ${helpers.getRelative(outputPath)}`);
   console.log("");
 }
