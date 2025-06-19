@@ -4,7 +4,7 @@ import "./node_modules/@sablier/devkit/just/base.just"
 set dotenv-load := true
 
 # ---------------------------------------------------------------------------- #
-#                                  ENVIRONMENT                                 #
+#                               ENVIRONMENT VARS                               #
 # ---------------------------------------------------------------------------- #
 
 export LOG_LEVEL := env("LOG_LEVEL", "info")
@@ -17,7 +17,7 @@ GLOBS_CLEAN := "**/{bindings,build,generated,logs}"
 GLOBS_CLEAN_IGNORE := "!src/graph/common/bindings"
 
 # ---------------------------------------------------------------------------- #
-#                                 RECIPES: BASE                                #
+#                                    RECIPES                                   #
 # ---------------------------------------------------------------------------- #
 
 # Show available commands
@@ -37,6 +37,13 @@ alias b := build
 clean globs=GLOBS_CLEAN:
     pnpm dlx del-cli "{{ globs }}" "{{ GLOBS_CLEAN_IGNORE }}"
 
+# Codegen all vendors
+[group("codegen")]
+@codegen:
+    just codegen-envio
+    echo ""
+    just codegen-graph
+
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
 @fetch-assets protocol="all" chain="all":
@@ -48,6 +55,15 @@ export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
     just biome-write "{{ globs }}"
 
+# Codegen the GraphQL schema
+[group("codegen")]
+[group("envio")]
+[group("graph")]
+@codegen-schema vendor="all" protocol="all":
+    just cli codegen schema \
+        --vendor {{ vendor }} \
+        --protocol {{ protocol }}
+
 # Setup Husky
 setup:
     pnpm husky
@@ -57,26 +73,66 @@ test args="--silent":
     pnpm vitest run {{ args }}
 alias t := test
 
-
 # ---------------------------------------------------------------------------- #
-#                               RECIPES: CODEGEN                               #
+#                                RECIPES: GRAPH                                #
 # ---------------------------------------------------------------------------- #
 
-# Build all subgraphs
+# Build all Graph indexers
 [group("graph")]
 @build-graph-indexer protocol="all":
     just for-each _build-graph-indexer {{ protocol }}
 
-_build-graph-indexer protocol: (codegen-graph protocol)
+_build-graph-indexer protocol: (codegen-schema "graph" protocol) (codegen-graph-manifest protocol)
+    #!/usr/bin/env sh
+    manifest_path=src/graph/{{ protocol }}/manifests/mainnet.yaml
     pnpm graph build \
+        $manifest_path \
         --output-dir src/graph/{{ protocol }}/build \
-        src/graph/{{ protocol }}/manifests/ethereum.yaml
+    2>/dev/null || { echo "❌ Build failed — comment this line or run the 'graph build' command directly to see the output"; exit 1; }
 
-# Codegen all vendors
+# Codegen everything for the Graph indexer (order matters):
+# 1. GraphQL schema
+# 2. YAML manifest
+# 3. AssemblyScript bindings
+[doc("Codegen everything for the Graph indexer")]
 [group("codegen")]
-@codegen:
-    just codegen-envio
-    just codegen-graph
+[group("graph")]
+@codegen-graph protocol="all":
+    just for-each _codegen-graph {{ protocol }}
+
+@_codegen-graph protocol:
+    just codegen-schema graph {{ protocol }}
+    just codegen-graph-manifest {{ protocol }} all
+    just codegen-graph-bindings {{ protocol }}
+
+# Codegen the Graph subgraph bindings
+[group("codegen")]
+[group("graph")]
+@codegen-graph-bindings protocol="all":
+    just for-each _codegen-graph-bindings {{ protocol }}
+
+_codegen-graph-bindings protocol:
+    #!/usr/bin/env sh
+    protocol_dir="src/graph/{{ protocol }}"
+    bindings_dir=$protocol_dir/bindings
+    pnpm dlx del-cli $bindings_dir
+    pnpm graph codegen \
+        --output-dir $bindings_dir \
+        $protocol_dir/manifests/mainnet.yaml \
+    &>/dev/null || { echo "❌ Codegen failed — comment this line or run the 'graph codegen' command directly to see the output"; exit 1; }
+    echo "✅ Generated Graph bindings\n"
+
+# Codegen the Graph subgraph manifest
+[group("codegen")]
+[group("graph")]
+@codegen-graph-manifest protocol="all" chain="all":
+    just cli codegen graph-manifest \
+        --protocol {{ protocol }} \
+        --chain {{ chain }}
+
+# ---------------------------------------------------------------------------- #
+#                                RECIPES: ENVIO                                #
+# ---------------------------------------------------------------------------- #
 
 # Codegen everything for the Envio indexer (order matters):
 # 1. GraphQL schema
@@ -103,7 +159,9 @@ _codegen-envio-bindings protocol:
     protocol_dir="src/envio/{{ protocol }}"
     pnpm envio codegen \
         --config $protocol_dir/config.yaml \
-        --output-directory $protocol_dir/bindings
+        --output-directory $protocol_dir/bindings \
+    &>/dev/null || { echo "❌ Codegen failed — comment this line or run the 'envio codegen' command directly to see the output"; exit 1; }
+    echo "✅ Generated Envio bindings\n"
 
 # Codegen the Envio config YAML
 [group("codegen")]
@@ -111,67 +169,23 @@ _codegen-envio-bindings protocol:
 @codegen-envio-config protocol="all":
     just cli codegen envio-config --protocol {{ protocol }}
 
-# Codegen everything for the Graph indexer (order matters):
-# 1. GraphQL schema
-# 2. YAML manifest
-# 3. AssemblyScript bindings
-[doc("Codegen everything for the Graph indexer")]
-[group("codegen")]
-[group("graph")]
-@codegen-graph protocol="all":
-    just for-each _codegen-graph {{ protocol }}
-
-@_codegen-graph protocol:
-    just codegen-schema graph {{ protocol }}
-    just codegen-graph-manifest {{ protocol }} all
-    just codegen-graph-bindings {{ protocol }}
-
-# Codegen the Graph subgraph bindings
-[group("codegen")]
-[group("graph")]
-@codegen-graph-bindings protocol="all":
-    just for-each _codegen-graph-bindings {{ protocol }}
-
-_codegen-graph-bindings protocol:
-    #!/usr/bin/env sh
-    protocol_dir="src/graph/{{ protocol }}"
-    pnpm dlx del-cli $protocol_dir/bindings
-    pnpm graph codegen \
-        --output-dir $protocol_dir/bindings \
-        $protocol_dir/manifests/ethereum.yaml
-
-# Codegen the Graph subgraph manifest
-[group("codegen")]
-[group("graph")]
-@codegen-graph-manifest protocol="all" chain="all":
-    just cli codegen graph-manifest --protocol {{ protocol }} --chain {{ chain }}
-
-# Codegen the GraphQL schema
-[group("codegen")]
-[group("envio")]
-[group("graph")]
-@codegen-schema vendor="all" protocol="all":
-    just cli codegen schema \
-        --vendor {{ vendor }} \
-        --protocol {{ protocol }}
-
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: PRINT                                #
 # ---------------------------------------------------------------------------- #
 
 # Print available chain arguments
 [group("print")]
-@print-chains:
-    just cli print chains
+@print-chains use_graph_slugs="false":
+    just cli print chains --graph {{ use_graph_slugs }}
 
-# Print available log levels available in Winston
+# Print available log levels available in Winston logger
 [group("print")]
 @print-log-levels:
     echo "Available log levels: error, warn, info, http, verbose, debug, silly"
 
 # Print available protocol arguments
 [group("print")]
-@print-protocol-args:
+@print-protocols:
     echo "Available protocol arguments: all, flow, lockup, airdrops"
 
 # ---------------------------------------------------------------------------- #
@@ -185,12 +199,12 @@ _codegen-graph-bindings protocol:
 
 # Helper to run a recipe for all protocols or a specific one
 [private]
-for-each base_recipe protocol:
+for-each recipe protocol:
     #!/usr/bin/env sh
     if [ "{{ protocol }}" = "all" ]; then
-        just {{ base_recipe }} airdrops
-        just {{ base_recipe }} flow
-        just {{ base_recipe }} lockup
+        just {{ recipe }} airdrops
+        just {{ recipe }} flow
+        just {{ recipe }} lockup
     else
-        just {{ base_recipe }} {{ protocol }}
+        just {{ recipe }} {{ protocol }}
     fi

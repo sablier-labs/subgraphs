@@ -14,7 +14,6 @@ import _ from "lodash";
 import { createEnvioConfig } from "../../../src/codegen/envio-config";
 import paths from "../../../src/paths";
 import type { Types } from "../../../src/types";
-import { logger } from "../../../src/winston";
 import { PROTOCOLS } from "../../constants";
 import * as helpers from "../../helpers";
 
@@ -23,12 +22,12 @@ import * as helpers from "../../helpers";
 /* -------------------------------------------------------------------------- */
 
 export function createEnvioConfigCommand(): Command {
-  const command = helpers.createBaseCommand("Generate Envio config file");
+  const command = helpers.createBaseCmd("Generate Envio config file");
 
-  helpers.addProtocolOption(command);
+  helpers.addProtocolOpt(command);
 
   command.action(async (options) => {
-    const protocolArg = helpers.parseProtocolOption(options.protocol);
+    const protocolArg = helpers.parseProtocolOpt(options.protocol);
 
     if (protocolArg === "all") {
       generateAllProtocolConfigs();
@@ -41,7 +40,7 @@ export function createEnvioConfigCommand(): Command {
   return command;
 }
 
-export const command = createEnvioConfigCommand();
+export const envioConfigCmd = createEnvioConfigCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
@@ -52,7 +51,7 @@ function generateAllProtocolConfigs(): void {
     generateConfig(p);
   }
 
-  logger.info("🎉 Successfully generated all Envio configs!\n");
+  console.log("🎉 Generated all Envio configs!\n");
 }
 
 function generateConfig(protocol: Types.Protocol): void {
@@ -61,6 +60,7 @@ function generateConfig(protocol: Types.Protocol): void {
   const configPath = paths.envio.config(protocol);
   fs.writeFileSync(configPath, yaml);
 
-  logger.info(`📁 Envio config path: ${helpers.getRelative(configPath)}`);
-  logger.info(`✅ Generated the Envio config for protocol ${_.capitalize(protocol)}\n`);
+  console.log(`✅ Generated the Envio config for protocol ${_.capitalize(protocol)}`);
+  console.log(`📁 Config path: ${helpers.getRelative(configPath)}`);
+  console.log();
 }

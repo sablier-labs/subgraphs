@@ -63,14 +63,14 @@ const QUERY = `#graphql
 /* -------------------------------------------------------------------------- */
 
 export function createFetchAssetsCommand(): Command {
-  const command = helpers.createBaseCommand("Fetch ERC20 token data from The Graph subgraphs");
+  const command = helpers.createBaseCmd("Fetch ERC20 token data from The Graph subgraphs");
 
-  helpers.addChainOption(command);
-  helpers.addProtocolOption(command);
+  helpers.addChainOpt(command);
+  helpers.addProtocolOpt(command);
 
   command.action(async (options) => {
-    const chainArg = helpers.parseChainOption(options.chain);
-    const protocolArg = helpers.parseProtocolOption(options.protocol);
+    const chainArg = helpers.parseChainOpt(options.chain);
+    const protocolArg = helpers.parseProtocolOpt(options.protocol);
 
     if (chainArg === "all") {
       await handleAllChains(protocolArg);
@@ -84,7 +84,7 @@ export function createFetchAssetsCommand(): Command {
 }
 
 // Export the command
-export const command = createFetchAssetsCommand();
+export const fetchAssetsCmd = createFetchAssetsCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                  HANDLERS                                  */
@@ -120,7 +120,7 @@ async function handleAllChains(protocolArg: string): Promise<void> {
       totalNew += newCount;
       totalAssets += totalCount;
     }
-    logger.info(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
+    console.log(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
   }
 }
 
@@ -145,7 +145,7 @@ async function handleChain(chainArg: string, protocolArg: string): Promise<void>
     totalNew += newCount;
     totalAssets += totalCount;
   }
-  logger.info(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
+  console.log(`📊 Chain ${chain.slug}: ${totalNew} new assets, ${totalAssets} total assets (all protocols)`);
 }
 
 async function handle(
@@ -172,12 +172,12 @@ async function handle(
 
   if (!skipLogger) {
     if (newCount > 0) {
-      logger.info(`✅ Successfully fetched ${newCount} new assets for ${indexer.protocol} indexer on ${chain.slug}`);
+      console.log(`✅ Successfully fetched ${newCount} new assets for ${indexer.protocol} indexer on ${chain.slug}`);
     } else {
-      logger.info(`✔️  No new assets found for ${indexer.protocol} indexer on ${chain.slug}`);
+      console.log(`✔️  No new assets found for ${indexer.protocol} indexer on ${chain.slug}`);
     }
     if (totalCount > 0) {
-      logger.info(`📁 There are ${totalCount} total assets in ${helpers.getRelative(filePath)}`);
+      console.log(`📁 There are ${totalCount} total assets in ${helpers.getRelative(filePath)}`);
     }
     console.log("");
   }

@@ -1,14 +1,12 @@
-import path, { join, resolve } from "node:path";
+import path, { join } from "node:path";
+import appRoot from "app-root-path";
 import * as fs from "fs-extra";
 import type { RPCData } from "./envio/common/types";
+import { getGraphChainSlug } from "./exports/indexers/graph";
 import type { Types } from "./types";
 
-const ROOT_DIR = join(__dirname, "..");
-if (!fs.existsSync(join(ROOT_DIR, "package.json"))) {
-  throw new Error("ROOT_DIR is not set correctly");
-}
-
-export const SRC_DIR = resolve(__dirname);
+const ROOT_DIR = appRoot.path;
+export const SRC_DIR = join(ROOT_DIR, "src");
 export const ABI_DIR = join(SRC_DIR, "abi");
 export const ENVIO_DIR = join(SRC_DIR, "envio");
 export const EXPORTS_DIR = join(SRC_DIR, "exports");
@@ -33,9 +31,14 @@ const paths = {
     schema: (protocol: P): string => join(ENVIO_DIR, protocol, "schema.graphql"),
   },
   exports: {
-    schemas: (protocol?: P): string => join(EXPORTS_DIR, "schemas", protocol ? `${protocol}.graphql` : ""),
+    schema: (protocol: P): string => join(EXPORTS_DIR, "schemas", `${protocol}.graphql`),
+    schemas: (): string => join(EXPORTS_DIR, "schemas"),
   },
   graph: {
+    manifest: (protocol: P, chainId: number): string => {
+      const chainSlug = getGraphChainSlug(chainId);
+      return join(GRAPH_DIR, protocol, "manifests", `${chainSlug}.yaml`);
+    },
     manifests: (protocol: P): string => join(GRAPH_DIR, protocol, "manifests"),
     schema: (protocol: P): string => join(GRAPH_DIR, protocol, "schema.graphql"),
   },
@@ -46,6 +49,7 @@ export default paths;
 
 /**
  * Returns the relative path from the directory of the start path to the end path.
+ * Helpful so that we don't hardcode the paths in the codebase.
  * @param from The path to the directory to start from
  * @param to The path to the directory or file to end at
  * @returns The relative path from the start path to the end path

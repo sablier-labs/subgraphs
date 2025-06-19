@@ -7,13 +7,13 @@ import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
 export function exportSchemasCommand(): Command {
-  const command = helpers.createBaseCommand("Copy GraphQL schemas to the dist directory");
+  const command = helpers.createBaseCmd("Copy GraphQL schemas to the dist directory");
 
   command.action(async () => {
     fs.ensureDirSync(paths.exports.schemas());
     for (const protocol of PROTOCOLS) {
       const schema = print(getMergedSchema(protocol));
-      const outputPath = paths.exports.schemas(protocol);
+      const outputPath = paths.exports.schema(protocol);
       fs.writeFileSync(outputPath, schema);
     }
   });
@@ -21,4 +21,4 @@ export function exportSchemasCommand(): Command {
   return command;
 }
 
-export const command = exportSchemasCommand();
+export const exportSchemasCmd = exportSchemasCommand();

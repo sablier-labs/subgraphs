@@ -15,12 +15,10 @@ import * as path from "node:path";
 import { type Command } from "commander";
 import * as fs from "fs-extra";
 import _ from "lodash";
-import { sablier } from "sablier";
 import { createGraphManifest } from "../../../src/codegen/graph-manifest";
 import { graphChains } from "../../../src/exports/indexers/graph";
 import paths from "../../../src/paths";
 import type { Types } from "../../../src/types";
-import { logger } from "../../../src/winston";
 import { PROTOCOLS } from "../../constants";
 import * as helpers from "../../helpers";
 
@@ -29,13 +27,13 @@ import * as helpers from "../../helpers";
 /* -------------------------------------------------------------------------- */
 
 export function createGraphManifestCommand(): Command {
-  const command = helpers.createBaseCommand("Generate subgraph manifests");
-  helpers.addProtocolOption(command);
-  helpers.addChainOption(command);
+  const command = helpers.createBaseCmd("Generate subgraph manifests");
+  helpers.addProtocolOpt(command);
+  helpers.addChainOpt(command);
 
   command.action(async (options) => {
-    const protocolArg = helpers.parseProtocolOption(options.protocol);
-    const chainArg = helpers.parseChainOption(options.chain);
+    const protocolArg = helpers.parseProtocolOpt(options.protocol);
+    const chainArg = helpers.parseChainOpt(options.chain);
 
     if (protocolArg === "all") {
       generateAllProtocolManifests(chainArg);
@@ -53,7 +51,7 @@ export function createGraphManifestCommand(): Command {
   return command;
 }
 
-export const command = createGraphManifestCommand();
+export const graphManifestCmd = createGraphManifestCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
@@ -66,7 +64,7 @@ function generateAllProtocolManifests(chainArg: string) {
     if (chainArg === "all") {
       const filesGenerated = generateAllChainManifests(p, true);
       totalCount += filesGenerated;
-      logger.info(`✅ Generated ${filesGenerated} manifests for protocol ${_.capitalize(p)}`);
+      console.log(`✅ Generated ${filesGenerated} manifests for ${_.capitalize(p)} protocol`);
       continue;
     }
 
@@ -74,8 +72,8 @@ function generateAllProtocolManifests(chainArg: string) {
   }
 
   if (chainArg === "all") {
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info(`🎉 Successfully generated ${totalCount} manifests in total!\n`);
+    console.log(`🎉 Generated ${totalCount} manifests in total`);
+    console.log();
   }
 }
 
@@ -85,7 +83,6 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
   if (fs.pathExistsSync(manifestsDir)) {
     fs.emptyDirSync(manifestsDir);
     fs.ensureFileSync(path.join(manifestsDir, ".gitkeep"));
-    logger.verbose("🗑️ Cleared existing manifests directory");
   }
 
   let filesGenerated = 0;
@@ -98,11 +95,9 @@ function generateAllChainManifests(protocol: Types.Protocol, suppressFinalLog = 
   }
 
   if (!suppressFinalLog) {
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info(
-      `🎉 Successfully generated ${filesGenerated} subgraph manifests for protocol ${_.capitalize(protocol)}!`,
-    );
-    logger.info(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
+    console.log(`🎉 Generated ${filesGenerated} subgraph manifests for ${_.capitalize(protocol)} protocol`);
+    console.log(`📁 Output directory: ${helpers.getRelative(manifestsDir)}`);
+    console.log();
   }
 
   return filesGenerated;
@@ -114,8 +109,9 @@ function generateManifest(protocol: Types.Protocol, chainArg: string): void {
   fs.ensureDirSync(manifestsDir);
 
   const manifestPath = writeManifestToFile(protocol, chain.id);
-  logger.info(`🎉 Successfully generated subgraph manifest for ${chainArg}`);
-  logger.info(`📁 Manifest path: ${manifestPath}`);
+  console.log(`✅ Generated subgraph manifest for ${chainArg}`);
+  console.log(`📁 Manifest path: ${manifestPath}`);
+  console.log();
 }
 
 /**
@@ -123,13 +119,10 @@ function generateManifest(protocol: Types.Protocol, chainArg: string): void {
  * @returns The relative path to the manifest file.
  */
 function writeManifestToFile(protocol: Types.Protocol, chainId: number): string {
-  const manifestsDir = paths.graph.manifests(protocol);
   const manifest = createGraphManifest(protocol, chainId);
   const yaml = helpers.dumpYAML(manifest);
-  const chain = sablier.chains.getOrThrow(chainId);
-  const manifestPath = path.join(manifestsDir, `${chain.slug}.yaml`);
+  const manifestPath = paths.graph.manifest(protocol, chainId);
   fs.writeFileSync(manifestPath, yaml);
 
-  logger.verbose(`✅ Generated manifest: ${helpers.getRelative(manifestPath)}`);
   return helpers.getRelative(manifestPath);
 }

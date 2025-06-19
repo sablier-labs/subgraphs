@@ -17,7 +17,6 @@ import _ from "lodash";
 import paths from "../../../src/paths";
 import { getMergedSchema } from "../../../src/schema";
 import type { Types } from "../../../src/types";
-import { logger } from "../../../src/winston";
 import { AUTOGEN_COMMENT, PROTOCOLS, VENDORS } from "../../constants";
 import * as helpers from "../../helpers";
 import { type ProtocolArg } from "../../types";
@@ -27,14 +26,14 @@ import { type ProtocolArg } from "../../types";
 /* -------------------------------------------------------------------------- */
 
 export function createSchemaCommand(): Command {
-  const command = helpers.createBaseCommand("Generate GraphQL schema files");
+  const command = helpers.createBaseCmd("Generate GraphQL schema files");
 
-  helpers.addVendorOption(command);
-  helpers.addProtocolOption(command);
+  helpers.addVendorOpt(command);
+  helpers.addProtocolOpt(command);
 
   command.action(async (options) => {
-    const vendorArg = helpers.parseVendorOption(options.vendor);
-    const protocolArg = helpers.parseProtocolOption(options.protocol);
+    const vendorArg = helpers.parseVendorOpt(options.vendor);
+    const protocolArg = helpers.parseProtocolOpt(options.protocol);
 
     if (vendorArg === "all") {
       generateAllVendorSchemas(protocolArg);
@@ -52,7 +51,7 @@ export function createSchemaCommand(): Command {
   return command;
 }
 
-export const command = createSchemaCommand();
+export const schemaCmd = createSchemaCommand();
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
@@ -67,8 +66,7 @@ function generateAllVendorSchemas(protocolArg: ProtocolArg): void {
     }
   }
 
-  logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+  console.log("🎉 Generated all GraphQL schemas");
 }
 
 function generateAllProtocolSchemas(vendor: Types.Vendor, skipLogs: boolean = false): void {
@@ -76,8 +74,7 @@ function generateAllProtocolSchemas(vendor: Types.Vendor, skipLogs: boolean = fa
     generateSchema(vendor, p);
   }
   if (!skipLogs) {
-    logger.verbose("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    logger.info("🎉 Successfully generated all GraphQL schemas!\n");
+    console.log("🎉 Generated all GraphQL schemas");
   }
 }
 
@@ -94,7 +91,7 @@ function generateSchema(vendor: Types.Vendor, protocol: Types.Protocol): void {
   const outputPath = paths.schema(vendor, protocol);
   fs.writeFileSync(outputPath, schema);
 
-  logger.info(`📁 Schema path: ${helpers.getRelative(outputPath)}`);
-  logger.info(`✅ Generated GraphQL schema for vendor ${_.capitalize(vendor)} and protocol ${_.capitalize(protocol)}`);
-  logger.info("");
+  console.log(`✅ Generated GraphQL schema for vendor ${_.capitalize(vendor)} and protocol ${_.capitalize(protocol)}`);
+  console.log(`📁 Output path: ${helpers.getRelative(outputPath)}`);
+  console.log("");
 }

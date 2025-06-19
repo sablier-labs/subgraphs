@@ -2,4 +2,4 @@
 # See https://github.com/LimeChain/matchstick/issues/432
 testsFolder: tests
 libsFolder: ../../../node_modules
-manifestPath: manifests/ethereum.yaml
+manifestPath: manifests/mainnet.yaml

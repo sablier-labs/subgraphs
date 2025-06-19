@@ -27,11 +27,12 @@ const NAME_TEMPLATING_VAR = "{SUBGRAPH_NAME}";
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
+// TODO: use this to write `deploy-all` recipe in `graph.just`
 export function getGraphChainSlug(chainId: number): string {
   return CHAIN_SLUG_OVERRIDES[chainId] ?? sablier.chains.getOrThrow(chainId).slug;
 }
 
-function getSubgraphName(chainId: number, protocol: Indexer.Protocol): Indexer.SubgraphName {
+function getSubgraphName(chainId: number, protocol: Indexer.Protocol): Indexer.GraphIndexerName {
   const graphChainName = getGraphChainSlug(chainId);
   return `sablier-${protocol}-${graphChainName}`;
 }

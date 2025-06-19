@@ -6,9 +6,9 @@ import { envioHypersync as envioExcluded } from "../../src/exports/indexers/envi
 import * as helpers from "../helpers";
 
 export function createCheckVendorsCommand(): Command {
-  const command = helpers.createBaseCommand("Check if a chain ID is supported by The Graph and Envio vendors");
+  const command = helpers.createBaseCmd("Check if a chain is supported by The Graph and Envio");
 
-  command.option("--chain-id <chainId>", "Chain ID to check (number)").action(async (options: { chainId?: string }) => {
+  command.option("--chain-id <number>", "Chain ID to check").action(async (options: { chainId?: string }) => {
     if (!options.chainId) {
       throw new Error("--chain-id is required");
     }
@@ -25,18 +25,14 @@ export function createCheckVendorsCommand(): Command {
       console.log(`🔗 Chain name: ${chain.name}`);
     }
 
-    console.log();
-
     await checkEnvioSupport(chainId);
     await checkGraphSupport(chainId);
-
-    console.log();
   });
 
   return command;
 }
 
-export const command = createCheckVendorsCommand();
+export const checkVendorsCmd = createCheckVendorsCommand();
 
 async function checkEnvioSupport(chainId: number): Promise<void> {
   console.log("Envio:");

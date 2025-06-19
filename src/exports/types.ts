@@ -8,7 +8,7 @@ export type Indexer = {
     url: string;
   };
   kind: "custom" | "official";
-  name: Indexer.SubgraphName;
+  name: Indexer.GraphIndexerName;
   protocol: Indexer.Protocol;
   /** GraphQL endpoint that doesn't require an API key. Opening it in the browser may open a GraphiQL playground.*/
   testingURL?: string;
@@ -46,9 +46,9 @@ export namespace Indexer {
     chainId: number;
   };
 
-  export type Protocol = Exclude<Sablier.Protocol, "legacy">;
+  export type GraphIndexerName = `sablier-${string}`;
 
-  export type SubgraphName = `sablier-${string}`;
+  export type Protocol = Exclude<Sablier.Protocol, "legacy">;
 
   export type Vendor = "envio" | "graph";
 }
