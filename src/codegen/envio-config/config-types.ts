@@ -48,7 +48,6 @@ export namespace EnvioConfig {
   export type TopSection = {
     name: string;
     ecosystem: "evm";
-    rollback_on_reorg: boolean;
     unordered_multichain_mode: boolean;
     schema: string;
     field_selection: FieldSelection;

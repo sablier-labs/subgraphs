@@ -11,7 +11,6 @@ function get(name: string): EnvioConfig.TopSection {
   return {
     name: `sablier-${name}`,
     ecosystem: "evm",
-    rollback_on_reorg: false,
     unordered_multichain_mode: true,
     schema: "./schema.graphql",
     field_selection: {
