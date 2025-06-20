@@ -88,12 +88,46 @@ _build-graph-indexer protocol: (codegen-graph protocol)
     if ! pnpm graph build \
         $manifest_path \
         --output-dir src/graph/{{ protocol }}/build \
-        &>/dev/null
-    then
-        echo "❌ Build failed — comment this line or run the 'graph build' command directly to see the output"
-        exit 1
-    fi
-    echo "✅ Built Graph indexer"
+        src/graph/{{ protocol }}/manifests/experimental.yaml
+
+# Codegen all vendors
+[group("codegen")]
+@codegen:
+    just codegen-envio
+    just codegen-graph
+
+# Codegen everything for the Envio indexer (order matters):
+# 1. GraphQL schema
+# 2. Envio config YAML
+[doc("Codegen everything for the Envio indexer")]
+[group("codegen")]
+[group("envio")]
+@codegen-envio protocol="all":
+    just for-each _codegen-envio {{ protocol }}
+
+@_codegen-envio protocol:
+    just codegen-schema envio {{ protocol }}
+    just codegen-envio-config {{ protocol }}
+    just codegen-envio-bindings {{ protocol }}
+
+# Codegen the Envio bindings
+[group("codegen")]
+[group("envio")]
+@codegen-envio-bindings protocol="all":
+    just for-each _codegen-envio-bindings {{ protocol }}
+
+_codegen-envio-bindings protocol:
+    #!/usr/bin/env sh
+    protocol_dir="src/envio/{{ protocol }}"
+    pnpm envio codegen \
+        --config $protocol_dir/config.yaml \
+        --output-directory $protocol_dir/bindings
+
+# Codegen the Envio config YAML
+[group("codegen")]
+[group("envio")]
+@codegen-envio-config protocol="all":
+    just cli codegen envio-config --protocol {{ protocol }}
 
 # Codegen everything for the Graph indexer (order matters):
 # 1. GraphQL schema
@@ -119,17 +153,10 @@ _build-graph-indexer protocol: (codegen-graph protocol)
 _codegen-graph-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/graph/{{ protocol }}"
-    bindings_dir=$protocol_dir/bindings
-    pnpm dlx del-cli $bindings_dir
-    if ! pnpm graph codegen \
-        --output-dir $bindings_dir \
-        $protocol_dir/manifests/mainnet.yaml \
-        &>/dev/null
-    then
-        echo "❌ Codegen failed — comment this line or run the 'graph codegen' command directly to see the output"
-        exit 1
-    fi
-    echo "✅ Generated Graph bindings"
+    pnpm dlx del-cli $protocol_dir/bindings
+    pnpm graph codegen \
+        --output-dir $protocol_dir/bindings \
+        $protocol_dir/manifests/experimental.yaml
 
 # Codegen the Graph subgraph manifest
 [group("codegen")]

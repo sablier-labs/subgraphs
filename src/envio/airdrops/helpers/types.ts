@@ -12,6 +12,8 @@ export namespace Params {
     claimAmount?: bigint;
     claimIndex?: bigint;
     claimRecipient?: Envio.Address;
+    claimTo?: Envio.Address;
+    forgoneAmount?: bigint;
     claimStreamId?: string;
     claimTokenId?: bigint;
     clawbackAmount?: bigint;
@@ -57,6 +59,12 @@ export namespace Params {
 
   export type CreateCampaignLT = CreateCampaignLockup & {
     tranchesWithPercentages: TrancheWithPercentage[];
+  };
+
+  export type CreateCampaignVCA = CreateCampaignBase & {
+    startTime: bigint | undefined;
+    endTime: bigint | undefined;
+    unlockPercentage: bigint | undefined;
   };
 }
 
