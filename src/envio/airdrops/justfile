@@ -1,0 +1,8 @@
+import "../envio.just"
+
+# Set protocol name
+export PROTOCOL := "airdrops"
+
+# Show available commands
+default:
+    @just --list

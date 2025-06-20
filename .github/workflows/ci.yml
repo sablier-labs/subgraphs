@@ -1,0 +1,69 @@
+name: "CI"
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{github.workflow}}-${{github.ref}}
+
+on:
+  pull_request:
+  push:
+    branches: ["main", "release"]
+
+jobs:
+  ci:
+    env:
+      ENVIO_ALCHEMY_API_KEY: ${{ secrets.ENVIO_ALCHEMY_API_KEY }}
+      ENVIO_ENVIRONMENT: "development"
+      ENVIO_INFURA_API_KEY: ${{ secrets.ENVIO_INFURA_API_KEY }}
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v4"
+
+      - name: "Set up devkit"
+        uses: "sablier-labs/devkit/actions/setup@main"
+        with:
+          package-manager: "pnpm"
+
+      - name: "Codegen Envio indexers"
+        run: "just codegen-envio"
+
+      - name: "Verify Envio configs haven't changed"
+        uses: "tj-actions/verify-changed-files@v20"
+        with:
+          fail-if-changed: true
+          fail-message: "❌ Envio config files are out of sync. Run 'just codegen-envio-config' locally and commit the changes."
+          files: |
+            ./src/envio/flow/config.yaml
+            ./src/envio/lockup/config.yaml
+            ./src/envio/airdrops/config.yaml
+
+      - name: "Codegen The Graph indexers"
+        run: "just codegen-graph"
+
+      - name: "Build all The Graph indexers as a check"
+        run: "just build-graph-indexer"
+
+      - name: "Export all GraphQL schemas"
+        run: "just export-schemas"
+
+      - name: "Verify GraphQL schemas haven't changed"
+        uses: "tj-actions/verify-changed-files@v20"
+        with:
+          fail-if-changed: true
+          fail-message: "❌ GraphQL schemas are out of sync. Run 'just export-schemas' locally and commit the changes."
+          files: |
+            ./src/exports/schemas/airdrops.graphql
+            ./src/exports/schemas/flow.graphql
+            ./src/exports/schemas/lockup.graphql
+
+      - name: "Run the code checks"
+        run: "just full-check"
+
+      - name: "Run the tests"
+        run: "just test"
+
+      - name: "Add summary"
+        run: | # shell
+          echo "## CI result" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
