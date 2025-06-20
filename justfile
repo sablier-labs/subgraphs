@@ -85,14 +85,9 @@ alias t := test
 _build-graph-indexer protocol: (codegen-graph protocol)
     #!/usr/bin/env sh
     manifest_path=src/graph/{{ protocol }}/manifests/mainnet.yaml
-    if ! pnpm graph build \
+    pnpm graph build \
         $manifest_path \
-        --output-dir src/graph/{{ protocol }}/build \
-        &>/dev/null
-    then
-        echo "❌ Build failed — comment this line or run the 'graph build' command directly to see the output"
-        exit 1
-    fi
+        --output-dir src/graph/{{ protocol }}/build
     echo "✅ Built Graph indexer"
 
 # Codegen everything for the Graph indexer (order matters):
@@ -121,14 +116,9 @@ _codegen-graph-bindings protocol:
     protocol_dir="src/graph/{{ protocol }}"
     bindings_dir=$protocol_dir/bindings
     pnpm dlx del-cli $bindings_dir
-    if ! pnpm graph codegen \
+    pnpm graph codegen \
         --output-dir $bindings_dir \
-        $protocol_dir/manifests/mainnet.yaml \
-        &>/dev/null
-    then
-        echo "❌ Codegen failed — comment this line or run the 'graph codegen' command directly to see the output"
-        exit 1
-    fi
+        $protocol_dir/manifests/mainnet.yaml
     echo "✅ Generated Graph bindings"
 
 # Codegen the Graph subgraph manifest
@@ -166,14 +156,9 @@ _codegen-graph-bindings protocol:
 _codegen-envio-bindings protocol:
     #!/usr/bin/env sh
     protocol_dir="src/envio/{{ protocol }}"
-    if ! pnpm envio codegen \
+    pnpm envio codegen \
         --config $protocol_dir/config.yaml \
-        --output-directory $protocol_dir/bindings \
-        &>/dev/null
-    then
-        echo "❌ Codegen failed — comment this line or run the 'envio codegen' command directly to see the output"
-        exit 1
-    fi
+        --output-directory $protocol_dir/bindings
     echo "✅ Generated Envio bindings"
 
 # Codegen the Envio config YAML
