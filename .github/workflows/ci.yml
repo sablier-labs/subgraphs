@@ -38,10 +38,10 @@ jobs:
             ./src/envio/lockup/config.yaml
             ./src/envio/airdrops/config.yaml
 
-      - name: "Codegen The Graph indexers"
+      - name: "Codegen Graph indexers"
         run: "just codegen-graph"
 
-      - name: "Build all The Graph indexers as a check"
+      - name: "Build all Graph indexers as a check"
         run: "just build-graph-indexer"
 
       - name: "Export all GraphQL schemas"

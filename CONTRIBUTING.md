@@ -12,7 +12,7 @@
 ```bash
 git clone https://github.com/sablier-labs/indexers.git sablier-indexers
 cd sablier-indexers
-just install
+pnpm install
 ```
 
 ### Available Commands
