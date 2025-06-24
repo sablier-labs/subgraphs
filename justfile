@@ -47,13 +47,15 @@ clean globs=GLOBS_CLEAN:
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
 @fetch-assets protocol="all" chain="all":
-    just cli fetch-assets --protocol {{ protocol }} --chain {{ chain }}
+    just cli fetch-assets \
+        --protocol {{ protocol }} \
+        --chain {{ chain }}
 
 # Generate the schemas in the ./src/exports directory
-# lint-staged will pass the globs to this recipe
+# lint-staged will call this recipe and pass the globs to it
 export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
-    just biome-write "{{ globs }}"
+    just --quiet biome-write "{{ globs }}"
 
 # Codegen the GraphQL schema
 [group("codegen")]
@@ -63,6 +65,7 @@ export-schemas +globs="src/exports/schemas/*.graphql":
     just cli codegen schema \
         --vendor {{ vendor }} \
         --protocol {{ protocol }}
+    just --quiet biome-write "src/envio/**/*.graphql"
 
 # Setup Husky
 setup:

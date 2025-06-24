@@ -152,8 +152,8 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): 
       };
     }
   } else {
-    const cliffDuration = params.cliffTime - params.startTime;
-    const totalDuration = stream.duration;
+    const cliffDuration = BigInt(params.cliffTime - params.startTime);
+    const totalDuration = BigInt(stream.duration);
 
     // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
     // See https://github.com/sablier-labs/lockup/blob/v1.2/src/libraries/Helpers.sol#L157-L168
