@@ -54,6 +54,19 @@ export async function TheGraph(
   return toTheGraph(await request(endpoint.TheGraph, document, variables));
 }
 
+export async function TheGraphRefactored(
+  document: string,
+  variables?: Record<string, unknown>,
+) {
+  return toTheGraph(
+    await request(
+      "https://api.studio.thegraph.com/query/112500/sablier-airdrops-experimental/version/latest",
+      document,
+      variables,
+    ),
+  );
+}
+
 /** --------------- Utilities --------------- */
 
 type Envio = string;

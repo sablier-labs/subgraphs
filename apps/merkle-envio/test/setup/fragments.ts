@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 
 export const ActionFragment_Envio = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
+    
     chainId
     subgraphId
     campaign {
@@ -31,13 +31,12 @@ export const FactoryFragment_Envio = gql/* GraphQL */ `
     id
     alias
     address
-    version
   }
 `;
 
 export const AssetFragment_Envio = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
+    
     address
     chainId
     decimals
@@ -118,7 +117,6 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
 
 export const ActionFragment_TheGraph = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
     chainId
     subgraphId
     campaign {
@@ -147,13 +145,11 @@ export const FactoryFragment_TheGraph = gql/* GraphQL */ `
     id
     alias
     address
-    version
   }
 `;
 
 export const AssetFragment_TheGraph = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
     address
     chainId
     decimals
@@ -164,7 +160,6 @@ export const AssetFragment_TheGraph = gql/* GraphQL */ `
 
 export const ActivityFragment_TheGraph = /* GraphQL */ `
   fragment ActivityFragment on Activity {
-    id
     timestamp
     day
     amount
