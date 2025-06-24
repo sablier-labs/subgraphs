@@ -16,7 +16,7 @@ export async function createDynamic(
 ): Promise<Entity.Stream> {
   const stream = await createBase(context, event, entities, params);
   await context.Stream.set(stream);
-  await createSegments(context, stream, params.segments);
+  await addSegments(context, stream, params.segments);
   return stream;
 }
 
@@ -38,12 +38,14 @@ export async function createLinear(
       initialAmount: params.unlockAmountStart,
     };
   }
-  const cliff = createCliff(baseStream, params);
+  const cliff = addCliff(baseStream, params);
+  const shape = addLinearShape(baseStream);
 
   const stream: Entity.Stream = {
     ...baseStream,
     ...cliff,
     ...initial,
+    ...shape,
   };
   await context.Stream.set(stream);
   return stream;
@@ -57,7 +59,7 @@ export async function createTranched(
 ): Promise<Entity.Stream> {
   const stream = await createBase(context, event, entities, params);
   await context.Stream.set(stream);
-  await createTranches(context, stream, params.tranches);
+  await addTranches(context, stream, params.tranches);
   return stream;
 }
 
@@ -140,7 +142,9 @@ async function createBase(
   return stream;
 }
 
-function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Partial<Entity.Stream> {
+function addCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Partial<Entity.Stream> {
+  const defaultCliff = { cliff: false };
+
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0/src/libraries/Helpers.sol#L204-L219
   if (stream.version === Version.Lockup.V2_0) {
@@ -151,40 +155,67 @@ function createCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): 
         cliffTime: params.cliffTime,
       };
     }
-  } else {
-    const cliffDuration = BigInt(params.cliffTime - params.startTime);
-    const totalDuration = BigInt(stream.duration);
-
-    // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
-    // See https://github.com/sablier-labs/lockup/blob/v1.2/src/libraries/Helpers.sol#L157-L168
-    if (stream.version === Version.Lockup.V1_2) {
-      if (params.cliffTime !== 0n) {
-        return {
-          cliff: true,
-          cliffAmount: (params.depositAmount * cliffDuration) / totalDuration,
-          cliffTime: params.cliffTime,
-        };
-      }
-    }
-    // In v1.0 and v1.1, no cliff means the cliff time is equal to the start time.
-    // See https://github.com/sablier-labs/lockup/blob/v1.1/src/libraries/Helpers.sol#L88-L103
-    // See https://github.com/sablier-labs/lockup/blob/v1.0/src/libraries/Helpers.sol#L88-L103
-    else if (stream.version === Version.Lockup.V1_0 || stream.version === Version.Lockup.V1_1) {
-      if (cliffDuration !== 0n) {
-        return {
-          cliff: true,
-          cliffAmount: (params.depositAmount * cliffDuration) / totalDuration,
-          cliffTime: params.cliffTime,
-        };
-      }
-    } else {
-      throw new Error(`Unknown Lockup version: ${stream.version}`);
-    }
+    return defaultCliff;
   }
-  return { cliff: false };
+
+  const cliffDuration = BigInt(params.cliffTime - params.startTime);
+  const totalDuration = BigInt(stream.duration);
+
+  // Ditto for v1.2, but the cliff amount has to be calculated as a percentage of the deposit amount.
+  // See https://github.com/sablier-labs/lockup/blob/v1.2/src/libraries/Helpers.sol#L157-L168
+  if (stream.version === Version.Lockup.V1_2) {
+    if (params.cliffTime !== 0n) {
+      return {
+        cliff: true,
+        cliffAmount: (params.depositAmount * cliffDuration) / totalDuration,
+        cliffTime: params.cliffTime,
+      };
+    }
+    return defaultCliff;
+  }
+
+  // In v1.0 and v1.1, no cliff means the cliff time is equal to the start time.
+  // See https://github.com/sablier-labs/lockup/blob/v1.1/src/libraries/Helpers.sol#L88-L103
+  // See https://github.com/sablier-labs/lockup/blob/v1.0/src/libraries/Helpers.sol#L88-L103
+  if (stream.version === Version.Lockup.V1_0 || stream.version === Version.Lockup.V1_1) {
+    if (cliffDuration !== 0n) {
+      return {
+        cliff: true,
+        cliffAmount: (params.depositAmount * cliffDuration) / totalDuration,
+        cliffTime: params.cliffTime,
+      };
+    }
+    return defaultCliff;
+  }
+
+  throw new Error(`Unknown Lockup version: ${stream.version}`);
 }
 
-async function createSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {
+/**
+ * Older versions of Lockup did not have a shape field, but it can be inferred.
+ * @see https://github.com/sablier-labs/interfaces/blob/30fffc0/packages/constants/src/stream/shape.ts#L12
+ */
+function addLinearShape(stream: Entity.Stream): Partial<Entity.Stream> {
+  if (stream.shape) {
+    return {};
+  }
+
+  // Note: <v1.2 streams didn't have the unlock shapes.
+  const isV1_0 = stream.version !== Version.Lockup.V1_0;
+  const isV1_1 = stream.version !== Version.Lockup.V1_1;
+  const isV1_2 = stream.version !== Version.Lockup.V1_2;
+  if (!isV1_0 && !isV1_1 && !isV1_2) {
+    return stream;
+  }
+
+  if (stream.cliff) {
+    return { shape: "cliff" };
+  } else {
+    return { shape: "linear" };
+  }
+}
+
+async function addSegments(context: Context.Handler, stream: Entity.Stream, segments: Segment[]): Promise<void> {
   let streamed = 0n;
 
   // The start time of the stream is the first segment's start time
@@ -213,7 +244,7 @@ async function createSegments(context: Context.Handler, stream: Entity.Stream, s
   }
 }
 
-async function createTranches(context: Context.Handler, stream: Entity.Stream, tranches: Tranche[]): Promise<void> {
+async function addTranches(context: Context.Handler, stream: Entity.Stream, tranches: Tranche[]): Promise<void> {
   let streamedAmount = 0n;
 
   // The start time of the stream is the first tranche's start time
