@@ -17,7 +17,6 @@ repomix
 .env*
 !.env.example
 subgraph.yaml
-src/envio/**/schema.graphql
 src/graph/**/schema.graphql
 src/graph/**/manifests/**/*.yaml
 src/graph/**/tests/**/*.latest.json

@@ -28,15 +28,19 @@ jobs:
       - name: "Codegen Envio indexers"
         run: "just codegen-envio"
 
-      - name: "Verify Envio configs haven't changed"
+      # We need this until this gets implemented in Envio: https://github.com/enviodev/hyperindex/issues/575
+      - name: "Verify Envio build files haven't changed"
         uses: "tj-actions/verify-changed-files@v20"
         with:
           fail-if-changed: true
-          fail-message: "❌ Envio config files are out of sync. Run 'just codegen-envio-config' locally and commit the changes."
+          fail-message: "❌ Envio build files are out of sync. Run 'just codegen-envio' locally and commit the changes."
           files: |
             ./src/envio/flow/config.yaml
+            ./src/envio/flow/schema.graphql
             ./src/envio/lockup/config.yaml
+            ./src/envio/lockup/schema.graphql
             ./src/envio/airdrops/config.yaml
+            ./src/envio/airdrops/schema.graphql
 
       - name: "Codegen Graph indexers"
         run: "just codegen-graph"
