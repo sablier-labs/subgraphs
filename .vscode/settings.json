@@ -10,7 +10,9 @@
     "**/flow/bindings": true,
     "**/lockup/bindings": true,
     "dist": true,
-    "node_modules": true
+    "node_modules": true,
+    "src/exports/schemas/*.graphql": true,
+    "**/schema.graphql": true
   },
   "[graphql][javascript][json][jsonc][typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
