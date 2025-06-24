@@ -70,7 +70,7 @@
   "scripts": {
     "build": "pnpm dlx del-cli dist && pnpm tsc -p tsconfig.build.json",
     "prepack": "pnpm install --frozen-lockfile && pnpm run build",
-    "start": "ts-node ./src/envio/$ENVIO_PROTOCOL/bindings/src/Index.bs.js"
+    "start": "cd ./src/envio/$ENVIO_PROTOCOL && ts-node ./bindings/src/Index.bs.js"
   },
   "types": "./dist/index.d.ts"
 }
