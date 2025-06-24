@@ -60,7 +60,7 @@ export function handle_SablierV2LockupDynamic_v1_1_CreateLockupDynamicStream(eve
       shape: null,
       startTime: params.range.start,
       streamId: params.streamId,
-      transferable: true,
+      transferable: params.transferable,
     },
     {
       segments: convertSegmentsV1_1(params.segments),

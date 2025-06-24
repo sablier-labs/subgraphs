@@ -250,7 +250,7 @@ function createTranche(stream: Entity.Stream, tranches: Tranche[]): void {
 
     tranche.save();
 
-    streamedAmount = streamedAmount.plus(tranche.endAmount);
+    streamedAmount = streamedAmount.plus(tranche.amount);
     previous = current;
   }
 }

@@ -235,7 +235,7 @@ async function createTranches(context: Context.Handler, stream: Entity.Stream, t
     };
     await context.Tranche.set(tranche);
 
-    streamedAmount += tranche.endAmount;
+    streamedAmount += tranche.amount;
     previous = current;
   }
 }
