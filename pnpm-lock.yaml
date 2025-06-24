@@ -31,7 +31,7 @@ importers:
         specifier: ^9.0
         version: 9.0.24(graphql@16.11.0)
       '@pinax/graph-networks-registry':
-        specifier: ^0.6.7
+        specifier: ^0.6
         version: 0.6.7
       '@sablier/devkit':
         specifier: github:sablier-labs/devkit#main
