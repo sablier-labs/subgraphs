@@ -66,7 +66,7 @@ export function getStream(tokenId: BigInt): Entity.Stream | null {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                COMMON LOGIC                                */
+/*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
 function createBaseStream(event: ethereum.Event, params: Params.CreateStreamCommon): Entity.Stream {

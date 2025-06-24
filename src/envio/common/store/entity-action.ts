@@ -5,7 +5,6 @@ import type { CommonParams } from "../types";
 export async function create<TContext, TAction extends Common.StreamAction, TWatcher extends Common.StreamWatcher>(
   context: TContext & {
     Action: { set: (action: TAction) => void | Promise<void> };
-    Watcher: { set: (watcher: TWatcher) => void | Promise<void> };
   },
   event: Envio.Event,
   watcher: TWatcher,
@@ -31,12 +30,6 @@ export async function create<TContext, TAction extends Common.StreamAction, TWat
     timestamp: BigInt(event.block.timestamp),
   };
   await context.Action.set(action as TAction);
-
-  const updatedWatcher = {
-    ...watcher,
-    actionCounter: watcher.actionCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher as TWatcher);
 
   return action as TAction;
 }

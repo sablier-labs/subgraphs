@@ -9,8 +9,32 @@ type Input = {
   context: Context.Handler;
   event: Envio.Event;
   loaderReturn: Loader.CreateReturn;
-  params: Params.CreateCampaignLL | Params.CreateCampaignLT;
+  params: Params.CreateCampaignBase | Params.CreateCampaignLL | Params.CreateCampaignLT;
 };
+
+/* -------------------------------------------------------------------------- */
+/*                               MERKLE INSTANT                               */
+/* -------------------------------------------------------------------------- */
+
+export async function createMerkleInstant(input: Input): Promise<void> {
+  const { context, event, loaderReturn, params } = input;
+
+  /* -------------------------------- CAMPAIGN -------------------------------- */
+  const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
+  const campaign = await Store.Campaign.createInstant(
+    context,
+    event,
+    createEntities,
+    params as Params.CreateCampaignBase,
+  );
+
+  /* --------------------------------- ACTION --------------------------------- */
+  const actionEntities = { campaign, ...createEntities };
+  await Store.Action.create(context, event, actionEntities, { category: "Create" });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.update(context, createEntities.watcher);
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                  MERKLE LL                                 */
@@ -19,15 +43,16 @@ type Input = {
 export async function createMerkleLL(input: Input): Promise<void> {
   const { context, event, loaderReturn, params } = input;
 
+  /* -------------------------------- CAMPAIGN -------------------------------- */
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
   const campaign = await Store.Campaign.createLL(context, event, createEntities, params as Params.CreateCampaignLL);
 
-  const actionEntities = {
-    campaign,
-    factory: createEntities.factory,
-    watcher: createEntities.watcher,
-  };
+  /* --------------------------------- ACTION --------------------------------- */
+  const actionEntities = { campaign, ...createEntities };
   await Store.Action.create(context, event, actionEntities, { category: "Create" });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.update(context, createEntities.watcher);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -37,19 +62,20 @@ export async function createMerkleLL(input: Input): Promise<void> {
 export async function createMerkleLT(input: Input): Promise<void> {
   const { context, event, loaderReturn, params } = input;
 
+  /* -------------------------------- CAMPAIGN -------------------------------- */
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
   const campaign = await Store.Campaign.createLT(context, event, createEntities, params as Params.CreateCampaignLT);
 
-  const actionEntities = {
-    campaign,
-    factory: createEntities.factory,
-    watcher: createEntities.watcher,
-  };
+  /* --------------------------------- ACTION --------------------------------- */
+  const actionEntities = { campaign, ...createEntities };
   await Store.Action.create(context, event, actionEntities, { category: "Create" });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.update(context, createEntities.watcher);
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                COMMON LOGIC                                */
+/*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
 async function createAssociatedEntities(

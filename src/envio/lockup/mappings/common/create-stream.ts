@@ -19,9 +19,15 @@ type Input = {
 export async function createLinearStream(input: Input): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
+  /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
   const stream = await Store.Stream.createLinear(context, event, entities, params as Params.CreateStreamLinear);
+
+  /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.update(context, entities.watcher);
 
   return stream;
 }
@@ -29,9 +35,15 @@ export async function createLinearStream(input: Input): Promise<Entity.Stream> {
 export async function createDynamicStream(input: Input): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
+  /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
   const stream = await Store.Stream.createDynamic(context, event, entities, params as Params.CreateStreamDynamic);
+
+  /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.update(context, entities.watcher);
 
   return stream;
 }
@@ -39,9 +51,15 @@ export async function createDynamicStream(input: Input): Promise<Entity.Stream> 
 export async function createTranchedStream(input: Input): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
+  /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
   const stream = await Store.Stream.createTranched(context, event, entities, params as Params.CreateTranche);
+
+  /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.update(context, entities.watcher);
 
   return stream;
 }
@@ -81,6 +99,6 @@ async function createAssociatedEntities(
       entities.asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, rpcData.assetMetadata)),
     batch: entities.batch ?? (await Store.Batch.create(event, params.sender)),
     batcher: entities.batcher ?? (await Store.Batcher.create(context, event, params.sender)),
-    watcher: entities.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
+    watcher: entities.watcher ?? CommonStore.Watcher.create(event.chainId),
   };
 }

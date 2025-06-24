@@ -9,7 +9,6 @@ export async function create(
   entities: Params.ActionEntities,
   params: Params.Action,
 ): Promise<Entity.Action> {
-  /* --------------------------------- ACTION --------------------------------- */
   const action: Entity.Action = {
     block: BigInt(event.block.number),
     campaign_id: entities.campaign.id,
@@ -31,13 +30,6 @@ export async function create(
     timestamp: BigInt(event.block.timestamp),
   };
   await context.Action.set(action);
-
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher: Entity.Watcher = {
-    ...entities.watcher,
-    actionCounter: entities.watcher.actionCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
 
   return action;
 }

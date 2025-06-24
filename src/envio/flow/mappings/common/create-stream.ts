@@ -63,10 +63,11 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     asset:
       loaderReturn.asset ?? (await CommonStore.Asset.create(context, event.chainId, event.params.token, assetMetadata)),
     batch: loaderReturn.batch ?? (await Store.Batch.create(event, event.params.sender)),
-    batcher: loaderReturn.batcher ?? (await Store.Batcher.create(event, event.params.sender)),
-    watcher: loaderReturn.watcher ?? (await CommonStore.Watcher.create(context, event.chainId)),
+    batcher: loaderReturn.batcher ?? (await Store.Batcher.create(context, event, event.params.sender)),
+    watcher: loaderReturn.watcher ?? CommonStore.Watcher.create(event.chainId),
   };
 
+  /* --------------------------------- STREAM --------------------------------- */
   const stream = await Store.Stream.create(context, event, entities, {
     ratePerSecond: event.params.ratePerSecond,
     recipient: event.params.recipient,
@@ -75,6 +76,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     transferable: event.params.transferable,
   });
 
+  /* --------------------------------- ACTION --------------------------------- */
   await Store.Action.create(context, event, entities.watcher, {
     addressA: event.params.sender,
     addressB: event.params.recipient,
@@ -82,6 +84,9 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     category: "Create",
     streamId: stream.id,
   });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.update(context, entities.watcher);
 };
 
 /* -------------------------------------------------------------------------- */

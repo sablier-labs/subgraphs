@@ -109,7 +109,7 @@ type Batcher @entity(immutable: false) {
   """
   id: String!
   """
-  Numerical index.
+  Total number of batches started by this sender.
   """
   batchCounter: BigInt!
   """

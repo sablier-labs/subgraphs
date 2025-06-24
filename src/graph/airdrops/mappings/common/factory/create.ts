@@ -41,7 +41,7 @@ export function handleCreateMerkleLT(
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                COMMON LOGIC                                */
+/*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
 function createTemplate(

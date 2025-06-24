@@ -156,13 +156,6 @@ async function createBaseCampaign(
   };
   await context.Factory.set(updatedFactory);
 
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher = {
-    ...entities.watcher,
-    campaignCounter: entities.watcher.campaignCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
-
   return campaign;
 }
 

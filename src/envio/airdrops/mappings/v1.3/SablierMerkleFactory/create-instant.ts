@@ -1,6 +1,6 @@
-import { CommonStore } from "../../../../common/store";
 import { Contract } from "../../../bindings";
-import { Store } from "../../../store";
+import type { Params } from "../../../helpers/types";
+import { createMerkleInstant } from "../../common/factory";
 import { Loader } from "../../common/loader";
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.contractRegister(({ event, context }) => {
@@ -37,40 +37,25 @@ struct ConstructorParams {
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleInstant.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
-    const { asset, assetMetadata, factory, watcher } = loaderReturn;
     const baseParams = event.params.baseParams;
-    const assetAddress = baseParams[0];
-
-    const entities = {
-      asset: asset ?? (await CommonStore.Asset.create(context, event.chainId, assetAddress, assetMetadata)),
-      factory: factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
-      watcher: watcher ?? (await Store.Watcher.create(event.chainId)),
-    };
-
-    /* -------------------------------- CAMPAIGN -------------------------------- */
-    const params = event.params;
-    const campaign = await Store.Campaign.createInstant(context, event, entities, {
+    const params: Params.CreateCampaignBase = {
       admin: baseParams[2],
-      aggregateAmount: params.aggregateAmount,
-      asset: assetAddress,
-      campaignAddress: params.merkleInstant,
+      aggregateAmount: event.params.aggregateAmount,
+      asset: baseParams[0],
+      campaignAddress: event.params.merkleInstant,
       category: "Instant",
       expiration: baseParams[1],
       ipfsCID: baseParams[3],
       merkleRoot: baseParams[4],
-      minimumFee: params.fee,
+      minimumFee: event.params.fee,
       name: baseParams[5],
-      recipientCount: params.recipientCount,
-    });
-
-    /* --------------------------------- ACTION --------------------------------- */
-    const actionEntities = {
-      campaign,
-      factory: entities.factory,
-      watcher: entities.watcher,
+      recipientCount: event.params.recipientCount,
     };
-    await Store.Action.create(context, event, actionEntities, {
-      category: "Create",
+    await createMerkleInstant({
+      context,
+      event,
+      loaderReturn,
+      params,
     });
   },
   loader: Loader.create["v1.3"],

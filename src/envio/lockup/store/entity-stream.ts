@@ -64,7 +64,7 @@ export async function createTranched(
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                COMMON LOGIC                                */
+/*                               INTERNAL LOGIC                               */
 /* -------------------------------------------------------------------------- */
 
 async function createBase(
@@ -131,13 +131,6 @@ async function createBase(
 
   /* ---------------------------------- BATCH --------------------------------- */
   await updateBatch(context, event, batch, batcher);
-
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher = {
-    ...watcher,
-    streamCounter: counter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
 
   return stream;
 }

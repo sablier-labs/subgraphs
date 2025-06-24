@@ -1,7 +1,7 @@
 import type { Envio } from "../../common/bindings";
 import { Id } from "../../common/id";
 import type { Context, Entity } from "../bindings";
-import { updateCounter as updateBatcherCounter } from "./entity-batcher";
+import { update as updateBatcher } from "./entity-batcher";
 
 export async function create(event: Envio.Event, sender: Envio.Address): Promise<Entity.Batch> {
   const id = Id.batch(event, sender);
@@ -41,7 +41,7 @@ export async function update(
       timestamp: BigInt(event.block.timestamp),
     };
     await context.Batch.set(updatedBatch);
-    await updateBatcherCounter(context, batcher);
+    await updateBatcher(context, batcher);
   } else {
     const updatedBatch: Entity.Batch = {
       ...batch,

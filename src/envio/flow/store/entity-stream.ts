@@ -1,3 +1,4 @@
+import _ from "lodash";
 import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { Id } from "../../common/id";
@@ -61,13 +62,6 @@ export async function create(
 
   /* ---------------------------------- BATCH --------------------------------- */
   await updateBatch(context, event, batch, batcher);
-
-  /* --------------------------------- WATCHER -------------------------------- */
-  const updatedWatcher = {
-    ...watcher,
-    streamCounter: counter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
 
   return stream;
 }
