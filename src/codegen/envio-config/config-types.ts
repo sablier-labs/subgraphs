@@ -48,8 +48,9 @@ export namespace EnvioConfig {
   export type TopSection = {
     name: string;
     ecosystem: "evm";
-    unordered_multichain_mode: boolean;
+    output: string;
     schema: string;
+    unordered_multichain_mode: boolean;
     field_selection: FieldSelection;
     contracts: Contract[];
     networks: Network[];
