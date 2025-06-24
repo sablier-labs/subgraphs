@@ -11,8 +11,7 @@ export function getOrCreateAsset(address: Address): Asset {
   if (entity == null) {
     entity = new Asset(id);
 
-    let contract = ERC20Contract.bind(address);
-    let decimals = contract.decimals();
+    let decimals = getAssetDecimals(address);
     let name = getAssetName(address);
     let symbol = getAssetSymbol(address);
 
@@ -20,7 +19,7 @@ export function getOrCreateAsset(address: Address): Asset {
     entity.address = address;
     entity.symbol = symbol;
     entity.name = name;
-    entity.decimals = BigInt.fromI32(decimals);
+    entity.decimals = decimals;
 
     entity.save();
   }
@@ -62,6 +61,15 @@ function getAssetName(address: Address): string {
   } else {
     return name.value;
   }
+}
+
+export function getAssetDecimals(address: Address): BigInt {
+  const contract = ERC20Contract.bind(address);
+  const decimals = contract.try_decimals();
+  if (decimals.reverted) {
+    return BigInt.fromU32(0);
+  }
+  return BigInt.fromI32(decimals.value);
 }
 
 /** --------------------------------------------------------------------------------------------------------- */

@@ -26,9 +26,6 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
     addressB
     amountA
     amountB
-    contract {
-      ...ContractFragment
-    }
   }
 `;
 
@@ -117,9 +114,6 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
     batch {
       ...BatchFragment
     }
-    contract {
-      ...ContractFragment
-    }
     segments(order_by: { position: asc }, limit: 1000) {
       ...SegmentFragment
     }
@@ -140,7 +134,6 @@ export const ContractFragment_TheGraph = gql/* GraphQL */ `
 
 export const ActionFragment_TheGraph = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
     chainId
     subgraphId
     stream {
@@ -155,23 +148,17 @@ export const ActionFragment_TheGraph = gql/* GraphQL */ `
     addressB
     amountA
     amountB
-    contract {
-      ...ContractFragment
-    }
   }
 `;
 
 export const BatchFragment_TheGraph = gql/* GraphQL */ `
   fragment BatchFragment on Batch {
-    id
-    label
     size
   }
 `;
 
 export const SegmentFragment_TheGraph = gql/* GraphQL */ `
   fragment SegmentFragment on Segment {
-    id
     position
     amount
     exponent
@@ -185,7 +172,6 @@ export const SegmentFragment_TheGraph = gql/* GraphQL */ `
 
 export const AssetFragment_TheGraph = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
     address
     chainId
     decimals
@@ -196,7 +182,6 @@ export const AssetFragment_TheGraph = gql/* GraphQL */ `
 
 export const TrancheFragment_TheGraph = gql/* GraphQL */ `
   fragment TrancheFragment on Tranche {
-    id
     position
     amount
     timestamp
@@ -213,7 +198,6 @@ export const StreamFragment_TheGraph = gql/* GraphQL */ `
     tokenId
     subgraphId
     chainId
-    alias
     category
     funder
     sender
@@ -232,11 +216,9 @@ export const StreamFragment_TheGraph = gql/* GraphQL */ `
     canceledTime
     withdrawnAmount
     intactAmount
-    position
     proxied
     proxender
     transferable
-    version
     asset {
       ...AssetFragment
     }
@@ -245,9 +227,6 @@ export const StreamFragment_TheGraph = gql/* GraphQL */ `
     }
     batch {
       ...BatchFragment
-    }
-    contract {
-      ...ContractFragment
     }
     segments(orderBy: position, orderDirection: asc, first: 1000) {
       ...SegmentFragment
