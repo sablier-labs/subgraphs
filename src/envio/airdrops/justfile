@@ -1,6 +1,6 @@
 import "../envio.just"
 
-# Set protocol name
+export ENVIO_PROTOCOL := "airdrops"
 export PROTOCOL := "airdrops"
 
 # Show available commands

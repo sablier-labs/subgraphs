@@ -72,6 +72,5 @@ export const envioChains = SUPPORTED_CHAINS;
  * @see @see https://github.com/enviodev/hyperindex/issues/599
  */
 export const envioHypersync: Record<number, string> = {
-  [chains.chiliz.id]: "https://chiliz.hypersync.xyz",
   [chains.tangle.id]: "https://tangle.hypersync.xyz",
 };

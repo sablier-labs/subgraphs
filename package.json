@@ -43,6 +43,7 @@
     "prettier": "^3.6",
     "prom-client": "^15.1",
     "strip-ansi": "^7.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20",
     "typescript": "5.8.3",
     "viem": "^2.31",
@@ -68,7 +69,8 @@
   },
   "scripts": {
     "build": "pnpm dlx del-cli dist && pnpm tsc -p tsconfig.build.json",
-    "prepack": "pnpm install --frozen-lockfile && pnpm run build"
+    "prepack": "pnpm install --frozen-lockfile && pnpm run build",
+    "start": "ts-node ./src/envio/$ENVIO_PROTOCOL/bindings/src/Index.bs.js"
   },
   "types": "./dist/index.d.ts"
 }

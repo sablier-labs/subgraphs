@@ -241,8 +241,6 @@ networks:
         name: "SablierLockup_v2_0"
   - id: 88888
     start_block: 19125587
-    hypersync_config:
-      url: "https://chiliz.hypersync.xyz"
     rpc:
       - url: "https://rpc.chiliz.com"
         for: "fallback"

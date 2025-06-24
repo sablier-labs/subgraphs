@@ -129,8 +129,6 @@ networks:
         name: "SablierFlow_v1_1"
   - id: 88888
     start_block: 19125673
-    hypersync_config:
-      url: "https://chiliz.hypersync.xyz"
     rpc:
       - url: "https://rpc.chiliz.com"
         for: "fallback"
