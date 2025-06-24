@@ -30,7 +30,6 @@ export function handleTransfer(event: ethereum.Event, params: Params.TransferNFT
     currentParties[index] = newRecipient;
     stream.parties = currentParties;
     stream.save();
-    return;
   } else {
     logError("Current recipient not found in parties array: {}", [currentRecipient.toHexString()]);
   }

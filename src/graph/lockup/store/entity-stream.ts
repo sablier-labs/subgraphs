@@ -1,4 +1,4 @@
-import { BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { LOCKUP_V1_0, LOCKUP_V1_1, LOCKUP_V1_2, LOCKUP_V2_0, ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
@@ -92,13 +92,16 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
 
   /* ---------------------------------- PROXY --------------------------------- */
   const contractVersion = readContractVersion();
-  // PRBProxy was only used in Lockup v1.0
-  stream.parties = [];
+  const parties = new Array<Bytes>(0);
+  parties.push(params.recipient);
+  parties.push(params.sender);
   stream.proxied = false;
+
+  // PRBProxy was only used in Lockup v1.0
   if (areStringsEqual(contractVersion, LOCKUP_V1_0)) {
     const proxender = loadProxender(params.sender);
     if (proxender) {
-      stream.parties.push(proxender);
+      parties.push(proxender);
       stream.proxied = true;
       stream.proxender = proxender;
     }
@@ -117,8 +120,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   stream.funder = params.funder;
   stream.hash = event.transaction.hash;
   stream.intactAmount = params.depositAmount;
-  stream.parties.push(params.recipient);
-  stream.parties.push(params.sender);
+  stream.parties = parties;
   stream.recipient = params.recipient;
   stream.sender = params.sender;
   stream.shape = params.shape;
