@@ -141,9 +141,9 @@ ERC-20 asset
 """
 type Asset @entity(immutable: true) {
   """
-  Contract address of the ERC20 token
+  Unique identifier: `{chainId}-{address}`
   """
-  id: ID!
+  id: String!
   """
   Alias for id
   """

@@ -51,7 +51,7 @@ clean globs=GLOBS_CLEAN:
         --protocol {{ protocol }} \
         --chain {{ chain }}
 
-# Generate the schemas in the ./src/exports directory
+# Export the schemas to the ./src/exports directory
 # lint-staged will call this recipe and pass the globs to it
 export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
