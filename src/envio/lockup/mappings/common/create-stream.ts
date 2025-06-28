@@ -27,7 +27,7 @@ export async function createLinearStream(input: Input): Promise<Entity.Stream> {
   await createAction(context, event, entities.watcher, params, stream.id);
 
   /* --------------------------------- WATCHER -------------------------------- */
-  await CommonStore.Watcher.update(context, entities.watcher);
+  await CommonStore.Watcher.incrementCounters(context, entities.watcher);
 
   return stream;
 }
@@ -43,7 +43,7 @@ export async function createDynamicStream(input: Input): Promise<Entity.Stream> 
   await createAction(context, event, entities.watcher, params, stream.id);
 
   /* --------------------------------- WATCHER -------------------------------- */
-  await CommonStore.Watcher.update(context, entities.watcher);
+  await CommonStore.Watcher.incrementCounters(context, entities.watcher);
 
   return stream;
 }
@@ -59,7 +59,7 @@ export async function createTranchedStream(input: Input): Promise<Entity.Stream>
   await createAction(context, event, entities.watcher, params, stream.id);
 
   /* --------------------------------- WATCHER -------------------------------- */
-  await CommonStore.Watcher.update(context, entities.watcher);
+  await CommonStore.Watcher.incrementCounters(context, entities.watcher);
 
   return stream;
 }

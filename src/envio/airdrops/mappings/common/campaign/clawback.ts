@@ -21,7 +21,7 @@ type LoaderReturn = {
 type Loader<T> = Loader_v1_1<T> & Loader_v1_2<T> & Loader_v1_3<T>;
 
 const loader: Loader<LoaderReturn> = async ({ context, event }) => {
-  const campaignId = Id.campaign(event.chainId, event.srcAddress);
+  const campaignId = Id.campaign(event.srcAddress, event.chainId);
   const campaign = await context.Campaign.getOrThrow(campaignId);
 
   const watcherId = event.chainId.toString();

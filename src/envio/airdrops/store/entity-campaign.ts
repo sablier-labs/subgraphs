@@ -125,7 +125,7 @@ async function createBaseCampaign(
     factory_id: entities.factory.address,
     fee: params.minimumFee,
     hash: event.transaction.hash,
-    id: Id.campaign(event.chainId, params.campaignAddress),
+    id: Id.campaign(params.campaignAddress, event.chainId),
     ipfsCID: params.ipfsCID,
     lockup: undefined,
     name: params.name,

@@ -2,10 +2,14 @@ import type { Common, Envio } from "../bindings";
 import { Id } from "../id";
 import type { RPCData } from "../types";
 
-export async function create<
-  TContext extends { Asset: { set: (asset: TAsset) => void | Promise<void> } },
-  TAsset extends Common.Asset,
->(context: TContext, chainId: number, assetAddress: Envio.Address, metadata: RPCData.ERC20Metadata): Promise<TAsset> {
+type AssetContext = { Asset: { set: (asset: Common.Asset) => void | Promise<void> } };
+
+export async function create(
+  context: AssetContext,
+  chainId: number,
+  assetAddress: Envio.Address,
+  metadata: RPCData.ERC20Metadata,
+): Promise<Common.Asset> {
   const asset: Common.Asset = {
     address: assetAddress.toLowerCase(),
     chainId: BigInt(chainId),
@@ -14,6 +18,6 @@ export async function create<
     name: metadata.name,
     symbol: metadata.symbol,
   };
-  await context.Asset.set(asset as TAsset);
-  return asset as TAsset;
+  await context.Asset.set(asset);
+  return asset;
 }

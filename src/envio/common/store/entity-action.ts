@@ -2,12 +2,12 @@ import type { Common, Envio } from "../bindings";
 import { Id } from "../id";
 import type { CommonParams } from "../types";
 
-export async function create<TContext, TAction extends Common.StreamAction, TWatcher extends Common.StreamWatcher>(
-  context: TContext & {
+export async function create<TAction extends Common.StreamAction>(
+  context: {
     Action: { set: (action: TAction) => void | Promise<void> };
   },
   event: Envio.Event,
-  watcher: TWatcher,
+  watcher: Common.StreamWatcher,
   params: CommonParams.Action,
 ): Promise<TAction> {
   const id = Id.action(event);

@@ -1,3 +1,4 @@
+import type { Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_RestartFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_RestartFlowStream_handler as Handler_v1_1,
@@ -9,7 +10,7 @@ import { Loader } from "./loader";
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
 
   /* --------------------------------- STREAM --------------------------------- */
 
@@ -26,7 +27,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     depletionTime = now + extraAmountScaled / event.params.ratePerSecond;
   }
 
-  stream = {
+  let updatedStream: Entity.Stream = {
     ...stream,
     depletionTime,
     lastAdjustmentTimestamp: now,
@@ -43,11 +44,11 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     category: "Restart",
     streamId: stream.id,
   });
-  stream = {
+  updatedStream = {
     ...stream,
     lastAdjustmentAction_id: action.id,
   };
-  context.Stream.set(stream);
+  context.Stream.set(updatedStream);
 };
 
 export const restartStream = { handler, loader: Loader.base };

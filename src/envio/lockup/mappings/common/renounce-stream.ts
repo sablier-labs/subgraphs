@@ -1,3 +1,5 @@
+import { CommonStore } from "../../../common/store";
+import type { Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_RenounceLockupStream_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_RenounceLockupStream_handler as Handler_v1_1,
@@ -12,10 +14,26 @@ type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
   const { stream, watcher } = loaderReturn;
 
-  await Store.Action.create(context, event, watcher, {
+  /* --------------------------------- STREAM --------------------------------- */
+  let updatedStream: Entity.Stream = {
+    ...stream,
+    cancelable: false,
+    renounceTime: BigInt(event.block.timestamp),
+  };
+
+  /* --------------------------------- ACTION --------------------------------- */
+  const action = await Store.Action.create(context, event, watcher, {
     category: "Renounce",
     streamId: stream.id,
   });
+  updatedStream = {
+    ...stream,
+    renounceAction_id: action.id,
+  };
+  await context.Stream.set(updatedStream);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 export const renounceStream = { handler, loader: Loader.base };

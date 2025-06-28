@@ -2,12 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@sablier/devkit/biome"],
   "files": {
-    "includes": [
-      "**/*.{graphql,js,json,jsonc,mjs,mts,ts}",
-      "!node_modules",
-      "!src/envio/common/rpc-data/**/*.json",
-      "!src/graph/**/bindings/**/*.ts"
-    ]
+    "includes": ["**/*.{graphql,js,json,jsonc,mjs,mts,ts}", "!node_modules", "!src/graph/**/bindings/**/*.ts"]
   },
   "overrides": [
     /* ------------------------------ YAML CODEGEN ------------------------------ */

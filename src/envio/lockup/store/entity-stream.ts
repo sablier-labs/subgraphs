@@ -120,7 +120,7 @@ async function createBase(
     renounceTime: undefined,
     sender,
     shape: params.shape ? sanitizeString(params.shape) : undefined,
-    startTime: now,
+    startTime: params.startTime,
     subgraphId: counter,
     timestamp: now,
     tokenId: params.tokenId,

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { ADDRESS_ZERO } from "../../../common/constants";
+import { CommonStore } from "../../../common/store";
 import { type Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_Transfer_handler as Handler_v1_0,
@@ -44,7 +45,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_v2_0<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
   if (!stream || !watcher) {
     return;
   }
@@ -53,12 +54,12 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   const currentRecipient = event.params.from.toLowerCase();
   const newRecipient = event.params.to.toLowerCase();
   if (stream.parties.includes(currentRecipient)) {
-    stream = {
+    const updatedStream = {
       ...stream,
       parties: _.without(stream.parties, currentRecipient).concat(newRecipient),
       recipient: newRecipient,
     };
-    context.Stream.set(stream);
+    context.Stream.set(updatedStream);
   } else {
     context.log.error("Current recipient not found in parties array", {
       currentRecipient,
@@ -73,6 +74,9 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     category: "Transfer",
     streamId: stream.id,
   });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 /* -------------------------------------------------------------------------- */

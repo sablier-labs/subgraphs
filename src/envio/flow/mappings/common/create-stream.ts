@@ -86,7 +86,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   });
 
   /* --------------------------------- WATCHER -------------------------------- */
-  await CommonStore.Watcher.update(context, entities.watcher);
+  await CommonStore.Watcher.incrementCounters(context, entities.watcher);
 };
 
 /* -------------------------------------------------------------------------- */

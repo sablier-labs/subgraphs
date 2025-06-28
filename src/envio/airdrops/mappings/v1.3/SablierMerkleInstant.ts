@@ -12,7 +12,7 @@ Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
     const activityId = Id.activity(event);
     const activity = await context.Activity.get(activityId);
 
-    const campaignId = Id.campaign(event.chainId, event.srcAddress);
+    const campaignId = Id.campaign(event.srcAddress, event.chainId);
     const campaign = await context.Campaign.getOrThrow(campaignId);
 
     const watcherId = event.chainId.toString();

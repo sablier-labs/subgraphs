@@ -1,3 +1,5 @@
+import { CommonStore } from "../../../common/store";
+import type { Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_VoidFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_VoidFlowStream_handler as Handler_v1_1,
@@ -9,7 +11,7 @@ import { Loader } from "./loader";
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
 
   /* --------------------------------- STREAM --------------------------------- */
 
@@ -23,7 +25,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
   const maxAvailable = withdrawnAmount + availableAmount;
 
-  stream = {
+  let updatedStream: Entity.Stream = {
     ...stream,
     depletionTime: 0n,
     forgivenDebt: event.params.writtenOffDebt,
@@ -45,13 +47,16 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     category: "Void",
     streamId: stream.id,
   });
-  stream = {
+  updatedStream = {
     ...stream,
     lastAdjustmentAction_id: action.id,
     pausedAction_id: action.id,
     voidedAction_id: action.id,
   };
-  context.Stream.set(stream);
+  context.Stream.set(updatedStream);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 export const voidStream = { handler, loader: Loader.base };

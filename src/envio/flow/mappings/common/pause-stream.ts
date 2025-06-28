@@ -1,3 +1,5 @@
+import { CommonStore } from "../../../common/store";
+import type { Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_PauseFlowStream_handler as Handler_v1_0,
   SablierFlow_v1_1_PauseFlowStream_handler as Handler_v1_1,
@@ -8,7 +10,7 @@ import { Loader } from "./loader";
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
 
   /* --------------------------------- STREAM --------------------------------- */
 
@@ -18,7 +20,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const streamedAmount = stream.ratePerSecond * elapsedTime;
   const snapshotAmount = stream.snapshotAmount + streamedAmount;
 
-  stream = {
+  let updatedStream: Entity.Stream = {
     ...stream,
     lastAdjustmentTimestamp: now,
     paused: true,
@@ -36,12 +38,15 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     category: "Pause",
     streamId: stream.id,
   });
-  stream = {
+  updatedStream = {
     ...stream,
     lastAdjustmentAction_id: action.id,
     pausedAction_id: action.id,
   };
-  context.Stream.set(stream);
+  context.Stream.set(updatedStream);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 export const pauseStream = { handler, loader: Loader.base };

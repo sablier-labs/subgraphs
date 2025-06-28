@@ -9,5 +9,5 @@ export async function create(
   watcher: Entity.Watcher,
   params: CommonParams.Action,
 ): Promise<Entity.Action> {
-  return CommonStore.Action.create<typeof context, Entity.Action, typeof watcher>(context, event, watcher, params);
+  return CommonStore.Action.create<Entity.Action>(context, event, watcher, params);
 }

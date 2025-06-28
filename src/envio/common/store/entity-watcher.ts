@@ -1,9 +1,13 @@
 import type { Common } from "../bindings";
 
+type WatcherContext = {
+  Watcher: { set: (watcher: Common.StreamWatcher) => void | Promise<void> };
+};
+
 /**
  * The entity is not set here because it will be set later in the `update` function.
  */
-export function create<TWatcher extends Common.StreamWatcher>(chainId: number): TWatcher {
+export function create(chainId: number): Common.StreamWatcher {
   const watcher: Common.StreamWatcher = {
     actionCounter: 1n,
     chainId: BigInt(chainId),
@@ -11,13 +15,18 @@ export function create<TWatcher extends Common.StreamWatcher>(chainId: number): 
     logs: [],
     streamCounter: 1n,
   };
-  return watcher as TWatcher;
+  return watcher;
 }
 
-export async function update<
-  TContext extends { Watcher: { set: (watcher: TWatcher) => void | Promise<void> } },
-  TWatcher extends Common.StreamWatcher,
->(context: TContext, watcher: TWatcher): Promise<void> {
+export async function incrementActionCounter(context: WatcherContext, watcher: Common.StreamWatcher): Promise<void> {
+  const updatedWatcher = {
+    ...watcher,
+    actionCounter: watcher.actionCounter + 1n,
+  };
+  await context.Watcher.set(updatedWatcher);
+}
+
+export async function incrementCounters(context: WatcherContext, watcher: Common.StreamWatcher): Promise<void> {
   const updatedWatcher = {
     ...watcher,
     actionCounter: watcher.actionCounter + 1n,

@@ -1,3 +1,5 @@
+import { CommonStore } from "../../../common/store";
+import type { Entity } from "../../bindings";
 import type {
   SablierV2LockupLinear_v1_0_CancelLockupStream_handler as Handler_v1_0,
   SablierV2LockupLinear_v1_1_CancelLockupStream_handler as Handler_v1_1,
@@ -10,10 +12,10 @@ import { Loader } from "./loader";
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T> & Handler_v1_2<T> & Handler_v2_0<T>;
 
 const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
 
   /* --------------------------------- STREAM --------------------------------- */
-  stream = {
+  let updatedStream: Entity.Stream = {
     ...stream,
     cancelable: false,
     canceled: true,
@@ -30,11 +32,14 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     category: "Cancel",
     streamId: stream.id,
   });
-  stream = {
+  updatedStream = {
     ...stream,
     canceledAction_id: action.id,
   };
-  await context.Stream.set(stream);
+  await context.Stream.set(updatedStream);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 export const cancelStream = { handler, loader: Loader.base };

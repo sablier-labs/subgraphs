@@ -1,4 +1,5 @@
 import { ADDRESS_ZERO } from "../../../common/constants";
+import { CommonStore } from "../../../common/store";
 import { type Entity } from "../../bindings";
 import type {
   SablierFlow_v1_0_Transfer_handler as Handler_v1_0,
@@ -40,7 +41,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 type Handler<T> = Handler_v1_0<T> & Handler_v1_1<T>;
 
 export const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
-  let { stream, watcher } = loaderReturn;
+  const { stream, watcher } = loaderReturn;
   if (!stream || !watcher) {
     return;
   }
@@ -54,11 +55,11 @@ export const handler: Handler<LoaderReturn> = async ({ context, event, loaderRet
   /* --------------------------------- STREAM --------------------------------- */
   const currentRecipient = event.params.from.toLowerCase();
   const newRecipient = event.params.to.toLowerCase();
-  stream = {
+  const updatedStream = {
     ...stream,
     recipient: newRecipient,
   };
-  context.Stream.set(stream);
+  context.Stream.set(updatedStream);
 
   /* --------------------------------- ACTION --------------------------------- */
   await Store.Action.create(context, event, watcher, {
@@ -67,6 +68,9 @@ export const handler: Handler<LoaderReturn> = async ({ context, event, loaderRet
     category: "Transfer",
     streamId: stream.id,
   });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementActionCounter(context, watcher);
 };
 
 /* -------------------------------------------------------------------------- */

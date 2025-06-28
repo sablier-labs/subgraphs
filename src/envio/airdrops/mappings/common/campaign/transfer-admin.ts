@@ -27,7 +27,7 @@ export const loader: Loader<LoaderReturn> = async ({ context, event }) => {
     return { campaign: undefined, watcher: undefined };
   }
 
-  const campaignId = Id.campaign(event.chainId, event.srcAddress);
+  const campaignId = Id.campaign(event.srcAddress, event.chainId);
   const campaign = await context.Campaign.getOrThrow(campaignId);
 
   const watcherId = event.chainId.toString();

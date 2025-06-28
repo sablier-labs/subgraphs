@@ -20,7 +20,7 @@ export namespace Id {
    * activity-137-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6-20300
    */
   export function activity(event: Envio.Event): string {
-    const campaignId = campaign(event.chainId, event.srcAddress);
+    const campaignId = campaign(event.srcAddress, event.chainId);
     const timestamp = event.block.timestamp;
     const day = BigInt(timestamp) / (60n * 60n * 24n); // 60 seconds * 60 minutes * 24 hours
     return `activity-${campaignId}-${day}`;
@@ -54,8 +54,8 @@ export namespace Id {
    * @example
    * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
    */
-  export function campaign(chainId: number, campaignAddress: Envio.Address): string {
-    return `${chainId}-${campaignAddress.toLowerCase()}`;
+  export function campaign(campaignAddress: Envio.Address, chainId: number): string {
+    return `${campaignAddress.toLowerCase()}-${chainId}`;
   }
   /**
    * @example
