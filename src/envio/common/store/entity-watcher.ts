@@ -5,11 +5,11 @@ import type { Common } from "../bindings";
  */
 export function create<TWatcher extends Common.StreamWatcher>(chainId: number): TWatcher {
   const watcher: Common.StreamWatcher = {
-    actionCounter: 0n,
+    actionCounter: 1n,
     chainId: BigInt(chainId),
     id: chainId.toString(),
     logs: [],
-    streamCounter: 0n,
+    streamCounter: 1n,
   };
   return watcher as TWatcher;
 }

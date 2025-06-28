@@ -82,7 +82,7 @@ async function createBase(
   const lockup = getContract("lockup", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
-  const funder = event.transaction.from?.toLowerCase() || "";
+  const funder = params.funder;
   const recipient = params.recipient.toLowerCase();
   const sender = params.sender.toLowerCase();
 
