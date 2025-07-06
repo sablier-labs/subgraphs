@@ -33,7 +33,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     streamId: stream.id,
   });
   updatedStream = {
-    ...stream,
+    ...updatedStream,
     canceledAction_id: action.id,
   };
   await context.Stream.set(updatedStream);

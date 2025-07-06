@@ -48,7 +48,7 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
     streamId: stream.id,
   });
   updatedStream = {
-    ...stream,
+    ...updatedStream,
     lastAdjustmentAction_id: action.id,
   };
   context.Stream.set(updatedStream);
