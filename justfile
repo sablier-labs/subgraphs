@@ -55,7 +55,7 @@ clean globs=GLOBS_CLEAN:
 # lint-staged will call this recipe and pass the globs to it
 export-schemas +globs="src/exports/schemas/*.graphql":
     just cli export-schemas
-    just --quiet biome-write "{{ globs }}"
+    just biome-write "{{ globs }}"
 
 # Codegen the GraphQL schema
 [group("codegen")]
@@ -65,7 +65,7 @@ export-schemas +globs="src/exports/schemas/*.graphql":
     just cli codegen schema \
         --vendor {{ vendor }} \
         --protocol {{ protocol }}
-    just --quiet biome-write "src/envio/**/*.graphql"
+    just biome-write "src/envio/**/*.graphql"
 
 # Setup Husky
 setup:
