@@ -10,7 +10,6 @@ export const ContractFragment_Envio = gql/* GraphQL */ `
 
 export const ActionFragment_Envio = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
     chainId
     subgraphId
     stream {
@@ -25,23 +24,17 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
     addressB
     amountA
     amountB
-    contract {
-      ...ContractFragment
-    }
   }
 `;
 
 export const BatchFragment_Envio = gql/* GraphQL */ `
   fragment BatchFragment on Batch {
-    id
-    label
     size
   }
 `;
 
 export const AssetFragment_Envio = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
     address
     chainId
     decimals
@@ -57,7 +50,7 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
     subgraphId
     category
     chainId
-    alias
+    # alias
     creator
     sender
     recipient
@@ -79,15 +72,11 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
     withdrawnAmount
     snapshotAmount
     position
-    version
     asset {
       ...AssetFragment
     }
     batch {
       ...BatchFragment
-    }
-    contract {
-      ...ContractFragment
     }
   }
 `;

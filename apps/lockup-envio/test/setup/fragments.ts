@@ -11,9 +11,8 @@ export const ContractFragment_Envio = gql/* GraphQL */ `
 
 export const ActionFragment_Envio = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
     chainId
-    subgraphId
+    # subgraphId
     stream {
       id
     }
@@ -31,21 +30,19 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
 
 export const BatchFragment_Envio = gql/* GraphQL */ `
   fragment BatchFragment on Batch {
-    id
-    label
     size
   }
 `;
 
 export const SegmentFragment_Envio = gql/* GraphQL */ `
   fragment SegmentFragment on Segment {
-    id
+    # id
     position
     amount
     exponent
     milestone
     endTime
-    startTime
+    # startTime
     startAmount
     endAmount
   }
@@ -53,23 +50,22 @@ export const SegmentFragment_Envio = gql/* GraphQL */ `
 
 export const AssetFragment_Envio = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
     address
     chainId
     decimals
-    name
-    symbol
+    # name
+    # symbol
   }
 `;
 
 export const TrancheFragment_Envio = gql/* GraphQL */ `
   fragment TrancheFragment on Tranche {
-    id
+    # id
     position
     amount
     timestamp
     endTime
-    startTime
+    # startTime
     endAmount
     startAmount
   }
@@ -79,23 +75,23 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
   fragment StreamFragment on Stream {
     id
     tokenId
-    subgraphId
+    # subgraphId
     chainId
-    alias
+    # alias
     category
-    funder
+    # funder
     sender
     recipient
     hash
     timestamp
     depositAmount
-    startTime
+    # startTime
     endTime
-    cliff
-    cliffTime
-    cliffAmount
+    # cliff
+    # cliffTime
+    # cliffAmount
     cancelable
-    renounceTime
+    # renounceTime
     canceled
     canceledTime
     withdrawnAmount
@@ -104,7 +100,7 @@ export const StreamFragment_Envio = gql/* GraphQL */ `
     proxied
     proxender
     transferable
-    version
+    # version
     actions(order_by: { subgraphId: asc }, limit: 1000) {
       ...ActionFragment
     }
@@ -207,7 +203,7 @@ export const StreamFragment_TheGraph = gql/* GraphQL */ `
     depositAmount
     startTime
     endTime
-    cliff
+    # cliff
     cliffTime
     cliffAmount
     cancelable

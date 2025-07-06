@@ -29,6 +29,7 @@ export type Action = object & {
 };
 
 export type Campaign = object & {
+  id: string;
   asset: Asset;
   actions?: Action[];
   activities?: Activity[];
@@ -63,10 +64,10 @@ export function cleanup_asset(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Asset identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Asset identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }
@@ -82,10 +83,10 @@ export function cleanup_factory(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Factory identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Factory identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }
@@ -103,10 +104,10 @@ export function cleanup_action(
 
   // value.subgraphId = "SKIP";
 
-  if (vendor === "Envio") {
-    /** Action identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Action identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   if (value.campaign) {
     value.campaign = cleanup_campaign(value.campaign, skip, vendor);

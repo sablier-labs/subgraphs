@@ -28,8 +28,6 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
 
 export const FactoryFragment_Envio = gql/* GraphQL */ `
   fragment FactoryFragment on Factory {
-    id
-    alias
     address
   }
 `;
