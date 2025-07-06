@@ -53,6 +53,10 @@ struct Schedule {
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleLL.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
+    const lockupAddress = event.params.lockup;
+    if (!isOfficialLockup(event, lockupAddress)) {
+      return;
+    }
     const baseParams = event.params.baseParams;
     const params: Params.CreateCampaignLL = {
       admin: baseParams[2],
