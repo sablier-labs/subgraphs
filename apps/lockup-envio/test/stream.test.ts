@@ -840,10 +840,10 @@ describe(`Streams pre and post refactor -The GRAPH-`, () => {
 });
 
 describe.only(`Streams pre and post refactor -Envio-`, () => {
-  test.only("First 100 results before subgraphId are the same", async () => {
+  test("First 100 results before subgraphId are the same", async () => {
     const variables = {
-      first: 5,
-      skip: 10,
+      first: 100,
+      skip: 0,
       subgraphId: 999999,
       chainId,
     } as const;
@@ -865,7 +865,7 @@ describe.only(`Streams pre and post refactor -Envio-`, () => {
     expect(received.streams.length).toEqual(expected.streams.length);
     expect(received.streams).toEqual(expected.streams);
   });
-  test("All entries are the same (asc)", async () => {
+  test.only("All entries are the same (asc)", async () => {
     const received = { streams: [] } as ReturnType<typeof cleanup.streams>;
     const expected = { streams: [] } as ReturnType<typeof cleanup.streams>;
 
