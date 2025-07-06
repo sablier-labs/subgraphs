@@ -24,12 +24,15 @@ export function getOrCreateBatch(event: ethereum.Event, sender: Address): Entity
   } else {
     const hash = batch.hash;
     if (hash === null) {
+      const newBatchCounter = batcher.batchCounter.plus(ONE);
+      batcher.batchCounter = newBatchCounter;
+      batcher.save();
+
       batch.batcher = batcher.id;
       batch.hash = event.transaction.hash;
+      batch.position = newBatchCounter;
       batch.size = TWO;
       batch.timestamp = event.block.timestamp;
-      batcher.batchCounter = batcher.batchCounter.plus(ONE);
-      batcher.save();
     } else {
       batch.size = batch.size.plus(ONE);
     }

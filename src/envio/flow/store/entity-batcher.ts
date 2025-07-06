@@ -16,10 +16,11 @@ export async function create(
   return batcher;
 }
 
-export async function update(context: Context.Handler, batcher: Entity.Batcher): Promise<void> {
+export async function update(context: Context.Handler, batcher: Entity.Batcher): Promise<Entity.Batcher> {
   const updatedBatcher = {
     ...batcher,
     batchCounter: batcher.batchCounter + 1n,
   };
   await context.Batcher.set(updatedBatcher);
+  return updatedBatcher;
 }

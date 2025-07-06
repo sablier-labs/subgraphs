@@ -12,6 +12,7 @@ export function create(event: Envio.Event, sender: Envio.Address): Entity.Batch 
     batcher_id: undefined,
     hash: undefined,
     id,
+    position: 0n,
     size: 0n,
     timestamp: undefined,
   };
@@ -36,15 +37,16 @@ export async function update(
   const newBatchSize = batch.size + 1n;
 
   if (newBatchSize === 2n) {
+    const updatedBatcher = await updateBatcher(context, batcher);
     const updatedBatch: Entity.Batch = {
       ...batch,
       batcher_id: batcher.id,
       hash: event.transaction.hash.toLowerCase(),
+      position: updatedBatcher.batchCounter,
       size: newBatchSize,
       timestamp: BigInt(event.block.timestamp),
     };
     await context.Batch.set(updatedBatch);
-    await updateBatcher(context, batcher);
   } else {
     const updatedBatch: Entity.Batch = {
       ...batch,
