@@ -361,9 +361,9 @@ describe(`Campaigns pre and post refactor - The Graph-`, () => {
 });
 
 describe.only(`Campaigns pre and post refactor - Envio-`, () => {
-  test.only("First 100 results before subgraphId are the same", async () => {
+  test("First 100 results before subgraphId are the same", async () => {
     const variables = {
-      first: 1,
+      first: 100,
       subgraphId: 0,
       chainId,
     } as const;
@@ -390,7 +390,7 @@ describe.only(`Campaigns pre and post refactor - Envio-`, () => {
     expect(received.campaigns.length).toEqual(expected.campaigns.length);
     expect(received.campaigns).toEqual(expected.campaigns);
   }, 1000000);
-  test("All entries are the same (asc)", async () => {
+  test.only("All entries are the same (asc)", async () => {
     const received = { campaigns: [] } as ReturnType<typeof cleanup.campaigns>;
     const expected = { campaigns: [] } as ReturnType<typeof cleanup.campaigns>;
 
@@ -404,15 +404,15 @@ describe.only(`Campaigns pre and post refactor - Envio-`, () => {
 
     while (!done) {
       const received_slice = cleanup.campaigns(
-        await TheGraphRefactored(theGraphQueries.getCampaigns_Asc, variables),
+        await EnvioRefactored(envioQueries.getCampaigns_Asc, variables),
         SKIP_CLEANUP,
-        "TheGraph",
+        "Envio",
       );
 
       const expected_slice = cleanup.campaigns(
-        await TheGraph(theGraphQueries.getCampaigns_Asc, variables),
+        await Envio(envioQueries.getCampaigns_Asc, variables),
         SKIP_CLEANUP,
-        "TheGraph",
+        "Envio",
       );
 
       received.campaigns.push(...received_slice.campaigns);

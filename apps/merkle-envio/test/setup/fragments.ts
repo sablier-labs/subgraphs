@@ -18,11 +18,11 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
     claimTokenId
     claimAmount
     claimIndex
-    claimRecipient
+    # claimRecipient
 
     clawbackAmount
-    clawbackFrom
-    clawbackTo
+    # clawbackFrom
+    # clawbackTo
   }
 `;
 
@@ -73,13 +73,13 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
   fragment CampaignFragment on Campaign {
     id
     subgraphId
-    address
+    # address
     chainId
     category
     hash
     timestamp
-    admin
-    lockup
+    # admin
+    # lockup
     root
     expires
     expiration
@@ -87,16 +87,16 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
     aggregateAmount
     totalRecipients
     clawbackTime
-    streamCliff
-    streamCliffDuration
-    streamTotalDuration
-    streamCancelable
-    streamTransferable
+    # streamCliff
+    # streamCliffDuration
+    # streamTotalDuration
+    # streamCancelable
+    # streamTransferable
     claimedAmount
     claimedCount
-    asset {
-      ...AssetFragment
-    }
+    # asset {
+    #   ...AssetFragment
+    # }
     factory {
       ...FactoryFragment
     }
