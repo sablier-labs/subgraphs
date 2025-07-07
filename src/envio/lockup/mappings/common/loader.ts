@@ -130,7 +130,6 @@ export namespace Loader {
 
     const watcherId = event.chainId.toString();
     const watcher = await context.Watcher.get(watcherId);
-
     return {
       entities: {
         asset,
@@ -147,17 +146,17 @@ export namespace Loader {
 
   type CreateV1_0<T> = CreateDynamic_v1_0<T> & CreateLinear_v1_0<T>;
   const createV1_0: CreateV1_0<CreateReturn> = async ({ context, event }): Promise<CreateReturn> => {
-    return loaderForCreate(context, event, { asset: event.params.asset, sender: event.params.sender });
+    return loaderForCreate(context, event, event.params);
   };
 
   type CreateV1_1<T> = CreateDynamic_v1_1<T> & CreateLinear_v1_1<T>;
   const createV1_1: CreateV1_1<CreateReturn> = async ({ context, event }): Promise<CreateReturn> => {
-    return loaderForCreate(context, event, { asset: event.params.asset, sender: event.params.sender });
+    return loaderForCreate(context, event, event.params);
   };
 
   type CreateV1_2<T> = CreateDynamic_v1_2<T> & CreateLinear_v1_2<T> & CreateTranched_v1_2<T>;
   const createV1_2: CreateV1_2<CreateReturn> = async ({ context, event }): Promise<CreateReturn> => {
-    return loaderForCreate(context, event, { asset: event.params.asset, sender: event.params.sender });
+    return loaderForCreate(context, event, event.params);
   };
 
   type CreateV2_0<T> = CreateDynamic_v2_0<T> & CreateLinear_v2_0<T> & CreateTranched_v2_0<T>;

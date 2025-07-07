@@ -111,5 +111,6 @@
   "0x95306d4158ff4e26619a3285e766a29eb24c214b": { "decimals": 18, "name": "Uniswap V2", "symbol": "UNI-V2" },
   "0xf45b4de5c02a7fd2cb137145fb52e7d6d5a9a32e": { "decimals": 18, "name": "mfercoin", "symbol": "mfer" },
   "0xa7954bd715776e29fb864ab35680bac9fa08eacd": { "decimals": 18, "name": "Cat Token", "symbol": "CAT" },
-  "0xe0614c6215f436dff973671161ce0a7eaa08826e": { "decimals": 18, "name": "FluffyCoin", "symbol": "FULL" }
+  "0xe0614c6215f436dff973671161ce0a7eaa08826e": { "decimals": 18, "name": "FluffyCoin", "symbol": "FULL" },
+  "0xd590184838e7eea2e27c07399ce0f44e9346d54c": { "decimals": 18, "name": "DOINEL", "symbol": "MACAROINEL" }
 }

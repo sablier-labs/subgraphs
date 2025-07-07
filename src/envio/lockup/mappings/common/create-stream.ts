@@ -9,19 +9,19 @@ import { type Params } from "../../helpers/types";
 import { Store } from "../../store";
 import { type Loader } from "./loader";
 
-type Input = {
+type Input<P extends Params.CreateStreamCommon> = {
   context: Context.Handler;
   event: Envio.Event;
   loaderReturn: Loader.CreateReturn;
-  params: Params.CreateStreamLinear | Params.CreateStreamDynamic | Params.CreateTranche;
+  params: P;
 };
 
-export async function createLinearStream(input: Input): Promise<Entity.Stream> {
+export async function createLinearStream(input: Input<Params.CreateStreamLinear>): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
   /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const stream = await Store.Stream.createLinear(context, event, entities, params as Params.CreateStreamLinear);
+  const stream = await Store.Stream.createLinear(context, event, entities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);
@@ -32,12 +32,12 @@ export async function createLinearStream(input: Input): Promise<Entity.Stream> {
   return stream;
 }
 
-export async function createDynamicStream(input: Input): Promise<Entity.Stream> {
+export async function createDynamicStream(input: Input<Params.CreateStreamDynamic>): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
   /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const stream = await Store.Stream.createDynamic(context, event, entities, params as Params.CreateStreamDynamic);
+  const stream = await Store.Stream.createDynamic(context, event, entities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);
@@ -48,12 +48,12 @@ export async function createDynamicStream(input: Input): Promise<Entity.Stream> 
   return stream;
 }
 
-export async function createTranchedStream(input: Input): Promise<Entity.Stream> {
+export async function createTranchedStream(input: Input<Params.CreateTranche>): Promise<Entity.Stream> {
   const { context, event, loaderReturn, params } = input;
 
   /* --------------------------------- STREAM --------------------------------- */
   const entities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const stream = await Store.Stream.createTranched(context, event, entities, params as Params.CreateTranche);
+  const stream = await Store.Stream.createTranched(context, event, entities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   await createAction(context, event, entities.watcher, params, stream.id);

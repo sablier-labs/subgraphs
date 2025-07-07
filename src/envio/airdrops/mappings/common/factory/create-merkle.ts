@@ -6,7 +6,7 @@ import type { Params } from "../../../helpers/types";
 import { Store } from "../../../store";
 import { type Loader } from "../../common/loader";
 
-type Input<P> = {
+type Input<P extends Params.CreateCampaignBase> = {
   context: Context.Handler;
   event: Envio.Event;
   loaderReturn: Loader.CreateReturn;
@@ -22,12 +22,7 @@ export async function createMerkleInstant(input: Input<Params.CreateCampaignBase
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const campaign = await Store.Campaign.createInstant(
-    context,
-    event,
-    createEntities,
-    params as Params.CreateCampaignBase,
-  );
+  const campaign = await Store.Campaign.createInstant(context, event, createEntities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   const actionEntities = { campaign, ...createEntities };
@@ -49,7 +44,7 @@ export async function createMerkleLL(input: Input<Params.CreateCampaignLL>): Pro
     return;
   }
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const campaign = await Store.Campaign.createLL(context, event, createEntities, params as Params.CreateCampaignLL);
+  const campaign = await Store.Campaign.createLL(context, event, createEntities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   const actionEntities = { campaign, ...createEntities };
@@ -71,7 +66,7 @@ export async function createMerkleLT(input: Input<Params.CreateCampaignLT>): Pro
     return;
   }
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
-  const campaign = await Store.Campaign.createLT(context, event, createEntities, params as Params.CreateCampaignLT);
+  const campaign = await Store.Campaign.createLT(context, event, createEntities, params);
 
   /* --------------------------------- ACTION --------------------------------- */
   const actionEntities = { campaign, ...createEntities };
@@ -89,12 +84,14 @@ async function createAssociatedEntities(
   context: Context.Handler,
   event: Envio.Event,
   loaderReturn: Loader.CreateReturn,
-  params: { asset: string },
+  params: { asset: Envio.Address },
 ): Promise<Params.CreateEntities> {
-  const { asset, assetMetadata, factory, watcher } = loaderReturn;
+  const { entities, rpcData } = loaderReturn;
+  context.log.debug("createAssociatedEntities", { params, rpcData });
   return {
-    asset: asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, assetMetadata)),
-    factory: factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
-    watcher: watcher ?? (await Store.Watcher.create(event.chainId)),
+    asset:
+      entities.asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, rpcData.assetMetadata)),
+    factory: entities.factory ?? (await Store.Factory.create(context, event.chainId, event.srcAddress)),
+    watcher: entities.watcher ?? Store.Watcher.create(event.chainId),
   };
 }

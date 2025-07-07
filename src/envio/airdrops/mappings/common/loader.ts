@@ -24,10 +24,14 @@ export namespace Loader {
   /* -------------------------------------------------------------------------- */
 
   export type CreateReturn = {
-    asset?: Entity.Asset;
-    assetMetadata: RPCData.ERC20Metadata;
-    factory?: Entity.Factory;
-    watcher?: Entity.Watcher;
+    entities: {
+      asset?: Entity.Asset;
+      factory?: Entity.Factory;
+      watcher?: Entity.Watcher;
+    };
+    rpcData: {
+      assetMetadata: RPCData.ERC20Metadata;
+    };
   };
 
   async function loaderForCreate(
@@ -48,10 +52,14 @@ export namespace Loader {
     const watcherId = event.chainId.toString();
     const watcher = await context.Watcher.get(watcherId);
     return {
-      asset,
-      assetMetadata,
-      factory,
-      watcher,
+      entities: {
+        asset,
+        factory,
+        watcher,
+      },
+      rpcData: {
+        assetMetadata,
+      },
     };
   }
 
