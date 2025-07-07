@@ -5,6 +5,7 @@ import { Id } from "../../common/id";
 import type { Context, Entity, Enum } from "../bindings";
 import { getNickname } from "../helpers/campaign";
 import type { Params } from "../helpers/types";
+import { createTranchesWithPercentages } from "./entity-tranche";
 
 export async function createInstant(
   context: Context.Handler,
@@ -51,6 +52,7 @@ export async function createLT(
     ...lockupCampaign,
   };
   await context.Campaign.set(campaign);
+  await createTranchesWithPercentages(context, campaign, params.tranchesWithPercentages);
   return campaign;
 }
 
