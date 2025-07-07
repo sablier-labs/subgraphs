@@ -12,8 +12,8 @@ importers:
         specifier: ^4.17
         version: 4.17.21
       sablier:
-        specifier: 1.0.0-beta.6
-        version: 1.0.0-beta.6(viem@2.31.4(typescript@5.8.3)(zod@3.25.51))
+        specifier: 1.0.0-beta.7
+        version: 1.0.0-beta.7(viem@2.31.4(typescript@5.8.3)(zod@3.25.51))
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.0.5
@@ -2995,8 +2995,8 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  sablier@1.0.0-beta.6:
-    resolution: {integrity: sha512-Vfwcc9U6kXl8BKJD1DJT6wdonKcP/aUpx8k5Lb2dMtu3IVzhfgBrRLigFH/yd5DakwyVms+A6zFh7W2Ywhe/kA==}
+  sablier@1.0.0-beta.7:
+    resolution: {integrity: sha512-MdBx3TRX5d3OCa1oAjdwCm0EmC0oNsFRuq7U0izJrXbivvCSu5UDckznB3Pex1Ytew25nv3sM23GSz0WG1IK1w==}
     engines: {node: '>=20'}
     peerDependencies:
       viem: ^2.31
@@ -6368,7 +6368,7 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  sablier@1.0.0-beta.6(viem@2.31.4(typescript@5.8.3)(zod@3.25.51)):
+  sablier@1.0.0-beta.7(viem@2.31.4(typescript@5.8.3)(zod@3.25.51)):
     dependencies:
       lodash: 4.17.21
       viem: 2.31.4(typescript@5.8.3)(zod@3.25.51)

@@ -29,7 +29,7 @@ export namespace Indexer {
       /** The indexer ID value, e.g. `53b7e25`. */
       id: string;
       /** The URL of the indexer. */
-      get url(): string;
+      url: string;
     };
     /** The URL on the Envio Hosted Service. */
     explorerURL: string;

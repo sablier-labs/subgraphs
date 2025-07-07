@@ -19,9 +19,9 @@ const SUPPORTED_CHAINS = [
   chains.berachain.id,
   chains.bsc.id,
   chains.chiliz.id,
-  chains.ethereum.id,
   chains.gnosis.id,
   chains.linea.id,
+  chains.mainnet.id,
   chains.mode.id,
   chains.morph.id,
   chains.optimism.id,
@@ -39,7 +39,7 @@ const SUPPORTED_CHAINS = [
   chains.arbitrumSepolia.id,
   chains.baseSepolia.id,
   chains.optimismSepolia.id,
-  chains.ethereumSepolia.id,
+  chains.sepolia.id,
 ] as const;
 
 function get(protocol: Indexer.Protocol): Indexer[] {

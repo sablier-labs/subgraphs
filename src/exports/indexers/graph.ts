@@ -16,8 +16,6 @@ import type { Indexer } from "../types";
 const CHAIN_SLUG_OVERRIDES: { [chainId: number]: string } = {
   [chains.arbitrum.id]: "arbitrum-one",
   [chains.blast.id]: "blast-mainnet",
-  [chains.ethereum.id]: "mainnet",
-  [chains.ethereumSepolia.id]: "sepolia",
   [chains.mode.id]: "mode-mainnet",
   [chains.sei.id]: "sei-mainnet",
 };
@@ -111,6 +109,11 @@ const OFFICIALS: IndexerGraphMap[] = [
   /* -------------------------------------------------------------------------- */
   /*                                  MAINNETS                                  */
   /* -------------------------------------------------------------------------- */
+  official(chains.mainnet.id, {
+    airdrops: "DFD73EcSue44R7mpHvXeyvcgaT8tR1iKakZFjBsiFpjs",
+    flow: "ECxBJhKceBGaVvK6vqmK3VQAncKwPeAQutEb8TeiUiod",
+    lockup: "AvDAMYYHGaEwn9F9585uqq6MM5CfvRtYcb7KjK7LKPCt",
+  }),
   official(chains.abstract.id, {
     airdrops: "DRrf6mYEhRt9QieKvTjDHnSWcBm3GW96hpedMKVxLABx",
     flow: "Gq3e1gihMoSynURwGXQnPoKGVZzdsyomdrMH934vQHuG",
@@ -150,11 +153,6 @@ const OFFICIALS: IndexerGraphMap[] = [
     airdrops: "6LK1aqrhzZCp6c88MEBDAR1VDLpZQiXpBKkceJ5Lu4LU",
     flow: "7QX7tJsANNFpxFLLjqzmXRzfY1wPGp3Lty5xGbhgADa6",
     lockup: "4KsXUFvsKFHH7Q8k3BPgEv2NhCJJGwG78gCPAUpncYb",
-  }),
-  official(chains.ethereum.id, {
-    airdrops: "DFD73EcSue44R7mpHvXeyvcgaT8tR1iKakZFjBsiFpjs",
-    flow: "ECxBJhKceBGaVvK6vqmK3VQAncKwPeAQutEb8TeiUiod",
-    lockup: "AvDAMYYHGaEwn9F9585uqq6MM5CfvRtYcb7KjK7LKPCt",
   }),
   official(chains.gnosis.id, {
     airdrops: "kQEY5PYbjx4SMKyMUwqJHRLDzKH1aUqGsf1cnibU7Kn",
@@ -219,15 +217,15 @@ const OFFICIALS: IndexerGraphMap[] = [
     flow: "AsnKT1waQMvuQxZAqfFuYwtRtAfN8uekDu75jPttfyLh",
     lockup: "DdiYENuyh5ztSybRJnBnCZuUgESkFasjGFHZUbURpKHz",
   }),
-  official(chains.ethereumSepolia.id, {
-    airdrops: "8PLGDyXEsPgRTAnozL7MAjmTUFY4TBzs8i4F9Pq3wwSh",
-    flow: "EU9AWmJjrjMRkjxcdHfuWPZvPTNAL3hiXfNGN5MwUpvm",
-    lockup: "5yDtFSxyRuqyjvGJyyuQhMEW3Uah7Ddy2KFSKVhy9VMa",
-  }),
   official(chains.optimismSepolia.id, {
     airdrops: "3kp1eR2T1XpvvLkSZ7Wtt45DbDaiykTes478RZ7zwTz",
     flow: "EFKqBB6TeH6etGuHCffnbMbETEgDZ6U29Lgpc4gpYvdB",
     lockup: "2LFYyhMVMUMYA2q7XMMnBvCs6v6awWxBeMuMk3tMtmiT",
+  }),
+  official(chains.sepolia.id, {
+    airdrops: "8PLGDyXEsPgRTAnozL7MAjmTUFY4TBzs8i4F9Pq3wwSh",
+    flow: "EU9AWmJjrjMRkjxcdHfuWPZvPTNAL3hiXfNGN5MwUpvm",
+    lockup: "5yDtFSxyRuqyjvGJyyuQhMEW3Uah7Ddy2KFSKVhy9VMa",
   }),
 ];
 
