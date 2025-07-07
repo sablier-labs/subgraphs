@@ -87,7 +87,6 @@ async function createAssociatedEntities(
   params: { asset: Envio.Address },
 ): Promise<Params.CreateEntities> {
   const { entities, rpcData } = loaderReturn;
-  context.log.debug("createAssociatedEntities", { params, rpcData });
   return {
     asset:
       entities.asset ?? (await CommonStore.Asset.create(context, event.chainId, params.asset, rpcData.assetMetadata)),

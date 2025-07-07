@@ -9,9 +9,9 @@ type V = Indexer.Vendor;
 export function getSablierIndexer(vendor: V, opts: { chainId: number; protocol: P }): I | undefined {
   const { chainId, protocol } = opts;
   if (vendor === "envio") {
-    return _.find(indexers.envio[protocol], { chainId });
+    return _.find(indexers.envio[protocol], (c) => c.chainId === chainId);
   } else {
-    return _.find(indexers.graph[protocol], { chainId });
+    return _.find(indexers.graph[protocol], (c) => c.chainId === chainId);
   }
 }
 

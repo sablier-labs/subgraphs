@@ -107,7 +107,7 @@ function extractContracts(protocol: Types.Protocol, chainId: number): ExtractCon
         continue;
       }
 
-      const contract = _.find(deployment.contracts, { name: contractName });
+      const contract = _.find(deployment.contracts, (c) => c.name === contractName);
 
       // If it's a deployment that exists, the contract from the contract map must exist.
       if (!contract) {

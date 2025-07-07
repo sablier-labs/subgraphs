@@ -4,6 +4,7 @@
  * @see https://docs.envio.dev/docs/HyperSync/hypersync-supported-networks
  */
 import { chains, Protocol } from "sablier";
+import { Vendor } from "../enums";
 import type { Indexer } from "../types";
 import { envioRecords } from "./envio-records";
 
@@ -55,6 +56,7 @@ function get(protocol: Indexer.Protocol): Indexer[] {
       name: `sablier-${protocol}`,
       protocol,
       testingURL: `https://cloud.hasura.io/public/graphiql?endpoint=${encodeURIComponent(record.endpoint.url)}`,
+      vendor: Vendor.Envio,
     };
   });
 }

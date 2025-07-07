@@ -6,6 +6,7 @@
  */
 import { chains, Protocol, sablier } from "sablier";
 import { SUBGRAPH_STUDIO_USER_ID } from "../constants";
+import { Vendor } from "../enums";
 import type { Indexer } from "../types";
 
 /* -------------------------------------------------------------------------- */
@@ -27,12 +28,11 @@ const NAME_TEMPLATING_VAR = "{SUBGRAPH_NAME}";
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-// TODO: use this to write `deploy-all` recipe in `graph.just`
 export function getGraphChainSlug(chainId: number): string {
   return CHAIN_SLUG_OVERRIDES[chainId] ?? sablier.chains.getOrThrow(chainId).slug;
 }
 
-function getSubgraphName(chainId: number, protocol: Indexer.Protocol): Indexer.GraphIndexerName {
+function getSubgraphName(chainId: number, protocol: Indexer.Protocol): string {
   const graphChainName = getGraphChainSlug(chainId);
   return `sablier-${protocol}-${graphChainName}`;
 }
@@ -53,6 +53,7 @@ function resolveCustom(protocol: Indexer.Protocol, chainId: number, templateURL:
     kind: "custom",
     name: subgraphName,
     protocol,
+    vendor: Vendor.Graph,
   };
 }
 
@@ -69,6 +70,7 @@ function resolveOfficial(protocol: Indexer.Protocol, chainId: number, subgraphId
     name: subgraphName,
     protocol,
     testingURL: `https://api.studio.thegraph.com/query/${SUBGRAPH_STUDIO_USER_ID}/${subgraphName}/version/latest`,
+    vendor: Vendor.Graph,
   };
 }
 

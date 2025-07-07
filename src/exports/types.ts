@@ -1,4 +1,5 @@
 import type { Sablier } from "sablier";
+import type * as enums from "./enums";
 
 export type Indexer = {
   chainId: number;
@@ -8,10 +9,11 @@ export type Indexer = {
     url: string;
   };
   kind: "custom" | "official";
-  name: Indexer.GraphIndexerName;
+  name: string;
   protocol: Indexer.Protocol;
-  /** GraphQL endpoint that doesn't require an API key. Opening it in the browser may open a GraphiQL playground.*/
+  /** GraphQL endpoint that doesn't require an API key. Opening it in the browser may lead to a GraphiQL playground.*/
   testingURL?: string;
+  vendor: Indexer.Vendor;
 };
 
 export namespace Indexer {
@@ -46,9 +48,7 @@ export namespace Indexer {
     chainId: number;
   };
 
-  export type GraphIndexerName = `sablier-${string}`;
-
   export type Protocol = Exclude<Sablier.Protocol, "legacy">;
 
-  export type Vendor = "envio" | "graph";
+  export type Vendor = `${enums.Vendor}` | enums.Vendor;
 }
