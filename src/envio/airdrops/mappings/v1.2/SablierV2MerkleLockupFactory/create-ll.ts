@@ -49,10 +49,6 @@ struct Durations {
 
 Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLL.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
-    const lockupAddress = event.params.lockupLinear;
-    if (!isOfficialLockup(event, lockupAddress)) {
-      return;
-    }
     const baseParams = event.params.baseParams;
     const params: Params.CreateCampaignLL = {
       admin: baseParams[3],

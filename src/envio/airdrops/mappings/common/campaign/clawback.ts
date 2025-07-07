@@ -57,6 +57,9 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
   await Store.Campaign.updateClawback(context, event, campaign, action.id);
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.incrementActionCounter(context, watcher);
 };
 
 /* -------------------------------------------------------------------------- */

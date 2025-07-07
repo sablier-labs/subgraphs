@@ -59,6 +59,9 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
   await Store.Action.create(context, event, entities, {
     category: "TransferAdmin",
   });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.incrementActionCounter(context, watcher);
 };
 
 /* -------------------------------------------------------------------------- */

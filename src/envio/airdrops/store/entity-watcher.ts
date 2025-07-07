@@ -14,7 +14,15 @@ export function create(chainId: number): Entity.Watcher {
   return watcher;
 }
 
-export async function update(context: Context.Handler, watcher: Entity.Watcher): Promise<void> {
+export async function incrementActionCounter(context: Context.Handler, watcher: Entity.Watcher): Promise<void> {
+  const updatedWatcher = {
+    ...watcher,
+    actionCounter: watcher.actionCounter + 1n,
+  };
+  await context.Watcher.set(updatedWatcher);
+}
+
+export async function incrementCounters(context: Context.Handler, watcher: Entity.Watcher): Promise<void> {
   const updatedWatcher = {
     ...watcher,
     actionCounter: watcher.actionCounter + 1n,

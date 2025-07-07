@@ -46,5 +46,8 @@ Contract.Campaign.MerkleInstant_v1_3.Claim.handlerWithLoader({
       claimRecipient: event.params.recipient,
       fee: event.transaction.value,
     });
+
+    /* --------------------------------- WATCHER -------------------------------- */
+    await Store.Watcher.incrementActionCounter(context, watcher);
   },
 });

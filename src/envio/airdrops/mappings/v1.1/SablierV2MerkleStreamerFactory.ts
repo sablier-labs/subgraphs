@@ -44,10 +44,6 @@ struct Durations {
 
 Contract.Factory.MerkleStreamerFactory_v1_1.CreateMerkleStreamerLL.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
-    const lockupAddress = event.params.lockupLinear;
-    if (!isOfficialLockup(event, lockupAddress)) {
-      return;
-    }
     const params: Params.CreateCampaignLL = {
       admin: event.params.admin,
       aggregateAmount: event.params.aggregateAmount,

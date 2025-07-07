@@ -49,10 +49,6 @@ struct ConstructorParams {
 
 Contract.Factory.MerkleFactory_v1_3.CreateMerkleLT.handlerWithLoader({
   handler: async ({ context, event, loaderReturn }) => {
-    const lockupAddress = event.params.lockup;
-    if (!isOfficialLockup(event, lockupAddress)) {
-      return;
-    }
     const baseParams = event.params.baseParams;
     const params: Params.CreateCampaignLT = {
       admin: baseParams[2],

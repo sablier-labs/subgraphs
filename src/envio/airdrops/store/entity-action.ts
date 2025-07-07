@@ -30,12 +30,5 @@ export async function create(
     timestamp: BigInt(event.block.timestamp),
   };
   await context.Action.set(action);
-
-  const updatedWatcher = {
-    ...entities.watcher,
-    actionCounter: entities.watcher.actionCounter + 1n,
-  };
-  await context.Watcher.set(updatedWatcher);
-
   return action;
 }

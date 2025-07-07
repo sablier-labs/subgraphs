@@ -74,6 +74,9 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     claimTokenId: BigInt(event.params.streamId),
     fee,
   });
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await Store.Watcher.incrementActionCounter(context, watcher);
 };
 
 /* -------------------------------------------------------------------------- */
