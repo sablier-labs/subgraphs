@@ -94,7 +94,6 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
     streamTransferable
     claimedAmount
     claimedCount
-    version
     asset {
       ...AssetFragment
     }
