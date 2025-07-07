@@ -18,7 +18,7 @@ type Tranche @entity(immutable: true) {
   endAmount: BigInt!
 
   """
-  Alias for the `timestamp` field.
+  Unix timestamp indicating the end of the tranche.
   """
   endTime: BigInt!
 
@@ -42,9 +42,4 @@ type Tranche @entity(immutable: true) {
   The stream in which this tranche was created.
   """
   stream: Stream!
-
-  """
-  Unix timestamp indicating the end of the tranche.
-  """
-  timestamp: BigInt!
 }

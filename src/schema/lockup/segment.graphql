@@ -18,7 +18,7 @@ type Segment @entity(immutable: true) {
   endAmount: BigInt!
 
   """
-  Alias for the `milestone` field.
+  Unix timestamp indicating the end of the segment.
   """
   endTime: BigInt!
 
@@ -27,11 +27,6 @@ type Segment @entity(immutable: true) {
   See https://github.com/sablier-labs/lockup/blob/v2.0/src/types/DataTypes.sol#L279-L288
   """
   exponent: BigInt!
-
-  """
-  Unix timestamp indicating the end of the segment.
-  """
-  milestone: BigInt!
 
   """
   Position of the segment inside the array.

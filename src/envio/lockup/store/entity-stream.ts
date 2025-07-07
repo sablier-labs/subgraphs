@@ -224,7 +224,6 @@ async function addSegments(context: Context.Handler, stream: Entity.Stream, segm
       endTime: current.milestone,
       exponent: current.exponent,
       id,
-      milestone: current.milestone,
       position: BigInt(i),
       startAmount: streamed,
       startTime: previous.milestone,
@@ -255,7 +254,6 @@ async function addTranches(context: Context.Handler, stream: Entity.Stream, tran
       startAmount: streamedAmount,
       startTime: previous.timestamp,
       stream_id: stream.id,
-      timestamp: current.timestamp,
     };
     await context.Tranche.set(tranche);
 

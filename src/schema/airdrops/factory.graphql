@@ -3,17 +3,18 @@ Entity for Merkle factories, which deploy campaigns.
 """
 type Factory @entity(immutable: false) {
   """
-  Contract address.
+  Unique identifier: `{chainId}-{address}`
   """
   id: String!
 
   """
-  The same as `id`.
+  The address of the factory contract.
   """
   address: Bytes!
 
   """
-  Factory alias, e.g., MSF2.
+  Factory alias, e.g., `MSF2`. For historical reasons, the alias comes from the
+  the name of the `MerkleStreamFactory` contract.
   """
   alias: String!
 

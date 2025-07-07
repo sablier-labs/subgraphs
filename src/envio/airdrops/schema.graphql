@@ -286,15 +286,16 @@ Entity for Merkle factories, which deploy campaigns.
 """
 type Factory @entity(immutable: false) {
   """
-  Contract address.
+  Unique identifier: `{chainId}-{address}`
   """
   id: String!
   """
-  The same as `id`.
+  The address of the factory contract.
   """
   address: Bytes!
   """
-  Factory alias, e.g., MSF2.
+  Factory alias, e.g., `MSF2`. For historical reasons, the alias comes from the
+  the name of the `MerkleStreamFactory` contract.
   """
   alias: String!
   """
@@ -375,23 +376,23 @@ type Asset @entity(immutable: true) {
   """
   id: String!
   """
-  Alias for id
+  Address of the ERC-20 token.
   """
   address: Bytes!
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g. 137 for Polygon.
   """
   chainId: BigInt!
   """
-  Decimals of the ERC20 token
+  Decimals of the ERC20 token.
   """
   decimals: BigInt!
   """
-  Name of the ERC20 token
+  Name of the ERC20 token.
   """
   name: String!
   """
-  Symbol of the ERC20 token
+  Symbol of the ERC20 token.
   """
   symbol: String!
   """

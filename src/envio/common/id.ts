@@ -51,13 +51,28 @@ export namespace Id {
   }
 
   /**
+   * The ID starts with the address due to historical reasons.
+   * @see https://github.com/sablier-labs/indexers/discussions/118
+   *
    * @example
    * 0xf50760d8ead9ff322631a1f3ebf26cc7891b3708-137
    */
   export function campaign(campaignAddress: Envio.Address, chainId: number): string {
     return `${campaignAddress.toLowerCase()}-${chainId}`;
   }
+
   /**
+   * @example
+   * 137-0xf0d61b42311c810dfde191d58427d81e87c5d5f6
+   */
+  export function factory(chainId: number, factoryAddress: string): string {
+    return `${chainId}-${factoryAddress}`;
+  }
+
+  /**
+   * The ID starts with the address due to historical reasons.
+   * @see https://github.com/sablier-labs/indexers/discussions/118
+   *
    * @example
    * 0xe0bfe071da104e571298f8b6e0fce44c512c1ff4-137-42
    */

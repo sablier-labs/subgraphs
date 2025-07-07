@@ -240,13 +240,12 @@ function addSegments(stream: Entity.Stream, segments: Segment[]): Entity.Stream 
     segment.stream = stream.id;
 
     segment.amount = current.amount;
+    segment.endTime = current.milestone;
     segment.exponent = current.exponent;
-    segment.milestone = current.milestone;
 
     segment.startAmount = streamed;
     segment.startTime = previous.milestone;
     segment.endAmount = streamed.plus(current.amount);
-    segment.endTime = current.milestone;
 
     segment.save();
 
@@ -272,10 +271,9 @@ function addTranches(stream: Entity.Stream, tranches: Tranche[]): void {
     tranche.position = BigInt.fromU32(i);
 
     tranche.amount = current.amount;
-    tranche.timestamp = current.timestamp;
+    tranche.endTime = current.timestamp;
 
     tranche.endAmount = streamedAmount.plus(current.amount);
-    tranche.endTime = current.timestamp;
     tranche.startAmount = streamedAmount;
     tranche.startTime = previous.timestamp;
 

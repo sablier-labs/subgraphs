@@ -1,4 +1,4 @@
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { ONE, ZERO } from "../../common/constants";
 import { readChainId, readContractVersion } from "../../common/context";
 import { Id } from "../../common/id";
@@ -86,7 +86,7 @@ function createBaseCampaign(event: ethereum.Event, params: Params.CreateCampaign
   const campaignId = Id.campaign(params.campaignAddress);
   const campaign = new Entity.Campaign(campaignId);
   const asset = getOrCreateAsset(params.asset);
-  const factory = getOrCreateFactory();
+  const factory = getOrCreateFactory(dataSource.address());
   const watcher = getOrCreateWatcher();
 
   /* --------------------------------- CAMPAIGN -------------------------------- */

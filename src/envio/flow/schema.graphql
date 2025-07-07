@@ -149,23 +149,23 @@ type Asset @entity(immutable: true) {
   """
   id: String!
   """
-  Alias for id
+  Address of the ERC-20 token.
   """
   address: Bytes!
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g. 137 for Polygon.
   """
   chainId: BigInt!
   """
-  Decimals of the ERC20 token
+  Decimals of the ERC20 token.
   """
   decimals: BigInt!
   """
-  Name of the ERC20 token
+  Name of the ERC20 token.
   """
   name: String!
   """
-  Symbol of the ERC20 token
+  Symbol of the ERC20 token.
   """
   symbol: String!
   """

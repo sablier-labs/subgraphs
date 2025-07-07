@@ -1,5 +1,6 @@
 import type { Envio } from "../../common/bindings";
 import { getContractAlias } from "../../common/deployments";
+import { Id } from "../../common/id";
 import type { Context, Entity } from "../bindings";
 
 export async function create(
@@ -13,7 +14,7 @@ export async function create(
     alias: getContractAlias("airdrops", chainId, address),
     campaignCounter: 0n,
     chainId: BigInt(chainId),
-    id: address,
+    id: Id.factory(chainId, address),
   };
   await context.Factory.set(factory);
   return factory;

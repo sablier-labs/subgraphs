@@ -138,7 +138,7 @@ type Segment @entity(immutable: true) {
   """
   endAmount: BigInt!
   """
-  Alias for the `milestone` field.
+  Unix timestamp indicating the end of the segment.
   """
   endTime: BigInt!
   """
@@ -146,10 +146,6 @@ type Segment @entity(immutable: true) {
   See https://github.com/sablier-labs/lockup/blob/v2.0/src/types/DataTypes.sol#L279-L288
   """
   exponent: BigInt!
-  """
-  Unix timestamp indicating the end of the segment.
-  """
-  milestone: BigInt!
   """
   Position of the segment inside the array.
   """
@@ -186,7 +182,7 @@ type Tranche @entity(immutable: true) {
   """
   endAmount: BigInt!
   """
-  Alias for the `timestamp` field.
+  Unix timestamp indicating the end of the tranche.
   """
   endTime: BigInt!
   """
@@ -206,10 +202,6 @@ type Tranche @entity(immutable: true) {
   The stream in which this tranche was created.
   """
   stream: Stream!
-  """
-  Unix timestamp indicating the end of the tranche.
-  """
-  timestamp: BigInt!
 }
 
 enum ActionCategory {
@@ -237,23 +229,23 @@ type Asset @entity(immutable: true) {
   """
   id: String!
   """
-  Alias for id
+  Address of the ERC-20 token.
   """
   address: Bytes!
   """
-  The id of the chain, e.g. 137 for Polygon
+  The id of the chain, e.g. 137 for Polygon.
   """
   chainId: BigInt!
   """
-  Decimals of the ERC20 token
+  Decimals of the ERC20 token.
   """
   decimals: BigInt!
   """
-  Name of the ERC20 token
+  Name of the ERC20 token.
   """
   name: String!
   """
-  Symbol of the ERC20 token
+  Symbol of the ERC20 token.
   """
   symbol: String!
   """
