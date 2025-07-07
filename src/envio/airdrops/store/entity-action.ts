@@ -31,5 +31,11 @@ export async function create(
   };
   await context.Action.set(action);
 
+  const updatedWatcher = {
+    ...entities.watcher,
+    actionCounter: entities.watcher.actionCounter + 1n,
+  };
+  await context.Watcher.set(updatedWatcher);
+
   return action;
 }
