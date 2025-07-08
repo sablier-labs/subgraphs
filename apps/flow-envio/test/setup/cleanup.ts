@@ -62,10 +62,10 @@ export function cleanup_action(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Action identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Action identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   if (value.contract) {
     value.contract = cleanup_contract(value.contract, skip, vendor);
@@ -85,10 +85,10 @@ export function cleanup_asset(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Asset identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Asset identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }
@@ -104,10 +104,10 @@ export function cleanup_batch(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Batch identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Batch identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }
@@ -123,10 +123,10 @@ export function cleanup_batcher(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Batcher identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Batcher identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }
@@ -142,10 +142,10 @@ export function cleanup_contract(
     return value;
   }
 
-  if (vendor === "Envio") {
-    /** Contract identifiers in Envio contain a -chainId suffix */
-    value.id = value.id.substring(0, value.id.lastIndexOf("-"));
-  }
+  // if (vendor === "Envio") {
+  //   /** Contract identifiers in Envio contain a -chainId suffix */
+  //   value.id = value.id.substring(0, value.id.lastIndexOf("-"));
+  // }
 
   return value;
 }

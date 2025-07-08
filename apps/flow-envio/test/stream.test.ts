@@ -1,4 +1,9 @@
-import { Envio, TheGraph } from "./setup/networking";
+import {
+  Envio,
+  EnvioRefactored,
+  TheGraph,
+  TheGraphRefactored,
+} from "./setup/networking";
 import { cleanup } from "./setup/cleanup";
 import { chainId, configuration, SKIP_CLEANUP } from "./setup/constants";
 import * as envioQueries from "./setup/queries-envio";
@@ -739,4 +744,154 @@ describe(`Streams (Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})
     expect(received.streams.length).toEqual(expected.streams.length);
     expect(received.streams).toEqual(expected.streams);
   }, 500000 /* test is sometimes slow due to query to theGraph */);
+});
+
+describe(`Campaigns pre and post refactor - The Graph -`, () => {
+  test("All entries are the same (asc)", async () => {
+    const received = { streams: [] } as ReturnType<typeof cleanup.streams>;
+    const expected = { streams: [] } as ReturnType<typeof cleanup.streams>;
+
+    const variables = {
+      first: 1000,
+      chainId,
+      subgraphId: 0,
+    };
+
+    let done = false;
+
+    while (!done) {
+      const received_slice = cleanup.streams(
+        await TheGraphRefactored(theGraphQueries.getStreams_Asc, variables),
+        SKIP_CLEANUP,
+        "TheGraph",
+      );
+
+      const expected_slice = cleanup.streams(
+        await TheGraph(theGraphQueries.getStreams_Asc, variables),
+        SKIP_CLEANUP,
+        "TheGraph",
+      );
+
+      received.streams.push(...received_slice.streams);
+      expected.streams.push(...expected_slice.streams);
+
+      const expected_subgraphId =
+        expected_slice.streams?.[variables.first - 1]?.subgraphId;
+      const received_subgraphId =
+        received_slice.streams?.[variables.first - 1]?.subgraphId;
+
+      if (
+        received_slice.streams.length < variables.first &&
+        expected_slice.streams.length < variables.first
+      ) {
+        done = true;
+      } else if (
+        !expected_subgraphId ||
+        expected_subgraphId !== received_subgraphId
+      ) {
+        done = true;
+      } else {
+        variables.subgraphId = parseInt(
+          expected_slice.streams[variables.first - 1].subgraphId,
+        );
+      }
+    }
+
+    console.info(
+      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
+    );
+
+    expect(received.streams.length).toBeGreaterThan(0);
+    expect(received.streams.length).toEqual(expected.streams.length);
+    expect(received.streams).toEqual(expected.streams);
+  }, 1000000 /* test is sometimes slow due to query to theGraph */);
+});
+
+describe.only(`Campaigns pre and post refactor - Envio -`, () => {
+  test.only("First 100 results before subgraphId are the same", async () => {
+    const variables = {
+      first: 1,
+      subgraphId: 3,
+      chainId,
+    } as const;
+
+    const received = cleanup.streams(
+      await EnvioRefactored(envioQueries.getStreams_Asc, variables),
+      SKIP_CLEANUP,
+      "Envio",
+    );
+
+    const expected = cleanup.streams(
+      await Envio(envioQueries.getStreams_Asc, variables),
+      SKIP_CLEANUP,
+      "Envio",
+    );
+
+    console.info(
+      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
+    );
+
+        console.log("id", received.streams[0].id);
+    expect(received.streams.length).toBeGreaterThan(0);
+    expect(received.streams.length).toEqual(expected.streams.length);
+    expect(received.streams).toEqual(expected.streams);
+  });
+  test("All entries are the same (asc)", async () => {
+    const received = { streams: [] } as ReturnType<typeof cleanup.streams>;
+    const expected = { streams: [] } as ReturnType<typeof cleanup.streams>;
+
+    const variables = {
+      first: 1000,
+      chainId,
+      subgraphId: 0,
+    };
+
+    let done = false;
+
+    while (!done) {
+      const received_slice = cleanup.streams(
+        await EnvioRefactored(envioQueries.getStreams_Asc, variables),
+        SKIP_CLEANUP,
+        "Envio",
+      );
+
+      const expected_slice = cleanup.streams(
+        await Envio(envioQueries.getStreams_Asc, variables),
+        SKIP_CLEANUP,
+        "Envio",
+      );
+
+      received.streams.push(...received_slice.streams);
+      expected.streams.push(...expected_slice.streams);
+
+      const expected_subgraphId =
+        expected_slice.streams?.[variables.first - 1]?.subgraphId;
+      const received_subgraphId =
+        received_slice.streams?.[variables.first - 1]?.subgraphId;
+
+      if (
+        received_slice.streams.length < variables.first &&
+        expected_slice.streams.length < variables.first
+      ) {
+        done = true;
+      } else if (
+        !expected_subgraphId ||
+        expected_subgraphId !== received_subgraphId
+      ) {
+        done = true;
+      } else {
+        variables.subgraphId = parseInt(
+          expected_slice.streams[variables.first - 1].subgraphId,
+        );
+      }
+    }
+
+    console.info(
+      `Comparing ${received.streams.length}, ${expected.streams.length} results.`,
+    );
+
+    expect(received.streams.length).toBeGreaterThan(0);
+    expect(received.streams.length).toEqual(expected.streams.length);
+    expect(received.streams).toEqual(expected.streams);
+  }, 1000000 /* test is sometimes slow due to query to theGraph */);
 });

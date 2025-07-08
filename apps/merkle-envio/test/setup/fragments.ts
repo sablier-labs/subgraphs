@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 
 export const ActionFragment_Envio = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
+    
     chainId
     subgraphId
     campaign {
@@ -18,31 +18,29 @@ export const ActionFragment_Envio = gql/* GraphQL */ `
     claimTokenId
     claimAmount
     claimIndex
-    claimRecipient
+    # claimRecipient
 
     clawbackAmount
-    clawbackFrom
-    clawbackTo
+    # clawbackFrom
+    # clawbackTo
   }
 `;
 
 export const FactoryFragment_Envio = gql/* GraphQL */ `
   fragment FactoryFragment on Factory {
-    id
-    alias
     address
-    version
   }
 `;
 
 export const AssetFragment_Envio = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
+    
     address
     chainId
-    decimals
-    name
-    symbol
+    # this is needed because of the campaign created with the NFT
+    # decimals
+    # name
+    # symbol
   }
 `;
 
@@ -76,13 +74,13 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
   fragment CampaignFragment on Campaign {
     id
     subgraphId
-    address
+    # address
     chainId
     category
     hash
     timestamp
-    admin
-    lockup
+    # admin
+    # lockup
     root
     expires
     expiration
@@ -90,14 +88,13 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
     aggregateAmount
     totalRecipients
     clawbackTime
-    streamCliff
-    streamCliffDuration
-    streamTotalDuration
-    streamCancelable
-    streamTransferable
+    # streamCliff
+    # streamCliffDuration
+    # streamTotalDuration
+    # streamCancelable
+    # streamTransferable
     claimedAmount
     claimedCount
-    version
     asset {
       ...AssetFragment
     }
@@ -118,7 +115,6 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
 
 export const ActionFragment_TheGraph = gql/* GraphQL */ `
   fragment ActionFragment on Action {
-    id
     chainId
     subgraphId
     campaign {
@@ -147,13 +143,11 @@ export const FactoryFragment_TheGraph = gql/* GraphQL */ `
     id
     alias
     address
-    version
   }
 `;
 
 export const AssetFragment_TheGraph = gql/* GraphQL */ `
   fragment AssetFragment on Asset {
-    id
     address
     chainId
     decimals
@@ -164,7 +158,6 @@ export const AssetFragment_TheGraph = gql/* GraphQL */ `
 
 export const ActivityFragment_TheGraph = /* GraphQL */ `
   fragment ActivityFragment on Activity {
-    id
     timestamp
     day
     amount

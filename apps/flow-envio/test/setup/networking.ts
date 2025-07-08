@@ -47,11 +47,25 @@ export async function Envio(
   return toEnvio(await request(endpoint.Envio, document, variables));
 }
 
+export async function EnvioRefactored(
+  document: string,
+  variables?: Record<string, unknown>,
+) {
+  return toEnvio(await request("https://indexer.hyperindex.xyz/a58a0ae/v1/graphql", document, variables));
+}
+
 export async function TheGraph(
   document: string,
   variables?: Record<string, unknown>,
 ) {
   return toTheGraph(await request(endpoint.TheGraph, document, variables));
+}
+
+export async function TheGraphRefactored(
+  document: string,
+  variables?: Record<string, unknown>,
+) {
+  return toTheGraph(await request("https://api.studio.thegraph.com/query/112500/sablier-flow-experimental/version/latest", document, variables));
 }
 
 /** --------------- Utilities --------------- */

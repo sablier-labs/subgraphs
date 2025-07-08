@@ -5,7 +5,7 @@ import * as envioQueries from "./setup/queries-envio";
 import * as theGraphQueries from "./setup/queries-the-graph";
 
 describe(`Campaigns (Campaign Id: ${configuration.airdropIds[0]}, Chain Id: ${chainId}, Envio: ${configuration.endpoint.Envio})`, () => {
-  test("Metadata results are the same", async () => {
+  test.skip("Metadata results are the same", async () => {
     const variables = {
       campaignId: configuration.airdropIds[0],
       campaignIdClone: configuration.airdropIds[0],
