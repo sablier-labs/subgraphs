@@ -213,29 +213,6 @@ networks:
       - name: "SablierMerkleInstant_v1_3"
       - name: "SablierMerkleLL_v1_3"
       - name: "SablierMerkleLT_v1_3"
-  - id: 1
-    start_block: 18811605
-    rpc:
-      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
-        for: "fallback"
-      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
-        for: "fallback"
-      - url: "https://eth.merkle.io"
-        for: "fallback"
-        interval_ceiling: 5000
-    contracts:
-      - address: "0x1a272b596b10f02931480bc7a3617db4a8d154e3"
-        name: "SablierV2MerkleStreamerFactory_v1_1"
-      - name: "SablierV2MerkleStreamerLL_v1_1"
-      - address: "0xf35ab407cf28012ba57caf5ee2f6d6e4420253bc"
-        name: "SablierV2MerkleLockupFactory_v1_2"
-      - name: "SablierV2MerkleLL_v1_2"
-      - name: "SablierV2MerkleLT_v1_2"
-      - address: "0x71dd3ca88e7564416e5c2e350090c12bf8f6144a"
-        name: "SablierMerkleFactory_v1_3"
-      - name: "SablierMerkleInstant_v1_3"
-      - name: "SablierMerkleLL_v1_3"
-      - name: "SablierMerkleLT_v1_3"
   - id: 100
     start_block: 31491795
     rpc:
@@ -273,6 +250,29 @@ networks:
       - name: "SablierV2MerkleLL_v1_2"
       - name: "SablierV2MerkleLT_v1_2"
       - address: "0xaa122611e0e3a0771127aa4cd4995a896bb2c20b"
+        name: "SablierMerkleFactory_v1_3"
+      - name: "SablierMerkleInstant_v1_3"
+      - name: "SablierMerkleLL_v1_3"
+      - name: "SablierMerkleLT_v1_3"
+  - id: 1
+    start_block: 18811605
+    rpc:
+      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
+        for: "fallback"
+      - url: "https://eth.merkle.io"
+        for: "fallback"
+        interval_ceiling: 5000
+    contracts:
+      - address: "0x1a272b596b10f02931480bc7a3617db4a8d154e3"
+        name: "SablierV2MerkleStreamerFactory_v1_1"
+      - name: "SablierV2MerkleStreamerLL_v1_1"
+      - address: "0xf35ab407cf28012ba57caf5ee2f6d6e4420253bc"
+        name: "SablierV2MerkleLockupFactory_v1_2"
+      - name: "SablierV2MerkleLL_v1_2"
+      - name: "SablierV2MerkleLT_v1_2"
+      - address: "0x71dd3ca88e7564416e5c2e350090c12bf8f6144a"
         name: "SablierMerkleFactory_v1_3"
       - name: "SablierMerkleInstant_v1_3"
       - name: "SablierMerkleLL_v1_3"

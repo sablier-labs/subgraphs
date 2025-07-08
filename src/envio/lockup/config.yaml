@@ -254,33 +254,6 @@ networks:
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x711900e5f55d427cd88e5e3fcae54ccf02de71f4"
         name: "SablierLockup_v2_0"
-  - id: 1
-    start_block: 17613133
-    rpc:
-      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
-        for: "fallback"
-      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
-        for: "fallback"
-      - url: "https://eth.merkle.io"
-        for: "fallback"
-        interval_ceiling: 5000
-    contracts:
-      - address: "0x39efdc3dbb57b2388ccc4bb40ac4cb1226bc9e44"
-        name: "SablierV2LockupDynamic_v1_0"
-      - address: "0xb10daee1fcf62243ae27776d7a92d39dc8740f95"
-        name: "SablierV2LockupLinear_v1_0"
-      - address: "0x7cc7e125d83a581ff438608490cc0f7bdff79127"
-        name: "SablierV2LockupDynamic_v1_1"
-      - address: "0xafb979d9afad1ad27c5eff4e27226e3ab9e5dcc9"
-        name: "SablierV2LockupLinear_v1_1"
-      - address: "0x9deabf7815b42bf4e9a03eec35a486ff74ee7459"
-        name: "SablierV2LockupDynamic_v1_2"
-      - address: "0x3962f6585946823440d274ad7c719b02b49de51e"
-        name: "SablierV2LockupLinear_v1_2"
-      - address: "0xf86b359035208e4529686a1825f2d5bee38c28a8"
-        name: "SablierV2LockupTranched_v1_2"
-      - address: "0x7c01aa3783577e15fd7e272443d44b92d5b21056"
-        name: "SablierLockup_v2_0"
   - id: 100
     start_block: 28766600
     rpc:
@@ -324,6 +297,33 @@ networks:
       - address: "0xc46ce4b77cbc46d17a2eceb2cc8e2ee23d96529f"
         name: "SablierV2LockupTranched_v1_2"
       - address: "0x6964252561e8762dd10267176eac5078b6291e51"
+        name: "SablierLockup_v2_0"
+  - id: 1
+    start_block: 17613133
+    rpc:
+      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
+        for: "fallback"
+      - url: "https://eth.merkle.io"
+        for: "fallback"
+        interval_ceiling: 5000
+    contracts:
+      - address: "0x39efdc3dbb57b2388ccc4bb40ac4cb1226bc9e44"
+        name: "SablierV2LockupDynamic_v1_0"
+      - address: "0xb10daee1fcf62243ae27776d7a92d39dc8740f95"
+        name: "SablierV2LockupLinear_v1_0"
+      - address: "0x7cc7e125d83a581ff438608490cc0f7bdff79127"
+        name: "SablierV2LockupDynamic_v1_1"
+      - address: "0xafb979d9afad1ad27c5eff4e27226e3ab9e5dcc9"
+        name: "SablierV2LockupLinear_v1_1"
+      - address: "0x9deabf7815b42bf4e9a03eec35a486ff74ee7459"
+        name: "SablierV2LockupDynamic_v1_2"
+      - address: "0x3962f6585946823440d274ad7c719b02b49de51e"
+        name: "SablierV2LockupLinear_v1_2"
+      - address: "0xf86b359035208e4529686a1825f2d5bee38c28a8"
+        name: "SablierV2LockupTranched_v1_2"
+      - address: "0x7c01aa3783577e15fd7e272443d44b92d5b21056"
         name: "SablierLockup_v2_0"
   - id: 34443
     start_block: 11343389

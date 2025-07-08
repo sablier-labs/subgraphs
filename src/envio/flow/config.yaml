@@ -138,21 +138,6 @@ networks:
         name: "SablierFlow_v1_0"
       - address: "0x28eab88ee8a951f78e1028557d0c3fd97af61a33"
         name: "SablierFlow_v1_1"
-  - id: 1
-    start_block: 21330577
-    rpc:
-      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
-        for: "fallback"
-      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
-        for: "fallback"
-      - url: "https://eth.merkle.io"
-        for: "fallback"
-        interval_ceiling: 5000
-    contracts:
-      - address: "0x2d9221a63e12aa796619cb381ec4a71b201281f5"
-        name: "SablierFlow_v1_0"
-      - address: "0x3df2aaede81d2f6b261f79047517713b8e844e04"
-        name: "SablierFlow_v1_1"
   - id: 100
     start_block: 37356094
     rpc:
@@ -180,6 +165,21 @@ networks:
       - address: "0x949bfa08f1632432a2656a9db17ca34d54da8296"
         name: "SablierFlow_v1_0"
       - address: "0xefc6e4c7dc5faa0cfbfebb5e04ea7cd47f64012f"
+        name: "SablierFlow_v1_1"
+  - id: 1
+    start_block: 21330577
+    rpc:
+      - url: "https://mainnet.infura.io/v3/{ENVIO_INFURA_API_KEY}"
+        for: "fallback"
+      - url: "https://eth-mainnet.g.alchemy.com/v2/{ENVIO_ALCHEMY_API_KEY}"
+        for: "fallback"
+      - url: "https://eth.merkle.io"
+        for: "fallback"
+        interval_ceiling: 5000
+    contracts:
+      - address: "0x2d9221a63e12aa796619cb381ec4a71b201281f5"
+        name: "SablierFlow_v1_0"
+      - address: "0x3df2aaede81d2f6b261f79047517713b8e844e04"
         name: "SablierFlow_v1_1"
   - id: 34443
     start_block: 16616938

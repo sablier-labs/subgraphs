@@ -22,6 +22,7 @@ import { Store } from "../../../store";
 type LoaderReturn = {
   activity?: Entity.Activity;
   campaign: Entity.Campaign;
+  factory: Entity.Factory;
   watcher: Entity.Watcher;
 };
 
@@ -36,9 +37,13 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
   const watcherId = event.chainId.toString();
   const watcher = await context.Watcher.getOrThrow(watcherId);
 
+  const factoryId = campaign.factory_id;
+  const factory = await context.Factory.getOrThrow(factoryId);
+
   return {
     activity,
     campaign,
+    factory,
     watcher,
   };
 };
@@ -50,7 +55,7 @@ const loader: Loader<LoaderReturn> = async ({ context, event }) => {
 type Handler<T> = HandlerLL_v1_1<T> & HandlerLL_v1_2<T> & HandlerLL_v1_3<T> & HandlerLT_v1_2<T> & HandlerLT_v1_3<T>;
 
 const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) => {
-  const { campaign, watcher } = loaderReturn;
+  const { campaign, watcher, factory } = loaderReturn;
   const activity = loaderReturn.activity ?? (await Store.Activity.create(context, event, campaign.id));
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
@@ -61,7 +66,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
 
   /* --------------------------------- ACTION --------------------------------- */
   let fee: bigint | undefined;
-  if (isVersionWithFees(event.chainId, campaign.factory_id)) {
+  if (isVersionWithFees(event.chainId, factory.address)) {
     fee = event.transaction.value;
   }
   const entities = { campaign, watcher };
