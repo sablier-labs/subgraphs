@@ -37,9 +37,10 @@ export const AssetFragment_Envio = gql/* GraphQL */ `
     
     address
     chainId
-    decimals
-    name
-    symbol
+    # this is needed because of the campaign created with the NFT
+    # decimals
+    # name
+    # symbol
   }
 `;
 
@@ -94,9 +95,9 @@ export const CampaignFragment_Envio = gql/* GraphQL */ `
     # streamTransferable
     claimedAmount
     claimedCount
-    # asset {
-    #   ...AssetFragment
-    # }
+    asset {
+      ...AssetFragment
+    }
     factory {
       ...FactoryFragment
     }
