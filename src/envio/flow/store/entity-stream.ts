@@ -29,7 +29,7 @@ export async function create(
     batch_id: batch.id,
     category: "Flow",
     chainId: BigInt(event.chainId),
-    contract: event.srcAddress,
+    contract: event.srcAddress.toLowerCase(),
     creator: event.transaction.from?.toLowerCase() || "",
     depletionTime: now,
     depositedAmount: 0n,

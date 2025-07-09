@@ -20,7 +20,7 @@ export async function create<TAction extends Common.StreamAction>(
     block: BigInt(event.block.number),
     category: params.category,
     chainId: BigInt(event.chainId),
-    contract: event.srcAddress,
+    contract: event.srcAddress.toLowerCase(),
     fee: event.transaction.value,
     from: event.transaction.from?.toLowerCase() || "",
     hash: event.transaction.hash,

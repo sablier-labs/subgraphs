@@ -28,17 +28,8 @@ export async function createLinear(
 ): Promise<Entity.Stream> {
   const baseStream = await createBase(context, event, entities, params);
 
-  let initial = {
-    initial: false,
-    initialAmount: 0n,
-  };
-  if (params.unlockAmountStart && params.unlockAmountStart > 0n) {
-    initial = {
-      initial: true,
-      initialAmount: params.unlockAmountStart,
-    };
-  }
   const cliff = addCliff(baseStream, params);
+  const initial = addInitial(params);
   const shape = addLinearShape(baseStream, cliff.cliff);
 
   const stream: Entity.Stream = {
@@ -82,7 +73,6 @@ async function createBase(
   const lockup = getContract("lockup", event.chainId, event.srcAddress);
 
   /* --------------------------------- STREAM --------------------------------- */
-  const funder = params.funder;
   const recipient = params.recipient.toLowerCase();
   const sender = params.sender.toLowerCase();
 
@@ -98,18 +88,18 @@ async function createBase(
     canceledTime: undefined,
     category: params.category as Enum.StreamCategory,
     chainId: BigInt(event.chainId),
-    cliff: false,
-    cliffAmount: 0n,
-    cliffTime: 0n,
-    contract: event.srcAddress,
+    cliff: undefined,
+    cliffAmount: undefined,
+    cliffTime: undefined,
+    contract: event.srcAddress.toLowerCase(),
     depositAmount: params.depositAmount,
     duration: params.endTime - params.startTime,
     endTime: params.endTime,
-    funder,
+    funder: params.funder.toLowerCase(),
     hash: event.transaction.hash,
     id: streamId,
-    initial: false,
-    initialAmount: 0n,
+    initial: undefined,
+    initialAmount: undefined,
     intactAmount: params.depositAmount,
     parties: _.compact([recipient, sender, params.proxender]),
     position: batch.size,
@@ -185,6 +175,19 @@ function addCliff(
   }
 
   throw new Error(`Unknown Lockup version: ${stream.version}`);
+}
+
+function addInitial(params: Params.CreateStreamLinear): Pick<Entity.Stream, "initial" | "initialAmount"> {
+  if (params.unlockAmountStart && params.unlockAmountStart > 0n) {
+    return {
+      initial: true,
+      initialAmount: params.unlockAmountStart,
+    };
+  }
+  return {
+    initial: false,
+    initialAmount: undefined,
+  };
 }
 
 /**

@@ -32,13 +32,11 @@ export function createStreamLinear(
   let stream = createBaseStream(event, commonParams);
 
   const unlockAmountStart = linearParams.unlockAmountStart;
-  if (unlockAmountStart) {
-    if (unlockAmountStart.gt(ZERO)) {
-      stream.initial = true;
-      stream.initialAmount = unlockAmountStart;
-    } else {
-      stream.initial = false;
-    }
+  if (unlockAmountStart !== null && unlockAmountStart.gt(ZERO)) {
+    stream.initial = true;
+    stream.initialAmount = unlockAmountStart;
+  } else {
+    stream.initial = false;
   }
 
   stream = addCliff(stream, commonParams, linearParams);

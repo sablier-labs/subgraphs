@@ -15,6 +15,7 @@
       "includes": ["**/src/graph/**/*.ts"],
       "linter": {
         "rules": {
+          "complexity": { "useOptionalChain": "off" },
           "style": { "useImportType": "off" },
           "suspicious": { "noDoubleEquals": "off", "noShadowRestrictedNames": "off" }
         }

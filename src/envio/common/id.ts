@@ -31,7 +31,7 @@ export namespace Id {
    * 137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174
    */
   export function asset(chainId: number, assetAddress: string): string {
-    return `${chainId}-${assetAddress}`;
+    return `${chainId}-${assetAddress.toLowerCase}`;
   }
 
   /**
@@ -66,7 +66,7 @@ export namespace Id {
    * 137-0xf0d61b42311c810dfde191d58427d81e87c5d5f6
    */
   export function factory(chainId: number, factoryAddress: string): string {
-    return `${chainId}-${factoryAddress}`;
+    return `${chainId}-${factoryAddress.toLowerCase()}`;
   }
 
   /**

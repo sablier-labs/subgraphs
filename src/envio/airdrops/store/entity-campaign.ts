@@ -112,8 +112,8 @@ async function createBaseCampaign(
   /* -------------------------------- CAMPAIGN -------------------------------- */
   // Some fields are set to 0/ undefined because they are set later depending on the campaign category.
   const campaign: Entity.Campaign = {
-    address: params.campaignAddress,
-    admin: params.admin,
+    address: params.campaignAddress.toLowerCase(),
+    admin: params.admin.toLowerCase(),
     aggregateAmount: params.aggregateAmount,
     asset_id: entities.asset.id,
     category: params.category as Enum.CampaignCategory,
@@ -163,7 +163,7 @@ async function createBaseCampaign(
 
 function createLockupCampaign(params: Params.CreateCampaignLockup): Partial<Entity.Campaign> {
   return {
-    lockup: params.lockup,
+    lockup: params.lockup.toLowerCase(),
     streamCancelable: params.cancelable,
     streamShape: params.shape ? sanitizeString(params.shape) : undefined,
     streamStart: params.startTime ? params.startTime > 0n : undefined,

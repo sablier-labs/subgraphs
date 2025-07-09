@@ -74,7 +74,7 @@ const handler: Handler<LoaderReturn> = async ({ context, event, loaderReturn }) 
     category: "Claim",
     claimAmount: event.params.amount,
     claimIndex: event.params.index,
-    claimRecipient: event.params.recipient,
+    claimRecipient: event.params.recipient.toLowerCase(),
     claimStreamId: campaign.lockup ? Id.stream(campaign.lockup, event.chainId, event.params.streamId) : undefined,
     claimTokenId: BigInt(event.params.streamId),
     fee,
