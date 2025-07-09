@@ -6,10 +6,10 @@ export const lockup_endpoints = {
   theGraph: "https://api.studio.thegraph.com/query/112500/sablier-lockup-experimental/version/latest",
 };
 export const flow_endpoints = {
-  envio: "https://indexer.hyperindex.xyz/7a2319b/v1/graphql",
+  envio: "https://indexer.hyperindex.xyz/e5413f8/v1/graphql",
   theGraph: "https://api.studio.thegraph.com/query/112500/sablier-flow-experimental/version/latest",
 };
 export const merkle_endpoints = {
-  envio: "https://indexer.hyperindex.xyz/97fbb62/v1/graphql",
+  envio: "https://indexer.hyperindex.xyz/339c0ae/v1/graphql",
   theGraph: "https://api.studio.thegraph.com/query/112500/sablier-airdrops-experimental/version/latest",
 };
