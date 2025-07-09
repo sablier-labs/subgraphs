@@ -42,7 +42,7 @@ export function createStreamLinear(
   }
 
   stream = addCliff(stream, commonParams, linearParams);
-  stream = addLinearShape(stream);
+  stream = addLinearShape(stream, stream.cliff);
   stream.save();
 
   return stream;
@@ -204,8 +204,10 @@ function addCliff(
  * Older versions of Lockup did not have a shape field, but it can be inferred.
  * @see https://github.com/sablier-labs/interfaces/blob/30fffc0/packages/constants/src/stream/shape.ts#L12
  */
-function addLinearShape(stream: Entity.Stream): Entity.Stream {
-  if (stream.shape !== null) {
+function addLinearShape(stream: Entity.Stream, cliff: boolean): Entity.Stream {
+  // If the shape was already provided by the user, return it.
+  const shape = stream.shape;
+  if (shape !== null) {
     return stream;
   }
 
@@ -217,7 +219,7 @@ function addLinearShape(stream: Entity.Stream): Entity.Stream {
     return stream;
   }
 
-  if (stream.cliff) {
+  if (cliff) {
     stream.shape = "cliff";
   } else {
     stream.shape = "linear";

@@ -39,7 +39,7 @@ export async function createLinear(
     };
   }
   const cliff = addCliff(baseStream, params);
-  const shape = addLinearShape(baseStream);
+  const shape = addLinearShape(baseStream, cliff.cliff);
 
   const stream: Entity.Stream = {
     ...baseStream,
@@ -135,8 +135,11 @@ async function createBase(
   return stream;
 }
 
-function addCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Partial<Entity.Stream> {
-  const defaultCliff = { cliff: false };
+function addCliff(
+  stream: Entity.Stream,
+  params: Params.CreateStreamLinear,
+): Pick<Entity.Stream, "cliff" | "cliffAmount" | "cliffTime"> {
+  const defaultCliff = { cliff: false, cliffAmount: undefined, cliffTime: undefined };
 
   // In v2.0, the cliff time is set to zero if there is no cliff.
   // See https://github.com/sablier-labs/lockup/blob/v2.0/src/libraries/Helpers.sol#L204-L219
@@ -188,9 +191,9 @@ function addCliff(stream: Entity.Stream, params: Params.CreateStreamLinear): Par
  * Older versions of Lockup did not have a shape field, but it can be inferred.
  * @see https://github.com/sablier-labs/interfaces/blob/30fffc0/packages/constants/src/stream/shape.ts#L12
  */
-function addLinearShape(stream: Entity.Stream): Partial<Entity.Stream> {
+function addLinearShape(stream: Entity.Stream, cliff?: boolean): Pick<Entity.Stream, "shape"> {
   if (stream.shape) {
-    return {};
+    return { shape: stream.shape };
   }
 
   // Note: <v1.2 streams didn't have the unlock shapes.
@@ -201,7 +204,7 @@ function addLinearShape(stream: Entity.Stream): Partial<Entity.Stream> {
     return stream;
   }
 
-  if (stream.cliff) {
+  if (cliff) {
     return { shape: "cliff" };
   } else {
     return { shape: "linear" };
