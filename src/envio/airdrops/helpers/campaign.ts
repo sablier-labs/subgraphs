@@ -25,7 +25,7 @@ export function getNickname(
  * Checks if the given address is an official Lockup contract. This check is needed because the Lockup contract
  * is a user-provided parameter when deploying an airdrop campaign.
  */
-export function isOfficialLockup(event: Envio.Event, address: Envio.Address): boolean {
+export function isOfficialLockup(logger: Envio.Logger, event: Envio.Event, address: Envio.Address): boolean {
   const lowercasedAddress = address.toLowerCase() as Sablier.Address;
   const contract = sablier.contracts.get({
     chainId: event.chainId,
@@ -33,7 +33,7 @@ export function isOfficialLockup(event: Envio.Event, address: Envio.Address): bo
     protocol: "lockup",
   });
   if (!contract) {
-    console.info("Unknown or incorrect Lockup address used for creating airdrop campaign", {
+    logger.info("Unknown or incorrect Lockup address used for creating airdrop campaign", {
       chainId: event.chainId,
       factory: event.srcAddress,
       lockup: address,

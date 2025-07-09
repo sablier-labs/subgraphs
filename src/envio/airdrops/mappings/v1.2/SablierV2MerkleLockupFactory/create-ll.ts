@@ -5,7 +5,7 @@ import { Loader } from "../../common/loader";
 
 Contract.Factory.MerkleLockupFactory_v1_2.CreateMerkleLL.contractRegister(({ context, event }) => {
   const lockupAddress = event.params.lockupLinear;
-  if (!isOfficialLockup(event, lockupAddress)) {
+  if (!isOfficialLockup(context.log, event, lockupAddress)) {
     return;
   }
   const campaignAddress = event.params.merkleLL;

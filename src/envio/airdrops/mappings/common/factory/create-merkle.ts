@@ -40,7 +40,7 @@ export async function createMerkleLL(input: Input<Params.CreateCampaignLL>): Pro
   const { context, event, loaderReturn, params } = input;
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
-  if (!isOfficialLockup(event, params.lockup)) {
+  if (!isOfficialLockup(context.log, event, params.lockup)) {
     return;
   }
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);
@@ -62,7 +62,7 @@ export async function createMerkleLT(input: Input<Params.CreateCampaignLT>): Pro
   const { context, event, loaderReturn, params } = input;
 
   /* -------------------------------- CAMPAIGN -------------------------------- */
-  if (!isOfficialLockup(event, params.lockup)) {
+  if (!isOfficialLockup(context.log, event, params.lockup)) {
     return;
   }
   const createEntities = await createAssociatedEntities(context, event, loaderReturn, params);

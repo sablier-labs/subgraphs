@@ -1,4 +1,5 @@
 import type { t as Address_t } from "envio/src/Address.gen";
+import type { logger } from "envio/src/Envio.gen";
 import type { genericEvent as Internal_genericEvent } from "envio/src/Internal.gen";
 import { type Enum as FlowEnum } from "../flow/bindings";
 import { type Enum as LockupEnum } from "../lockup/bindings";
@@ -74,6 +75,8 @@ export namespace Envio {
   export type eventLog<params> = Internal_genericEvent<params, Block_t, Transaction_t>;
   export type EventLog<params> = eventLog<params>;
   export type Event<Params extends object = Record<string, unknown>> = EventLog<Params>;
+
+  export type Logger = logger;
 
   export type Transaction_t = {
     readonly from: undefined | Address_t;
