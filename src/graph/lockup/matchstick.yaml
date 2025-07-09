@@ -1,5 +1,0 @@
-# This is a WIP
-# See https://github.com/LimeChain/matchstick/issues/432
-testsFolder: tests
-libsFolder: ../../../node_modules
-manifestPath: manifests/mainnet.yaml

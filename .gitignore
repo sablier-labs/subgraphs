@@ -19,4 +19,3 @@ repomix
 subgraph.yaml
 src/graph/**/schema.graphql
 src/graph/**/manifests/**/*.yaml
-src/graph/**/tests/**/*.latest.json

@@ -14,7 +14,7 @@
     "sablier": "1.0.0-beta.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.5",
+    "@biomejs/biome": "^2.1",
     "@graphprotocol/graph-cli": "0.97.1",
     "@graphprotocol/graph-ts": "0.38.1",
     "@graphql-tools/load-files": "^7.0",
@@ -30,7 +30,7 @@
     "app-root-path": "^3.1",
     "axios": "^1.10",
     "commander": "^14.0",
-    "envio": "2.24.0",
+    "envio": "2.25.0",
     "execa": "5.1.1",
     "fs-extra": "^11.3",
     "graphql": "^16.11",
@@ -39,7 +39,6 @@
     "husky": "^9.1",
     "js-yaml": "^4.1",
     "lint-staged": "^16.1",
-    "matchstick-as": "^0.6",
     "ora": "^8.2",
     "prettier": "^3.6",
     "prom-client": "^15.1",
