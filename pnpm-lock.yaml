@@ -31,8 +31,8 @@ importers:
         specifier: ^9.0
         version: 9.0.24(graphql@16.11.0)
       '@pinax/graph-networks-registry':
-        specifier: ^0.6
-        version: 0.6.7
+        specifier: ^0.7
+        version: 0.7.1
       '@sablier/devkit':
         specifier: github:sablier-labs/devkit#main
         version: https://codeload.github.com/sablier-labs/devkit/tar.gz/f4773d03ac79435e685d2127b829edd1b54d6d21
@@ -887,6 +887,9 @@ packages:
 
   '@pinax/graph-networks-registry@0.6.7':
     resolution: {integrity: sha512-xogeCEZ50XRMxpBwE3TZjJ8RCO8Guv39gDRrrKtlpDEDEMLm0MzD3A0SQObgj7aF7qTZNRTWzsuvQdxgzw25wQ==}
+
+  '@pinax/graph-networks-registry@0.7.1':
+    resolution: {integrity: sha512-Gn2kXRiEd5COAaMY/aDCRO0V+zfb1uQKCu5HFPoWka+EsZW27AlTINA7JctYYYEMuCbjMia5FBOzskjgEvj6LA==}
 
   '@pnpm/config.env-replace@1.1.0':
     resolution: {integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w==}
@@ -4207,6 +4210,8 @@ snapshots:
   '@opentelemetry/api@1.9.0': {}
 
   '@pinax/graph-networks-registry@0.6.7': {}
+
+  '@pinax/graph-networks-registry@0.7.1': {}
 
   '@pnpm/config.env-replace@1.1.0': {}
 
