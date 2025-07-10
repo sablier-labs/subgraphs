@@ -93,7 +93,7 @@ type Batch @entity(immutable: true) {
   """
   Index of the batch based on the `batchCounter` in the `Batcher` entity.
   """
-  position: BigInt!
+  position: BigInt
   """
   Number of streams part of this batch.
   """

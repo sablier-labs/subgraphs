@@ -55,7 +55,7 @@ alias cb := codegen-bindings
 
 # Codegen the subgraph manifest
 [group("codegen")]
-@codegen-manifest chain="ethereum":
+@codegen-manifest chain="mainnet":
     just root::codegen-graph-manifest {{ PROTOCOL }} {{ chain }}
 alias cm := codegen-manifest
 

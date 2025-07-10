@@ -9,6 +9,8 @@ export function getOrCreateAsset(address: Address): Entity.Asset {
   const id = Id.asset(address);
   let asset = Entity.Asset.load(id);
 
+  logDebug("getOrCreateAsset: {}, {}", [asset === null ? "is null" : "is not null", id]);
+
   if (asset === null) {
     asset = new Entity.Asset(id);
 
@@ -18,9 +20,7 @@ export function getOrCreateAsset(address: Address): Entity.Asset {
     asset.name = fetchAssetName(address);
     asset.symbol = fetchAssetSymbol(address);
 
-    logDebug("getOrCreateAsset: {}, {}, {}, {}, {}, {}, {}", [
-      asset === null ? "is null" : "is not null",
-      id,
+    logDebug("getOrCreateAsset: {}, {}, {}, {}, {}", [
       asset.address.toHexString(),
       asset.chainId.toString(),
       asset.decimals.toString(),
