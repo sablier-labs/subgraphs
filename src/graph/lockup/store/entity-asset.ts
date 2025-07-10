@@ -2,6 +2,7 @@ import { Address } from "@graphprotocol/graph-ts";
 import { fetchAssetDecimals, fetchAssetName, fetchAssetSymbol } from "../../common/bindings/fetch";
 import { readChainId } from "../../common/context";
 import { Id } from "../../common/id";
+import { logDebug } from "../../common/logger";
 import * as Entity from "../bindings/schema";
 
 export function getOrCreateAsset(address: Address): Entity.Asset {
@@ -17,6 +18,15 @@ export function getOrCreateAsset(address: Address): Entity.Asset {
     asset.name = fetchAssetName(address);
     asset.symbol = fetchAssetSymbol(address);
 
+    logDebug("getOrCreateAsset: {}, {}, {}, {}, {}, {}, {}", [
+      asset === null ? "is null" : "is not null",
+      id,
+      asset.address.toHexString(),
+      asset.chainId.toString(),
+      asset.decimals.toString(),
+      asset.name,
+      asset.symbol,
+    ]);
     asset.save();
   }
 

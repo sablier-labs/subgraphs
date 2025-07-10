@@ -1,3 +1,11 @@
+/**
+ * @file Logging abstractions to include a Sablier prefix in all logs.
+ * @example
+ * ```ts
+ * logInfo("My value is: {}", [myValue]);
+ * ```
+ * @see https://thegraph.com/docs/en/subgraphs/developing/creating/graph-ts/api/#logging-api
+ */
 import { log } from "@graphprotocol/graph-ts";
 import { LOG_PREFIX } from "./constants";
 
@@ -20,7 +28,6 @@ export function logWarning(message: string, dependencies: string[] = []): void {
 /**
  * Log a critical message and shuts down the subgraph.
  * @see https://github.com/graphprotocol/graph-tooling/discussions/2014
- * @see https://thegraph.com/docs/en/subgraphs/developing/creating/graph-ts/api/#logging-api
  */
 export function shutDown(message: string, dependencies: string[] = []): void {
   log.critical(LOG_PREFIX.concat(message), dependencies);

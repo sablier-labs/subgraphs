@@ -38,6 +38,16 @@ export namespace Id {
   }
 
   /**
+   * @example
+   * 137-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6
+   */
+  export function batcher(sender: Address): string {
+    const chainId = readChainId().toString();
+    const address = sender.toHexString();
+    return `${chainId}-${address}`;
+  }
+
+  /**
    * The ID starts with the address due to historical reasons.
    * @see https://github.com/sablier-labs/indexers/discussions/118
    *
@@ -57,7 +67,7 @@ export namespace Id {
   export function factory(factoryAddress: Address): string {
     const chainId = readChainId().toString();
     const address = factoryAddress.toHexString();
-    return `${address}-${chainId}`;
+    return `${chainId}-${address}`;
   }
 
   /**
