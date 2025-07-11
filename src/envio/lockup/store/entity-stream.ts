@@ -82,7 +82,7 @@ async function createBase(
   let stream: Entity.Stream = {
     alias: Id.streamAlias(lockup.alias, event.chainId, tokenId),
     asset_id: asset.id,
-    assetDecimals: asset.decimals,
+    assetDecimalsValue: asset.decimals,
     batch_id: batch.id,
     cancelable: params.cancelable,
     canceled: false,

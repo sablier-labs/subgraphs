@@ -6,8 +6,8 @@ module.exports = {
   "*.{js,ts}": "pnpm biome lint --write --only correctness/noUnusedImports",
   "*.{md,yaml,yml}": "pnpm prettier --cache --write",
   "src/exports/schemas/*.graphql": (_stagedFiles) => {
-    const codegenSchema = "just codegen-schema envio all";
-    const exportSchemas = "just export-schemas";
-    return [codegenSchema, exportSchemas];
+    const codegenSchemas = "just codegen-schema envio all";
+    const exportSchemas = "just export-schema";
+    return [codegenSchemas, exportSchemas];
   },
 };

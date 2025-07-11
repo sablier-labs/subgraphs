@@ -22,8 +22,8 @@ export function handleVoidFlowStream(event: ethereum.Event, params: Params.VoidF
   const streamedAmount = stream.ratePerSecond.times(elapsedTime);
   const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
 
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
-  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
   const maxAvailable = withdrawnAmount.plus(availableAmount);
 
   stream.depletionTime = ZERO;

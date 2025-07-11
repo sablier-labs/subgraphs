@@ -16,8 +16,8 @@ export function handleRestartFlowStream(event: ethereum.Event, params: Params.Re
   /* --------------------------------- STREAM --------------------------------- */
 
   // Restart is actually an adjustment.
-  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
   const notWithdrawnAmount = stream.snapshotAmount.minus(withdrawnAmount);
 
   const now = event.block.timestamp;

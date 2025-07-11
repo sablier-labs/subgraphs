@@ -49,13 +49,13 @@ jobs:
         run: "just build-graph-indexer"
 
       - name: "Export all GraphQL schemas"
-        run: "just export-schemas"
+        run: "just export-schema"
 
       - name: "Verify GraphQL schemas haven't changed"
         uses: "tj-actions/verify-changed-files@v20"
         with:
           fail-if-changed: true
-          fail-message: "❌ GraphQL schemas are out of sync. Run 'just export-schemas' locally and commit the changes."
+          fail-message: "❌ GraphQL schemas are out of sync. Run 'just export-schema' locally and commit the changes."
           files: |
             ./src/exports/schemas/airdrops.graphql
             ./src/exports/schemas/flow.graphql

@@ -14,7 +14,7 @@ import { envioConfigCmd } from "./commands/codegen/envio-config";
 import { graphManifestCmd } from "./commands/codegen/graph-manifest";
 import { schemaCmd } from "./commands/codegen/schema";
 import { deployAllGraphCmd } from "./commands/deploy-all-graph";
-import { exportSchemasCmd } from "./commands/export-schemas";
+import { exportSchemaCmd } from "./commands/export-schema";
 import { fetchAssetsCmd } from "./commands/fetch-assets";
 import { printChainsCmd } from "./commands/print-chains";
 
@@ -44,7 +44,7 @@ export async function main() {
 
   program.addCommand(checkVendorsCmd.name("check-vendors"));
   program.addCommand(deployAllGraphCmd.name("deploy-all-graph"));
-  program.addCommand(exportSchemasCmd.name("export-schemas"));
+  program.addCommand(exportSchemaCmd.name("export-schema"));
   program.addCommand(fetchAssetsCmd.name("fetch-assets"));
 
   program.parse();

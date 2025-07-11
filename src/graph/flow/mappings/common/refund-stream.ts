@@ -19,11 +19,11 @@ export function handleRefundFromFlowStream(event: ethereum.Event, params: Params
   stream.availableAmount = stream.availableAmount.minus(params.amount);
 
   const now = event.block.timestamp;
-  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
   const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
   const streamedAmount = stream.ratePerSecond.times(elapsedTime);
   const snapshotAmount = stream.snapshotAmount.plus(streamedAmount);
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
   const notWithdrawnAmount = snapshotAmount.minus(withdrawnAmount);
 
   // If the entire available amount is refunded, the stream starts accruing now.

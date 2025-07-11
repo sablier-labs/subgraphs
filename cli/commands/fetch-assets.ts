@@ -47,7 +47,7 @@ type ERC20Data = {
 
 // See https://ethereum.stackexchange.com/q/114818/24693
 const MAX_QUERY_LIMIT = 1000;
-const QUERY = `#graphql
+const QUERY = /* GraphQL */ `
   query GetAllAssets {
     assets(first: ${MAX_QUERY_LIMIT}) {
       address

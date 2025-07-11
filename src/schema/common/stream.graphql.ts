@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
 import type { Types } from "../../types";
 
-const commonDefs = `#graphql
+const commonDefs = /* GraphQL */ `
   # ------------------------------------ IDs ----------------------------------- #
   """
   Unique identifier: \`{contractAddress}-{chainId}-{tokenId}\`
@@ -54,8 +54,9 @@ const commonDefs = `#graphql
 
   """
   ERC-20 token decimals. Stored here to avoid loading the asset entity on each stream.
+  Note: the "Value" suffix is added because of a bug in GraphQL Code Generator.
   """
-  assetDecimals: BigInt!
+  assetDecimalsValue: BigInt!
 
   """
   The batch the stream may be part of.

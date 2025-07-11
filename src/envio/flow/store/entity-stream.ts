@@ -24,7 +24,7 @@ export async function create(
   const stream: Entity.Stream = {
     alias: Id.streamAlias(flow.alias, event.chainId, tokenId),
     asset_id: asset.id,
-    assetDecimals: asset.decimals,
+    assetDecimalsValue: asset.decimals,
     availableAmount: 0n,
     batch_id: batch.id,
     category: "Flow",

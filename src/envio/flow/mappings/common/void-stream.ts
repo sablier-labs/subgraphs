@@ -21,8 +21,8 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   const streamedAmount = stream.ratePerSecond * elapsedTime;
   const snapshotAmount = stream.snapshotAmount + streamedAmount;
 
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
-  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
   const maxAvailable = withdrawnAmount + availableAmount;
 
   let updatedStream: Entity.Stream = {

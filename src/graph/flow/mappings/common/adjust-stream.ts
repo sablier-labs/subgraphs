@@ -21,9 +21,9 @@ export function handleAdjustFlowStream(event: ethereum.Event, params: Params.Adj
 
   // The depletion time is recalculated only if the current depletion time is in the future.
   if (stream.depletionTime.gt(now)) {
-    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
     const notWithdrawn = snapshotAmount.minus(withdrawnAmount);
-    const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+    const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
     const extraAmount = availableAmount.minus(notWithdrawn);
     stream.depletionTime = now.plus(extraAmount.div(params.newRatePerSecond));
   }

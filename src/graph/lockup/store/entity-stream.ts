@@ -82,7 +82,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   /* ---------------------------------- ASSET --------------------------------- */
   const asset = getOrCreateAsset(params.asset);
   stream.asset = asset.id;
-  stream.assetDecimals = asset.decimals;
+  stream.assetDecimalsValue = asset.decimals;
 
   /* ---------------------------------- BATCH --------------------------------- */
   const batch = createOrCreateBatch(event, params.sender);

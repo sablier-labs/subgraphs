@@ -23,7 +23,7 @@ export function createStream(event: ethereum.Event, params: Params.CreateFlowStr
   /* --------------------------------- ASSET --------------------------------- */
   const asset = getOrCreateAsset(params.token);
   stream.asset = asset.id;
-  stream.assetDecimals = asset.decimals;
+  stream.assetDecimalsValue = asset.decimals;
 
   /* --------------------------------- BATCH --------------------------------- */
   const batch = createOrUpdateBatch(event, params.sender);

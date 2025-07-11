@@ -25,9 +25,9 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   // The depletion time is recalculated only if the current depletion time is in the future.
   let depletionTime = stream.depletionTime;
   if (stream.depletionTime > now) {
-    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+    const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
     const notWithdrawn = snapshotAmount - withdrawnAmount;
-    const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+    const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
     const extraAmount = availableAmount - notWithdrawn;
     depletionTime = now + extraAmount / event.params.newRatePerSecond;
   }

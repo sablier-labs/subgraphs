@@ -16,13 +16,13 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
 
   const refundedAmount = stream.refundedAmount + event.params.amount;
   const availableAmount = stream.availableAmount - event.params.amount;
-  const scaledAvailableAmount = scale(availableAmount, stream.assetDecimals);
+  const scaledAvailableAmount = scale(availableAmount, stream.assetDecimalsValue);
 
   const now = BigInt(event.block.timestamp);
   const elapsedTime = now - stream.lastAdjustmentTimestamp;
   const streamedAmount = stream.ratePerSecond * elapsedTime;
   const snapshotAmount = stream.snapshotAmount + streamedAmount;
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
 
   const notWithdrawnAmount = snapshotAmount - withdrawnAmount;
 

@@ -23,10 +23,15 @@ GLOBS_CLEAN_IGNORE := "!src/graph/common/bindings"
 # Show available commands
 default: full-check
 
-# Build the project
-build: (clean "dist")
-    pnpm tsc -p tsconfig.build.json
+# Build the entire package
+build: (clean "dist") export-schema codegen-gql
+    just build-tsc
 alias b := build
+
+# Build the TypeScript package
+build-tsc:
+    pnpm tsc -p tsconfig.build.json
+alias bt := build-tsc
 
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
@@ -44,19 +49,19 @@ clean globs=GLOBS_CLEAN:
     echo ""
     just codegen-graph
 
+# Export the schemas to the ./src/exports directory
+# lint-staged will call this recipe and pass the globs to it
+export-schema +globs="src/exports/schemas/*.graphql":
+    just cli export-schema
+    just biome-write "{{ globs }}"
+
+
 # Fetch assets from The Graph subgraphs and save them to JSON files
 [group("envio")]
 @fetch-assets protocol="all" chain="all":
     just cli fetch-assets \
         --protocol {{ protocol }} \
         --chain {{ chain }}
-
-# Export the schemas to the ./src/exports directory
-# lint-staged will call this recipe and pass the globs to it
-export-schemas +globs="src/exports/schemas/*.graphql":
-    just cli export-schemas
-    just biome-write "{{ globs }}"
-
 # Codegen the GraphQL schema
 [group("codegen")]
 [group("envio")]
@@ -75,6 +80,45 @@ setup:
 test args="--silent":
     pnpm vitest run {{ args }}
 alias t := test
+
+
+# ---------------------------------------------------------------------------- #
+#                                RECIPES: ENVIO                                #
+# ---------------------------------------------------------------------------- #
+
+# Codegen everything for the Envio indexer (order matters):
+# 1. GraphQL schema
+# 2. Envio config YAML
+[doc("Codegen everything for the Envio indexer")]
+[group("codegen")]
+[group("envio")]
+@codegen-envio protocol="all":
+    just for-each _codegen-envio {{ protocol }}
+
+@_codegen-envio protocol:
+    just codegen-schema envio {{ protocol }}
+    just codegen-envio-config {{ protocol }}
+    just codegen-envio-bindings {{ protocol }}
+
+# Codegen the Envio bindings
+[group("codegen")]
+[group("envio")]
+@codegen-envio-bindings protocol="all":
+    just for-each _codegen-envio-bindings {{ protocol }}
+
+_codegen-envio-bindings protocol:
+    #!/usr/bin/env sh
+    protocol_dir="src/envio/{{ protocol }}"
+    pnpm envio codegen \
+        --config $protocol_dir/config.yaml \
+        --output-directory $protocol_dir/bindings
+    echo "✅ Generated Envio bindings"
+
+# Codegen the Envio config YAML
+[group("codegen")]
+[group("envio")]
+@codegen-envio-config protocol="all":
+    just cli codegen envio-config --protocol {{ protocol }}
 
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: GRAPH                                #
@@ -132,43 +176,36 @@ _codegen-graph-bindings protocol:
         --protocol {{ protocol }} \
         --chain {{ chain }}
 
+
 # ---------------------------------------------------------------------------- #
-#                                RECIPES: ENVIO                                #
+#                                 RECIPES: GQL                                 #
 # ---------------------------------------------------------------------------- #
 
-# Codegen everything for the Envio indexer (order matters):
-# 1. GraphQL schema
-# 2. Envio config YAML
-[doc("Codegen everything for the Envio indexer")]
+
+# Codegen all GraphQL types and queries
 [group("codegen")]
-[group("envio")]
-@codegen-envio protocol="all":
-    just for-each _codegen-envio {{ protocol }}
+[group("gql")]
+@codegen-gql:
+    just codegen-gql-envio
+    just codegen-gql-graph
 
-@_codegen-envio protocol:
-    just codegen-schema envio {{ protocol }}
-    just codegen-envio-config {{ protocol }}
-    just codegen-envio-bindings {{ protocol }}
-
-# Codegen the Envio bindings
+# Codegen GraphQL types and queries for Envio indexers
 [group("codegen")]
+[group("gql")]
 [group("envio")]
-@codegen-envio-bindings protocol="all":
-    just for-each _codegen-envio-bindings {{ protocol }}
+@codegen-gql-envio:
+    pnpm graphql-codegen --config ./graphql-codegen.js --project envioAirdrops
+    pnpm graphql-codegen --config ./graphql-codegen.js --project envioFlow
+    pnpm graphql-codegen --config ./graphql-codegen.js --project envioLockup
 
-_codegen-envio-bindings protocol:
-    #!/usr/bin/env sh
-    protocol_dir="src/envio/{{ protocol }}"
-    pnpm envio codegen \
-        --config $protocol_dir/config.yaml \
-        --output-directory $protocol_dir/bindings
-    echo "✅ Generated Envio bindings"
-
-# Codegen the Envio config YAML
+# Codegen GraphQL types and queries for Graph indexers
 [group("codegen")]
-[group("envio")]
-@codegen-envio-config protocol="all":
-    just cli codegen envio-config --protocol {{ protocol }}
+[group("gql")]
+[group("graph")]
+@codegen-gql-graph:
+    pnpm graphql-codegen --config ./graphql-codegen.js --project graphAirdrops
+    pnpm graphql-codegen --config ./graphql-codegen.js --project graphFlow
+    pnpm graphql-codegen --config ./graphql-codegen.js --project graphLockup
 
 # ---------------------------------------------------------------------------- #
 #                                RECIPES: PRINT                                #

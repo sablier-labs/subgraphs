@@ -237,8 +237,9 @@ type Stream @entity(immutable: false) {
   asset: Asset!
   """
   ERC-20 token decimals. Stored here to avoid loading the asset entity on each stream.
+  Note: the "Value" suffix is added because of a bug in GraphQL Code Generator.
   """
-  assetDecimals: BigInt!
+  assetDecimalsValue: BigInt!
   """
   The batch the stream may be part of.
   Note: this is available only when created within a batch create transaction.

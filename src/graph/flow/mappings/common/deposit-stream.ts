@@ -17,12 +17,12 @@ export function handleDepositFlowStream(event: ethereum.Event, params: Params.De
   /* --------------------------------- STREAM --------------------------------- */
   stream.depositedAmount = stream.depositedAmount.plus(params.amount);
   stream.availableAmount = stream.availableAmount.plus(params.amount);
-  const availableAmount = scale(stream.availableAmount, stream.assetDecimals);
+  const availableAmount = scale(stream.availableAmount, stream.assetDecimalsValue);
 
   const now = event.block.timestamp;
   const elapsedTime = now.minus(stream.lastAdjustmentTimestamp);
   const snapshotAmount = stream.snapshotAmount.plus(stream.ratePerSecond.times(elapsedTime));
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
   const notWithdrawnAmount = snapshotAmount.minus(withdrawnAmount);
 
   // If the stream still has debt, mimic the contract behavior.

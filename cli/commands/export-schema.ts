@@ -6,7 +6,7 @@ import { getMergedSchema } from "../../src/schema";
 import { PROTOCOLS } from "../constants";
 import * as helpers from "../helpers";
 
-export function exportSchemasCommand(): Command {
+export function exportSchemaCommand(): Command {
   const command = helpers.createBaseCmd("Copy GraphQL schemas to the dist directory");
 
   command.action(async () => {
@@ -21,4 +21,4 @@ export function exportSchemasCommand(): Command {
   return command;
 }
 
-export const exportSchemasCmd = exportSchemasCommand();
+export const exportSchemaCmd = exportSchemaCommand();

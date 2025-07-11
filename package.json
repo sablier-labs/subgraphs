@@ -17,8 +17,11 @@
     "@biomejs/biome": "^2.1",
     "@graphprotocol/graph-cli": "0.97.1",
     "@graphprotocol/graph-ts": "0.38.1",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/client-preset": "^4.8.3",
     "@graphql-tools/load-files": "^7.0",
     "@graphql-tools/merge": "^9.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@pinax/graph-networks-registry": "^0.7",
     "@sablier/devkit": "github:sablier-labs/devkit#main",
     "@types/fs-extra": "^11.0",
@@ -68,8 +71,8 @@
     "url": "git+https://github.com/sablier-labs/indexers.git"
   },
   "scripts": {
-    "build": "pnpm dlx del-cli dist && pnpm tsc -p tsconfig.build.json",
-    "prepack": "pnpm install --frozen-lockfile && pnpm run build",
+    "build-package": "pnpm dlx del-cli dist && pnpm tsc -p tsconfig.build.json",
+    "prepack": "pnpm install --frozen-lockfile && pnpm run build-package",
     "start": "cd ./src/envio/$ENVIO_PROTOCOL && ts-node ./bindings/src/Index.res.js"
   },
   "types": "./dist/index.d.ts"

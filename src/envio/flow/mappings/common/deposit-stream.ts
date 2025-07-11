@@ -15,12 +15,12 @@ const handler: Handler<Loader.BaseReturn> = async ({ context, event, loaderRetur
   /* --------------------------------- STREAM --------------------------------- */
   const depositedAmount = stream.depositedAmount + event.params.amount;
   const availableAmount = stream.availableAmount + event.params.amount;
-  const scaledAvailableAmount = scale(availableAmount, stream.assetDecimals);
+  const scaledAvailableAmount = scale(availableAmount, stream.assetDecimalsValue);
 
   const now = BigInt(event.block.timestamp);
   const elapsedTime = now - stream.lastAdjustmentTimestamp;
   const snapshotAmount = stream.snapshotAmount + stream.ratePerSecond * elapsedTime;
-  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimals);
+  const withdrawnAmount = scale(stream.withdrawnAmount, stream.assetDecimalsValue);
   const notWithdrawnAmount = snapshotAmount - withdrawnAmount;
 
   // If the stream still has debt, mimic the contract behavior.

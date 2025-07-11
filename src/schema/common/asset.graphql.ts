@@ -1,14 +1,14 @@
 import { gql } from "graphql-tag";
 import type { Types } from "../../types";
 
-const streams = `#graphql
+const streams = /* GraphQL */ `
 """
 Streams that rely on this token
 """
 streams: [Stream!]! @derivedFrom(field: "asset")
 `;
 
-const campaigns = `#graphql
+const campaigns = /* GraphQL */ `
 """
 Campaigns that rely on this asset.
 """
