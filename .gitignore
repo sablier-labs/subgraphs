@@ -1,81 +1,21 @@
-# Builds
-**/build
-**/dist
-**/static
-**/generated
-
-!apps/*-envio/src/generated
-
-apps/*/subgraph.yaml
-packages/*/subgraph.yaml
-
-# Node.js
-**/node_modules
-.node_repl_history
-.npm
-.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
-# Linters
-**/.eslintcache
-**/.stylelintcache
-
-# Logs
-*.log
+# Directories
+dist
 logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+node_modules
+repomix
+**/.bin
+**/airdrops/bindings
+**/build
+!cli/commands/build
+**/flow/bindings
+**/generated
+**/lockup/bindings
 
-# Misc
-.DS_Store
-.env
-.env.*
-!.env.example
-
-# Next.js
-**/.next
-**/.vercel
-**/next-env.d.ts
-
-# TypeScript cache
+# Files
+*.log
 *.tsbuildinfo
-
-
-# Envio
-
-**/lib/*
-**/benchmarks/
-**/artifacts
-**/logs
-*.exe
-*.obj
-*.out
-*.compile
-*.native
-*.byte
-*.cmo
-*.annot
-*.cmi
-*.cmx
-*.cmt
-*.cmti
-*.cma
-*.a
-*.cmxa
-*.obj
-*~
-*.annot
-*.cmj
-*.bak
-*.mlast
-*.mliast
-.merlin
-.bsb.lock
-*.bs.js
+.env*
+!.env.example
+subgraph.yaml
+src/graph/**/schema.graphql
+src/graph/**/manifests/**/*.yaml
