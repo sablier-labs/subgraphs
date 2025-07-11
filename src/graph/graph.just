@@ -92,7 +92,7 @@ alias da := deploy-all
 
 # Deploy to experimental subgraph on Ethereum Sepolia
 [group("deploy")]
-deploy-experimental version_label: codegen-schema codegen-manifest
+deploy-experimental version_label: codegen-schema (codegen-manifest "sepolia")
     #!/usr/bin/env sh
     subgraph_name=sablier-{{ PROTOCOL }}-experimental
     manifest_path={{ justfile_dir() }}/manifests/sepolia.yaml

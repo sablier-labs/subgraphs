@@ -47,7 +47,7 @@ export namespace Id {
    * 137-0x5ce95bff1297dadbdcf9929a10bd02bdfab0dcc6
    */
   export function batcher(chainId: number, sender: Envio.Address): string {
-    return `${chainId}-${sender}`;
+    return `${chainId}-${sender.toLowerCase()}`;
   }
 
   /**
