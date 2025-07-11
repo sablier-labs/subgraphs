@@ -1,6 +1,5 @@
 import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
-import { getOrCreateBatch } from "./entity-batch";
 import { createStreamDynamic, createStreamLinear, createStreamTranched, getStream } from "./entity-stream";
 import { getOrCreateWatcher } from "./entity-watcher";
 
@@ -13,9 +12,6 @@ export namespace Store {
     export const getOrCreate = getOrCreateAsset;
   }
 
-  export namespace Batch {
-    export const getOrCreate = getOrCreateBatch;
-  }
   export namespace Stream {
     export const createDynamic = createStreamDynamic;
     export const createLinear = createStreamLinear;

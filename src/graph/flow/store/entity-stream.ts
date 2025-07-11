@@ -5,7 +5,7 @@ import { Id } from "../../common/id";
 import * as Entity from "../bindings/schema";
 import { Params } from "../helpers/types";
 import { getOrCreateAsset } from "./entity-asset";
-import { getOrCreateBatch } from "./entity-batch";
+import { createOrUpdateBatch } from "./entity-batch";
 import { getOrCreateWatcher } from "./entity-watcher";
 
 export function createStream(event: ethereum.Event, params: Params.CreateFlowStream): Entity.Stream {
@@ -26,7 +26,7 @@ export function createStream(event: ethereum.Event, params: Params.CreateFlowStr
   stream.assetDecimals = asset.decimals;
 
   /* --------------------------------- BATCH --------------------------------- */
-  const batch = getOrCreateBatch(event, params.sender);
+  const batch = createOrUpdateBatch(event, params.sender);
   stream.batch = batch.id;
   stream.position = batch.size.minus(ONE);
 

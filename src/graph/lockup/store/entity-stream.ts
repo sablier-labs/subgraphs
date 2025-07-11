@@ -10,7 +10,7 @@ import { loadProxender } from "../helpers";
 import { Params, Segment, Tranche } from "../helpers/types";
 import { createAction } from "./entity-action";
 import { getOrCreateAsset } from "./entity-asset";
-import { getOrCreateBatch } from "./entity-batch";
+import { createOrCreateBatch } from "./entity-batch";
 import { getOrCreateWatcher } from "./entity-watcher";
 
 export function createStreamDynamic(
@@ -85,7 +85,7 @@ function createBaseStream(event: ethereum.Event, params: Params.CreateStreamComm
   stream.assetDecimals = asset.decimals;
 
   /* ---------------------------------- BATCH --------------------------------- */
-  const batch = getOrCreateBatch(event, params.sender);
+  const batch = createOrCreateBatch(event, params.sender);
   stream.batch = batch.id;
   stream.position = batch.size.minus(ONE);
 

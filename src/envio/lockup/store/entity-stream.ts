@@ -4,8 +4,10 @@ import type { Envio } from "../../common/bindings";
 import { getContract } from "../../common/deployments";
 import { sanitizeString } from "../../common/helpers";
 import { Id } from "../../common/id";
+import { CommonStore } from "../../common/store";
 import type { Context, Entity, Enum } from "../bindings";
 import type { Params, Segment, Tranche } from "../helpers/types";
+import { create as createAction } from "./entity-action";
 import { update as updateBatch } from "./entity-batch";
 
 export async function createDynamic(
@@ -77,7 +79,7 @@ async function createBase(
   const sender = params.sender.toLowerCase();
 
   // Some fields are set to 0/ undefined because they are set later depending on the stream category.
-  const stream: Entity.Stream = {
+  let stream: Entity.Stream = {
     alias: Id.streamAlias(lockup.alias, event.chainId, tokenId),
     asset_id: asset.id,
     assetDecimals: asset.decimals,
@@ -121,6 +123,25 @@ async function createBase(
 
   /* ---------------------------------- BATCH --------------------------------- */
   await updateBatch(context, event, batch, batcher);
+
+  /* --------------------------------- ACTION --------------------------------- */
+  const action = await createAction(context, event, watcher, {
+    addressA: params.sender,
+    addressB: params.recipient,
+    amountA: params.depositAmount,
+    category: "Create",
+    streamId: streamId,
+  });
+  if (params.cancelable) {
+    stream = {
+      ...stream,
+      renounceAction_id: action.id,
+      renounceTime: now,
+    };
+  }
+
+  /* --------------------------------- WATCHER -------------------------------- */
+  await CommonStore.Watcher.incrementCounters(context, entities.watcher);
 
   return stream;
 }
